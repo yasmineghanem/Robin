@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 				editBuilder.insert(get_endpoint(editor), '\nprint(add(2, 3))');
             });
 			
-			vscode.window.showInformationMessage('line added succufully.');
+			vscode.window.showInformationMessage('line added successfully.');
         } else {
             vscode.window.showErrorMessage('No active text editor.');
         }
