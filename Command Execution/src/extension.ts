@@ -2,8 +2,10 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 const axios = require('axios');
+const http = require("http");
 
-function get_endpoint( editor :vscode.TextEditor):vscode.Position {
+
+function get_endpoint(editor: vscode.TextEditor): vscode.Position {
 	const lastLine = editor.document.lineAt(editor.document.lineCount - 1);
 	const endPosition = new vscode.Position(editor.document.lineCount - 1, lastLine.range.end.character);
 	return endPosition;
@@ -12,6 +14,7 @@ function get_endpoint( editor :vscode.TextEditor):vscode.Position {
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
+
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "robin" is now active!');
@@ -19,33 +22,96 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('robin.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		// vscode.window.showInformationMessage('Hello World from Robin!');
-		// vscode.commands.executeCommand('editor.action.addCommentLine');
+	// let disposable = vscode.commands.registerCommand('robin.helloWorld',
+	// 	(args: any) => {
+
+	// 		// The code you place here will be executed every time your command is executed
+	// 		// Display a message box to the user
+	// 		// vscode.window.showInformationMessage('Hello World from Robin!');
+	// 		// vscode.commands.executeCommand('editor.action.addCommentLine');
+	// 		const editor = vscode.window.activeTextEditor;
+
+	// 		// Check if an editor is open
+	// 		if (editor) {
+	// 			// Insert code line y = 400 at the end of the file
+	// 			editor.edit(editBuilder => {
+	// 				// editBuilder.insert(get_endpoint(editor), '\ny = 400');
+	// 				// editBuilder.insert(get_endpoint(editor), '\nprint(y)');
+	// 				// editBuilder.insert(get_endpoint(editor), `\ndef add(x, y):`);
+	// 				// editBuilder.insert(get_endpoint(editor), '\n	return x + y');
+	// 				// editBuilder.insert(get_endpoint(editor), '\nprint(add(2, 3))');
+	// 				editBuilder.insert(get_endpoint(editor), `\nargs ${args} }`);
+	// 			});
+
+	// 			vscode.window.showInformationMessage('line added successfully.');
+	// 		} else {
+	// 			vscode.window.showErrorMessage('No active text editor.');
+	// 		}
+
+	// 	}
+	// );
+	const command = 'robin.helloWorld';
+
+	const commandHandler = (args: any) => {
 		const editor = vscode.window.activeTextEditor;
 
-        // Check if an editor is open
-        if (editor) {
-            // Insert code line y = 400 at the end of the file
-            editor.edit(editBuilder => {
-                editBuilder.insert(get_endpoint(editor), '\ny = 400');
-				editBuilder.insert(get_endpoint(editor), '\nprint(y)');
-				editBuilder.insert(get_endpoint(editor),  `\ndef add(x, y):`);
-				editBuilder.insert(get_endpoint(editor), '\n	return x + y');
-				editBuilder.insert(get_endpoint(editor), '\nprint(add(2, 3))');
-            });
-			
+		// Check if an editor is open
+		if (editor) {
+			// Insert code line y = 400 at the end of the file
+			editor.edit(editBuilder => {
+				// editBuilder.insert(get_endpoint(editor), '\ny = 400');
+				// editBuilder.insert(get_endpoint(editor), '\nprint(y)');
+				// editBuilder.insert(get_endpoint(editor), `\ndef add(x, y):`);
+				// editBuilder.insert(get_endpoint(editor), '\n	return x + y');
+				// editBuilder.insert(get_endpoint(editor), '\nprint(add(2, 3))');
+				editBuilder.insert(get_endpoint(editor), `\nargs ${args} }`);
+			});
+
 			vscode.window.showInformationMessage('line added successfully.');
-        } else {
-            vscode.window.showErrorMessage('No active text editor.');
-        }
+		} else {
+			vscode.window.showErrorMessage('No active text editor.');
+		}
+	};
 
+	context.subscriptions.push(
+		vscode.commands.registerCommand(command, commandHandler)
+	);
+
+
+
+	// Start a simple HTTP server
+	const server = http.createServer((
+		req: any,
+		res: any
+	) => {
+		if (req.url.startsWith("/execute-command")) {
+
+			const args = req.url.split("?")[1];
+
+
+			// Execute your VS Code command here
+			vscode.commands.executeCommand("robin.helloWorld",
+				args
+			).then(
+				() => {
+					res.writeHead(200, { "Content-Type": "text/plain" });
+					res.end("Command executed successfully");
+				},
+				(err) => {
+					res.writeHead(500, { "Content-Type": "text/plain" });
+					res.end("Failed to execute command");
+				}
+			);
+		} else {
+
+			res.writeHead(404, { "Content-Type": "text/plain" });
+			res.end(req.url + "Not Found");
+		}
 	});
-	
-	context.subscriptions.push(disposable);
-}
 
+	server.listen(3000, () => {
+		console.log("Server listening on port 3000");
+	});
+}
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
