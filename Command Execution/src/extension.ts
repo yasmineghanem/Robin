@@ -4,95 +4,118 @@ import * as vscode from 'vscode';
 const axios = require('axios');
 const http = require("http");
 
+const express = require("express");
+const cors = require("cors");
 
 function get_endpoint(editor: vscode.TextEditor): vscode.Position {
 	const lastLine = editor.document.lineAt(editor.document.lineCount - 1);
 	const endPosition = new vscode.Position(editor.document.lineCount - 1, lastLine.range.end.character);
 	return endPosition;
 }
+function get_currentpoint(editor: vscode.TextEditor): vscode.Position {
+	const position = editor.selection.active;
+	return position;
+}
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "robin" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	// let disposable = vscode.commands.registerCommand('robin.helloWorld',
-	// 	(args: any) => {
-
-	// 		// The code you place here will be executed every time your command is executed
-	// 		// Display a message box to the user
-	// 		// vscode.window.showInformationMessage('Hello World from Robin!');
-	// 		// vscode.commands.executeCommand('editor.action.addCommentLine');
-	// 		const editor = vscode.window.activeTextEditor;
-
-	// 		// Check if an editor is open
-	// 		if (editor) {
-	// 			// Insert code line y = 400 at the end of the file
-	// 			editor.edit(editBuilder => {
-	// 				// editBuilder.insert(get_endpoint(editor), '\ny = 400');
-	// 				// editBuilder.insert(get_endpoint(editor), '\nprint(y)');
-	// 				// editBuilder.insert(get_endpoint(editor), `\ndef add(x, y):`);
-	// 				// editBuilder.insert(get_endpoint(editor), '\n	return x + y');
-	// 				// editBuilder.insert(get_endpoint(editor), '\nprint(add(2, 3))');
-	// 				editBuilder.insert(get_endpoint(editor), `\nargs ${args} }`);
-	// 			});
-
-	// 			vscode.window.showInformationMessage('line added successfully.');
-	// 		} else {
-	// 			vscode.window.showErrorMessage('No active text editor.');
-	// 		}
-
-	// 	}
-	// );
-	const command = 'robin.helloWorld';
-
-	const commandHandler = (args: any) => {
+	let declareVariable = vscode.commands.registerCommand('robin.declareVariable', (args,body) => {
 		const editor = vscode.window.activeTextEditor;
+		// {
+		// 	"operation": null,
+		// 	"parameters": [
+		// 		{
+		// 			"name": "x",
+		// 			"type": null,
+		// 			"default": 10
+		// 		}
+		// 	]
+		// }
+		const parameters=body.parameters;
+		let name = parameters[0]['name'];
+		let value = parameters[0]['default'];
+        // Check if an editor is open
+        if (editor) {
+			const line = `\n${name} = ${JSON.stringify(value)}`;
 
-		// Check if an editor is open
-		if (editor) {
-			// Insert code line y = 400 at the end of the file
-			editor.edit(editBuilder => {
-				// editBuilder.insert(get_endpoint(editor), '\ny = 400');
-				// editBuilder.insert(get_endpoint(editor), '\nprint(y)');
-				// editBuilder.insert(get_endpoint(editor), `\ndef add(x, y):`);
-				// editBuilder.insert(get_endpoint(editor), '\n	return x + y');
-				// editBuilder.insert(get_endpoint(editor), '\nprint(add(2, 3))');
-				editBuilder.insert(get_endpoint(editor), `\nargs ${args} }`);
-			});
+            editor.edit(editBuilder => {
+                editBuilder.insert(get_currentpoint(editor), line);
+            });
+			} else {
+            vscode.window.showErrorMessage('No active text editor.');
+        }
 
-			vscode.window.showInformationMessage('line added successfully.');
-		} else {
-			vscode.window.showErrorMessage('No active text editor.');
+	});
+
+	let declareFunction = vscode.commands.registerCommand('robin.declareFunction', (args,body) => {
+		const editor = vscode.window.activeTextEditor;
+		// {
+		// 	"operation": null,
+		// 	"parameters": [
+		// 		null, // first paremeter is the return type
+		// 		"add", // second parameter is the function name
+		// 		{
+		// 			"name": "x",
+		// 			"type": null,
+		// 			"default": 0
+		// 		},
+		// 		{
+		// 			"name": "y",
+		// 			"type": null,
+		// 			"default": 10
+		// 		}
+		// 	]
+		// }
+		const parameters=body.parameters;
+		let type=parameters[0];
+		let name=parameters[1];
+		let line1="def "+name+"(";
+		for (let i=2;i<parameters.length;i++){
+			if(i-2)line1+=",";
+			line1+=parameters[i]['name'] +  ' = '+JSON.stringify(parameters[i]['default']);
 		}
-	};
+		line1+="):";
+        // Check if an editor is open
+        if (editor) {
+            editor.edit(editBuilder => {
+				editBuilder.insert(get_currentpoint(editor),  `\n${line1}`);
+				editBuilder.insert(get_currentpoint(editor), '\n	return None');
+            });
+			} else {
+            vscode.window.showErrorMessage('No active text editor.');
+        }
+	});
 
-	context.subscriptions.push(
-		vscode.commands.registerCommand(command, commandHandler)
-	);
+	let declareClass = vscode.commands.registerCommand('robin.declareClass', (args,body) => {
+		const editor = vscode.window.activeTextEditor;
+		// {
+		// 	"operation": null,
+		// 	"parameters": [
+		// 		"person" // first parameter is the class name
+		// 	]
+		// }
+		let parameters=body.parameters;
+		let name = parameters[0];
+		let line = `\nclass ${name}:`;
+        // Check if an editor is open
+        if (editor) {
+            editor.edit(editBuilder => {
+			editBuilder.insert(get_currentpoint(editor), line);
+            });
+			} else {
+            vscode.window.showErrorMessage('No active text editor.');
+        }
 
+	});
 
-
-	// Start a simple HTTP server
-	const server = http.createServer((
-		req: any,
-		res: any
-	) => {
-		if (req.url.startsWith("/execute-command")) {
-
-			const args = req.url.split("?")[1];
-
-
-			// Execute your VS Code command here
-			vscode.commands.executeCommand("robin.helloWorld",
-				args
-			).then(
+    const server = express();
+	server.use(cors());
+	server.use(express.json());
+	
+	server.post("/declare-var", (req:any, res:any) => {
+			const data = req.body;
+			const args = req.query;
+			vscode.commands.executeCommand("robin.declareVariable", args, data).then(
 				() => {
 					res.writeHead(200, { "Content-Type": "text/plain" });
 					res.end("Command executed successfully");
@@ -101,14 +124,37 @@ export function activate(context: vscode.ExtensionContext) {
 					res.writeHead(500, { "Content-Type": "text/plain" });
 					res.end("Failed to execute command");
 				}
-			);
-		} else {
-
-			res.writeHead(404, { "Content-Type": "text/plain" });
-			res.end(req.url + "Not Found");
-		}
+			);			
+		
 	});
-
+	server.post("/declare-func",(req:any,res:any)=>{
+		const data = req.body;
+		const args = req.query;
+		vscode.commands.executeCommand("robin.declareFunction", args, data).then(
+			()=>{
+				res.writeHead(200, { "Content-Type": "text/plain" });
+				res.end("Command executed successfully");
+			},
+			(err)=>{
+				res.writeHead(500, { "Content-Type": "text/plain" });
+				res.end("Failed to execute command");
+			}
+		);
+	});
+	server.post("/declare-class",(req:any,res:any)=>{
+		const data = req.body;
+		const args = req.query;
+		vscode.commands.executeCommand("robin.declareClass", args, data).then(
+			()=>{
+				res.writeHead(200, { "Content-Type": "text/plain" });
+				res.end("Command executed successfully");
+			},
+			(err)=>{
+				res.writeHead(500, { "Content-Type": "text/plain" });
+				res.end("Failed to execute command");
+			}
+		);
+	});
 	server.listen(3000, () => {
 		console.log("Server listening on port 3000");
 	});
