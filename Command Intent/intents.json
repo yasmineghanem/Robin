@@ -1,0 +1,86 @@
+{
+    "intents": [
+        {
+            "intent": "Declaration",
+            "keywords": [
+                "new",
+                "declare",
+                "declare variable",
+                "declare function",
+                "define",
+                "define a new function",
+                "create",
+                "create variable",
+                "create function",
+                "initialize",
+                "initialize a new variable"
+            ],
+            "responses": [
+                "declaration intent completed"
+            ]
+        },
+        {
+            "intent": "Assignment",
+            "keywords": [
+                "assign",
+                "assign the value",
+                "compute",
+                "compute the value",
+                "set",
+                "set the varible to value",
+                "put",
+                "put the value",
+                "store",
+                "store the value",
+                "add",
+                "add the value",
+                "subtract",
+                "subtract the value",
+                "multiply"
+            ],
+            "responses": [
+                "assignment intent completed"
+            ]
+        },
+        {
+            "intent": "Conditional",
+            "keywords": [
+                "compare",
+                "and",
+                "or",
+                "if",
+                "else",
+                "condition",
+                "condition statement",
+                "equal",
+                "not equal",
+                "compare between",
+                "greater than",
+                "smaller than"      
+            ],
+            "responses": [
+                "conditoinal intent completed"
+            ]
+        },
+        {
+            "intent": "Iterative",
+            "keywords": [
+                "loop",
+                "for",
+                "while",
+                "do",
+                "do while",
+                "repeat",
+                "iterate",
+                "iterate over",
+                "iterate through",
+                "search",
+                "search for",
+                "search in"
+            ],
+            "responses": [
+                "iterative intent completed"
+            ]
+        }
+    ]
+}
