@@ -5,6 +5,7 @@ import numpy as np
 import random
 import json
 
+
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -112,29 +113,24 @@ print(model.summary())
 
 model.fit(padded_sequences, categorical_vec, epochs=epochs, verbose=0)
 
-test_text_inputs = ["declare and new variable",
-                    "iterate over the array",
-                    "compare between x and y",
-                    "if the values are equal",
-                    "define a function",
-                    "set the value of x to 10",
-                    "make a loop",
-                    "make a function"]
+# this should be the output from the speech recognition module
+# test_text_inputs = ["declare and new variable",
+#                     "iterate over the array",
+#                     "compare between x and y",
+#                     "if the values are equal",
+#                     "define a function",
+#                     "set the value of x to 10",
+#                     "make a loop",
+#                     "make a function"]
 
-test_intents = ["Declaration",
-                "Iterative",
-                "Conditional",
-                "Conditional",
-                "Declaration",
-                "Assignment",
-                "Iterative",
-                "Declaration"]
+test_intents = ["Iterative Operation"]
 
-test_sequences = tokenizer.texts_to_sequences(test_text_inputs)
+test_sequences = tokenizer.texts_to_sequences(["iterate through the array"])
 test_padded_sequences = pad_sequences(test_sequences, padding='pre')
 test_labels = np.array([unique_intents.index(intent)
                        for intent in test_intents])
 test_labels = tf.keras.utils.to_categorical(
     test_labels, num_classes=num_classes)
 print(test_labels)
+print(index_to_intent[np.where(test_labels[0]==1)[0][0]])
 loss, accuracy = model.evaluate(test_padded_sequences, test_labels)

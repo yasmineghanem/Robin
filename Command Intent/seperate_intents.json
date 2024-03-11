@@ -1,0 +1,70 @@
+{
+    "intents": [
+        {
+            "intent": "Varibale Declaration"
+        },
+        {
+            "intent": "Function Declaration"
+        },
+        {
+            "intent": "Class Declaration"
+        },
+        {
+            "intent": "Insertion Operation"
+        },
+        {
+            "intent": "Assignment Operation"
+        },
+        {
+            "intent": "Conditional Statement"
+        },
+        {
+            "intent": "Insertion"
+        },
+        {
+            "intent": "Iterative Statement"
+        },
+        {
+            "intent": "Array Operation"
+        },
+        {
+            "intent": "Bitwise Operation"
+        },
+        {
+            "intent": "Logiacal Operation"
+        },
+        {
+            "intent": "Comparosion Operation"
+        },
+        {
+            "intent": "Mathematical Operation"
+        },
+        {
+            "intent": "Iterative Statement"
+        },
+        {
+            "intent": "Identity Operation"
+        },
+        {
+            "intent": "Membership Operation"
+        },
+        {
+            "intent": "Casting"
+        },
+        {
+            "intent": "Datatypes"
+        },
+        {
+            "intent": "Exception Handling"
+        },
+        {
+            "intent": "I/O Operation"
+        },
+        {
+            "intent": "Assertion"
+        },
+        {
+            "intent": "Libraries"
+        }
+    ]
+}
