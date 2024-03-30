@@ -4,22 +4,11 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import random
 import json
-
-
+from utils import * 
 import warnings
+
+# ignore warnings
 warnings.filterwarnings('ignore')
-
-
-def clean(line):
-    cleaned_line = ''
-    for char in line:
-        if char.isalpha():
-            cleaned_line += char
-        else:
-            cleaned_line += ' '
-    cleaned_line = ' '.join(cleaned_line.split())
-    return cleaned_line
-
 
 # load the dataset
 with open('intents.json', 'r') as f:

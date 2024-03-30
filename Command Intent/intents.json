@@ -386,6 +386,22 @@
             "responses": [
                 "Libraries intent detected"
             ]
+        },
+        {
+            "intent": "IDE Interactions",
+            "keywords":[
+            ],
+            "responses": [
+                "IDE Interactions intent detected"
+            ]
+        },
+        {
+            "intent": "File System",
+            "keywords":[
+            ],
+            "responses": [
+                "File System intent detected"
+            ]
         }
 
     ]
