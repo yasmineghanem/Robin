@@ -37,7 +37,16 @@
             ],
             "responses": [
                 "declaration intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": true,
+                "responses": [
+                    "declare a new variable %%NAME%% with value %%VALUE%%",
+                    "declare a new function %%NAME%% with parameters %%PARAMS%%"
+                ]
+            },
+            "entities": []
             
         },
         {
@@ -74,7 +83,13 @@
             ],
             "responses": [
                 "assignment intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "Conditional Statement",
@@ -104,7 +119,13 @@
             ],
             "responses": [
                 "conditoinal intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "Iterative Operation",
@@ -144,7 +165,13 @@
             ],
             "responses": [
                 "iterative intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "Insertion",
@@ -173,7 +200,13 @@
             ],
             "responses": [
                 "Insertion intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "Array Operation",
@@ -204,16 +237,28 @@
             ],
             "responses": [
                 "Array intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "Operators",
             "keywords": [
-        
+                "operators"
             ],
             "responses": [
                 "iterative intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "OOP Operations",
@@ -242,7 +287,13 @@
             ],
             "responses": [
                 "OOP intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "Casting",
@@ -269,8 +320,14 @@
         
             ],
             "responses": [
-                "iterative intent detected"
-            ]
+                "casting intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "Exception Handling",
@@ -298,8 +355,14 @@
         
             ],
             "responses": [
-                "iterative intent detected"
-            ]
+                "exception handling intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "I/O Operations",
@@ -328,7 +391,13 @@
             ],
             "responses": [
                 "IO intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "Assertion",
@@ -357,7 +426,13 @@
             ],
             "responses": [
                 "Assertion intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "Libraries",
@@ -385,23 +460,44 @@
             ],
             "responses": [
                 "Libraries intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "IDE Interactions",
             "keywords":[
+                "IDE"
             ],
             "responses": [
                 "IDE Interactions intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         },
         {
             "intent": "File System",
             "keywords":[
+                "create a file",
+                "open file"
             ],
             "responses": [
                 "File System intent detected"
-            ]
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": []
         }
 
     ]
