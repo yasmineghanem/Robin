@@ -136,6 +136,17 @@ function activate(context) {
             vscode.window.showErrorMessage('No active text editor.');
         }
     });
+    let goToLocation = vscode.commands.registerCommand('robin.goToLocation', (data) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const position = new vscode.Position(data.line, data.character ?? 0);
+            editor.selection = new vscode.Selection(position, position);
+            editor.revealRange(new vscode.Range(position, position));
+        }
+        else {
+            vscode.window.showErrorMessage('No active text editor.');
+        }
+    });
     const server = express();
     server.use(cors());
     server.use(express.json());
@@ -165,6 +176,30 @@ function activate(context) {
         const data = req.body;
         const args = req.query;
         vscode.commands.executeCommand("robin.declareClass", args, data).then(() => {
+            res.writeHead(200, { "Content-Type": "text/plain" });
+            res.end("Command executed successfully");
+        }, (err) => {
+            res.writeHead(500, { "Content-Type": "text/plain" });
+            res.end("Failed to execute command");
+        });
+    });
+    server.get("/file-name", (req, res) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const fileName = editor.document.fileName;
+            // get file name not whole path
+            const fileNameArr = fileName.split("\\");
+            res.writeHead(200, { "Content-Type": "text/plain" });
+            res.end(fileNameArr[fileNameArr.length - 1]);
+        }
+        else {
+            res.writeHead(500, { "Content-Type": "text/plain" });
+            res.end("No active text editor");
+        }
+    });
+    server.post("/go-to-location", (req, res) => {
+        const data = req.body;
+        vscode.commands.executeCommand("robin.goToLocation", data).then(() => {
             res.writeHead(200, { "Content-Type": "text/plain" });
             res.end("Command executed successfully");
         }, (err) => {
