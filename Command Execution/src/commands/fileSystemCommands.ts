@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import fs from "fs";
+import fs, { stat } from "fs";
 
 // create new file
 // sample input => 
@@ -58,13 +58,121 @@ const createDirectory = () => vscode.commands.registerCommand('robin.createDirec
     }
 });
 
+/**
+ * copy file
+ * {
+ *   source: "source file",
+ *   destination: "destination file"
+ * }
+ * 
+ * first, we need to check if the source file exists, 
+ * if it does, we need to read it's content 
+ * check if the destination is defined
+ * if it is, create a new file with the source file's content, and the destination's name
+ * if it's not, create a new file with the source file's content and the name would be source file - copy
+ */
+
+const copyFileCommand = () => {
+    vscode.commands.registerCommand('robin.copyFile', (args) => {
+        const source = args.source;
+        const destination = args.destination;
+        const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+        const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
+        let path = "";
+
+        // check if the source file doesn't have an extension, get the first the file the matches the source
+        if (source.split('.').pop() === source) {
+
+            const files = fs.readdirSync(vscode.workspace.rootPath?.toString() || '');
+            const file = files.find(file => file.split('.')[0] === source);
+            if (file) {
+                const content = fs.readFileSync(`${vscode.workspace.rootPath}\\${file}`, 'utf-8');
+                if (destination) {
+                    path = destinationPath;
+                    fs.writeFileSync(destinationPath, content);
+                } else {
+                    // add copy before extenstion
+                    path = `${vscode.workspace.rootPath}\\${source}-copy.${file.split('.').pop()}`;
+                    fs.writeFileSync(path, content);
+                }
+
+                return {
+                    success: true,
+                    path
+                };
+            }
+        }
+        else {
+
+            if (fs.existsSync(sourcePath)) {
+                const content = fs.readFileSync(sourcePath, 'utf-8');
+                if (destination) {
+                    fs.writeFileSync(destinationPath, content);
+                } else {
+                    // add copy before extension
+                    path = `${vscode.workspace.rootPath}\\${source.split('.')[0]}-copy.${source.split('.').pop()}`
+                    fs.writeFileSync(path, content);
+                }
+
+                return {
+                    success: true,
+                    path
+                };
+            }
+        }
+
+        return {
+            success: false,
+            message: "Source file not found"
+        };
+
+    });
+};
+
+
+const copyDirectory = () => {
+    vscode.commands.registerCommand('robin.copyDirectory', (args) => {
+        const source = args.source;
+        const destination = args.destination;
+        const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+
+        if (fs.existsSync(sourcePath
+        )) {
+            if (destination) {
+                vscode.workspace.fs.copy(
+                    vscode.Uri.file(sourcePath),
+                    vscode.Uri.file(`${vscode.workspace.rootPath}\\${destination}`)
+
+                );
+            }
+            else {
+                vscode.workspace.fs.copy(
+                    vscode.Uri.file(sourcePath),
+                    vscode.Uri.file(`${vscode.workspace.rootPath}\\${source} copy`)
+                );
+            }
+            return {
+                success: true
+            };
+        }
+        return {
+            success: false,
+            message: "Source directory not found"
+        };
+    });
+
+};
+
 const registerFileSystemCommands = () => {
     const commands = [
         createFile,
-        createDirectory
+        createDirectory,
+        copyFileCommand,
+        copyDirectory
     ];
 
     commands.forEach(command => command());
 };
+
 
 export default registerFileSystemCommands;

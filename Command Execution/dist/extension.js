@@ -24713,10 +24713,98 @@ const createDirectory = () => vscode.commands.registerCommand('robin.createDirec
         vscode.window.showErrorMessage('No active text editor.');
     }
 });
+/**
+ * copy file
+ * {
+ *   source: "source file",
+ *   destination: "destination file"
+ * }
+ *
+ * first, we need to check if the source file exists,
+ * if it does, we need to read it's content
+ * check if the destination is defined
+ * if it is, create a new file with the source file's content, and the destination's name
+ * if it's not, create a new file with the source file's content and the name would be source file - copy
+ */
+const copyFileCommand = () => {
+    vscode.commands.registerCommand('robin.copyFile', (args) => {
+        const source = args.source;
+        const destination = args.destination;
+        const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+        const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
+        let path = "";
+        // check if the source file doesn't have an extension, get the first the file the matches the source
+        if (source.split('.').pop() === source) {
+            const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || '');
+            const file = files.find(file => file.split('.')[0] === source);
+            if (file) {
+                const content = fs_1.default.readFileSync(`${vscode.workspace.rootPath}\\${file}`, 'utf-8');
+                if (destination) {
+                    path = destinationPath;
+                    fs_1.default.writeFileSync(destinationPath, content);
+                }
+                else {
+                    // add copy before extenstion
+                    path = `${vscode.workspace.rootPath}\\${source}-copy.${file.split('.').pop()}`;
+                    fs_1.default.writeFileSync(path, content);
+                }
+                return {
+                    success: true,
+                    path
+                };
+            }
+        }
+        else {
+            if (fs_1.default.existsSync(sourcePath)) {
+                const content = fs_1.default.readFileSync(sourcePath, 'utf-8');
+                if (destination) {
+                    fs_1.default.writeFileSync(destinationPath, content);
+                }
+                else {
+                    // add copy before extension
+                    path = `${vscode.workspace.rootPath}\\${source.split('.')[0]}-copy.${source.split('.').pop()}`;
+                    fs_1.default.writeFileSync(path, content);
+                }
+                return {
+                    success: true,
+                    path
+                };
+            }
+        }
+        return {
+            success: false,
+            message: "Source file not found"
+        };
+    });
+};
+const copyDirectory = () => {
+    vscode.commands.registerCommand('robin.copyDirectory', (args) => {
+        const source = args.source;
+        const destination = args.destination;
+        const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+        if (fs_1.default.existsSync(sourcePath)) {
+            if (destination) {
+                vscode.workspace.fs.copy(vscode.Uri.file(sourcePath), vscode.Uri.file(`${vscode.workspace.rootPath}\\${destination}`));
+            }
+            else {
+                vscode.workspace.fs.copy(vscode.Uri.file(sourcePath), vscode.Uri.file(`${vscode.workspace.rootPath}\\${source} copy`));
+            }
+            return {
+                success: true
+            };
+        }
+        return {
+            success: false,
+            message: "Source directory not found"
+        };
+    });
+};
 const registerFileSystemCommands = () => {
     const commands = [
         createFile,
-        createDirectory
+        createDirectory,
+        copyFileCommand,
+        copyDirectory
     ];
     commands.forEach(command => command());
 };
@@ -24792,6 +24880,40 @@ router.post("/create-directory", (req, res) => {
         res.writeHead(400, { "Content-Type": "application/json" });
         console.log(err);
         res.end(JSON.stringify(err));
+    });
+});
+// copy file
+router.post("/copy-file", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.copyFile", data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File copied successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File not found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+// copy directory
+router.post("/copy-directory", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.copyDirectory", data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Directory copied successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Directory not found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
     });
 });
 exports["default"] = router;

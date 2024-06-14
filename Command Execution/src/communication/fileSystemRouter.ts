@@ -49,4 +49,54 @@ router.post("/create-directory", (req: any, res: any) => {
 });
 
 
+// copy file
+router.post(
+  "/copy-file",
+  (req: any, res: any) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.copyFile", data).then(
+      (response: any) => {
+        if (response.success) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File copied successfully!" }));
+        }
+        else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File not found" }));
+        }
+      },
+      (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+      }
+    );
+  }
+);
+
+
+// copy directory
+router.post(
+  "/copy-directory",
+  (req: any, res: any) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.copyDirectory", data).then(
+      (response: any) => {
+        if (response.success) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Directory copied successfully!" }));
+        }
+        else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Directory not found" }));
+        }
+      },
+      (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+      }
+    );
+  }
+);
+
+
 export default router;
