@@ -1611,7 +1611,11 @@
             ]
         },
         {
-            "intent": "Conditional Statement"
+            "intent": "Conditional Statement",
+            "keywords": [
+                "", 
+                ""
+            ]
         },
         {
             "intent": "Iterative Statement"
@@ -1641,13 +1645,153 @@
             "intent": "Membership Operation"
         },
         {
-            "intent": "Casting"
+            "intent": "Casting",
+            "keywords":[
+                "Cast x to an integer", //1
+                "Convert y to a float", //2
+                "Change type to a string", //3
+                "Cast temp to a double" //4
+            ],
+            "responses": [
+                "casting intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    {
+                        "entity": "CAST_TYPE",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                [ //2
+                    {
+                        "entity": "CAST_TYPE",
+                        "from": 3,
+                        "to": 4
+                    }
+
+                ],
+                [ //3
+                    {
+                        "entity": "CAST_TYPE",
+                        "from": 4,
+                        "to": 5
+                    }
+
+                ],
+                [ //4
+                    {
+                        "entity": "CAST_TYPE",
+                        "from": 3,
+                        "to": 4
+                    }
+
+                ]
+            ]
         },
         {
-            "intent": "Datatypes"
+            "intent": "Datatypes",
+            "keywords":[
+                "create a list variable named arr", //1
+                "define a tuple variable called ", //2
+                "declare a dictionary variable with name hash", //3
+                "create a set variable called items" //4
+                
+            ],
+            "responses": [
+                "datatype intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    {
+                        "entity": "DATATYPE",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 5,
+                        "to": 6
+                    }
+                    
+                ],
+                [ //2
+                    {
+                        "entity": "DATATYPE",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 5,
+                        "to": 6
+                    }
+
+                ],
+                [ //3
+                    {
+                        "entity": "DATATYPE",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 5,
+                        "to": 6
+                    }
+
+                ],
+                [ //4
+                    {
+                        "entity": "DATATYPE",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 5,
+                        "to": 6
+                    }
+
+                ]
+            ]
         },
         {
-            "intent": "Exception Handling"
+            "intent": "Exception Handling",
+            "keywords":[
+                "Create a try except block to handle exceptions",//1
+                "Write a try block",//2
+                "Add an except block to catch and handle any errors that occur",//3
+            ],
+            "responses": [
+                "exception handling intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    
+                ],
+                [ //2
+
+                ],
+                [ //3
+
+                ]
+            ]
         },
         {
             "intent": "I/O Operation"
@@ -1656,7 +1800,65 @@
             "intent": "Assertion"
         },
         {
-            "intent": "Libraries"
+            "intent": "Libraries",
+            "keywords":[
+                "Import the math library", //1
+                "Use the random library", //2
+                "Include the os library", //3
+                "Add the sys library", //4
+                "Use json to work with JSON data" //5
+            ],
+            "responses": [
+                "library intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    {
+                        "entity": "LIBRARY_NAME",
+                        "from": 2,
+                        "to": 3
+                    }
+                    
+                ],
+                [ //2
+                    {
+                        "entity": "LIBRARY_NAME",
+                        "from": 3,
+                        "to": 4
+                    
+                    }
+
+                ],
+                [ //3
+                    {
+                        "entity": "LIBRARY_NAME",
+                        "from": 3,
+                        "to": 4
+                    }
+
+                ],
+                [ //4
+                    {
+                        "entity": "LIBRARY_NAME",
+                        "from": 3,
+                        "to": 4
+                    }
+
+                ],
+                [ //5
+                    {
+                        "entity": "LIBRARY_NAME",
+                        "from": 2,
+                        "to": 3
+                    }
+
+                ]
+            ]
         }
     ]
 }
