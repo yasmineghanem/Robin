@@ -1624,25 +1624,690 @@
             "intent": "Array Operation"
         },
         {
-            "intent": "Insertion Operation"
+            "intent": "Insertion Operation",
+            "keywords":[
+                "Insert 5 into the list l", //1
+                "Add 10 to the array x", //2
+                "Concatenate 3.14 into the list y", //3
+                "Insert the string variable name into the array names", //4
+                "Add x to the list l", //5
+                "Put the sentence \" i am a student \" into the array x" //6
+            ],
+            "responses": [
+                "insertion operation intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    {
+                        "entity": "VALUE",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "ARRAY",
+                        "from": 5,
+                        "to": 6
+                    }
+
+                ],
+                [ //2
+                    {
+                        "entity": "VALUE",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "ARRAY",
+                        "from": 5,
+                        "to": 6
+                    }
+
+                ],
+                [ //3
+                    {
+                        "entity": "VALUE",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "ARRAY",
+                        "from": 5,
+                        "to": 6
+                    }
+
+                ],
+                [ //4
+                    {
+                        "entity": "VARIABLE",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "ARRAY",
+                        "from": 8,
+                        "to": 9
+                    }
+                ],
+                [ //5
+                    {
+                        "entity": "VARIABLE",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "ARRAY",
+                        "from": 5,
+                        "to": 6
+                    }
+
+                ],
+                [ //6
+                    {
+                        "entity": "VALUE_STRING",
+                        "from": 3,
+                        "to": 9
+                    },
+                    {
+                        "entity": "ARRAY",
+                        "from": 12,
+                        "to": 13
+                    }
+                ]
+            ]
         },
         {
-            "intent": "Bitwise Operation"
+            "intent": "Bitwise Operation",
+            "keywords":[
+                "Perform a bitwise AND operation on x and y", //1
+                "Make a bitwise OR operation on a and b", //2
+                "Do a bitwise XOR operation on x and y", //3
+                "Have a bitwise NOT operation on a", //4
+                "Perform a bitwise left shift operation on x by 2", //5
+                "Perform a bitwise right shift operation on a by 3" //6
+            ],
+            "responses": [
+                "bitwise operation intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities":[
+                [ //1
+                    {
+                        "entity": "OPERAND1",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 8,
+                        "to": 9
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                [ //2
+                    {
+                        "entity": "OPERAND1",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 8,
+                        "to": 9
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                [ //3
+                    {
+                        "entity": "OPERAND1",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 8,
+                        "to": 9
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                [ //4
+                    {
+                        "entity": "OPERAND1",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                [ //5
+                    {
+                        "entity": "OPERAND1",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    },
+                    {
+                        "entity": "SHIFT_VALUE",
+                        "from": 9,
+                        "to": 10
+                    }
+                ],
+                [ //6
+                    {
+                        "entity": "OPERAND1",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    },
+                    {
+                        "entity": "SHIFT_VALUE",
+                        "from": 9,
+                        "to": 10
+                    }
+                ]
+            ]
+
+
         },
         {
             "intent": "Logical Operation"
         },
         {
-            "intent": "Comparosion Operation"
+            "intent": "Comparison Operation",
+            "keywords":[
+                "Check if x is equal to y", //1
+                "Check if a is not equal to b", //2
+
+                "Check if x is greater than y", //3
+                "Check if a is less than b", //4
+
+                "Check if x is greater than or equal to y", //5
+                "Check if a is less than or equal to b" //6
+            ],
+            "responses": [
+                "comparison operation intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 5
+                    }
+
+                ],
+                [ //2
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 6
+                    }
+
+                ],
+                [ //3
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 6
+                    }
+
+                ],
+                [ //4
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 6
+                    }
+
+                ],
+                [ //5
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 9,
+                        "to": 10
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 8
+                    }
+
+                ],
+                [ //6
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 9,
+                        "to": 10
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 8
+                    }
+
+                ]
+            ]
         },
         {
-            "intent": "Mathematical Operation"
+            "intent": "Mathematical Operation",
+            "keywords":[
+                "Add x and y", //1
+                "Subtract a from b", //2
+
+                "Multiply x by y", //3
+                "Divide a by b", //4
+
+                "Get the remainder of x divided by y", //5
+                "Get the modulus of a divided by b", //6
+
+                "Raise x to the power of y", //7
+                "Get the square root of x", //8
+
+                "Get the floor value of x", //9
+                "Ceil x"//10
+
+            ],
+            "responses": [
+                "mathematical operation intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities":[
+                [//1
+                    {
+                        "entity": "OPERAND1",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 0,
+                        "to": 1
+                    }
+                ],
+
+                [//2
+                    {
+                        "entity": "OPERAND1",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 0,
+                        "to": 1
+                    }
+                ],
+
+                [//3
+                    {
+                        "entity": "OPERAND1",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 0,
+                        "to": 1
+                    }
+                ],
+
+                [//4
+                    {
+                        "entity": "OPERAND1",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 0,
+                        "to": 1
+                    }
+                ],
+
+                [//5
+                    {
+                        "entity": "OPERAND1",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 2,
+                        "to": 3
+                    }
+                ],
+                
+                [//6
+                    {
+                        "entity": "OPERAND1",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 2,
+                        "to": 3
+                    }
+                ],
+
+                [//7
+                    {
+                        "entity": "OPERAND1",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+
+                [//8
+                    {
+                        "entity": "OPERAND1",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 2,
+                        "to": 4
+                    }
+                ],
+
+                [//9
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 5,
+                        "to": 6
+                    }
+                ],
+
+                [//10
+                    {
+                        "entity": "OPERAND1",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 0,
+                        "to": 1
+                    }
+                ]
+            ]
         },
         {
-            "intent": "Identity Operation"
+            "intent": "Identity Operation",
+            "keywords":[
+                "Check if x is y", //1
+                "Check if a is not b", //2
+            ],
+            "responses": [
+                "identity operation intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities":[
+                [//1
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                
+                [//2
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "OPERAND2",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    }
+                ]
+            ]
         },
         {
-            "intent": "Membership Operation"
+            "intent": "Membership Operation",
+            "keywords":[
+                "Check if x is in the list arr", //1
+                "Check if y is not in the set unique", //2
+                "Check if z is in the dictionary words", //3
+                "Check if a is not in the tuple y" //4
+
+            ],  
+            "responses": [
+                "membership operation intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    {
+                        "entity": "ELEMENT",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "COLLECTION",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+                [ //2
+                    {
+                        "entity": "ELEMENT",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "COLLECTION",
+                        "from": 8,
+                        "to": 9
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 4,
+                        "to": 6
+                    }
+                ],
+                [ //3
+                    {
+                        "entity": "ELEMENT",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "COLLECTION",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+                [ //4
+                    {
+                        "entity": "ELEMENT",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "COLLECTION",
+                        "from": 8,
+                        "to": 9
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 4,
+                        "to": 6
+                    }
+                    
+                ]
+            ]
         },
         {
             "intent": "Casting",
@@ -1794,10 +2459,207 @@
             ]
         },
         {
-            "intent": "I/O Operation"
+            "intent": "I/O Operation",
+            "keywords":[
+                "Take input from user for their name", //1
+                "Read from a user and put in variable x", //2
+                "Ask the user to input their age", //3
+                "Promt the user to enter their email", //4
+
+                "output the variable result", //5
+                "Print \" Error \" ", //6
+                "Print x", //7
+                "Show the error message err", //8
+                "Display age", //9
+                "Write y", //10
+                "Print the following message \" program ends here \" " //11
+            ],
+            "responses": [
+                "I/O operation intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 6,
+                        "to": 7
+                    }
+                    
+                ],
+                [ //2
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 8,
+                        "to": 9
+                    }
+
+                ],
+                [ //3
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 6,
+                        "to": 7
+                    }
+
+                ],
+                [ //4
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 6,
+                        "to": 7
+                    }
+
+                ],
+                [ //5
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 3,
+                        "to": 4
+                    }
+
+                ],
+                [ //6
+                    {
+                        "entity": "MESSAGE",
+                        "from": 1,
+                        "to": 4
+                    }
+
+                ],
+                [ //7
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    }
+
+                ],
+                [ //8
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 4,
+                        "to": 5
+                    }
+
+                ],
+                [ //9
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    }
+
+                ],
+                [ //10
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    }
+
+                ],
+                [ //11
+                    {
+                        "entity": "MESSAGE",
+                        "from": 4,
+                        "to": 9
+                    }
+
+                ]
+            ]
         },
         {
-            "intent": "Assertion"
+            "intent": "Assertion",
+            "keywords":[
+                "Assert that x is greater than or equal 0", //1
+                "Assert that y is smaller than or equal 100", //2
+
+                "Ensure that z is not equal to null", //3
+                "Confirm that b equals zero" //4
+            ],
+            "responses": [
+                "assertion intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": false,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 8
+                    },
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "VALUE",
+                        "from": 8,
+                        "to": 9
+                    }
+                ],
+                [ //2
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 8
+                    },
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "VALUE",
+                        "from": 8,
+                        "to": 9
+                    }
+                ],
+                [ //3
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "VALUE",
+                        "from": 7,
+                        "to": 8
+                    }
+                ],
+                [ //4
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "OPERAND1",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "VALUE",
+                        "from": 4,
+                        "to": 5
+                    }
+                ]
+            ]
         },
         {
             "intent": "Libraries",
