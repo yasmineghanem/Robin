@@ -1502,14 +1502,14 @@
                 "assign the value 5 to the variable x", //1
                 "assign the value 10 to the variable y", //2
                 "set the string hello to the variable message", //3
-                "assign the value 3.14 to the variable pi", //4
+                "assign the value 3.14 to pi", //4
                 "put my name is john in the variable name", //5
                 "insert 100 into the variable count", //6
                 "set is valid to true", //7
-                "assign the value 20 to the variable age", //8
+                "assign the value 20 to age", //8
                 "assign the value 30 to the variable salary", //9
                 "set the variable is active to false", //10
-                "put the sentence i am a student in the variable statement", //11
+                "put i am a student in the variable statement", //11
                 "x equals y", //12 
                 "name equals noah", //13
                 "age is equal to 23", //14
@@ -1526,99 +1526,1235 @@
                 "update name to adam", //25
                 "update is valid to false", //26
                 "store 9843 to the variable num", //27
+                "assign the values 1 2 and 3 to the list arr", //28
+                "put the values apple banana cherry in the list fruits", //29
+                "assign the values {name: 'john, age: 23} to the variable person", //30
+                "person of age equals 23", //31
+                "assign the values 1 2 3 4 and 5 to the list numbers", //32
             ],
             "responses": [
                 "assignment intent detected"
             ],
             "extension": {
                 "function":"",
-                "entities": false,
+                "entities": true,
                 "responses": []
             },
             "entities": [
                 [ //1
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                     
                 ],
                 [ //2
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //3
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //4
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //5
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 8,
+                        "to": 9
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 1,
+                        "to": 5
+                    }
                 ],
                 [ //6
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 1,
+                        "to": 2
+                    }
                 ],
                 [ //7
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 3
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 4,
+                        "to": 5
+                    }
                 ],
                 [ //8
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //9
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //10
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 3,
+                        "to": 5
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 6,
+                        "to": 7
+                    }
                 ],
                 [ //11
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 8,
+                        "to": 9
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 1,
+                        "to": 4
+                    }
                 ],
                 [ //12
-
-                ],
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 2,
+                        "to": 3
+                    }
+                ],  
                 [ //13
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 2,
+                        "to": 3
+                    }
                 ],
                 [ //14
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 4,
+                        "to": 5
+                    }
                 ],
                 [ //15
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 4,
+                        "to": 5
+                    }
                 ],
                 [ //16
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //17
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 0,
+                        "to": 2
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //18
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //19
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 4,
+                        "to": 5
+                    }
                 ],
                 [ //20
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //21
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //22
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //23
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
                 ],
                 [ //24
-
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 6,
+                        "to": 7
+                    }
+                ],
+                [ //25
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                [ //26
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 3
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+                [ //27
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 1,
+                        "to": 2
+                    }
+                ],
+                [ //28
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 10,
+                        "to": 11
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 7
+                    }
+                ],
+                [ //29
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 6
+                    }
+                ],
+                [ //30
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 10,
+                        "to": 11
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 7
+                    }
+                ],
+                [ //31
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 0,
+                        "to": 3
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+                [ //32
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 12,
+                        "to": 13
+                    },
+                    {
+                        "entity": "EXPRESSION",
+                        "from": 3,
+                        "to": 9
+                    }
                 ]
+
             ]
         },
         {
             "intent": "Conditional Statement",
             "keywords": [
-                "", 
-                ""
+                "if x equals y", //1
+                "if name equals noah", //2
+                "if age is greater than 23", //3
+                "if salary is less than 50000", //4
+                "if is valid is true", //5
+                "if var1 is equal to 11", //6
+                "check if x and y are equal", //7
+                "check if is finished is true", //8
+                "check whether flag is false", //9
+                "if x is not equal to y", //10
+                "if count is greater than 100", //11
+                "if count is less than size", //12
+                "check if is valid is false", //13
+                "if var1 and var2 are equal", //14
+                "if x is equal to y", //15
+                "if salary is more than 50000", //16
+                "if temp is smaller than name", //17
+                "check if test is none", //18
+                "check whether a and b are not equal", //19
+                "check if a and b are the same", //20
+                "if x is more than y", //21
+                "check if x is less than y", //22
+                "check if temp1 and temp2 are the same", //23
+            ],
+            "responses": [
+                "conditional statement intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": true,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 2,
+                        "to": 3
+                    }
+                ],
+                [  //2
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 2,
+                        "to": 3
+                    }
+                ],
+                [ //3
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    }
+                ],
+                [ //4
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    }
+                ],
+                [ //5
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 3
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                [ //6
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                [ //7
+                    {
+                        "entity": "LHS",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 6,
+                        "to": 7
+                    }
+                ],
+                [ //8
+                    {
+                        "entity": "LHS",
+                        "from": 2,
+                        "to": 4
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+                [ //9
+                    {
+                        "entity": "LHS",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    }  
+
+                ],
+                [ //10
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    }
+                ],
+                [ //11
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    }
+                ],
+                [ //12
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    }
+                ],
+                [ //13
+                    {
+                        "entity": "LHS",
+                        "from": 2,
+                        "to": 4
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+                [ //14
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 3,
+                        "to": 4
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 5,
+                        "to": 6
+                    }
+                ],
+                [ //15
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    }
+
+                ],
+                [ //16
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    }
+                ],
+                [ //17
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    }
+                ],
+                [ //18
+                    {
+                        "entity": "LHS",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                [ //19
+                    {
+                        "entity": "LHS",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 6,
+                        "to": 8
+                    }
+                ],
+                [ //20
+                    {
+                        "entity": "LHS",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 7,
+                        "to": 8
+                    }
+                ],
+                [ //21
+                    {
+                        "entity": "LHS",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 3,
+                        "to": 5
+                    }
+
+                ],
+                [ //22
+                    {
+                        "entity": "LHS",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 6,
+                        "to": 7
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 4,
+                        "to": 6
+                    }
+                ],
+                [ //23
+                    {
+                        "entity": "LHS",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "RHS",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "OPERATOR",
+                        "from": 7,
+                        "to": 8
+                    }
+                
+
+                ]
             ]
         },
         {
-            "intent": "Iterative Statement"
+            "intent": "Iterative Statement",
+            "keywords": [
+                "create a for loop from 0 to 10", //1
+                "write a while loop that runs until x is less than 5", //2
+                "create a while loop until flag is false", //3
+                "write a for loop that iterates over an array of length 100", //4
+                "iterate from 1 to 100 using a for loop", //5
+                "using a while loop iterate while count is greater than 0", //7,
+                "while true", //8
+                "for i in range 10", //9
+                "for i in range 1 to 50", //10
+                "while flag is true", //11
+                "while is valid is false", //12
+                "for i in range 0 to 100", //13
+                "use a for loop to iterate from 10 to 0", //14
+                "loop from 10 to 99 using a for loop", //15
+                "while x is less than 100", //16
+                "while false",  //18
+                "create a for loop from 0 to n", //19
+                "for x in range 100", //20
+                "for j in range 1 to 10", //21
+                "while x is more than 0", //22
+                "while x and y are equal", //23
+                "create a while loop with the condition x is equal to y", //24
+                "write a for loop that iterates 100 times", //25
+
+            ],
+            "responses": [
+                "iterative statement intent detected"
+            ],
+            "extension": {
+                "function":"",
+                "entities": true,
+                "responses": []
+            },
+            "entities": [
+                [ //1
+                    {
+                        "entity": "TYPE",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "START",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 7,
+                        "to": 8
+                    }
+                ],
+                [ //2
+                    {
+                        "entity": "TYPE",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 7,
+                        "to": 12
+                    }
+                ],
+                [ //3
+                    {
+                        "entity": "TYPE",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 5,
+                        "to": 8
+                    }
+                ],
+                [ //4
+                    {
+                        "entity": "TYPE",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 11,
+                        "to": 12
+                    }
+                ],
+                [ //5
+                    {
+                        "entity": "TYPE",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "START",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+                [ //7
+                    {
+                        "entity": "TYPE",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 6,
+                        "to": 11
+                    }
+                ],
+                [ //8
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 1,
+                        "to": 2
+                    }
+                ],
+                [ //9
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "VARIABLE",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+                [ //10
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "VARIABLE",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "START",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 6,
+                        "to": 7
+                    }
+
+                ],
+                [ //11
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "VARIABLE",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 2,
+                        "to": 4
+                    }
+                ],
+                [ //12
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "VARIABLE",
+                        "from": 1,
+                        "to": 3
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 3,
+                        "to": 4
+                    }
+                ],
+                [ //13
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "VARIABLE",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "START",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 6,
+                        "to": 7
+                    }
+                ],
+                [ //14
+                    {
+                        "entity": "TYPE",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "START",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 9,
+                        "to": 10
+                    }
+                ],
+                [ //15
+                    {
+                        "entity": "TYPE",
+                        "from": 7,
+                        "to": 8
+                    },
+                    {
+                        "entity": "START",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+                [ //16
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },                    
+                    {
+                        "entity": "CONDITION",
+                        "from": 2,
+                        "to": 6
+                    }
+                ],
+                [ //18
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 1,
+                        "to": 2
+                    }
+                ],
+                [ //19
+                    {
+                        "entity": "TYPE",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "START",
+                        "from": 5,
+                        "to": 6
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 7,
+                        "to": 8
+                    }
+                ],
+                [ //20
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "VARIABLE",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 4,
+                        "to": 5
+                    }
+                ],
+                [ //21
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "VARIABLE",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
+                        "entity": "START",
+                        "from": 4,
+                        "to": 5
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 6,
+                        "to": 7
+                    }
+                ],
+                [ //22
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 2,
+                        "to": 6
+                    }
+                ],
+                [ //23
+                    {
+                        "entity": "TYPE",
+                        "from": 0,
+                        "to": 1
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 1,
+                        "to": 6
+                    }
+                ],
+                [ //24
+                    {
+                        "entity": "TYPE",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "CONDITION",
+                        "from": 7,
+                        "to": 12
+                    }
+                ],
+                [ //25
+                    {
+                        "entity": "TYPE",
+                        "from": 2,
+                        "to": 3
+                    },
+                    {
+                        "entity": "STOP",
+                        "from": 6,
+                        "to": 7
+                    }
+                
+
+                ]
+            ]
         },
         {
             "intent": "Array Operation"
@@ -1633,7 +2769,7 @@
             "intent": "Logical Operation"
         },
         {
-            "intent": "Comparosion Operation"
+            "intent": "Comparison Operation"
         },
         {
             "intent": "Mathematical Operation"
@@ -1663,20 +2799,35 @@
             "entities": [
                 [ //1
                     {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
                         "entity": "CAST_TYPE",
-                        "from": 3,
-                        "to": 4
+                        "from": 4,
+                        "to": 5
                     }
                 ],
                 [ //2
                     {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
                         "entity": "CAST_TYPE",
-                        "from": 3,
-                        "to": 4
+                        "from": 4,
+                        "to": 5
                     }
 
                 ],
                 [ //3
+                    {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    },
                     {
                         "entity": "CAST_TYPE",
                         "from": 4,
@@ -1686,81 +2837,14 @@
                 ],
                 [ //4
                     {
+                        "entity": "VARIABLE_NAME",
+                        "from": 1,
+                        "to": 2
+                    },
+                    {
                         "entity": "CAST_TYPE",
-                        "from": 3,
-                        "to": 4
-                    }
-
-                ]
-            ]
-        },
-        {
-            "intent": "Datatypes",
-            "keywords":[
-                "create a list variable named arr", //1
-                "define a tuple variable called ", //2
-                "declare a dictionary variable with name hash", //3
-                "create a set variable called items" //4
-                
-            ],
-            "responses": [
-                "datatype intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": [
-                [ //1
-                    {
-                        "entity": "DATATYPE",
-                        "from": 3,
-                        "to": 4
-                    },
-                    {
-                        "entity": "VARIABLE_NAME",
-                        "from": 5,
-                        "to": 6
-                    }
-                    
-                ],
-                [ //2
-                    {
-                        "entity": "DATATYPE",
-                        "from": 3,
-                        "to": 4
-                    },
-                    {
-                        "entity": "VARIABLE_NAME",
-                        "from": 5,
-                        "to": 6
-                    }
-
-                ],
-                [ //3
-                    {
-                        "entity": "DATATYPE",
-                        "from": 3,
-                        "to": 4
-                    },
-                    {
-                        "entity": "VARIABLE_NAME",
-                        "from": 5,
-                        "to": 6
-                    }
-
-                ],
-                [ //4
-                    {
-                        "entity": "DATATYPE",
-                        "from": 3,
-                        "to": 4
-                    },
-                    {
-                        "entity": "VARIABLE_NAME",
-                        "from": 5,
-                        "to": 6
+                        "from": 4,
+                        "to": 5
                     }
 
                 ]
@@ -1828,8 +2912,8 @@
                 [ //2
                     {
                         "entity": "LIBRARY_NAME",
-                        "from": 3,
-                        "to": 4
+                        "from": 2,
+                        "to": 3
                     
                     }
 
@@ -1837,24 +2921,24 @@
                 [ //3
                     {
                         "entity": "LIBRARY_NAME",
-                        "from": 3,
-                        "to": 4
+                        "from": 2,
+                        "to": 3
                     }
 
                 ],
                 [ //4
                     {
                         "entity": "LIBRARY_NAME",
-                        "from": 3,
-                        "to": 4
+                        "from": 2,
+                        "to": 3
                     }
 
                 ],
                 [ //5
                     {
                         "entity": "LIBRARY_NAME",
-                        "from": 2,
-                        "to": 3
+                        "from": 1,
+                        "to": 2
                     }
 
                 ]
