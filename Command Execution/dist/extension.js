@@ -24616,6 +24616,23 @@ router.post("/rename", (req, res) => {
 //     );
 //   }
 // );
+// save
+router.post("/save", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.save", data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File saved successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "No active files found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
 exports["default"] = router;
 
 
@@ -25055,6 +25072,30 @@ const rename = () => {
         };
     });
 };
+// save file or all current files
+const saveFile = () => {
+    vscode.commands.registerCommand('robin.save', (args) => {
+        const all = args.all ?? false;
+        if (all) {
+            vscode.workspace.textDocuments.forEach((doc) => {
+                doc.save();
+            });
+        }
+        else {
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                editor.document.save();
+                // return {
+                //     success: true
+                // };
+            }
+            ;
+        }
+        return {
+            success: true
+        };
+    });
+};
 const registerFileSystemCommands = () => {
     const commands = [
         createFile,
@@ -25063,7 +25104,8 @@ const registerFileSystemCommands = () => {
         copyDirectory,
         deleteFile,
         rename,
-        copyFileClipboard,
+        saveFile,
+        // copyFileClipboard,
     ];
     commands.forEach(command => command());
 };

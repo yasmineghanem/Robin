@@ -172,7 +172,7 @@ const copyDirectory = () => {
                 vscode.workspace.fs.copy(
                     vscode.Uri.file(sourcePath),
                     vscode.Uri.file(`${vscode.workspace.rootPath}\\${destination}`)
-,
+                    ,
 
                 );
             }
@@ -292,6 +292,33 @@ const rename = () => {
 };
 
 
+// save file or all current files
+const saveFile = () => {
+    vscode.commands.registerCommand('robin.save', (args) => {
+        const all = args.all ?? false;
+        if (all) {
+            vscode.workspace.textDocuments.forEach((doc) => {
+                doc.save();
+            });
+        }
+        else {
+
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                editor.document.save();
+                // return {
+                //     success: true
+                // };
+            };
+        }
+        return {
+            success: true
+        };
+
+    });
+
+};
+
 const registerFileSystemCommands = () => {
     const commands = [
         createFile,
@@ -300,7 +327,8 @@ const registerFileSystemCommands = () => {
         copyDirectory,
         deleteFile,
         rename,
-        copyFileClipboard,
+        saveFile,
+        // copyFileClipboard,
     ];
 
     commands.forEach(command => command());

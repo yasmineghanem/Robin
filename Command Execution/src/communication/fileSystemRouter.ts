@@ -170,4 +170,28 @@ router.post(
 //     );
 //   }
 // );
+
+// save
+router.post(
+  "/save",
+  (req: any, res: any) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.save", data).then(
+      (response: any) => {
+        if (response.success) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File saved successfully!" }));
+        }
+        else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "No active files found" }));
+        }
+      },
+      (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+      }
+    );
+  }
+);
 export default router;
