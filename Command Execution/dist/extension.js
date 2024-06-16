@@ -37,7 +37,7 @@ exports.deactivate = exports.activate = void 0;
 // Import the module and reference it with the alias vscode in your code below
 const vscode = __importStar(__webpack_require__(1));
 const server_1 = __importDefault(__webpack_require__(2));
-const commands_1 = __importDefault(__webpack_require__(162));
+const commands_1 = __importDefault(__webpack_require__(163));
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
@@ -103,7 +103,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const express_1 = __importDefault(__webpack_require__(3));
 const cors_1 = __importDefault(__webpack_require__(160));
-const fileSystemRouter_1 = __importDefault(__webpack_require__(164));
+const fileSystemRouter_1 = __importDefault(__webpack_require__(162));
 const server = (0, express_1.default)();
 // middleware
 server.use((0, cors_1.default)());
@@ -24483,12 +24483,177 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const vscode = __importStar(__webpack_require__(1));
+// import server from "./server";
+const router = (__webpack_require__(3).Router)();
+// router prefix
+// router.prefix = '/file-system';
+router.post("/create-file", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.createFile", data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File created successfully!" }));
+        }
+        else {
+            res.writeHead(409, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File already exists!" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+router.post("/create-directory", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.createDirectory", data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({
+                // response.path,
+                message: "Directory created successfully!",
+            }));
+        }
+        else {
+            res.writeHead(409, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Directory already exists!" }));
+        }
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        console.log(err);
+        res.end(JSON.stringify(err));
+    });
+});
+// copy file
+router.post("/copy-file", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.copyFile", data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File copied successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File not found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+// copy directory
+router.post("/copy-directory", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.copyDirectory", data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Directory copied successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Directory not found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+// delete file or directory
+router.post("/delete", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.deleteFile", data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File/Directory deleted successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File/Directory not found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+// rename file or directory
+router.post("/rename", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.rename", data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File/Directory renamed successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File/Directory not found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+// copy to clipboard
+// router.post(
+//   "/copy-clipboard",
+//   (req: any, res: any) => {
+//     const data = req.body;
+//     vscode.commands.executeCommand("robin.copyFileClipboard", data).then(
+//       (response: any) => {
+//         if (response.success) {
+//           res.writeHead(200, { "Content-Type": "application/json" });
+//           res.end(JSON.stringify({ message: "File copied to clipboard!" }));
+//         }
+//         else {
+//           res.writeHead(404, { "Content-Type": "application/json" });
+//           res.end(JSON.stringify({ message: "File not found" }));
+//         }
+//       },
+//       (err) => {
+//         res.writeHead(500, { "Content-Type": "application/json" });
+//         res.end(JSON.stringify({ error: err }));
+//       }
+//     );
+//   }
+// );
+exports["default"] = router;
+
+
+/***/ }),
+/* 163 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
-const filesystemCommands_1 = __importDefault(__webpack_require__(163));
+const filesystemCommands_1 = __importDefault(__webpack_require__(164));
 // register commands
 // function get_endpoint(editor: vscode.TextEditor): vscode.Position {
 //   const lastLine = editor.document.lineAt(editor.document.lineCount - 1);
@@ -24622,7 +24787,7 @@ exports["default"] = registerAllCommands;
 
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -24656,6 +24821,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const fs_1 = __importDefault(__webpack_require__(25));
+/**
+ *
+ * defining some utilities
+ */
+// check if the file or directory exists
+// if check with and without extension
+const fileExists = (path) => {
+    if (fs_1.default.existsSync(path)) {
+        return true;
+    }
+    const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || '');
+    const file = files.find(file => file.split('.')[0] === path);
+    if (file) {
+        return true;
+    }
+    return false;
+};
 // create new file
 // sample input => 
 // {
@@ -24781,6 +24963,7 @@ const copyDirectory = () => {
     vscode.commands.registerCommand('robin.copyDirectory', (args) => {
         const source = args.source;
         const destination = args.destination;
+        const overwrite = args.overwrite ?? false;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
         if (fs_1.default.existsSync(sourcePath)) {
             if (destination) {
@@ -24799,124 +24982,92 @@ const copyDirectory = () => {
         };
     });
 };
+// delete file or directory
+const deleteFile = () => {
+    vscode.commands.registerCommand('robin.deleteFile', (args) => {
+        const source = args.source;
+        const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+        if (fileExists(sourcePath)) {
+            vscode.workspace.fs.delete(vscode.Uri.file(sourcePath), { recursive: true });
+            return {
+                success: true
+            };
+        }
+        return {
+            success: false,
+            message: "File not found"
+        };
+    });
+};
+// copy file to clipboard
+// const copyFileClipboard = () => {
+//     vscode.commands.registerCommand('robin.copyFileClipboard', (args) => {
+//         const source = args.source;
+//         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+//         if (fileExists(sourcePath)) {
+//             vscode.env.clipboard.writeText(sourcePath);
+//             return {
+//                 success: true
+//             };
+//         }
+//         return {
+//             success: false,
+//             message: "File not found"
+//         };
+//     });
+// };
+// paste from clipboard
+// const pasteFromClipboard = () => {
+//     vscode.commands.registerCommand('robin.pasteFromClipboard', (args) => {
+//         vscode.env.clipboard.readText().then((text) => {
+//             if (fileExists(text)) {
+//                 vscode.workspace.fs.copy(
+//                     vscode.Uri.file(text),
+//                     vscode.Uri.file(`${vscode.workspace.rootPath}\\${text.split('\\').pop()}`)
+//                 );
+//                 return {
+//                     success: true
+//                 };
+//             }
+//             return {
+//                 success: false,
+//                 message: "File not found"
+//             };
+//         });
+//     });
+// };
+const rename = () => {
+    vscode.commands.registerCommand('robin.rename', (args) => {
+        const source = args.source;
+        const destination = args.destination;
+        // const overwrite = args.overwrite ?? false;
+        const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+        const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
+        if (fileExists(sourcePath)) {
+            vscode.workspace.fs.rename(vscode.Uri.file(sourcePath), vscode.Uri.file(destinationPath));
+            return {
+                success: true,
+            };
+        }
+        return {
+            success: false,
+            message: "File not found"
+        };
+    });
+};
 const registerFileSystemCommands = () => {
     const commands = [
         createFile,
         createDirectory,
         copyFileCommand,
-        copyDirectory
+        copyDirectory,
+        deleteFile,
+        rename,
+        copyFileClipboard,
     ];
     commands.forEach(command => command());
 };
 exports["default"] = registerFileSystemCommands;
-
-
-/***/ }),
-/* 164 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const vscode = __importStar(__webpack_require__(1));
-// import server from "./server";
-const router = (__webpack_require__(3).Router)();
-// router prefix
-// router.prefix = '/file-system';
-router.post("/create-file", (req, res) => {
-    const data = req.body;
-    vscode.commands.executeCommand("robin.createFile", data).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "File created successfully!" }));
-        }
-        else {
-            res.writeHead(409, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "File already exists!" }));
-        }
-    }, (err) => {
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: err }));
-    });
-});
-router.post("/create-directory", (req, res) => {
-    const data = req.body;
-    vscode.commands.executeCommand("robin.createDirectory", data).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({
-                // response.path,
-                message: "Directory created successfully!",
-            }));
-        }
-        else {
-            res.writeHead(409, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Directory already exists!" }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        console.log(err);
-        res.end(JSON.stringify(err));
-    });
-});
-// copy file
-router.post("/copy-file", (req, res) => {
-    const data = req.body;
-    vscode.commands.executeCommand("robin.copyFile", data).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "File copied successfully!" }));
-        }
-        else {
-            res.writeHead(404, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "File not found" }));
-        }
-    }, (err) => {
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: err }));
-    });
-});
-// copy directory
-router.post("/copy-directory", (req, res) => {
-    const data = req.body;
-    vscode.commands.executeCommand("robin.copyDirectory", data).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Directory copied successfully!" }));
-        }
-        else {
-            res.writeHead(404, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Directory not found" }));
-        }
-    }, (err) => {
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: err }));
-    });
-});
-exports["default"] = router;
 
 
 /***/ })

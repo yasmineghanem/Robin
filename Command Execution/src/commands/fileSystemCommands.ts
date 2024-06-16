@@ -1,6 +1,33 @@
 import * as vscode from 'vscode';
 import fs, { stat } from "fs";
 
+
+
+/**
+ * 
+ * defining some utilities
+ */
+
+// check if the file or directory exists
+// if check with and without extension
+const fileExists = (path: string) => {
+    if (fs.existsSync(path)) {
+        return true;
+    }
+    const files = fs.readdirSync(vscode.workspace.rootPath?.toString() || '');
+    const file = files.find(file => file.split('.')[0] === path);
+    if (file) {
+        return true;
+    }
+    return false;
+};
+
+
+
+
+
+
+
 // create new file
 // sample input => 
 // {
@@ -72,6 +99,7 @@ const createDirectory = () => vscode.commands.registerCommand('robin.createDirec
  * if it's not, create a new file with the source file's content and the name would be source file - copy
  */
 
+
 const copyFileCommand = () => {
     vscode.commands.registerCommand('robin.copyFile', (args) => {
         const source = args.source;
@@ -110,7 +138,7 @@ const copyFileCommand = () => {
                     fs.writeFileSync(destinationPath, content);
                 } else {
                     // add copy before extension
-                    path = `${vscode.workspace.rootPath}\\${source.split('.')[0]}-copy.${source.split('.').pop()}`
+                    path = `${vscode.workspace.rootPath}\\${source.split('.')[0]}-copy.${source.split('.').pop()}`;
                     fs.writeFileSync(path, content);
                 }
 
@@ -134,6 +162,8 @@ const copyDirectory = () => {
     vscode.commands.registerCommand('robin.copyDirectory', (args) => {
         const source = args.source;
         const destination = args.destination;
+        const overwrite = args.overwrite ?? false;
+
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
 
         if (fs.existsSync(sourcePath
@@ -142,6 +172,7 @@ const copyDirectory = () => {
                 vscode.workspace.fs.copy(
                     vscode.Uri.file(sourcePath),
                     vscode.Uri.file(`${vscode.workspace.rootPath}\\${destination}`)
+,
 
                 );
             }
@@ -163,12 +194,113 @@ const copyDirectory = () => {
 
 };
 
+
+// delete file or directory
+const deleteFile = () => {
+    vscode.commands.registerCommand('robin.deleteFile', (args) => {
+        const source = args.source;
+        const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+        if (fileExists(sourcePath
+        )) {
+            vscode.workspace.fs.delete(
+                vscode.Uri.file(sourcePath),
+                { recursive: true }
+            );
+            return {
+                success: true
+            };
+        }
+
+        return {
+            success: false,
+            message: "File not found"
+        };
+
+
+    });
+
+};
+
+// copy file to clipboard
+// const copyFileClipboard = () => {
+//     vscode.commands.registerCommand('robin.copyFileClipboard', (args) => {
+//         const source = args.source;
+//         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+//         if (fileExists(sourcePath)) {
+//             vscode.env.clipboard.writeText(sourcePath);
+//             return {
+//                 success: true
+//             };
+//         }
+
+//         return {
+//             success: false,
+//             message: "File not found"
+//         };
+//     });
+
+
+// };
+
+// paste from clipboard
+// const pasteFromClipboard = () => {
+//     vscode.commands.registerCommand('robin.pasteFromClipboard', (args) => {
+//         vscode.env.clipboard.readText().then((text) => {
+//             if (fileExists(text)) {
+//                 vscode.workspace.fs.copy(
+//                     vscode.Uri.file(text),
+//                     vscode.Uri.file(`${vscode.workspace.rootPath}\\${text.split('\\').pop()}`)
+//                 );
+//                 return {
+//                     success: true
+//                 };
+//             }
+//             return {
+//                 success: false,
+//                 message: "File not found"
+//             };
+//         });
+//     });
+// };
+
+
+const rename = () => {
+    vscode.commands.registerCommand('robin.rename', (args) => {
+        const source = args.source;
+        const destination = args.destination;
+        // const overwrite = args.overwrite ?? false;
+        const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+        const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
+
+        if (fileExists(sourcePath)) {
+            vscode.workspace.fs.rename(
+                vscode.Uri.file(sourcePath),
+                vscode.Uri.file(destinationPath),
+                // { overwrite }
+            );
+            return {
+                success: true,
+            };
+        }
+
+        return {
+            success: false,
+            message: "File not found"
+        };
+    });
+
+};
+
+
 const registerFileSystemCommands = () => {
     const commands = [
         createFile,
         createDirectory,
         copyFileCommand,
-        copyDirectory
+        copyDirectory,
+        deleteFile,
+        rename,
+        copyFileClipboard,
     ];
 
     commands.forEach(command => command());

@@ -99,4 +99,75 @@ router.post(
 );
 
 
+// delete file or directory
+router.post(
+  "/delete",
+  (req: any, res: any) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.deleteFile", data).then(
+      (response: any) => {
+        if (response.success) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File/Directory deleted successfully!" }));
+        }
+        else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File/Directory not found" }));
+        }
+      },
+      (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+      }
+    );
+  }
+);
+
+// rename file or directory
+router.post(
+  "/rename",
+  (req: any, res: any) => {
+    const data = req.body;
+    vscode.commands.executeCommand("robin.rename", data).then(
+      (response: any) => {
+        if (response.success) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File/Directory renamed successfully!" }));
+        }
+        else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File/Directory not found" }));
+        }
+      },
+      (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+      }
+    );
+  }
+);
+
+// copy to clipboard
+// router.post(
+//   "/copy-clipboard",
+//   (req: any, res: any) => {
+//     const data = req.body;
+//     vscode.commands.executeCommand("robin.copyFileClipboard", data).then(
+//       (response: any) => {
+//         if (response.success) {
+//           res.writeHead(200, { "Content-Type": "application/json" });
+//           res.end(JSON.stringify({ message: "File copied to clipboard!" }));
+//         }
+//         else {
+//           res.writeHead(404, { "Content-Type": "application/json" });
+//           res.end(JSON.stringify({ message: "File not found" }));
+//         }
+//       },
+//       (err) => {
+//         res.writeHead(500, { "Content-Type": "application/json" });
+//         res.end(JSON.stringify({ error: err }));
+//       }
+//     );
+//   }
+// );
 export default router;
