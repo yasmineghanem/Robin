@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import fs from "fs";
-import { COPY_FILE, CREATE_DIRECTORY, CREATE_FILE, DELETE_FILE, RENAME, SAVE } from '../constants/fileSystem';
+import { COPY_DIRECTORY, COPY_FILE, CREATE_DIRECTORY, CREATE_FILE, DELETE_FILE, RENAME, SAVE } from '../constants/fileSystem';
 
 
 
@@ -160,7 +160,7 @@ const copyFileCommand = () => {
 
 
 const copyDirectory = () => {
-    vscode.commands.registerCommand(CREATE_DIRECTORY, (args) => {
+    vscode.commands.registerCommand(COPY_DIRECTORY, (args) => {
         const source = args.source;
         const destination = args.destination;
         const overwrite = args.overwrite ?? false;
