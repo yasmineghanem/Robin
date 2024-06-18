@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import express from "express";
 import cors from "cors";
 import fileSystemRouter from "./fileSystemRouter";
+import IDERouter from "./IDERouter";
 
 const server = express();
 // middleware
@@ -9,7 +10,8 @@ server.use(cors());
 server.use(express.json());
 
 
-server.use('/file-system',fileSystemRouter);
+server.use('/file-system', fileSystemRouter);
+server.use('/ide', IDERouter);
 
 
 // endpoints

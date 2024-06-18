@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import fs, { stat } from "fs";
+import fs from "fs";
+import { COPY_FILE, CREATE_DIRECTORY, CREATE_FILE, DELETE_FILE, RENAME, SAVE } from '../constants/fileSystem';
 
 
 
@@ -35,7 +36,7 @@ const fileExists = (path: string) => {
 //     "extension": "/py",
 //     "content": "file content"
 // }
-const createFile = () => vscode.commands.registerCommand('robin.createFile', (args) => {
+const createFile = () => vscode.commands.registerCommand(CREATE_FILE, (args) => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
         const fileName = args.fileName;
@@ -63,8 +64,8 @@ const createFile = () => vscode.commands.registerCommand('robin.createFile', (ar
 // {
 //     "name": "new directory"
 // }
-const createDirectory = () => vscode.commands.registerCommand('robin.createDirectory', (args) => {
-    const editor = vscode.window.activeTextEditor;
+const createDirectory = () => vscode.commands.registerCommand(CREATE_DIRECTORY, (args) => {
+const editor = vscode.window.activeTextEditor;
     if (editor) {
         const name = args.name;
         const path = `${vscode.workspace.rootPath}\\${name}`;
@@ -101,7 +102,7 @@ const createDirectory = () => vscode.commands.registerCommand('robin.createDirec
 
 
 const copyFileCommand = () => {
-    vscode.commands.registerCommand('robin.copyFile', (args) => {
+    vscode.commands.registerCommand(COPY_FILE, (args) => {
         const source = args.source;
         const destination = args.destination;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
@@ -159,7 +160,7 @@ const copyFileCommand = () => {
 
 
 const copyDirectory = () => {
-    vscode.commands.registerCommand('robin.copyDirectory', (args) => {
+    vscode.commands.registerCommand(CREATE_DIRECTORY, (args) => {
         const source = args.source;
         const destination = args.destination;
         const overwrite = args.overwrite ?? false;
@@ -197,7 +198,7 @@ const copyDirectory = () => {
 
 // delete file or directory
 const deleteFile = () => {
-    vscode.commands.registerCommand('robin.deleteFile', (args) => {
+    vscode.commands.registerCommand(DELETE_FILE, (args) => {
         const source = args.source;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
         if (fileExists(sourcePath
@@ -265,7 +266,7 @@ const deleteFile = () => {
 
 
 const rename = () => {
-    vscode.commands.registerCommand('robin.rename', (args) => {
+    vscode.commands.registerCommand(RENAME, (args) => {
         const source = args.source;
         const destination = args.destination;
         // const overwrite = args.overwrite ?? false;
@@ -294,7 +295,7 @@ const rename = () => {
 
 // save file or all current files
 const saveFile = () => {
-    vscode.commands.registerCommand('robin.save', (args) => {
+    vscode.commands.registerCommand(SAVE, (args) => {
         const all = args.all ?? false;
         if (all) {
             vscode.workspace.textDocuments.forEach((doc) => {

@@ -1,13 +1,12 @@
 import * as vscode from 'vscode';
+import { COPY_DIRECTORY, COPY_FILE, CREATE_DIRECTORY, CREATE_FILE, DELETE_FILE, RENAME, SAVE } from '../constants/fileSystem';
 // import server from "./server";
 const router = require('express').Router();
 
-// router prefix
-// router.prefix = '/file-system';
 
 router.post("/create-file", (req: any, res: any) => {
   const data = req.body;
-  vscode.commands.executeCommand("robin.createFile", data).then(
+  vscode.commands.executeCommand(CREATE_FILE, data).then(
     (response: any) => {
       if (response.success) {
         res.writeHead(200, { "Content-Type": "application/json" });
@@ -25,7 +24,7 @@ router.post("/create-file", (req: any, res: any) => {
 });
 router.post("/create-directory", (req: any, res: any) => {
   const data = req.body;
-  vscode.commands.executeCommand("robin.createDirectory", data).then(
+  vscode.commands.executeCommand(CREATE_DIRECTORY, data).then(
     (response: any) => {
       if (response.success) {
         res.writeHead(200, { "Content-Type": "application/json" });
@@ -54,7 +53,7 @@ router.post(
   "/copy-file",
   (req: any, res: any) => {
     const data = req.body;
-    vscode.commands.executeCommand("robin.copyFile", data).then(
+    vscode.commands.executeCommand(COPY_FILE, data).then(
       (response: any) => {
         if (response.success) {
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -79,7 +78,7 @@ router.post(
   "/copy-directory",
   (req: any, res: any) => {
     const data = req.body;
-    vscode.commands.executeCommand("robin.copyDirectory", data).then(
+    vscode.commands.executeCommand(COPY_DIRECTORY, data).then(
       (response: any) => {
         if (response.success) {
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -104,7 +103,7 @@ router.post(
   "/delete",
   (req: any, res: any) => {
     const data = req.body;
-    vscode.commands.executeCommand("robin.deleteFile", data).then(
+    vscode.commands.executeCommand(DELETE_FILE, data).then(
       (response: any) => {
         if (response.success) {
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -128,7 +127,7 @@ router.post(
   "/rename",
   (req: any, res: any) => {
     const data = req.body;
-    vscode.commands.executeCommand("robin.rename", data).then(
+    vscode.commands.executeCommand(RENAME, data).then(
       (response: any) => {
         if (response.success) {
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -176,7 +175,7 @@ router.post(
   "/save",
   (req: any, res: any) => {
     const data = req.body;
-    vscode.commands.executeCommand("robin.save", data).then(
+    vscode.commands.executeCommand(SAVE, data).then(
       (response: any) => {
         if (response.success) {
           res.writeHead(200, { "Content-Type": "application/json" });

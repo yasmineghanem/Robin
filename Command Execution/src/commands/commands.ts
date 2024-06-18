@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import registerFileSystemCommands from './filesystemCommands';
+import registerFileSystemCommands from './fileSystemCommands';
+import registerIDECommands from './IDECommands';
 
 // register commands
 // function get_endpoint(editor: vscode.TextEditor): vscode.Position {
@@ -138,6 +139,7 @@ const registerAllCommands = () => {
   commands.forEach(command => command());
 
   registerFileSystemCommands();
+  registerIDECommands();
 };
 
 export default registerAllCommands;
