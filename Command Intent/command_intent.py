@@ -35,7 +35,7 @@ for intent in data['intents']:
         unique_intents.append(intent['intent'])
     for keyword in intent['keywords']:
         # cleaning is done before adding text to corpus
-        text_input.append(clean(keyword))
+        text_input.append(  (keyword))
         intents.append(intent['intent'])
     if intent['intent'] not in response_for_intent:
         response_for_intent[intent['intent']] = []
