@@ -5,7 +5,7 @@ import threading
 HTTP = 'https://'
 IP_ADDRESS = '192.168.1.86'
 URL =  HTTP + IP_ADDRESS + ':4343/video'
-
+URL = 0
 # eye_controller_object = eye_controller(URL)    
 # frame_thread = threading.Thread(target=eye_controller_object.process_frames)
 # frame_thread.start()
