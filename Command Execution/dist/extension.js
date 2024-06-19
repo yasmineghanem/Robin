@@ -37,7 +37,7 @@ exports.deactivate = exports.activate = void 0;
 // Import the module and reference it with the alias vscode in your code below
 const vscode = __importStar(__webpack_require__(1));
 const server_1 = __importDefault(__webpack_require__(2));
-const commands_1 = __importDefault(__webpack_require__(162));
+const commands_1 = __importDefault(__webpack_require__(169));
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
@@ -103,24 +103,31 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const express_1 = __importDefault(__webpack_require__(3));
 const cors_1 = __importDefault(__webpack_require__(160));
-const fileSystemRouter_1 = __importDefault(__webpack_require__(164));
+const fileSystemRouter_1 = __importDefault(__webpack_require__(162));
+const IDERouter_1 = __importDefault(__webpack_require__(164));
+const codeRouter_1 = __importDefault(__webpack_require__(166));
 const server = (0, express_1.default)();
 // middleware
 server.use((0, cors_1.default)());
 server.use(express_1.default.json());
 server.use('/file-system', fileSystemRouter_1.default);
+server.use('/ide', IDERouter_1.default);
+server.use('/code', codeRouter_1.default);
 // endpoints
-server.post("/declare-var", (req, res) => {
-    const data = req.body;
-    const args = req.query;
-    vscode.commands.executeCommand("robin.declareVariable", args, data).then(() => {
-        res.writeHead(200, { "Content-Type": "text/plain" });
-        res.end("Command executed successfully");
-    }, (err) => {
-        res.writeHead(500, { "Content-Type": "text/plain" });
-        res.end("Failed to execute command");
-    });
-});
+// server.post("/declare-var", (req, res) => {
+//   const data = req.body;
+//   const args = req.query;
+//   vscode.commands.executeCommand("robin.declareVariable", args, data).then(
+//     () => {
+//       res.writeHead(200, { "Content-Type": "text/plain" });
+//       res.end("Command executed successfully");
+//     },
+//     (err) => {
+//       res.writeHead(500, { "Content-Type": "text/plain" });
+//       res.end("Failed to execute command");
+//     }
+//   );
+// });
 server.post("/declare-func", (req, res) => {
     const data = req.body;
     const args = req.query;
@@ -24483,12 +24490,431 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const vscode = __importStar(__webpack_require__(1));
+const fileSystem_1 = __webpack_require__(163);
+const router = (__webpack_require__(3).Router)();
+router.post("/create-file", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand(fileSystem_1.CREATE_FILE, data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File created successfully!" }));
+        }
+        else {
+            res.writeHead(409, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File already exists!" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+router.post("/create-directory", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand(fileSystem_1.CREATE_DIRECTORY, data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({
+                // response.path,
+                message: "Directory created successfully!",
+            }));
+        }
+        else {
+            res.writeHead(409, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Directory already exists!" }));
+        }
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        console.log(err);
+        res.end(JSON.stringify(err));
+    });
+});
+// copy file
+router.post("/copy-file", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand(fileSystem_1.COPY_FILE, data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File copied successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File not found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+// copy directory
+router.post("/copy-directory", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand(fileSystem_1.COPY_DIRECTORY, data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Directory copied successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Directory not found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+// delete file or directory
+router.post("/delete", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand(fileSystem_1.DELETE_FILE, data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File/Directory deleted successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File/Directory not found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+// rename file or directory
+router.post("/rename", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand(fileSystem_1.RENAME, data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File/Directory renamed successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File/Directory not found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+// copy to clipboard
+// router.post(
+//   "/copy-clipboard",
+//   (req: any, res: any) => {
+//     const data = req.body;
+//     vscode.commands.executeCommand("robin.copyFileClipboard", data).then(
+//       (response: any) => {
+//         if (response.success) {
+//           res.writeHead(200, { "Content-Type": "application/json" });
+//           res.end(JSON.stringify({ message: "File copied to clipboard!" }));
+//         }
+//         else {
+//           res.writeHead(404, { "Content-Type": "application/json" });
+//           res.end(JSON.stringify({ message: "File not found" }));
+//         }
+//       },
+//       (err) => {
+//         res.writeHead(500, { "Content-Type": "application/json" });
+//         res.end(JSON.stringify({ error: err }));
+//       }
+//     );
+//   }
+// );
+// save
+router.post("/save", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand(fileSystem_1.SAVE, data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "File saved successfully!" }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "No active files found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
+exports["default"] = router;
+
+
+/***/ }),
+/* 163 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// commands
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SAVE = exports.RENAME = exports.DELETE_FILE = exports.COPY_DIRECTORY = exports.COPY_FILE = exports.CREATE_DIRECTORY = exports.CREATE_FILE = void 0;
+// create file
+exports.CREATE_FILE = "robin.createFile";
+// create directory
+exports.CREATE_DIRECTORY = "robin.createDirectory";
+// copy file
+exports.COPY_FILE = "robin.copyFile";
+// copy directory
+exports.COPY_DIRECTORY = "robin.copyDirectory";
+// delete file
+exports.DELETE_FILE = "robin.deleteFile";
+// rename
+exports.RENAME = "robin.rename";
+// save
+exports.SAVE = "robin.save";
+
+
+/***/ }),
+/* 164 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const vscode = __importStar(__webpack_require__(1));
+const IDE_1 = __webpack_require__(165);
+const router = (__webpack_require__(3).Router)();
+router.post("/go-to-line", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand(IDE_1.GO_TO_LINE, data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Navigated to line!" }));
+        }
+        else {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "No active text editor" }));
+        }
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+// go to file
+router.post("/go-to-file", (req, res) => {
+    const data = req.body;
+    vscode.commands.executeCommand(IDE_1.GO_TO_FILE, data).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Navigated to file!" }));
+        }
+        else {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: response.message }));
+        }
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+// terminal focus
+router.get("/focus-terminal", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.FOCUS_TERMINAL).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Terminal focused!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+// new terminal
+router.get("/new-terminal", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.NEW_TERMINAL).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "New terminal created!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+// kill terminal
+router.get("/kill-terminal", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.KILL_TERMINAL).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Terminal killed!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+exports["default"] = router;
+
+
+/***/ }),
+/* 165 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// commands
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
+exports.GO_TO_LINE = "robin.goToLine";
+// go to file
+exports.GO_TO_FILE = "robin.goToFile";
+// focus on terminal
+exports.FOCUS_TERMINAL = "robin.focusTerminal";
+// new terminal
+exports.NEW_TERMINAL = "robin.newTerminal";
+// kill terminal
+exports.KILL_TERMINAL = "robin.killTerminal";
+
+
+/***/ }),
+/* 166 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const code_1 = __webpack_require__(167);
+const utilities_1 = __webpack_require__(168);
+const express_1 = __importDefault(__webpack_require__(3));
+const router = express_1.default.Router();
+// declare variable
+router.post('/declare-variable', (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.DECLARE_VARIABLE, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// declare function
+router.post('/declare-function', (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.DECLARE_FUNCTION, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+exports["default"] = router;
+
+
+/***/ }),
+/* 167 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.DECLARE_VARIABLE = "robin.declareVariable";
+exports.DECLARE_FUNCTION = "robin.declareFunction";
+
+
+/***/ }),
+/* 168 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.executeCommand = exports.errorHandler = exports.successHandler = void 0;
+const vscode = __importStar(__webpack_require__(1));
+const successHandler = (response, res) => {
+    if (response.success) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Variable declared successfully!' }));
+    }
+    else {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: response.message }));
+    }
+};
+exports.successHandler = successHandler;
+const errorHandler = (err, res) => {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(err));
+};
+exports.errorHandler = errorHandler;
+const executeCommand = (command, data, successHandler, errorHandler, res) => {
+    vscode.commands.executeCommand(command, data).then((response) => successHandler(response, res), (err) => errorHandler(err, res));
+};
+exports.executeCommand = executeCommand;
+
+
+/***/ }),
+/* 169 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
-const filesystemCommands_1 = __importDefault(__webpack_require__(163));
+const fileSystemCommands_1 = __importDefault(__webpack_require__(170));
+const IDECommands_1 = __importDefault(__webpack_require__(171));
+const codeCommands_1 = __importDefault(__webpack_require__(172));
 // register commands
 // function get_endpoint(editor: vscode.TextEditor): vscode.Position {
 //   const lastLine = editor.document.lineAt(editor.document.lineCount - 1);
@@ -24502,72 +24928,69 @@ function get_currentpoint(editor) {
 const activateRobin = () => vscode.commands.registerCommand('robin.activate', () => {
     vscode.window.showInformationMessage('Robin Activated!');
 });
-const declareVariable = () => vscode.commands.registerCommand('robin.declareVariable', (args, body) => {
-    const editor = vscode.window.activeTextEditor;
-    // {
-    // 	"operation": null,
-    // 	"parameters": [
-    // 		{
-    // 			"name": "x",
-    // 			"type": null,
-    // 			"default": 10
-    // 		}
-    // 	]
-    // }
-    const parameters = body.parameters;
-    let name = parameters[0]['name'];
-    let value = parameters[0]['default'];
-    // Check if an editor is open
-    if (editor) {
-        const line = `\n${name} = ${JSON.stringify(value)}`;
-        editor.edit(editBuilder => {
-            editBuilder.insert(get_currentpoint(editor), line);
-        });
-    }
-    else {
-        vscode.window.showErrorMessage('No active text editor.');
-    }
-});
-const declareFunction = () => vscode.commands.registerCommand('robin.declareFunction', (args, body) => {
-    const editor = vscode.window.activeTextEditor;
-    // {
-    // 	"operation": null,
-    // 	"parameters": [
-    // 		null, // first paremeter is the return type
-    // 		"add", // second parameter is the function name
-    // 		{
-    // 			"name": "x",
-    // 			"type": null,
-    // 			"default": 0
-    // 		},
-    // 		{
-    // 			"name": "y",
-    // 			"type": null,
-    // 			"default": 10
-    // 		}
-    // 	]
-    // }
-    const parameters = body.parameters;
-    let type = parameters[0];
-    let name = parameters[1];
-    let line1 = "def " + name + "(";
-    for (let i = 2; i < parameters.length; i++) {
-        if (i - 2)
-            line1 += ",";
-        line1 += parameters[i]['name'] + ' = ' + JSON.stringify(parameters[i]['default']);
-    }
-    line1 += "):";
-    // Check if an editor is open
-    if (editor) {
-        editor.edit(editBuilder => {
-            editBuilder.insert(get_currentpoint(editor), `\n${line1}`);
-            editBuilder.insert(get_currentpoint(editor), '\n	return None');
-        });
-    }
-    else {
-        vscode.window.showErrorMessage('No active text editor.');
-    }
-});
+// const declareVariable = () => vscode.commands.registerCommand('robin.declareVariable', (args, body) => {
+//   const editor = vscode.window.activeTextEditor;
+//   // {
+//   // 	"operation": null,
+//   // 	"parameters": [
+//   // 		{
+//   // 			"name": "x",
+//   // 			"type": null,
+//   // 			"default": 10
+//   // 		}
+//   // 	]
+//   // }
+//   const parameters = body.parameters;
+//   let name = parameters[0]['name'];
+//   let value = parameters[0]['default'];
+//   // Check if an editor is open
+//   if (editor) {
+//     const line = `\n${name} = ${JSON.stringify(value)}`;
+//     editor.edit(editBuilder => {
+//       editBuilder.insert(get_currentpoint(editor), line);
+//     });
+//   } else {
+//     vscode.window.showErrorMessage('No active text editor.');
+//   }
+// });
+// const declareFunction = () => vscode.commands.registerCommand('robin.declareFunction', (args, body) => {
+//   const editor = vscode.window.activeTextEditor;
+//   // {
+//   // 	"operation": null,
+//   // 	"parameters": [
+//   // 		null, // first paremeter is the return type
+//   // 		"add", // second parameter is the function name
+//   // 		{
+//   // 			"name": "x",
+//   // 			"type": null,
+//   // 			"default": 0
+//   // 		},
+//   // 		{
+//   // 			"name": "y",
+//   // 			"type": null,
+//   // 			"default": 10
+//   // 		}
+//   // 	]
+//   // }
+//   const parameters = body.parameters;
+//   let type = parameters[0];
+//   let name = parameters[1];
+//   let line1 = "def " + name + "(";
+//   for (let i = 2; i < parameters.length; i++) {
+//     if (i - 2) line1 += ",";
+//     line1 += parameters[i]['name'] + ' = ' + JSON.stringify(parameters[i]['default']);
+//   }
+//   line1 += "):";
+//   // Check if an editor is open
+//   if (editor) {
+//     editor.edit(editBuilder => {
+//       editBuilder.insert(get_currentpoint(editor), `\n${line1}`);
+//       editBuilder.insert(get_currentpoint(editor), '\n	return None');
+//     });
+//   } else {
+//     vscode.window.showErrorMessage('No active text editor.');
+//   }
+// });
 const declareClass = () => vscode.commands.registerCommand('robin.declareClass', (args, body) => {
     const editor = vscode.window.activeTextEditor;
     let parameters = body.parameters;
@@ -24609,20 +25032,23 @@ const fileName = () => vscode.commands.registerCommand('robin.fileName', () => {
 const registerAllCommands = () => {
     const commands = [
         activateRobin,
-        declareVariable,
-        declareFunction,
+        // declareVariable,
+        // declareFunction,
         declareClass,
         goToLocation,
         fileName
     ];
     commands.forEach(command => command());
-    (0, filesystemCommands_1.default)();
+    (0, fileSystemCommands_1.default)();
+    (0, IDECommands_1.default)();
+    (0, codeCommands_1.default)();
 };
+// ahmed 7abiby
 exports["default"] = registerAllCommands;
 
 
 /***/ }),
-/* 163 */
+/* 170 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -24656,6 +25082,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const fs_1 = __importDefault(__webpack_require__(25));
+const fileSystem_1 = __webpack_require__(163);
+/**
+ *
+ * defining some utilities
+ */
+// check if the file or directory exists
+// if check with and without extension
+const fileExists = (path) => {
+    if (fs_1.default.existsSync(path)) {
+        return true;
+    }
+    const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || '');
+    const file = files.find(file => file.split('.')[0] === path);
+    if (file) {
+        return true;
+    }
+    return false;
+};
 // create new file
 // sample input => 
 // {
@@ -24663,55 +25107,53 @@ const fs_1 = __importDefault(__webpack_require__(25));
 //     "extension": "/py",
 //     "content": "file content"
 // }
-const createFile = () => vscode.commands.registerCommand('robin.createFile', (args) => {
-    const editor = vscode.window.activeTextEditor;
-    if (editor) {
-        const fileName = args.fileName;
-        const extension = args.extension;
-        const content = args.content;
-        const path = `${vscode.workspace.rootPath}\\${fileName}${extension}`;
-        // check if it already exists
-        if (!fs_1.default.existsSync(path)) {
-            fs_1.default.writeFileSync(path, content);
-            return {
-                // path,
-                success: true
-            };
-        }
+const createFile = () => vscode.commands.registerCommand(fileSystem_1.CREATE_FILE, (args) => {
+    // const editor = vscode.window.activeTextEditor;
+    // if (editor) {
+    const fileName = args.fileName;
+    const extension = args.extension;
+    const content = args.content;
+    const path = `${vscode.workspace.rootPath}\\${fileName}${extension}`;
+    // check if it already exists
+    if (!fs_1.default.existsSync(path)) {
+        fs_1.default.writeFileSync(path, content);
         return {
             // path,
-            success: false
+            success: true
         };
     }
-    else {
-        vscode.window.showErrorMessage('No active text editor.');
-    }
+    return {
+        // path,
+        success: false
+    };
+    // } else {
+    //     vscode.window.showErrorMessage('No active text editor.');
+    // }
 });
 // create new directory
 // {
 //     "name": "new directory"
 // }
-const createDirectory = () => vscode.commands.registerCommand('robin.createDirectory', (args) => {
-    const editor = vscode.window.activeTextEditor;
-    if (editor) {
-        const name = args.name;
-        const path = `${vscode.workspace.rootPath}\\${name}`;
-        // check if it already exists
-        if (!fs_1.default.existsSync(path)) {
-            fs_1.default.mkdirSync(path);
-            return {
-                path,
-                success: true
-            };
-        }
+const createDirectory = () => vscode.commands.registerCommand(fileSystem_1.CREATE_DIRECTORY, (args) => {
+    // const editor = vscode.window.activeTextEditor;
+    //     if (editor) {
+    const name = args.name;
+    const path = `${vscode.workspace.rootPath}\\${name}`;
+    // check if it already exists
+    if (!fs_1.default.existsSync(path)) {
+        fs_1.default.mkdirSync(path);
         return {
             path,
-            success: false
+            success: true
         };
     }
-    else {
-        vscode.window.showErrorMessage('No active text editor.');
-    }
+    return {
+        path,
+        success: false
+    };
+    // } else {
+    //     vscode.window.showErrorMessage('No active text editor.');
+    // }
 });
 /**
  * copy file
@@ -24727,7 +25169,7 @@ const createDirectory = () => vscode.commands.registerCommand('robin.createDirec
  * if it's not, create a new file with the source file's content and the name would be source file - copy
  */
 const copyFileCommand = () => {
-    vscode.commands.registerCommand('robin.copyFile', (args) => {
+    vscode.commands.registerCommand(fileSystem_1.COPY_FILE, (args) => {
         const source = args.source;
         const destination = args.destination;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
@@ -24778,9 +25220,10 @@ const copyFileCommand = () => {
     });
 };
 const copyDirectory = () => {
-    vscode.commands.registerCommand('robin.copyDirectory', (args) => {
+    vscode.commands.registerCommand(fileSystem_1.COPY_DIRECTORY, (args) => {
         const source = args.source;
         const destination = args.destination;
+        const overwrite = args.overwrite ?? false;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
         if (fs_1.default.existsSync(sourcePath)) {
             if (destination) {
@@ -24799,12 +25242,113 @@ const copyDirectory = () => {
         };
     });
 };
+// delete file or directory
+const deleteFile = () => {
+    vscode.commands.registerCommand(fileSystem_1.DELETE_FILE, (args) => {
+        const source = args.source;
+        const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+        if (fileExists(sourcePath)) {
+            vscode.workspace.fs.delete(vscode.Uri.file(sourcePath), { recursive: true });
+            return {
+                success: true
+            };
+        }
+        return {
+            success: false,
+            message: "File not found"
+        };
+    });
+};
+// copy file to clipboard
+// const copyFileClipboard = () => {
+//     vscode.commands.registerCommand('robin.copyFileClipboard', (args) => {
+//         const source = args.source;
+//         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+//         if (fileExists(sourcePath)) {
+//             vscode.env.clipboard.writeText(sourcePath);
+//             return {
+//                 success: true
+//             };
+//         }
+//         return {
+//             success: false,
+//             message: "File not found"
+//         };
+//     });
+// };
+// paste from clipboard
+// const pasteFromClipboard = () => {
+//     vscode.commands.registerCommand('robin.pasteFromClipboard', (args) => {
+//         vscode.env.clipboard.readText().then((text) => {
+//             if (fileExists(text)) {
+//                 vscode.workspace.fs.copy(
+//                     vscode.Uri.file(text),
+//                     vscode.Uri.file(`${vscode.workspace.rootPath}\\${text.split('\\').pop()}`)
+//                 );
+//                 return {
+//                     success: true
+//                 };
+//             }
+//             return {
+//                 success: false,
+//                 message: "File not found"
+//             };
+//         });
+//     });
+// };
+const rename = () => {
+    vscode.commands.registerCommand(fileSystem_1.RENAME, (args) => {
+        const source = args.source;
+        const destination = args.destination;
+        // const overwrite = args.overwrite ?? false;
+        const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+        const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
+        if (fileExists(sourcePath)) {
+            vscode.workspace.fs.rename(vscode.Uri.file(sourcePath), vscode.Uri.file(destinationPath));
+            return {
+                success: true,
+            };
+        }
+        return {
+            success: false,
+            message: "File not found"
+        };
+    });
+};
+// save file or all current files
+const saveFile = () => {
+    vscode.commands.registerCommand(fileSystem_1.SAVE, (args) => {
+        const all = args.all ?? false;
+        if (all) {
+            vscode.workspace.textDocuments.forEach((doc) => {
+                doc.save();
+            });
+        }
+        else {
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                editor.document.save();
+                // return {
+                //     success: true
+                // };
+            }
+            ;
+        }
+        return {
+            success: true
+        };
+    });
+};
 const registerFileSystemCommands = () => {
     const commands = [
         createFile,
         createDirectory,
         copyFileCommand,
-        copyDirectory
+        copyDirectory,
+        deleteFile,
+        rename,
+        saveFile,
+        // copyFileClipboard,
     ];
     commands.forEach(command => command());
 };
@@ -24812,7 +25356,110 @@ exports["default"] = registerFileSystemCommands;
 
 
 /***/ }),
-/* 164 */
+/* 171 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const vscode = __importStar(__webpack_require__(1));
+const IDE_1 = __webpack_require__(165);
+const fs_1 = __importDefault(__webpack_require__(25));
+// go to line
+const goToLine = () => vscode.commands.registerCommand(IDE_1.GO_TO_LINE, (data) => {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const position = new vscode.Position(data.line - 1 ?? 0, data.character ?? 0);
+        editor.selection = new vscode.Selection(position, position);
+        editor.revealRange(new vscode.Range(position, position));
+        return {
+            success: true
+        };
+    }
+    else {
+        return {
+            success: false,
+            message: "No active text editor"
+        };
+    }
+});
+// go to file
+const goToFile = () => vscode.commands.registerCommand(IDE_1.GO_TO_FILE, (data) => {
+    const path = `${vscode.workspace.rootPath}\\${data?.path}`;
+    const file = vscode.Uri.file(path);
+    // check if file exists
+    if (fs_1.default.existsSync(path)) {
+        vscode.workspace.openTextDocument(file).then(doc => {
+            vscode.window.showTextDocument(doc);
+            return {
+                success: true
+            };
+        }, (err) => {
+            return {
+                success: false,
+                message: err
+            };
+        });
+    }
+    return {
+        success: false,
+        message: "File does not exist"
+    };
+});
+// focus on terminal
+const focusTerminal = () => vscode.commands.registerCommand(IDE_1.FOCUS_TERMINAL, () => {
+    vscode.commands.executeCommand('workbench.action.terminal.focus');
+});
+// new terminal
+const newTerminal = () => vscode.commands.registerCommand(IDE_1.NEW_TERMINAL, () => {
+    vscode.commands.executeCommand('workbench.action.terminal.new');
+});
+// kill terminal
+const killTerminal = () => vscode.commands.registerCommand(IDE_1.KILL_TERMINAL, () => {
+    vscode.commands.executeCommand('workbench.action.terminal.kill');
+});
+// register commands
+const registerIDECommands = () => {
+    const commands = [
+        goToLine,
+        goToFile,
+        focusTerminal,
+        newTerminal,
+        killTerminal
+    ];
+    commands.forEach(command => command());
+};
+exports["default"] = registerIDECommands;
+
+
+/***/ }),
+/* 172 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -24842,81 +25489,159 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
-// import server from "./server";
-const router = (__webpack_require__(3).Router)();
-// router prefix
-// router.prefix = '/file-system';
-router.post("/create-file", (req, res) => {
-    const data = req.body;
-    vscode.commands.executeCommand("robin.createFile", data).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "File created successfully!" }));
+const code_1 = __webpack_require__(167);
+// utilities
+const pythonReservedKeywords = new Set([
+    "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class", "continue",
+    "def", "del", "elif", "else", "except", "finally", "for", "from", "global", "if", "import", "in",
+    "is", "lambda", "nonlocal", "not", "or", "pass", "raise", "return", "try", "while", "with", "yield"
+]);
+const getCurrentPosition = (editor) => {
+    const position = editor.selection.active;
+    return position;
+};
+function isValidVariableName(name) {
+    const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+    if (!pattern.test(name)) {
+        return false;
+    }
+    return !pythonReservedKeywords.has(name);
+}
+// {
+//     "name": "x",
+//     "value" : 0
+// }
+// declare variable
+const declareVariable = () => {
+    vscode.commands.registerCommand(code_1.DECLARE_VARIABLE, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const name = args.name;
+            const value = args.value ?? "None";
+            if (!isValidVariableName(name)) {
+                vscode.window.showErrorMessage("Invalid variable name");
+                return {
+                    success: false,
+                    message: "Invalid variable name"
+                };
+            }
+            const line = `\n${name} = ${JSON.stringify(value)}`;
+            let s = await editor.edit(editBuilder => {
+                editBuilder.insert(getCurrentPosition(editor), line);
+            });
+            if (!s) {
+                vscode.window.showErrorMessage("Failed to declare variable");
+                return {
+                    success: false,
+                    message: "Failed to declare variable"
+                };
+            }
+            vscode.window.showInformationMessage("Variable declared successfully");
+            return {
+                success: true,
+                message: "Variable declared successfully"
+            };
         }
         else {
-            res.writeHead(409, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "File already exists!" }));
+            vscode.window.showErrorMessage('No active text editor.');
+            return {
+                success: false,
+                message: "No active text editor"
+            };
         }
-    }, (err) => {
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: err }));
     });
-});
-router.post("/create-directory", (req, res) => {
-    const data = req.body;
-    vscode.commands.executeCommand("robin.createDirectory", data).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({
-                // response.path,
-                message: "Directory created successfully!",
-            }));
+};
+// declare function
+// {
+//     "name": "x_string",
+//     "paramaters": [
+//         {
+//             "name": "x",
+//             "value": "test"
+//         },
+//         {
+//             "name": "y",
+//             "value": "test"
+//         }
+//     ]
+// }
+const declareFunction = () => {
+    vscode.commands.registerCommand(code_1.DECLARE_FUNCTION, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // console.log(args)
+            const name = args.name;
+            if (!isValidVariableName(name)) {
+                vscode.window.showErrorMessage("Invalid function name");
+                return {
+                    success: false,
+                    message: "Invalid function name"
+                };
+            }
+            const parameters = args.parameters ?? [];
+            // sort the parameters so that the parameters with values are last
+            parameters.sort((a, b) => {
+                if ('value' in a && !('value' in b)) {
+                    return 1; // a has value, b does not -> a comes after b
+                }
+                else if (!('value' in a) && 'value' in b) {
+                    return -1; // a does not have value, b does -> a comes before b
+                }
+                return 0; // both have value or both do not have value -> keep original order
+            });
+            // console.log(parameters, parameters.length)
+            let line1 = "\ndef " + name + "(";
+            for (let i = 0; i < parameters.length; i++) {
+                if (!isValidVariableName(parameters[i].name)) {
+                    return {
+                        success: false,
+                        message: "Invalid variable name"
+                    };
+                }
+                if (i) {
+                    line1 += ", ";
+                }
+                line1 += parameters[i]['name'];
+                if (parameters[i]['value']) {
+                    line1 += ' = ' + JSON.stringify(parameters[i]['value']);
+                }
+            }
+            line1 += "):\n\t";
+            let s = await editor.edit(editBuilder => {
+                editBuilder.insert(getCurrentPosition(editor), line1);
+            });
+            if (!s) {
+                vscode.window.showErrorMessage("Failed to declare function");
+                return {
+                    success: false,
+                    message: "Failed to declare function"
+                };
+            }
+            vscode.window.showInformationMessage("Function declared successfully");
+            return {
+                success: true,
+                message: "Function declared successfully"
+            };
         }
         else {
-            res.writeHead(409, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Directory already exists!" }));
+            vscode.window.showErrorMessage('No active text editor.');
+            return {
+                success: false,
+                message: "No active text editor"
+            };
         }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        console.log(err);
-        res.end(JSON.stringify(err));
     });
-});
-// copy file
-router.post("/copy-file", (req, res) => {
-    const data = req.body;
-    vscode.commands.executeCommand("robin.copyFile", data).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "File copied successfully!" }));
-        }
-        else {
-            res.writeHead(404, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "File not found" }));
-        }
-    }, (err) => {
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: err }));
+};
+const registerCodeCommands = () => {
+    const commands = [
+        declareVariable,
+        declareFunction
+    ];
+    commands.forEach((command) => {
+        command();
     });
-});
-// copy directory
-router.post("/copy-directory", (req, res) => {
-    const data = req.body;
-    vscode.commands.executeCommand("robin.copyDirectory", data).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Directory copied successfully!" }));
-        }
-        else {
-            res.writeHead(404, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Directory not found" }));
-        }
-    }, (err) => {
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: err }));
-    });
-});
-exports["default"] = router;
+};
+exports["default"] = registerCodeCommands;
 
 
 /***/ })

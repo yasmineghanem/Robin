@@ -2,6 +2,8 @@ import * as vscode from "vscode";
 import express from "express";
 import cors from "cors";
 import fileSystemRouter from "./fileSystemRouter";
+import IDERouter from "./IDERouter";
+import codeRouter from "./codeRouter";
 
 const server = express();
 // middleware
@@ -9,24 +11,28 @@ server.use(cors());
 server.use(express.json());
 
 
-server.use('/file-system',fileSystemRouter);
+server.use('/file-system', fileSystemRouter);
+server.use('/ide', IDERouter);
+server.use('/code', codeRouter);
+
+
 
 
 // endpoints
-server.post("/declare-var", (req, res) => {
-  const data = req.body;
-  const args = req.query;
-  vscode.commands.executeCommand("robin.declareVariable", args, data).then(
-    () => {
-      res.writeHead(200, { "Content-Type": "text/plain" });
-      res.end("Command executed successfully");
-    },
-    (err) => {
-      res.writeHead(500, { "Content-Type": "text/plain" });
-      res.end("Failed to execute command");
-    }
-  );
-});
+// server.post("/declare-var", (req, res) => {
+//   const data = req.body;
+//   const args = req.query;
+//   vscode.commands.executeCommand("robin.declareVariable", args, data).then(
+//     () => {
+//       res.writeHead(200, { "Content-Type": "text/plain" });
+//       res.end("Command executed successfully");
+//     },
+//     (err) => {
+//       res.writeHead(500, { "Content-Type": "text/plain" });
+//       res.end("Failed to execute command");
+//     }
+//   );
+// });
 server.post("/declare-func", (req, res) => {
   const data = req.body;
   const args = req.query;

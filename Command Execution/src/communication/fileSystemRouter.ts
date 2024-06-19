@@ -1,13 +1,11 @@
 import * as vscode from 'vscode';
-// import server from "./server";
+import { COPY_DIRECTORY, COPY_FILE, CREATE_DIRECTORY, CREATE_FILE, DELETE_FILE, RENAME, SAVE } from '../constants/fileSystem';
 const router = require('express').Router();
 
-// router prefix
-// router.prefix = '/file-system';
 
 router.post("/create-file", (req: any, res: any) => {
   const data = req.body;
-  vscode.commands.executeCommand("robin.createFile", data).then(
+  vscode.commands.executeCommand(CREATE_FILE, data).then(
     (response: any) => {
       if (response.success) {
         res.writeHead(200, { "Content-Type": "application/json" });
@@ -25,7 +23,7 @@ router.post("/create-file", (req: any, res: any) => {
 });
 router.post("/create-directory", (req: any, res: any) => {
   const data = req.body;
-  vscode.commands.executeCommand("robin.createDirectory", data).then(
+  vscode.commands.executeCommand(CREATE_DIRECTORY, data).then(
     (response: any) => {
       if (response.success) {
         res.writeHead(200, { "Content-Type": "application/json" });
@@ -54,7 +52,7 @@ router.post(
   "/copy-file",
   (req: any, res: any) => {
     const data = req.body;
-    vscode.commands.executeCommand("robin.copyFile", data).then(
+    vscode.commands.executeCommand(COPY_FILE, data).then(
       (response: any) => {
         if (response.success) {
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -79,7 +77,7 @@ router.post(
   "/copy-directory",
   (req: any, res: any) => {
     const data = req.body;
-    vscode.commands.executeCommand("robin.copyDirectory", data).then(
+    vscode.commands.executeCommand(COPY_DIRECTORY, data).then(
       (response: any) => {
         if (response.success) {
           res.writeHead(200, { "Content-Type": "application/json" });
@@ -99,4 +97,99 @@ router.post(
 );
 
 
+// delete file or directory
+router.post(
+  "/delete",
+  (req: any, res: any) => {
+    const data = req.body;
+    vscode.commands.executeCommand(DELETE_FILE, data).then(
+      (response: any) => {
+        if (response.success) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File/Directory deleted successfully!" }));
+        }
+        else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File/Directory not found" }));
+        }
+      },
+      (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+      }
+    );
+  }
+);
+
+// rename file or directory
+router.post(
+  "/rename",
+  (req: any, res: any) => {
+    const data = req.body;
+    vscode.commands.executeCommand(RENAME, data).then(
+      (response: any) => {
+        if (response.success) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File/Directory renamed successfully!" }));
+        }
+        else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File/Directory not found" }));
+        }
+      },
+      (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+      }
+    );
+  }
+);
+
+// copy to clipboard
+// router.post(
+//   "/copy-clipboard",
+//   (req: any, res: any) => {
+//     const data = req.body;
+//     vscode.commands.executeCommand("robin.copyFileClipboard", data).then(
+//       (response: any) => {
+//         if (response.success) {
+//           res.writeHead(200, { "Content-Type": "application/json" });
+//           res.end(JSON.stringify({ message: "File copied to clipboard!" }));
+//         }
+//         else {
+//           res.writeHead(404, { "Content-Type": "application/json" });
+//           res.end(JSON.stringify({ message: "File not found" }));
+//         }
+//       },
+//       (err) => {
+//         res.writeHead(500, { "Content-Type": "application/json" });
+//         res.end(JSON.stringify({ error: err }));
+//       }
+//     );
+//   }
+// );
+
+// save
+router.post(
+  "/save",
+  (req: any, res: any) => {
+    const data = req.body;
+    vscode.commands.executeCommand(SAVE, data).then(
+      (response: any) => {
+        if (response.success) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "File saved successfully!" }));
+        }
+        else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "No active files found" }));
+        }
+      },
+      (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+      }
+    );
+  }
+);
 export default router;
