@@ -1,30 +1,13 @@
 import cv2
 import mediapipe as mp
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-from enum import Enum
-import time
 import pyautogui
 import ipywidgets as widgets
-import PIL.Image
-import io
-import threading
-import ipywidgets as widgets
 from IPython.display import display, clear_output
+from mouse_utilities import *
 
 
-class directions(Enum):
-    LEFT = 1
-    RIGHT = 2
-    UP = 3
-    DOWN = 4
-    STRAIGHT = 0
-class CLICK(Enum):
-    LEFT_CLICK = 1
-    RIGHT_CLICK = 2
-    
 class eye_controller:
-    def __init__(self):
+    def __init__(self,URL):
         self.is_left = False
         self.is_right = False
         self.is_up = False
@@ -64,10 +47,8 @@ class eye_controller:
         self.right_eye_boundary = [33,  133, 173, 157, 158, 159, 160, 161, 246, 163, 144, 145, 153, 154, 155,133]
         self.left_eye_boundary = [362, 263, 373, 380, 381, 382, 384, 385, 386, 387, 388, 466, 390, 373, 374, 380]
         self.mp_face_mesh = mp.solutions.face_mesh
-        HTTP = 'https://'
-        IP_ADDRESS = '192.168.1.10'
-        URL =  HTTP + IP_ADDRESS + ':4343/video'
-        self.cap = cv2.VideoCapture(URL)
+        self.URL=URL
+        
 
     def neared_distance(self,point0,point1,point2,frame):
         x_0 = int(point0.x * frame.shape[1])
@@ -123,21 +104,6 @@ class eye_controller:
         else:
             return directions.RIGHT
 
-    def move_mouse(self,direction):
-        if(direction == directions.STRAIGHT):
-            return
-        current_x, current_y = pyautogui.position()
-        if direction == directions.LEFT:
-            current_x -= 5
-        elif direction == directions.RIGHT:
-            current_x += 5
-        elif direction == directions.UP:
-            current_y -= 5
-        elif direction == directions.DOWN:
-            current_y += 5
-        else:
-            print('mouse is in the same position')
-        pyautogui.moveTo(int(current_x), int(current_y))
 
     def horizontal_process(self,face_landmarks,frame):
         self.is_left = False
@@ -213,17 +179,10 @@ class eye_controller:
                 self.is_right_blink=True
                 self.COUNTER_right=0
                 
-    def mouse_click(self, click_type):
-        if click_type == CLICK.LEFT_CLICK:
-            pyautogui.click(button='left')
-            print("Left Click Detected")
-        elif click_type == CLICK.RIGHT_CLICK:
-            pyautogui.click(button='right')
-            print("Right Click Detected")
-        else:
-            print("Unknown Click Type")
-            
-    def process_frames(self):
+        
+    def process_frames(self):        
+        self.cap = cv2.VideoCapture(self.URL)
+        distance = 10
         with self.mp_face_mesh.FaceMesh(max_num_faces=1,
                                 refine_landmarks=True,
                                 min_detection_confidence=0.5,
@@ -234,6 +193,8 @@ class eye_controller:
                     print("Ignoring empty camera frame.")
                     break
                 result = face_mesh.process(frame)
+                if result.multi_face_landmarks is None :
+                    continue
                 for face_landmarks in result.multi_face_landmarks:
                     self.move=False
                     self.horizontal_process(face_landmarks,frame)
@@ -241,22 +202,19 @@ class eye_controller:
                     self.left_blink(face_landmarks,frame)
                     self.right_blikc(face_landmarks,frame)
                     if self.is_left_blink:
-                        print("Left Blink Detected")
-                        self.mouse_click(CLICK.LEFT_CLICK)
+                        mouse_click(CLICK.LEFT_CLICK)
                     elif self.is_right_blink:
-                        print("Right Blink Detected")
-                        self.mouse_click(CLICK.RIGHT_CLICK)
+                        mouse_click(CLICK.RIGHT_CLICK)
                     if self.is_left:
-                        self.move_mouse(directions.LEFT)
+                        move_mouse(directions.LEFT,distance)
                     if self.is_right:
-                        self.move_mouse(directions.RIGHT)
+                        move_mouse(directions.RIGHT,distance)
                     if self.is_up:
-                        self.move_mouse(directions.UP)
+                        move_mouse(directions.UP,distance)
                     if self.is_down:
-                        self.move_mouse(directions.DOWN)
+                        move_mouse(directions.DOWN,distance)
                     if(self.move==False):
-                        self.move_mouse(directions.STRAIGHT)
-                        print("No movement detected")
+                        move_mouse(directions.STRAIGHT)
 
 
                 cv2.imshow('frame', cv2.flip(frame,1))
@@ -267,9 +225,3 @@ class eye_controller:
             
         self.cap.release()
         cv2.destroyAllWindows()
-        
-        
-
-eye_controller_object = eye_controller()    
-frame_thread = threading.Thread(target=eye_controller_object.process_frames)
-frame_thread.start()
