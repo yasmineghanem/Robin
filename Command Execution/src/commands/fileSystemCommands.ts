@@ -37,27 +37,27 @@ const fileExists = (path: string) => {
 //     "content": "file content"
 // }
 const createFile = () => vscode.commands.registerCommand(CREATE_FILE, (args) => {
-    const editor = vscode.window.activeTextEditor;
-    if (editor) {
-        const fileName = args.fileName;
-        const extension = args.extension;
-        const content = args.content;
-        const path = `${vscode.workspace.rootPath}\\${fileName}${extension}`;
-        // check if it already exists
-        if (!fs.existsSync(path)) {
-            fs.writeFileSync(path, content);
-            return {
-                // path,
-                success: true
-            };
-        }
+    // const editor = vscode.window.activeTextEditor;
+    // if (editor) {
+    const fileName = args.fileName;
+    const extension = args.extension;
+    const content = args.content;
+    const path = `${vscode.workspace.rootPath}\\${fileName}${extension}`;
+    // check if it already exists
+    if (!fs.existsSync(path)) {
+        fs.writeFileSync(path, content);
         return {
             // path,
-            success: false
+            success: true
         };
-    } else {
-        vscode.window.showErrorMessage('No active text editor.');
     }
+    return {
+        // path,
+        success: false
+    };
+    // } else {
+    //     vscode.window.showErrorMessage('No active text editor.');
+    // }
 });
 
 // create new directory
@@ -65,25 +65,25 @@ const createFile = () => vscode.commands.registerCommand(CREATE_FILE, (args) => 
 //     "name": "new directory"
 // }
 const createDirectory = () => vscode.commands.registerCommand(CREATE_DIRECTORY, (args) => {
-const editor = vscode.window.activeTextEditor;
-    if (editor) {
-        const name = args.name;
-        const path = `${vscode.workspace.rootPath}\\${name}`;
-        // check if it already exists
-        if (!fs.existsSync(path)) {
-            fs.mkdirSync(path);
-            return {
-                path,
-                success: true
-            };
-        }
+    // const editor = vscode.window.activeTextEditor;
+    //     if (editor) {
+    const name = args.name;
+    const path = `${vscode.workspace.rootPath}\\${name}`;
+    // check if it already exists
+    if (!fs.existsSync(path)) {
+        fs.mkdirSync(path);
         return {
             path,
-            success: false
+            success: true
         };
-    } else {
-        vscode.window.showErrorMessage('No active text editor.');
     }
+    return {
+        path,
+        success: false
+    };
+    // } else {
+    //     vscode.window.showErrorMessage('No active text editor.');
+    // }
 });
 
 /**

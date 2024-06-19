@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import registerFileSystemCommands from './fileSystemCommands';
 import registerIDECommands from './IDECommands';
+import registerCodeCommands from './codeCommands';
 
 // register commands
 // function get_endpoint(editor: vscode.TextEditor): vscode.Position {
@@ -17,72 +18,72 @@ const activateRobin = () => vscode.commands.registerCommand('robin.activate', ()
   vscode.window.showInformationMessage('Robin Activated!');
 });
 
-const declareVariable = () => vscode.commands.registerCommand('robin.declareVariable', (args, body) => {
-  const editor = vscode.window.activeTextEditor;
-  // {
-  // 	"operation": null,
-  // 	"parameters": [
-  // 		{
-  // 			"name": "x",
-  // 			"type": null,
-  // 			"default": 10
-  // 		}
-  // 	]
-  // }
-  const parameters = body.parameters;
-  let name = parameters[0]['name'];
-  let value = parameters[0]['default'];
-  // Check if an editor is open
-  if (editor) {
-    const line = `\n${name} = ${JSON.stringify(value)}`;
+// const declareVariable = () => vscode.commands.registerCommand('robin.declareVariable', (args, body) => {
+//   const editor = vscode.window.activeTextEditor;
+//   // {
+//   // 	"operation": null,
+//   // 	"parameters": [
+//   // 		{
+//   // 			"name": "x",
+//   // 			"type": null,
+//   // 			"default": 10
+//   // 		}
+//   // 	]
+//   // }
+//   const parameters = body.parameters;
+//   let name = parameters[0]['name'];
+//   let value = parameters[0]['default'];
+//   // Check if an editor is open
+//   if (editor) {
+//     const line = `\n${name} = ${JSON.stringify(value)}`;
 
-    editor.edit(editBuilder => {
-      editBuilder.insert(get_currentpoint(editor), line);
-    });
-  } else {
-    vscode.window.showErrorMessage('No active text editor.');
-  }
+//     editor.edit(editBuilder => {
+//       editBuilder.insert(get_currentpoint(editor), line);
+//     });
+//   } else {
+//     vscode.window.showErrorMessage('No active text editor.');
+//   }
 
-});
+// });
 
-const declareFunction = () => vscode.commands.registerCommand('robin.declareFunction', (args, body) => {
-  const editor = vscode.window.activeTextEditor;
-  // {
-  // 	"operation": null,
-  // 	"parameters": [
-  // 		null, // first paremeter is the return type
-  // 		"add", // second parameter is the function name
-  // 		{
-  // 			"name": "x",
-  // 			"type": null,
-  // 			"default": 0
-  // 		},
-  // 		{
-  // 			"name": "y",
-  // 			"type": null,
-  // 			"default": 10
-  // 		}
-  // 	]
-  // }
-  const parameters = body.parameters;
-  let type = parameters[0];
-  let name = parameters[1];
-  let line1 = "def " + name + "(";
-  for (let i = 2; i < parameters.length; i++) {
-    if (i - 2) line1 += ",";
-    line1 += parameters[i]['name'] + ' = ' + JSON.stringify(parameters[i]['default']);
-  }
-  line1 += "):";
-  // Check if an editor is open
-  if (editor) {
-    editor.edit(editBuilder => {
-      editBuilder.insert(get_currentpoint(editor), `\n${line1}`);
-      editBuilder.insert(get_currentpoint(editor), '\n	return None');
-    });
-  } else {
-    vscode.window.showErrorMessage('No active text editor.');
-  }
-});
+// const declareFunction = () => vscode.commands.registerCommand('robin.declareFunction', (args, body) => {
+//   const editor = vscode.window.activeTextEditor;
+//   // {
+//   // 	"operation": null,
+//   // 	"parameters": [
+//   // 		null, // first paremeter is the return type
+//   // 		"add", // second parameter is the function name
+//   // 		{
+//   // 			"name": "x",
+//   // 			"type": null,
+//   // 			"default": 0
+//   // 		},
+//   // 		{
+//   // 			"name": "y",
+//   // 			"type": null,
+//   // 			"default": 10
+//   // 		}
+//   // 	]
+//   // }
+//   const parameters = body.parameters;
+//   let type = parameters[0];
+//   let name = parameters[1];
+//   let line1 = "def " + name + "(";
+//   for (let i = 2; i < parameters.length; i++) {
+//     if (i - 2) line1 += ",";
+//     line1 += parameters[i]['name'] + ' = ' + JSON.stringify(parameters[i]['default']);
+//   }
+//   line1 += "):";
+//   // Check if an editor is open
+//   if (editor) {
+//     editor.edit(editBuilder => {
+//       editBuilder.insert(get_currentpoint(editor), `\n${line1}`);
+//       editBuilder.insert(get_currentpoint(editor), '\n	return None');
+//     });
+//   } else {
+//     vscode.window.showErrorMessage('No active text editor.');
+//   }
+// });
 
 const declareClass = () => vscode.commands.registerCommand('robin.declareClass', (args, body) => {
   const editor = vscode.window.activeTextEditor;
@@ -129,8 +130,8 @@ const fileName = () => vscode.commands.registerCommand('robin.fileName', () => {
 const registerAllCommands = () => {
   const commands = [
     activateRobin,
-    declareVariable,
-    declareFunction,
+    // declareVariable,
+    // declareFunction,
     declareClass,
     goToLocation,
     fileName
@@ -140,6 +141,7 @@ const registerAllCommands = () => {
 
   registerFileSystemCommands();
   registerIDECommands();
+  registerCodeCommands();
 };
-
+// ahmed 7abiby
 export default registerAllCommands;

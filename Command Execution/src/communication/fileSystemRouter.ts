@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { COPY_DIRECTORY, COPY_FILE, CREATE_DIRECTORY, CREATE_FILE, DELETE_FILE, RENAME, SAVE } from '../constants/fileSystem';
-// import server from "./server";
 const router = require('express').Router();
 
 
