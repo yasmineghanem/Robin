@@ -24,7 +24,7 @@ function isValidVariableName(name: string): boolean {
 // interfaces
 interface Parameter {
     name: string;
-    value?: string;
+    value?: any;
 }
 
 
