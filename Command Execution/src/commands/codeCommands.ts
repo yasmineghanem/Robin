@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 import { DECLARE_FUNCTION, DECLARE_VARIABLE } from '../constants/code';
+// import Parser from 'tree-sitter';
+// import Python from 'tree-sitter-python';
 
 // utilities
 const pythonReservedKeywords: Set<string> = new Set([
@@ -36,6 +38,14 @@ interface Parameter {
 // declare variable
 const declareVariable = () => {
     vscode.commands.registerCommand(DECLARE_VARIABLE, async (args) => {
+        //Create output channel
+        let orange = vscode.window.createOutputChannel("Orange");
+
+        //Write to output.
+        orange.appendLine("I am a banana.");
+        // print to output channel
+        orange.show();
+
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             const name = args.name;
@@ -78,6 +88,35 @@ const declareVariable = () => {
             };
         }
     });
+
+
+    //     // read the current file and get its parse tree
+    //     const editor = vscode.window.activeTextEditor;
+    //     if (!editor) {
+    //         vscode.window.showErrorMessage('No active text editor.');
+    //         return {
+    //             success: false,
+    //             message: "No active text editor"
+    //         };
+    //     }
+    //     // const text = editor.document.getText();
+    //     // const parser = new Parser();
+    //     // parser.setLanguage(Python);
+    //     // const tree = parser.parse(text);
+    //     // const root = tree.rootNode;
+    //     // const cursorPosition = editor.selection.active;
+    //     // const currentNode = root.namedDescendantForPosition({
+    //     //     row: cursorPosition.line,
+    //     //     column: cursorPosition.character
+    //     // });
+
+
+    //     return {
+    //         success: true,
+    //         message: "Variable declared successfully"
+    //     }
+    // }
+    // )
 };
 
 

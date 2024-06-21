@@ -37,16 +37,20 @@ exports.deactivate = exports.activate = void 0;
 // Import the module and reference it with the alias vscode in your code below
 const vscode = __importStar(__webpack_require__(1));
 const server_1 = __importDefault(__webpack_require__(2));
-const commands_1 = __importDefault(__webpack_require__(169));
+const commands_1 = __importDefault(__webpack_require__(168));
+const path_1 = __importDefault(__webpack_require__(7));
+(__webpack_require__(172).config)({
+    path: path_1.default.resolve(__dirname, '../.env')
+}); // Load environment variables from .env
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
     // register all commands
     (0, commands_1.default)();
-    server_1.default.listen(3000, () => {
+    server_1.default.listen(process.env.SERVER_HOST_PORT || 3000, () => {
         // activate extension by executing hello world command
         vscode.commands.executeCommand("robin.activate");
-        console.log("Server listening on port 3000");
+        console.log("Server listening on port " + process.env.SERVER_HOST_PORT || 0);
         // on any request log
         server_1.default.use((req, res, next) => {
             console.log(req.method, req.url);
@@ -102,10 +106,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const express_1 = __importDefault(__webpack_require__(3));
-const cors_1 = __importDefault(__webpack_require__(160));
-const fileSystemRouter_1 = __importDefault(__webpack_require__(162));
-const IDERouter_1 = __importDefault(__webpack_require__(164));
-const codeRouter_1 = __importDefault(__webpack_require__(166));
+const cors_1 = __importDefault(__webpack_require__(159));
+const fileSystemRouter_1 = __importDefault(__webpack_require__(161));
+const IDERouter_1 = __importDefault(__webpack_require__(163));
+const codeRouter_1 = __importDefault(__webpack_require__(165));
 const server = (0, express_1.default)();
 // middleware
 server.use((0, cors_1.default)());
@@ -217,8 +221,8 @@ var mixin = __webpack_require__(99);
 var proto = __webpack_require__(100);
 var Route = __webpack_require__(112);
 var Router = __webpack_require__(111);
-var req = __webpack_require__(148);
-var res = __webpack_require__(155);
+var req = __webpack_require__(147);
+var res = __webpack_require__(154);
 
 /**
  * Expose `createApplication()`.
@@ -277,7 +281,7 @@ exports.Router = Router;
 exports.json = bodyParser.json
 exports.query = __webpack_require__(125);
 exports.raw = bodyParser.raw
-exports["static"] = __webpack_require__(159);
+exports["static"] = __webpack_require__(158);
 exports.text = bodyParser.text
 exports.urlencoded = bodyParser.urlencoded
 
@@ -1075,6 +1079,9 @@ module.exports = json
 
 var FIRST_CHAR_REGEXP = /^[\x20\x09\x0a\x0d]*([^\x20\x09\x0a\x0d])/ // eslint-disable-line no-control-regex
 
+var JSON_SYNTAX_CHAR = '#'
+var JSON_SYNTAX_REGEXP = /#+/g
+
 /**
  * Create a middleware to parse JSON bodies.
  *
@@ -1188,15 +1195,23 @@ function json (options) {
 
 function createStrictSyntaxError (str, char) {
   var index = str.indexOf(char)
-  var partial = index !== -1
-    ? str.substring(0, index) + '#'
-    : ''
+  var partial = ''
+
+  if (index !== -1) {
+    partial = str.substring(0, index) + JSON_SYNTAX_CHAR
+
+    for (var i = index + 1; i < str.length; i++) {
+      partial += JSON_SYNTAX_CHAR
+    }
+  }
 
   try {
     JSON.parse(partial); /* istanbul ignore next */ throw new SyntaxError('strict violation')
   } catch (e) {
     return normalizeJsonSyntaxError(e, {
-      message: e.message.replace('#', char),
+      message: e.message.replace(JSON_SYNTAX_REGEXP, function (placeholder) {
+        return str.substring(index, index + placeholder.length)
+      }),
       stack: e.stack
     })
   }
@@ -3627,6 +3642,13 @@ function getDecoder (encoding) {
 function getRawBody (stream, options, callback) {
   var done = callback
   var opts = options || {}
+
+  // light validation
+  if (stream === undefined) {
+    throw new TypeError('argument stream is required')
+  } else if (typeof stream !== 'object' || stream === null || typeof stream.on !== 'function') {
+    throw new TypeError('argument stream must be a stream')
+  }
 
   if (options === true || typeof options === 'string') {
     // short cut for encoding
@@ -8878,42 +8900,54 @@ var $mapHas = callBound('Map.prototype.has', true);
 *
 * That node is also moved to the head of the list, so that if it's accessed again we don't need to traverse the whole list. By doing so, all the recently used nodes can be accessed relatively quickly.
 */
+/** @type {import('.').listGetNode} */
 var listGetNode = function (list, key) { // eslint-disable-line consistent-return
-	for (var prev = list, curr; (curr = prev.next) !== null; prev = curr) {
+	/** @type {typeof list | NonNullable<(typeof list)['next']>} */
+	var prev = list;
+	/** @type {(typeof list)['next']} */
+	var curr;
+	for (; (curr = prev.next) !== null; prev = curr) {
 		if (curr.key === key) {
 			prev.next = curr.next;
-			curr.next = list.next;
+			// eslint-disable-next-line no-extra-parens
+			curr.next = /** @type {NonNullable<typeof list.next>} */ (list.next);
 			list.next = curr; // eslint-disable-line no-param-reassign
 			return curr;
 		}
 	}
 };
 
+/** @type {import('.').listGet} */
 var listGet = function (objects, key) {
 	var node = listGetNode(objects, key);
 	return node && node.value;
 };
+/** @type {import('.').listSet} */
 var listSet = function (objects, key, value) {
 	var node = listGetNode(objects, key);
 	if (node) {
 		node.value = value;
 	} else {
 		// Prepend the new node to the beginning of the list
-		objects.next = { // eslint-disable-line no-param-reassign
+		objects.next = /** @type {import('.').ListNode<typeof value>} */ ({ // eslint-disable-line no-param-reassign, no-extra-parens
 			key: key,
 			next: objects.next,
 			value: value
-		};
+		});
 	}
 };
+/** @type {import('.').listHas} */
 var listHas = function (objects, key) {
 	return !!listGetNode(objects, key);
 };
 
+/** @type {import('.')} */
 module.exports = function getSideChannel() {
-	var $wm;
-	var $m;
-	var $o;
+	/** @type {WeakMap<object, unknown>} */ var $wm;
+	/** @type {Map<object, unknown>} */ var $m;
+	/** @type {import('.').RootNode<unknown>} */ var $o;
+
+	/** @type {import('.').Channel} */
 	var channel = {
 		assert: function (key) {
 			if (!channel.has(key)) {
@@ -9706,9 +9740,7 @@ var gOPD = __webpack_require__(91);
 var $TypeError = __webpack_require__(78);
 var $floor = GetIntrinsic('%Math.floor%');
 
-/** @typedef {(...args: unknown[]) => unknown} Func */
-
-/** @type {<T extends Func = Func>(fn: T, length: number, loose?: boolean) => T} */
+/** @type {import('.')} */
 module.exports = function setFunctionLength(fn, length) {
 	if (typeof fn !== 'function') {
 		throw new $TypeError('`fn` is not a function');
@@ -13255,7 +13287,7 @@ var toString = Object.prototype.toString;
  * Initialize a new `Router` with the given `options`.
  *
  * @param {Object} [options]
- * @return {Router} which is an callable function
+ * @return {Router} which is a callable function
  * @public
  */
 
@@ -13959,7 +13991,10 @@ Route.prototype._handles_method = function _handles_method(method) {
     return true;
   }
 
-  var name = method.toLowerCase();
+  // normalize name
+  var name = typeof method === 'string'
+    ? method.toLowerCase()
+    : method
 
   if (name === 'head' && !this.methods['head']) {
     name = 'get';
@@ -14002,8 +14037,10 @@ Route.prototype.dispatch = function dispatch(req, res, done) {
   if (stack.length === 0) {
     return done();
   }
+  var method = typeof req.method === 'string'
+    ? req.method.toLowerCase()
+    : req.method
 
-  var method = req.method.toLowerCase();
   if (method === 'head' && !this.methods['head']) {
     method = 'get';
   }
@@ -15788,9 +15825,9 @@ var contentDisposition = __webpack_require__(130);
 var contentType = __webpack_require__(10);
 var deprecate = __webpack_require__(6)('express');
 var flatten = __webpack_require__(118);
-var mime = (__webpack_require__(132).mime);
-var etag = __webpack_require__(138);
-var proxyaddr = __webpack_require__(145);
+var mime = (__webpack_require__(131).mime);
+var etag = __webpack_require__(137);
+var proxyaddr = __webpack_require__(144);
 var qs = __webpack_require__(69);
 var querystring = __webpack_require__(98);
 
@@ -15888,17 +15925,15 @@ exports.contentDisposition = deprecate.function(contentDisposition,
 /**
  * Parse accept params `str` returning an
  * object with `.value`, `.quality` and `.params`.
- * also includes `.originalIndex` for stable sorting
  *
  * @param {String} str
- * @param {Number} index
  * @return {Object}
  * @api private
  */
 
-function acceptParams(str, index) {
+function acceptParams (str) {
   var parts = str.split(/ *; */);
-  var ret = { value: parts[0], quality: 1, params: {}, originalIndex: index };
+  var ret = { value: parts[0], quality: 1, params: {} }
 
   for (var i = 1; i < parts.length; ++i) {
     var pms = parts[i].split(/ *= */);
@@ -16053,6 +16088,7 @@ function createETagGenerator (options) {
 /**
  * Parse an extended query string with qs.
  *
+ * @param {String} str
  * @return {Object}
  * @private
  */
@@ -16173,7 +16209,7 @@ module.exports.parse = parse
  */
 
 var basename = (__webpack_require__(7).basename)
-var Buffer = (__webpack_require__(131).Buffer)
+var Buffer = (__webpack_require__(129).Buffer)
 
 /**
  * RegExp to match non attr-char, *after* encodeURIComponent (i.e. not including "%")
@@ -16613,77 +16649,6 @@ function ContentDisposition (type, parameters) {
 
 /***/ }),
 /* 131 */
-/***/ ((module, exports, __webpack_require__) => {
-
-/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-/* eslint-disable node/no-deprecated-api */
-var buffer = __webpack_require__(35)
-var Buffer = buffer.Buffer
-
-// alternative to using Object.keys for old browsers
-function copyProps (src, dst) {
-  for (var key in src) {
-    dst[key] = src[key]
-  }
-}
-if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
-  module.exports = buffer
-} else {
-  // Copy properties from require('buffer')
-  copyProps(buffer, exports)
-  exports.Buffer = SafeBuffer
-}
-
-function SafeBuffer (arg, encodingOrOffset, length) {
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.prototype = Object.create(Buffer.prototype)
-
-// Copy static methods from Buffer
-copyProps(Buffer, SafeBuffer)
-
-SafeBuffer.from = function (arg, encodingOrOffset, length) {
-  if (typeof arg === 'number') {
-    throw new TypeError('Argument must not be a number')
-  }
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.alloc = function (size, fill, encoding) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  var buf = Buffer(size)
-  if (fill !== undefined) {
-    if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-  } else {
-    buf.fill(0)
-  }
-  return buf
-}
-
-SafeBuffer.allocUnsafe = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return Buffer(size)
-}
-
-SafeBuffer.allocUnsafeSlow = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return buffer.SlowBuffer(size)
-}
-
-
-/***/ }),
-/* 132 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -16702,18 +16667,18 @@ SafeBuffer.allocUnsafeSlow = function (size) {
  */
 
 var createError = __webpack_require__(11)
-var debug = __webpack_require__(133)('send')
+var debug = __webpack_require__(132)('send')
 var deprecate = __webpack_require__(6)('send')
 var destroy = __webpack_require__(28)
 var encodeUrl = __webpack_require__(107)
 var escapeHtml = __webpack_require__(108)
-var etag = __webpack_require__(138)
-var fresh = __webpack_require__(140)
+var etag = __webpack_require__(137)
+var fresh = __webpack_require__(139)
 var fs = __webpack_require__(25)
-var mime = __webpack_require__(141)
-var ms = __webpack_require__(143)
+var mime = __webpack_require__(140)
+var ms = __webpack_require__(142)
 var onFinished = __webpack_require__(59)
-var parseRange = __webpack_require__(144)
+var parseRange = __webpack_require__(143)
 var path = __webpack_require__(7)
 var statuses = __webpack_require__(13)
 var Stream = __webpack_require__(30)
@@ -17833,7 +17798,7 @@ function setHeaders (res, headers) {
 
 
 /***/ }),
-/* 133 */
+/* 132 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /**
@@ -17842,14 +17807,14 @@ function setHeaders (res, headers) {
  */
 
 if (typeof process !== 'undefined' && process.type === 'renderer') {
-  module.exports = __webpack_require__(134);
+  module.exports = __webpack_require__(133);
 } else {
-  module.exports = __webpack_require__(137);
+  module.exports = __webpack_require__(136);
 }
 
 
 /***/ }),
-/* 134 */
+/* 133 */
 /***/ ((module, exports, __webpack_require__) => {
 
 /**
@@ -17858,7 +17823,7 @@ if (typeof process !== 'undefined' && process.type === 'renderer') {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(135);
+exports = module.exports = __webpack_require__(134);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -18040,7 +18005,7 @@ function localstorage() {
 
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ ((module, exports, __webpack_require__) => {
 
 
@@ -18056,7 +18021,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(136);
+exports.humanize = __webpack_require__(135);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -18248,7 +18213,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 136 */
+/* 135 */
 /***/ ((module) => {
 
 /**
@@ -18406,7 +18371,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 137 */
+/* 136 */
 /***/ ((module, exports, __webpack_require__) => {
 
 /**
@@ -18422,7 +18387,7 @@ var util = __webpack_require__(16);
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(135);
+exports = module.exports = __webpack_require__(134);
 exports.init = init;
 exports.log = log;
 exports.formatArgs = formatArgs;
@@ -18660,7 +18625,7 @@ exports.enable(load());
 
 
 /***/ }),
-/* 138 */
+/* 137 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -18684,7 +18649,7 @@ module.exports = etag
  * @private
  */
 
-var crypto = __webpack_require__(139)
+var crypto = __webpack_require__(138)
 var Stats = (__webpack_require__(25).Stats)
 
 /**
@@ -18798,14 +18763,14 @@ function stattag (stat) {
 
 
 /***/ }),
-/* 139 */
+/* 138 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("crypto");
 
 /***/ }),
-/* 140 */
+/* 139 */
 /***/ ((module) => {
 
 "use strict";
@@ -18949,7 +18914,7 @@ function parseTokenList (str) {
 
 
 /***/ }),
-/* 141 */
+/* 140 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var path = __webpack_require__(7);
@@ -19038,7 +19003,7 @@ Mime.prototype.extension = function(mimeType) {
 var mime = new Mime();
 
 // Define built-in types
-mime.define(__webpack_require__(142));
+mime.define(__webpack_require__(141));
 
 // Default type
 mime.default_type = mime.lookup('bin');
@@ -19063,14 +19028,14 @@ module.exports = mime;
 
 
 /***/ }),
-/* 142 */
+/* 141 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"application/andrew-inset":["ez"],"application/applixware":["aw"],"application/atom+xml":["atom"],"application/atomcat+xml":["atomcat"],"application/atomsvc+xml":["atomsvc"],"application/bdoc":["bdoc"],"application/ccxml+xml":["ccxml"],"application/cdmi-capability":["cdmia"],"application/cdmi-container":["cdmic"],"application/cdmi-domain":["cdmid"],"application/cdmi-object":["cdmio"],"application/cdmi-queue":["cdmiq"],"application/cu-seeme":["cu"],"application/dash+xml":["mpd"],"application/davmount+xml":["davmount"],"application/docbook+xml":["dbk"],"application/dssc+der":["dssc"],"application/dssc+xml":["xdssc"],"application/ecmascript":["ecma"],"application/emma+xml":["emma"],"application/epub+zip":["epub"],"application/exi":["exi"],"application/font-tdpfr":["pfr"],"application/font-woff":[],"application/font-woff2":[],"application/geo+json":["geojson"],"application/gml+xml":["gml"],"application/gpx+xml":["gpx"],"application/gxf":["gxf"],"application/gzip":["gz"],"application/hyperstudio":["stk"],"application/inkml+xml":["ink","inkml"],"application/ipfix":["ipfix"],"application/java-archive":["jar","war","ear"],"application/java-serialized-object":["ser"],"application/java-vm":["class"],"application/javascript":["js","mjs"],"application/json":["json","map"],"application/json5":["json5"],"application/jsonml+json":["jsonml"],"application/ld+json":["jsonld"],"application/lost+xml":["lostxml"],"application/mac-binhex40":["hqx"],"application/mac-compactpro":["cpt"],"application/mads+xml":["mads"],"application/manifest+json":["webmanifest"],"application/marc":["mrc"],"application/marcxml+xml":["mrcx"],"application/mathematica":["ma","nb","mb"],"application/mathml+xml":["mathml"],"application/mbox":["mbox"],"application/mediaservercontrol+xml":["mscml"],"application/metalink+xml":["metalink"],"application/metalink4+xml":["meta4"],"application/mets+xml":["mets"],"application/mods+xml":["mods"],"application/mp21":["m21","mp21"],"application/mp4":["mp4s","m4p"],"application/msword":["doc","dot"],"application/mxf":["mxf"],"application/octet-stream":["bin","dms","lrf","mar","so","dist","distz","pkg","bpk","dump","elc","deploy","exe","dll","deb","dmg","iso","img","msi","msp","msm","buffer"],"application/oda":["oda"],"application/oebps-package+xml":["opf"],"application/ogg":["ogx"],"application/omdoc+xml":["omdoc"],"application/onenote":["onetoc","onetoc2","onetmp","onepkg"],"application/oxps":["oxps"],"application/patch-ops-error+xml":["xer"],"application/pdf":["pdf"],"application/pgp-encrypted":["pgp"],"application/pgp-signature":["asc","sig"],"application/pics-rules":["prf"],"application/pkcs10":["p10"],"application/pkcs7-mime":["p7m","p7c"],"application/pkcs7-signature":["p7s"],"application/pkcs8":["p8"],"application/pkix-attr-cert":["ac"],"application/pkix-cert":["cer"],"application/pkix-crl":["crl"],"application/pkix-pkipath":["pkipath"],"application/pkixcmp":["pki"],"application/pls+xml":["pls"],"application/postscript":["ai","eps","ps"],"application/prs.cww":["cww"],"application/pskc+xml":["pskcxml"],"application/raml+yaml":["raml"],"application/rdf+xml":["rdf"],"application/reginfo+xml":["rif"],"application/relax-ng-compact-syntax":["rnc"],"application/resource-lists+xml":["rl"],"application/resource-lists-diff+xml":["rld"],"application/rls-services+xml":["rs"],"application/rpki-ghostbusters":["gbr"],"application/rpki-manifest":["mft"],"application/rpki-roa":["roa"],"application/rsd+xml":["rsd"],"application/rss+xml":["rss"],"application/rtf":["rtf"],"application/sbml+xml":["sbml"],"application/scvp-cv-request":["scq"],"application/scvp-cv-response":["scs"],"application/scvp-vp-request":["spq"],"application/scvp-vp-response":["spp"],"application/sdp":["sdp"],"application/set-payment-initiation":["setpay"],"application/set-registration-initiation":["setreg"],"application/shf+xml":["shf"],"application/smil+xml":["smi","smil"],"application/sparql-query":["rq"],"application/sparql-results+xml":["srx"],"application/srgs":["gram"],"application/srgs+xml":["grxml"],"application/sru+xml":["sru"],"application/ssdl+xml":["ssdl"],"application/ssml+xml":["ssml"],"application/tei+xml":["tei","teicorpus"],"application/thraud+xml":["tfi"],"application/timestamped-data":["tsd"],"application/vnd.3gpp.pic-bw-large":["plb"],"application/vnd.3gpp.pic-bw-small":["psb"],"application/vnd.3gpp.pic-bw-var":["pvb"],"application/vnd.3gpp2.tcap":["tcap"],"application/vnd.3m.post-it-notes":["pwn"],"application/vnd.accpac.simply.aso":["aso"],"application/vnd.accpac.simply.imp":["imp"],"application/vnd.acucobol":["acu"],"application/vnd.acucorp":["atc","acutc"],"application/vnd.adobe.air-application-installer-package+zip":["air"],"application/vnd.adobe.formscentral.fcdt":["fcdt"],"application/vnd.adobe.fxp":["fxp","fxpl"],"application/vnd.adobe.xdp+xml":["xdp"],"application/vnd.adobe.xfdf":["xfdf"],"application/vnd.ahead.space":["ahead"],"application/vnd.airzip.filesecure.azf":["azf"],"application/vnd.airzip.filesecure.azs":["azs"],"application/vnd.amazon.ebook":["azw"],"application/vnd.americandynamics.acc":["acc"],"application/vnd.amiga.ami":["ami"],"application/vnd.android.package-archive":["apk"],"application/vnd.anser-web-certificate-issue-initiation":["cii"],"application/vnd.anser-web-funds-transfer-initiation":["fti"],"application/vnd.antix.game-component":["atx"],"application/vnd.apple.installer+xml":["mpkg"],"application/vnd.apple.mpegurl":["m3u8"],"application/vnd.apple.pkpass":["pkpass"],"application/vnd.aristanetworks.swi":["swi"],"application/vnd.astraea-software.iota":["iota"],"application/vnd.audiograph":["aep"],"application/vnd.blueice.multipass":["mpm"],"application/vnd.bmi":["bmi"],"application/vnd.businessobjects":["rep"],"application/vnd.chemdraw+xml":["cdxml"],"application/vnd.chipnuts.karaoke-mmd":["mmd"],"application/vnd.cinderella":["cdy"],"application/vnd.claymore":["cla"],"application/vnd.cloanto.rp9":["rp9"],"application/vnd.clonk.c4group":["c4g","c4d","c4f","c4p","c4u"],"application/vnd.cluetrust.cartomobile-config":["c11amc"],"application/vnd.cluetrust.cartomobile-config-pkg":["c11amz"],"application/vnd.commonspace":["csp"],"application/vnd.contact.cmsg":["cdbcmsg"],"application/vnd.cosmocaller":["cmc"],"application/vnd.crick.clicker":["clkx"],"application/vnd.crick.clicker.keyboard":["clkk"],"application/vnd.crick.clicker.palette":["clkp"],"application/vnd.crick.clicker.template":["clkt"],"application/vnd.crick.clicker.wordbank":["clkw"],"application/vnd.criticaltools.wbs+xml":["wbs"],"application/vnd.ctc-posml":["pml"],"application/vnd.cups-ppd":["ppd"],"application/vnd.curl.car":["car"],"application/vnd.curl.pcurl":["pcurl"],"application/vnd.dart":["dart"],"application/vnd.data-vision.rdz":["rdz"],"application/vnd.dece.data":["uvf","uvvf","uvd","uvvd"],"application/vnd.dece.ttml+xml":["uvt","uvvt"],"application/vnd.dece.unspecified":["uvx","uvvx"],"application/vnd.dece.zip":["uvz","uvvz"],"application/vnd.denovo.fcselayout-link":["fe_launch"],"application/vnd.dna":["dna"],"application/vnd.dolby.mlp":["mlp"],"application/vnd.dpgraph":["dpg"],"application/vnd.dreamfactory":["dfac"],"application/vnd.ds-keypoint":["kpxx"],"application/vnd.dvb.ait":["ait"],"application/vnd.dvb.service":["svc"],"application/vnd.dynageo":["geo"],"application/vnd.ecowin.chart":["mag"],"application/vnd.enliven":["nml"],"application/vnd.epson.esf":["esf"],"application/vnd.epson.msf":["msf"],"application/vnd.epson.quickanime":["qam"],"application/vnd.epson.salt":["slt"],"application/vnd.epson.ssf":["ssf"],"application/vnd.eszigno3+xml":["es3","et3"],"application/vnd.ezpix-album":["ez2"],"application/vnd.ezpix-package":["ez3"],"application/vnd.fdf":["fdf"],"application/vnd.fdsn.mseed":["mseed"],"application/vnd.fdsn.seed":["seed","dataless"],"application/vnd.flographit":["gph"],"application/vnd.fluxtime.clip":["ftc"],"application/vnd.framemaker":["fm","frame","maker","book"],"application/vnd.frogans.fnc":["fnc"],"application/vnd.frogans.ltf":["ltf"],"application/vnd.fsc.weblaunch":["fsc"],"application/vnd.fujitsu.oasys":["oas"],"application/vnd.fujitsu.oasys2":["oa2"],"application/vnd.fujitsu.oasys3":["oa3"],"application/vnd.fujitsu.oasysgp":["fg5"],"application/vnd.fujitsu.oasysprs":["bh2"],"application/vnd.fujixerox.ddd":["ddd"],"application/vnd.fujixerox.docuworks":["xdw"],"application/vnd.fujixerox.docuworks.binder":["xbd"],"application/vnd.fuzzysheet":["fzs"],"application/vnd.genomatix.tuxedo":["txd"],"application/vnd.geogebra.file":["ggb"],"application/vnd.geogebra.tool":["ggt"],"application/vnd.geometry-explorer":["gex","gre"],"application/vnd.geonext":["gxt"],"application/vnd.geoplan":["g2w"],"application/vnd.geospace":["g3w"],"application/vnd.gmx":["gmx"],"application/vnd.google-apps.document":["gdoc"],"application/vnd.google-apps.presentation":["gslides"],"application/vnd.google-apps.spreadsheet":["gsheet"],"application/vnd.google-earth.kml+xml":["kml"],"application/vnd.google-earth.kmz":["kmz"],"application/vnd.grafeq":["gqf","gqs"],"application/vnd.groove-account":["gac"],"application/vnd.groove-help":["ghf"],"application/vnd.groove-identity-message":["gim"],"application/vnd.groove-injector":["grv"],"application/vnd.groove-tool-message":["gtm"],"application/vnd.groove-tool-template":["tpl"],"application/vnd.groove-vcard":["vcg"],"application/vnd.hal+xml":["hal"],"application/vnd.handheld-entertainment+xml":["zmm"],"application/vnd.hbci":["hbci"],"application/vnd.hhe.lesson-player":["les"],"application/vnd.hp-hpgl":["hpgl"],"application/vnd.hp-hpid":["hpid"],"application/vnd.hp-hps":["hps"],"application/vnd.hp-jlyt":["jlt"],"application/vnd.hp-pcl":["pcl"],"application/vnd.hp-pclxl":["pclxl"],"application/vnd.hydrostatix.sof-data":["sfd-hdstx"],"application/vnd.ibm.minipay":["mpy"],"application/vnd.ibm.modcap":["afp","listafp","list3820"],"application/vnd.ibm.rights-management":["irm"],"application/vnd.ibm.secure-container":["sc"],"application/vnd.iccprofile":["icc","icm"],"application/vnd.igloader":["igl"],"application/vnd.immervision-ivp":["ivp"],"application/vnd.immervision-ivu":["ivu"],"application/vnd.insors.igm":["igm"],"application/vnd.intercon.formnet":["xpw","xpx"],"application/vnd.intergeo":["i2g"],"application/vnd.intu.qbo":["qbo"],"application/vnd.intu.qfx":["qfx"],"application/vnd.ipunplugged.rcprofile":["rcprofile"],"application/vnd.irepository.package+xml":["irp"],"application/vnd.is-xpr":["xpr"],"application/vnd.isac.fcs":["fcs"],"application/vnd.jam":["jam"],"application/vnd.jcp.javame.midlet-rms":["rms"],"application/vnd.jisp":["jisp"],"application/vnd.joost.joda-archive":["joda"],"application/vnd.kahootz":["ktz","ktr"],"application/vnd.kde.karbon":["karbon"],"application/vnd.kde.kchart":["chrt"],"application/vnd.kde.kformula":["kfo"],"application/vnd.kde.kivio":["flw"],"application/vnd.kde.kontour":["kon"],"application/vnd.kde.kpresenter":["kpr","kpt"],"application/vnd.kde.kspread":["ksp"],"application/vnd.kde.kword":["kwd","kwt"],"application/vnd.kenameaapp":["htke"],"application/vnd.kidspiration":["kia"],"application/vnd.kinar":["kne","knp"],"application/vnd.koan":["skp","skd","skt","skm"],"application/vnd.kodak-descriptor":["sse"],"application/vnd.las.las+xml":["lasxml"],"application/vnd.llamagraphics.life-balance.desktop":["lbd"],"application/vnd.llamagraphics.life-balance.exchange+xml":["lbe"],"application/vnd.lotus-1-2-3":["123"],"application/vnd.lotus-approach":["apr"],"application/vnd.lotus-freelance":["pre"],"application/vnd.lotus-notes":["nsf"],"application/vnd.lotus-organizer":["org"],"application/vnd.lotus-screencam":["scm"],"application/vnd.lotus-wordpro":["lwp"],"application/vnd.macports.portpkg":["portpkg"],"application/vnd.mcd":["mcd"],"application/vnd.medcalcdata":["mc1"],"application/vnd.mediastation.cdkey":["cdkey"],"application/vnd.mfer":["mwf"],"application/vnd.mfmp":["mfm"],"application/vnd.micrografx.flo":["flo"],"application/vnd.micrografx.igx":["igx"],"application/vnd.mif":["mif"],"application/vnd.mobius.daf":["daf"],"application/vnd.mobius.dis":["dis"],"application/vnd.mobius.mbk":["mbk"],"application/vnd.mobius.mqy":["mqy"],"application/vnd.mobius.msl":["msl"],"application/vnd.mobius.plc":["plc"],"application/vnd.mobius.txf":["txf"],"application/vnd.mophun.application":["mpn"],"application/vnd.mophun.certificate":["mpc"],"application/vnd.mozilla.xul+xml":["xul"],"application/vnd.ms-artgalry":["cil"],"application/vnd.ms-cab-compressed":["cab"],"application/vnd.ms-excel":["xls","xlm","xla","xlc","xlt","xlw"],"application/vnd.ms-excel.addin.macroenabled.12":["xlam"],"application/vnd.ms-excel.sheet.binary.macroenabled.12":["xlsb"],"application/vnd.ms-excel.sheet.macroenabled.12":["xlsm"],"application/vnd.ms-excel.template.macroenabled.12":["xltm"],"application/vnd.ms-fontobject":["eot"],"application/vnd.ms-htmlhelp":["chm"],"application/vnd.ms-ims":["ims"],"application/vnd.ms-lrm":["lrm"],"application/vnd.ms-officetheme":["thmx"],"application/vnd.ms-outlook":["msg"],"application/vnd.ms-pki.seccat":["cat"],"application/vnd.ms-pki.stl":["stl"],"application/vnd.ms-powerpoint":["ppt","pps","pot"],"application/vnd.ms-powerpoint.addin.macroenabled.12":["ppam"],"application/vnd.ms-powerpoint.presentation.macroenabled.12":["pptm"],"application/vnd.ms-powerpoint.slide.macroenabled.12":["sldm"],"application/vnd.ms-powerpoint.slideshow.macroenabled.12":["ppsm"],"application/vnd.ms-powerpoint.template.macroenabled.12":["potm"],"application/vnd.ms-project":["mpp","mpt"],"application/vnd.ms-word.document.macroenabled.12":["docm"],"application/vnd.ms-word.template.macroenabled.12":["dotm"],"application/vnd.ms-works":["wps","wks","wcm","wdb"],"application/vnd.ms-wpl":["wpl"],"application/vnd.ms-xpsdocument":["xps"],"application/vnd.mseq":["mseq"],"application/vnd.musician":["mus"],"application/vnd.muvee.style":["msty"],"application/vnd.mynfc":["taglet"],"application/vnd.neurolanguage.nlu":["nlu"],"application/vnd.nitf":["ntf","nitf"],"application/vnd.noblenet-directory":["nnd"],"application/vnd.noblenet-sealer":["nns"],"application/vnd.noblenet-web":["nnw"],"application/vnd.nokia.n-gage.data":["ngdat"],"application/vnd.nokia.n-gage.symbian.install":["n-gage"],"application/vnd.nokia.radio-preset":["rpst"],"application/vnd.nokia.radio-presets":["rpss"],"application/vnd.novadigm.edm":["edm"],"application/vnd.novadigm.edx":["edx"],"application/vnd.novadigm.ext":["ext"],"application/vnd.oasis.opendocument.chart":["odc"],"application/vnd.oasis.opendocument.chart-template":["otc"],"application/vnd.oasis.opendocument.database":["odb"],"application/vnd.oasis.opendocument.formula":["odf"],"application/vnd.oasis.opendocument.formula-template":["odft"],"application/vnd.oasis.opendocument.graphics":["odg"],"application/vnd.oasis.opendocument.graphics-template":["otg"],"application/vnd.oasis.opendocument.image":["odi"],"application/vnd.oasis.opendocument.image-template":["oti"],"application/vnd.oasis.opendocument.presentation":["odp"],"application/vnd.oasis.opendocument.presentation-template":["otp"],"application/vnd.oasis.opendocument.spreadsheet":["ods"],"application/vnd.oasis.opendocument.spreadsheet-template":["ots"],"application/vnd.oasis.opendocument.text":["odt"],"application/vnd.oasis.opendocument.text-master":["odm"],"application/vnd.oasis.opendocument.text-template":["ott"],"application/vnd.oasis.opendocument.text-web":["oth"],"application/vnd.olpc-sugar":["xo"],"application/vnd.oma.dd2+xml":["dd2"],"application/vnd.openofficeorg.extension":["oxt"],"application/vnd.openxmlformats-officedocument.presentationml.presentation":["pptx"],"application/vnd.openxmlformats-officedocument.presentationml.slide":["sldx"],"application/vnd.openxmlformats-officedocument.presentationml.slideshow":["ppsx"],"application/vnd.openxmlformats-officedocument.presentationml.template":["potx"],"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":["xlsx"],"application/vnd.openxmlformats-officedocument.spreadsheetml.template":["xltx"],"application/vnd.openxmlformats-officedocument.wordprocessingml.document":["docx"],"application/vnd.openxmlformats-officedocument.wordprocessingml.template":["dotx"],"application/vnd.osgeo.mapguide.package":["mgp"],"application/vnd.osgi.dp":["dp"],"application/vnd.osgi.subsystem":["esa"],"application/vnd.palm":["pdb","pqa","oprc"],"application/vnd.pawaafile":["paw"],"application/vnd.pg.format":["str"],"application/vnd.pg.osasli":["ei6"],"application/vnd.picsel":["efif"],"application/vnd.pmi.widget":["wg"],"application/vnd.pocketlearn":["plf"],"application/vnd.powerbuilder6":["pbd"],"application/vnd.previewsystems.box":["box"],"application/vnd.proteus.magazine":["mgz"],"application/vnd.publishare-delta-tree":["qps"],"application/vnd.pvi.ptid1":["ptid"],"application/vnd.quark.quarkxpress":["qxd","qxt","qwd","qwt","qxl","qxb"],"application/vnd.realvnc.bed":["bed"],"application/vnd.recordare.musicxml":["mxl"],"application/vnd.recordare.musicxml+xml":["musicxml"],"application/vnd.rig.cryptonote":["cryptonote"],"application/vnd.rim.cod":["cod"],"application/vnd.rn-realmedia":["rm"],"application/vnd.rn-realmedia-vbr":["rmvb"],"application/vnd.route66.link66+xml":["link66"],"application/vnd.sailingtracker.track":["st"],"application/vnd.seemail":["see"],"application/vnd.sema":["sema"],"application/vnd.semd":["semd"],"application/vnd.semf":["semf"],"application/vnd.shana.informed.formdata":["ifm"],"application/vnd.shana.informed.formtemplate":["itp"],"application/vnd.shana.informed.interchange":["iif"],"application/vnd.shana.informed.package":["ipk"],"application/vnd.simtech-mindmapper":["twd","twds"],"application/vnd.smaf":["mmf"],"application/vnd.smart.teacher":["teacher"],"application/vnd.solent.sdkm+xml":["sdkm","sdkd"],"application/vnd.spotfire.dxp":["dxp"],"application/vnd.spotfire.sfs":["sfs"],"application/vnd.stardivision.calc":["sdc"],"application/vnd.stardivision.draw":["sda"],"application/vnd.stardivision.impress":["sdd"],"application/vnd.stardivision.math":["smf"],"application/vnd.stardivision.writer":["sdw","vor"],"application/vnd.stardivision.writer-global":["sgl"],"application/vnd.stepmania.package":["smzip"],"application/vnd.stepmania.stepchart":["sm"],"application/vnd.sun.wadl+xml":["wadl"],"application/vnd.sun.xml.calc":["sxc"],"application/vnd.sun.xml.calc.template":["stc"],"application/vnd.sun.xml.draw":["sxd"],"application/vnd.sun.xml.draw.template":["std"],"application/vnd.sun.xml.impress":["sxi"],"application/vnd.sun.xml.impress.template":["sti"],"application/vnd.sun.xml.math":["sxm"],"application/vnd.sun.xml.writer":["sxw"],"application/vnd.sun.xml.writer.global":["sxg"],"application/vnd.sun.xml.writer.template":["stw"],"application/vnd.sus-calendar":["sus","susp"],"application/vnd.svd":["svd"],"application/vnd.symbian.install":["sis","sisx"],"application/vnd.syncml+xml":["xsm"],"application/vnd.syncml.dm+wbxml":["bdm"],"application/vnd.syncml.dm+xml":["xdm"],"application/vnd.tao.intent-module-archive":["tao"],"application/vnd.tcpdump.pcap":["pcap","cap","dmp"],"application/vnd.tmobile-livetv":["tmo"],"application/vnd.trid.tpt":["tpt"],"application/vnd.triscape.mxs":["mxs"],"application/vnd.trueapp":["tra"],"application/vnd.ufdl":["ufd","ufdl"],"application/vnd.uiq.theme":["utz"],"application/vnd.umajin":["umj"],"application/vnd.unity":["unityweb"],"application/vnd.uoml+xml":["uoml"],"application/vnd.vcx":["vcx"],"application/vnd.visio":["vsd","vst","vss","vsw"],"application/vnd.visionary":["vis"],"application/vnd.vsf":["vsf"],"application/vnd.wap.wbxml":["wbxml"],"application/vnd.wap.wmlc":["wmlc"],"application/vnd.wap.wmlscriptc":["wmlsc"],"application/vnd.webturbo":["wtb"],"application/vnd.wolfram.player":["nbp"],"application/vnd.wordperfect":["wpd"],"application/vnd.wqd":["wqd"],"application/vnd.wt.stf":["stf"],"application/vnd.xara":["xar"],"application/vnd.xfdl":["xfdl"],"application/vnd.yamaha.hv-dic":["hvd"],"application/vnd.yamaha.hv-script":["hvs"],"application/vnd.yamaha.hv-voice":["hvp"],"application/vnd.yamaha.openscoreformat":["osf"],"application/vnd.yamaha.openscoreformat.osfpvg+xml":["osfpvg"],"application/vnd.yamaha.smaf-audio":["saf"],"application/vnd.yamaha.smaf-phrase":["spf"],"application/vnd.yellowriver-custom-menu":["cmp"],"application/vnd.zul":["zir","zirz"],"application/vnd.zzazz.deck+xml":["zaz"],"application/voicexml+xml":["vxml"],"application/wasm":["wasm"],"application/widget":["wgt"],"application/winhlp":["hlp"],"application/wsdl+xml":["wsdl"],"application/wspolicy+xml":["wspolicy"],"application/x-7z-compressed":["7z"],"application/x-abiword":["abw"],"application/x-ace-compressed":["ace"],"application/x-apple-diskimage":[],"application/x-arj":["arj"],"application/x-authorware-bin":["aab","x32","u32","vox"],"application/x-authorware-map":["aam"],"application/x-authorware-seg":["aas"],"application/x-bcpio":["bcpio"],"application/x-bdoc":[],"application/x-bittorrent":["torrent"],"application/x-blorb":["blb","blorb"],"application/x-bzip":["bz"],"application/x-bzip2":["bz2","boz"],"application/x-cbr":["cbr","cba","cbt","cbz","cb7"],"application/x-cdlink":["vcd"],"application/x-cfs-compressed":["cfs"],"application/x-chat":["chat"],"application/x-chess-pgn":["pgn"],"application/x-chrome-extension":["crx"],"application/x-cocoa":["cco"],"application/x-conference":["nsc"],"application/x-cpio":["cpio"],"application/x-csh":["csh"],"application/x-debian-package":["udeb"],"application/x-dgc-compressed":["dgc"],"application/x-director":["dir","dcr","dxr","cst","cct","cxt","w3d","fgd","swa"],"application/x-doom":["wad"],"application/x-dtbncx+xml":["ncx"],"application/x-dtbook+xml":["dtb"],"application/x-dtbresource+xml":["res"],"application/x-dvi":["dvi"],"application/x-envoy":["evy"],"application/x-eva":["eva"],"application/x-font-bdf":["bdf"],"application/x-font-ghostscript":["gsf"],"application/x-font-linux-psf":["psf"],"application/x-font-pcf":["pcf"],"application/x-font-snf":["snf"],"application/x-font-type1":["pfa","pfb","pfm","afm"],"application/x-freearc":["arc"],"application/x-futuresplash":["spl"],"application/x-gca-compressed":["gca"],"application/x-glulx":["ulx"],"application/x-gnumeric":["gnumeric"],"application/x-gramps-xml":["gramps"],"application/x-gtar":["gtar"],"application/x-hdf":["hdf"],"application/x-httpd-php":["php"],"application/x-install-instructions":["install"],"application/x-iso9660-image":[],"application/x-java-archive-diff":["jardiff"],"application/x-java-jnlp-file":["jnlp"],"application/x-latex":["latex"],"application/x-lua-bytecode":["luac"],"application/x-lzh-compressed":["lzh","lha"],"application/x-makeself":["run"],"application/x-mie":["mie"],"application/x-mobipocket-ebook":["prc","mobi"],"application/x-ms-application":["application"],"application/x-ms-shortcut":["lnk"],"application/x-ms-wmd":["wmd"],"application/x-ms-wmz":["wmz"],"application/x-ms-xbap":["xbap"],"application/x-msaccess":["mdb"],"application/x-msbinder":["obd"],"application/x-mscardfile":["crd"],"application/x-msclip":["clp"],"application/x-msdos-program":[],"application/x-msdownload":["com","bat"],"application/x-msmediaview":["mvb","m13","m14"],"application/x-msmetafile":["wmf","emf","emz"],"application/x-msmoney":["mny"],"application/x-mspublisher":["pub"],"application/x-msschedule":["scd"],"application/x-msterminal":["trm"],"application/x-mswrite":["wri"],"application/x-netcdf":["nc","cdf"],"application/x-ns-proxy-autoconfig":["pac"],"application/x-nzb":["nzb"],"application/x-perl":["pl","pm"],"application/x-pilot":[],"application/x-pkcs12":["p12","pfx"],"application/x-pkcs7-certificates":["p7b","spc"],"application/x-pkcs7-certreqresp":["p7r"],"application/x-rar-compressed":["rar"],"application/x-redhat-package-manager":["rpm"],"application/x-research-info-systems":["ris"],"application/x-sea":["sea"],"application/x-sh":["sh"],"application/x-shar":["shar"],"application/x-shockwave-flash":["swf"],"application/x-silverlight-app":["xap"],"application/x-sql":["sql"],"application/x-stuffit":["sit"],"application/x-stuffitx":["sitx"],"application/x-subrip":["srt"],"application/x-sv4cpio":["sv4cpio"],"application/x-sv4crc":["sv4crc"],"application/x-t3vm-image":["t3"],"application/x-tads":["gam"],"application/x-tar":["tar"],"application/x-tcl":["tcl","tk"],"application/x-tex":["tex"],"application/x-tex-tfm":["tfm"],"application/x-texinfo":["texinfo","texi"],"application/x-tgif":["obj"],"application/x-ustar":["ustar"],"application/x-virtualbox-hdd":["hdd"],"application/x-virtualbox-ova":["ova"],"application/x-virtualbox-ovf":["ovf"],"application/x-virtualbox-vbox":["vbox"],"application/x-virtualbox-vbox-extpack":["vbox-extpack"],"application/x-virtualbox-vdi":["vdi"],"application/x-virtualbox-vhd":["vhd"],"application/x-virtualbox-vmdk":["vmdk"],"application/x-wais-source":["src"],"application/x-web-app-manifest+json":["webapp"],"application/x-x509-ca-cert":["der","crt","pem"],"application/x-xfig":["fig"],"application/x-xliff+xml":["xlf"],"application/x-xpinstall":["xpi"],"application/x-xz":["xz"],"application/x-zmachine":["z1","z2","z3","z4","z5","z6","z7","z8"],"application/xaml+xml":["xaml"],"application/xcap-diff+xml":["xdf"],"application/xenc+xml":["xenc"],"application/xhtml+xml":["xhtml","xht"],"application/xml":["xml","xsl","xsd","rng"],"application/xml-dtd":["dtd"],"application/xop+xml":["xop"],"application/xproc+xml":["xpl"],"application/xslt+xml":["xslt"],"application/xspf+xml":["xspf"],"application/xv+xml":["mxml","xhvml","xvml","xvm"],"application/yang":["yang"],"application/yin+xml":["yin"],"application/zip":["zip"],"audio/3gpp":[],"audio/adpcm":["adp"],"audio/basic":["au","snd"],"audio/midi":["mid","midi","kar","rmi"],"audio/mp3":[],"audio/mp4":["m4a","mp4a"],"audio/mpeg":["mpga","mp2","mp2a","mp3","m2a","m3a"],"audio/ogg":["oga","ogg","spx"],"audio/s3m":["s3m"],"audio/silk":["sil"],"audio/vnd.dece.audio":["uva","uvva"],"audio/vnd.digital-winds":["eol"],"audio/vnd.dra":["dra"],"audio/vnd.dts":["dts"],"audio/vnd.dts.hd":["dtshd"],"audio/vnd.lucent.voice":["lvp"],"audio/vnd.ms-playready.media.pya":["pya"],"audio/vnd.nuera.ecelp4800":["ecelp4800"],"audio/vnd.nuera.ecelp7470":["ecelp7470"],"audio/vnd.nuera.ecelp9600":["ecelp9600"],"audio/vnd.rip":["rip"],"audio/wav":["wav"],"audio/wave":[],"audio/webm":["weba"],"audio/x-aac":["aac"],"audio/x-aiff":["aif","aiff","aifc"],"audio/x-caf":["caf"],"audio/x-flac":["flac"],"audio/x-m4a":[],"audio/x-matroska":["mka"],"audio/x-mpegurl":["m3u"],"audio/x-ms-wax":["wax"],"audio/x-ms-wma":["wma"],"audio/x-pn-realaudio":["ram","ra"],"audio/x-pn-realaudio-plugin":["rmp"],"audio/x-realaudio":[],"audio/x-wav":[],"audio/xm":["xm"],"chemical/x-cdx":["cdx"],"chemical/x-cif":["cif"],"chemical/x-cmdf":["cmdf"],"chemical/x-cml":["cml"],"chemical/x-csml":["csml"],"chemical/x-xyz":["xyz"],"font/collection":["ttc"],"font/otf":["otf"],"font/ttf":["ttf"],"font/woff":["woff"],"font/woff2":["woff2"],"image/apng":["apng"],"image/bmp":["bmp"],"image/cgm":["cgm"],"image/g3fax":["g3"],"image/gif":["gif"],"image/ief":["ief"],"image/jp2":["jp2","jpg2"],"image/jpeg":["jpeg","jpg","jpe"],"image/jpm":["jpm"],"image/jpx":["jpx","jpf"],"image/ktx":["ktx"],"image/png":["png"],"image/prs.btif":["btif"],"image/sgi":["sgi"],"image/svg+xml":["svg","svgz"],"image/tiff":["tiff","tif"],"image/vnd.adobe.photoshop":["psd"],"image/vnd.dece.graphic":["uvi","uvvi","uvg","uvvg"],"image/vnd.djvu":["djvu","djv"],"image/vnd.dvb.subtitle":[],"image/vnd.dwg":["dwg"],"image/vnd.dxf":["dxf"],"image/vnd.fastbidsheet":["fbs"],"image/vnd.fpx":["fpx"],"image/vnd.fst":["fst"],"image/vnd.fujixerox.edmics-mmr":["mmr"],"image/vnd.fujixerox.edmics-rlc":["rlc"],"image/vnd.ms-modi":["mdi"],"image/vnd.ms-photo":["wdp"],"image/vnd.net-fpx":["npx"],"image/vnd.wap.wbmp":["wbmp"],"image/vnd.xiff":["xif"],"image/webp":["webp"],"image/x-3ds":["3ds"],"image/x-cmu-raster":["ras"],"image/x-cmx":["cmx"],"image/x-freehand":["fh","fhc","fh4","fh5","fh7"],"image/x-icon":["ico"],"image/x-jng":["jng"],"image/x-mrsid-image":["sid"],"image/x-ms-bmp":[],"image/x-pcx":["pcx"],"image/x-pict":["pic","pct"],"image/x-portable-anymap":["pnm"],"image/x-portable-bitmap":["pbm"],"image/x-portable-graymap":["pgm"],"image/x-portable-pixmap":["ppm"],"image/x-rgb":["rgb"],"image/x-tga":["tga"],"image/x-xbitmap":["xbm"],"image/x-xpixmap":["xpm"],"image/x-xwindowdump":["xwd"],"message/rfc822":["eml","mime"],"model/gltf+json":["gltf"],"model/gltf-binary":["glb"],"model/iges":["igs","iges"],"model/mesh":["msh","mesh","silo"],"model/vnd.collada+xml":["dae"],"model/vnd.dwf":["dwf"],"model/vnd.gdl":["gdl"],"model/vnd.gtw":["gtw"],"model/vnd.mts":["mts"],"model/vnd.vtu":["vtu"],"model/vrml":["wrl","vrml"],"model/x3d+binary":["x3db","x3dbz"],"model/x3d+vrml":["x3dv","x3dvz"],"model/x3d+xml":["x3d","x3dz"],"text/cache-manifest":["appcache","manifest"],"text/calendar":["ics","ifb"],"text/coffeescript":["coffee","litcoffee"],"text/css":["css"],"text/csv":["csv"],"text/hjson":["hjson"],"text/html":["html","htm","shtml"],"text/jade":["jade"],"text/jsx":["jsx"],"text/less":["less"],"text/markdown":["markdown","md"],"text/mathml":["mml"],"text/n3":["n3"],"text/plain":["txt","text","conf","def","list","log","in","ini"],"text/prs.lines.tag":["dsc"],"text/richtext":["rtx"],"text/rtf":[],"text/sgml":["sgml","sgm"],"text/slim":["slim","slm"],"text/stylus":["stylus","styl"],"text/tab-separated-values":["tsv"],"text/troff":["t","tr","roff","man","me","ms"],"text/turtle":["ttl"],"text/uri-list":["uri","uris","urls"],"text/vcard":["vcard"],"text/vnd.curl":["curl"],"text/vnd.curl.dcurl":["dcurl"],"text/vnd.curl.mcurl":["mcurl"],"text/vnd.curl.scurl":["scurl"],"text/vnd.dvb.subtitle":["sub"],"text/vnd.fly":["fly"],"text/vnd.fmi.flexstor":["flx"],"text/vnd.graphviz":["gv"],"text/vnd.in3d.3dml":["3dml"],"text/vnd.in3d.spot":["spot"],"text/vnd.sun.j2me.app-descriptor":["jad"],"text/vnd.wap.wml":["wml"],"text/vnd.wap.wmlscript":["wmls"],"text/vtt":["vtt"],"text/x-asm":["s","asm"],"text/x-c":["c","cc","cxx","cpp","h","hh","dic"],"text/x-component":["htc"],"text/x-fortran":["f","for","f77","f90"],"text/x-handlebars-template":["hbs"],"text/x-java-source":["java"],"text/x-lua":["lua"],"text/x-markdown":["mkd"],"text/x-nfo":["nfo"],"text/x-opml":["opml"],"text/x-org":[],"text/x-pascal":["p","pas"],"text/x-processing":["pde"],"text/x-sass":["sass"],"text/x-scss":["scss"],"text/x-setext":["etx"],"text/x-sfv":["sfv"],"text/x-suse-ymp":["ymp"],"text/x-uuencode":["uu"],"text/x-vcalendar":["vcs"],"text/x-vcard":["vcf"],"text/xml":[],"text/yaml":["yaml","yml"],"video/3gpp":["3gp","3gpp"],"video/3gpp2":["3g2"],"video/h261":["h261"],"video/h263":["h263"],"video/h264":["h264"],"video/jpeg":["jpgv"],"video/jpm":["jpgm"],"video/mj2":["mj2","mjp2"],"video/mp2t":["ts"],"video/mp4":["mp4","mp4v","mpg4"],"video/mpeg":["mpeg","mpg","mpe","m1v","m2v"],"video/ogg":["ogv"],"video/quicktime":["qt","mov"],"video/vnd.dece.hd":["uvh","uvvh"],"video/vnd.dece.mobile":["uvm","uvvm"],"video/vnd.dece.pd":["uvp","uvvp"],"video/vnd.dece.sd":["uvs","uvvs"],"video/vnd.dece.video":["uvv","uvvv"],"video/vnd.dvb.file":["dvb"],"video/vnd.fvt":["fvt"],"video/vnd.mpegurl":["mxu","m4u"],"video/vnd.ms-playready.media.pyv":["pyv"],"video/vnd.uvvu.mp4":["uvu","uvvu"],"video/vnd.vivo":["viv"],"video/webm":["webm"],"video/x-f4v":["f4v"],"video/x-fli":["fli"],"video/x-flv":["flv"],"video/x-m4v":["m4v"],"video/x-matroska":["mkv","mk3d","mks"],"video/x-mng":["mng"],"video/x-ms-asf":["asf","asx"],"video/x-ms-vob":["vob"],"video/x-ms-wm":["wm"],"video/x-ms-wmv":["wmv"],"video/x-ms-wmx":["wmx"],"video/x-ms-wvx":["wvx"],"video/x-msvideo":["avi"],"video/x-sgi-movie":["movie"],"video/x-smv":["smv"],"x-conference/x-cooltalk":["ice"]}');
 
 /***/ }),
-/* 143 */
+/* 142 */
 /***/ ((module) => {
 
 /**
@@ -19238,7 +19203,7 @@ function plural(ms, msAbs, n, name) {
 
 
 /***/ }),
-/* 144 */
+/* 143 */
 /***/ ((module) => {
 
 "use strict";
@@ -19407,7 +19372,7 @@ function sortByRangeStart (a, b) {
 
 
 /***/ }),
-/* 145 */
+/* 144 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -19433,8 +19398,8 @@ module.exports.compile = compile
  * @private
  */
 
-var forwarded = __webpack_require__(146)
-var ipaddr = __webpack_require__(147)
+var forwarded = __webpack_require__(145)
+var ipaddr = __webpack_require__(146)
 
 /**
  * Variables.
@@ -19741,7 +19706,7 @@ function trustSingle (subnet) {
 
 
 /***/ }),
-/* 146 */
+/* 145 */
 /***/ ((module) => {
 
 "use strict";
@@ -19838,7 +19803,7 @@ function parse (header) {
 
 
 /***/ }),
-/* 147 */
+/* 146 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 /* module decorator */ module = __webpack_require__.nmd(module);
@@ -20518,7 +20483,7 @@ function parse (header) {
 
 
 /***/ }),
-/* 148 */
+/* 147 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -20537,15 +20502,15 @@ function parse (header) {
  * @private
  */
 
-var accepts = __webpack_require__(149);
+var accepts = __webpack_require__(148);
 var deprecate = __webpack_require__(6)('express');
 var isIP = (__webpack_require__(26).isIP);
 var typeis = __webpack_require__(61);
 var http = __webpack_require__(122);
-var fresh = __webpack_require__(140);
-var parseRange = __webpack_require__(144);
+var fresh = __webpack_require__(139);
+var parseRange = __webpack_require__(143);
 var parse = __webpack_require__(109);
-var proxyaddr = __webpack_require__(145);
+var proxyaddr = __webpack_require__(144);
 
 /**
  * Request prototype.
@@ -21050,7 +21015,7 @@ function defineGetter(obj, name, getter) {
 
 
 /***/ }),
-/* 149 */
+/* 148 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -21068,7 +21033,7 @@ function defineGetter(obj, name, getter) {
  * @private
  */
 
-var Negotiator = __webpack_require__(150)
+var Negotiator = __webpack_require__(149)
 var mime = __webpack_require__(63)
 
 /**
@@ -21295,7 +21260,7 @@ function validMime (type) {
 
 
 /***/ }),
-/* 150 */
+/* 149 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -21309,10 +21274,10 @@ function validMime (type) {
 
 
 
-var preferredCharsets = __webpack_require__(151)
-var preferredEncodings = __webpack_require__(152)
-var preferredLanguages = __webpack_require__(153)
-var preferredMediaTypes = __webpack_require__(154)
+var preferredCharsets = __webpack_require__(150)
+var preferredEncodings = __webpack_require__(151)
+var preferredLanguages = __webpack_require__(152)
+var preferredMediaTypes = __webpack_require__(153)
 
 /**
  * Module exports.
@@ -21384,7 +21349,7 @@ Negotiator.prototype.preferredMediaTypes = Negotiator.prototype.mediaTypes;
 
 
 /***/ }),
-/* 151 */
+/* 150 */
 /***/ ((module) => {
 
 "use strict";
@@ -21560,7 +21525,7 @@ function isQuality(spec) {
 
 
 /***/ }),
-/* 152 */
+/* 151 */
 /***/ ((module) => {
 
 "use strict";
@@ -21751,7 +21716,7 @@ function isQuality(spec) {
 
 
 /***/ }),
-/* 153 */
+/* 152 */
 /***/ ((module) => {
 
 "use strict";
@@ -21937,7 +21902,7 @@ function isQuality(spec) {
 
 
 /***/ }),
-/* 154 */
+/* 153 */
 /***/ ((module) => {
 
 "use strict";
@@ -22238,7 +22203,7 @@ function splitParameters(str) {
 
 
 /***/ }),
-/* 155 */
+/* 154 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -22268,16 +22233,16 @@ var onFinished = __webpack_require__(59);
 var path = __webpack_require__(7);
 var statuses = __webpack_require__(13)
 var merge = __webpack_require__(123);
-var sign = (__webpack_require__(156).sign);
+var sign = (__webpack_require__(155).sign);
 var normalizeType = (__webpack_require__(128).normalizeType);
 var normalizeTypes = (__webpack_require__(128).normalizeTypes);
 var setCharset = (__webpack_require__(128).setCharset);
-var cookie = __webpack_require__(157);
-var send = __webpack_require__(132);
+var cookie = __webpack_require__(156);
+var send = __webpack_require__(131);
 var extname = path.extname;
 var mime = send.mime;
 var resolve = path.resolve;
-var vary = __webpack_require__(158);
+var vary = __webpack_require__(157);
 
 /**
  * Response prototype.
@@ -22299,6 +22264,7 @@ module.exports = res
  */
 
 var charsetRegExp = /;\s*charset\s*=/;
+var schemaAndHostRegExp = /^(?:[a-zA-Z][a-zA-Z0-9+.-]*:)?\/\/[^\\\/\?]+/;
 
 /**
  * Set status `code`.
@@ -23148,15 +23114,23 @@ res.cookie = function (name, value, options) {
  */
 
 res.location = function location(url) {
-  var loc = url;
+  var loc;
 
   // "back" is an alias for the referrer
   if (url === 'back') {
     loc = this.req.get('Referrer') || '/';
+  } else {
+    loc = String(url);
   }
 
-  // set location
-  return this.set('Location', encodeUrl(loc));
+  var m = schemaAndHostRegExp.exec(loc);
+  var pos = m ? m[0].length + 1 : 0;
+
+  // Only encode after host to avoid invalid encoding which can introduce
+  // vulnerabilities (e.g. `\\` to `%5C`).
+  loc = loc.slice(0, pos) + encodeUrl(loc.slice(pos));
+
+  return this.set('Location', loc);
 };
 
 /**
@@ -23414,14 +23388,14 @@ function stringify (value, replacer, spaces, escape) {
 
 
 /***/ }),
-/* 156 */
+/* 155 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 /**
  * Module dependencies.
  */
 
-var crypto = __webpack_require__(139);
+var crypto = __webpack_require__(138);
 
 /**
  * Sign the given `val` with `secret`.
@@ -23471,7 +23445,7 @@ function sha1(str){
 
 
 /***/ }),
-/* 157 */
+/* 156 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -23649,6 +23623,10 @@ function serialize(name, val, options) {
     str += '; Secure';
   }
 
+  if (opt.partitioned) {
+    str += '; Partitioned'
+  }
+
   if (opt.priority) {
     var priority = typeof opt.priority === 'string'
       ? opt.priority.toLowerCase()
@@ -23710,7 +23688,7 @@ function decode (str) {
 /**
  * URL-encode value.
  *
- * @param {string} str
+ * @param {string} val
  * @returns {string}
  */
 
@@ -23748,7 +23726,7 @@ function tryDecode(str, decode) {
 
 
 /***/ }),
-/* 158 */
+/* 157 */
 /***/ ((module) => {
 
 "use strict";
@@ -23904,7 +23882,7 @@ function vary (res, field) {
 
 
 /***/ }),
-/* 159 */
+/* 158 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -23927,7 +23905,7 @@ var encodeUrl = __webpack_require__(107)
 var escapeHtml = __webpack_require__(108)
 var parseUrl = __webpack_require__(109)
 var resolve = (__webpack_require__(7).resolve)
-var send = __webpack_require__(132)
+var send = __webpack_require__(131)
 var url = __webpack_require__(110)
 
 /**
@@ -24121,15 +24099,15 @@ function createRedirectDirectoryListener () {
 
 
 /***/ }),
-/* 160 */
+/* 159 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 (function () {
 
   'use strict';
 
-  var assign = __webpack_require__(161);
-  var vary = __webpack_require__(158);
+  var assign = __webpack_require__(160);
+  var vary = __webpack_require__(157);
 
   var defaults = {
     origin: '*',
@@ -24365,7 +24343,7 @@ function createRedirectDirectoryListener () {
 
 
 /***/ }),
-/* 161 */
+/* 160 */
 /***/ ((module) => {
 
 "use strict";
@@ -24462,7 +24440,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 162 */
+/* 161 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -24492,7 +24470,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
-const fileSystem_1 = __webpack_require__(163);
+const fileSystem_1 = __webpack_require__(162);
 const router = (__webpack_require__(3).Router)();
 router.post("/create-file", (req, res) => {
     const data = req.body;
@@ -24642,7 +24620,7 @@ exports["default"] = router;
 
 
 /***/ }),
-/* 163 */
+/* 162 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -24667,7 +24645,7 @@ exports.SAVE = "robin.save";
 
 
 /***/ }),
-/* 164 */
+/* 163 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -24697,7 +24675,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
-const IDE_1 = __webpack_require__(165);
+const IDE_1 = __webpack_require__(164);
 const router = (__webpack_require__(3).Router)();
 router.post("/go-to-line", (req, res) => {
     const data = req.body;
@@ -24766,7 +24744,7 @@ exports["default"] = router;
 
 
 /***/ }),
-/* 165 */
+/* 164 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -24786,7 +24764,7 @@ exports.KILL_TERMINAL = "robin.killTerminal";
 
 
 /***/ }),
-/* 166 */
+/* 165 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -24795,8 +24773,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const code_1 = __webpack_require__(167);
-const utilities_1 = __webpack_require__(168);
+const code_1 = __webpack_require__(166);
+const utilities_1 = __webpack_require__(167);
 const express_1 = __importDefault(__webpack_require__(3));
 const router = express_1.default.Router();
 // declare variable
@@ -24813,7 +24791,7 @@ exports["default"] = router;
 
 
 /***/ }),
-/* 167 */
+/* 166 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -24825,7 +24803,7 @@ exports.DECLARE_FUNCTION = "robin.declareFunction";
 
 
 /***/ }),
-/* 168 */
+/* 167 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -24879,7 +24857,7 @@ exports.executeCommand = executeCommand;
 
 
 /***/ }),
-/* 169 */
+/* 168 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -24912,9 +24890,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
-const fileSystemCommands_1 = __importDefault(__webpack_require__(170));
-const IDECommands_1 = __importDefault(__webpack_require__(171));
-const codeCommands_1 = __importDefault(__webpack_require__(172));
+const fileSystemCommands_1 = __importDefault(__webpack_require__(169));
+const IDECommands_1 = __importDefault(__webpack_require__(170));
+const codeCommands_1 = __importDefault(__webpack_require__(171));
 // register commands
 // function get_endpoint(editor: vscode.TextEditor): vscode.Position {
 //   const lastLine = editor.document.lineAt(editor.document.lineCount - 1);
@@ -25048,7 +25026,7 @@ exports["default"] = registerAllCommands;
 
 
 /***/ }),
-/* 170 */
+/* 169 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -25082,7 +25060,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const fs_1 = __importDefault(__webpack_require__(25));
-const fileSystem_1 = __webpack_require__(163);
+const fileSystem_1 = __webpack_require__(162);
 /**
  *
  * defining some utilities
@@ -25356,7 +25334,7 @@ exports["default"] = registerFileSystemCommands;
 
 
 /***/ }),
-/* 171 */
+/* 170 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -25389,7 +25367,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
-const IDE_1 = __webpack_require__(165);
+const IDE_1 = __webpack_require__(164);
 const fs_1 = __importDefault(__webpack_require__(25));
 // go to line
 const goToLine = () => vscode.commands.registerCommand(IDE_1.GO_TO_LINE, (data) => {
@@ -25459,7 +25437,7 @@ exports["default"] = registerIDECommands;
 
 
 /***/ }),
-/* 172 */
+/* 171 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -25489,7 +25467,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
-const code_1 = __webpack_require__(167);
+const code_1 = __webpack_require__(166);
+// import Parser from 'tree-sitter';
+// import Python from 'tree-sitter-python';
 // utilities
 const pythonReservedKeywords = new Set([
     "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class", "continue",
@@ -25514,6 +25494,12 @@ function isValidVariableName(name) {
 // declare variable
 const declareVariable = () => {
     vscode.commands.registerCommand(code_1.DECLARE_VARIABLE, async (args) => {
+        //Create output channel
+        let orange = vscode.window.createOutputChannel("Orange");
+        //Write to output.
+        orange.appendLine("I am a banana.");
+        // print to output channel
+        orange.show();
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             const name = args.name;
@@ -25550,6 +25536,31 @@ const declareVariable = () => {
             };
         }
     });
+    //     // read the current file and get its parse tree
+    //     const editor = vscode.window.activeTextEditor;
+    //     if (!editor) {
+    //         vscode.window.showErrorMessage('No active text editor.');
+    //         return {
+    //             success: false,
+    //             message: "No active text editor"
+    //         };
+    //     }
+    //     // const text = editor.document.getText();
+    //     // const parser = new Parser();
+    //     // parser.setLanguage(Python);
+    //     // const tree = parser.parse(text);
+    //     // const root = tree.rootNode;
+    //     // const cursorPosition = editor.selection.active;
+    //     // const currentNode = root.namedDescendantForPosition({
+    //     //     row: cursorPosition.line,
+    //     //     column: cursorPosition.character
+    //     // });
+    //     return {
+    //         success: true,
+    //         message: "Variable declared successfully"
+    //     }
+    // }
+    // )
 };
 // declare function
 // {
@@ -25643,6 +25654,387 @@ const registerCodeCommands = () => {
 };
 exports["default"] = registerCodeCommands;
 
+
+/***/ }),
+/* 172 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const fs = __webpack_require__(25)
+const path = __webpack_require__(7)
+const os = __webpack_require__(173)
+const crypto = __webpack_require__(138)
+const packageJson = __webpack_require__(174)
+
+const version = packageJson.version
+
+const LINE = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/mg
+
+// Parse src into an Object
+function parse (src) {
+  const obj = {}
+
+  // Convert buffer to string
+  let lines = src.toString()
+
+  // Convert line breaks to same format
+  lines = lines.replace(/\r\n?/mg, '\n')
+
+  let match
+  while ((match = LINE.exec(lines)) != null) {
+    const key = match[1]
+
+    // Default undefined or null to empty string
+    let value = (match[2] || '')
+
+    // Remove whitespace
+    value = value.trim()
+
+    // Check if double quoted
+    const maybeQuote = value[0]
+
+    // Remove surrounding quotes
+    value = value.replace(/^(['"`])([\s\S]*)\1$/mg, '$2')
+
+    // Expand newlines if double quoted
+    if (maybeQuote === '"') {
+      value = value.replace(/\\n/g, '\n')
+      value = value.replace(/\\r/g, '\r')
+    }
+
+    // Add to object
+    obj[key] = value
+  }
+
+  return obj
+}
+
+function _parseVault (options) {
+  const vaultPath = _vaultPath(options)
+
+  // Parse .env.vault
+  const result = DotenvModule.configDotenv({ path: vaultPath })
+  if (!result.parsed) {
+    const err = new Error(`MISSING_DATA: Cannot parse ${vaultPath} for an unknown reason`)
+    err.code = 'MISSING_DATA'
+    throw err
+  }
+
+  // handle scenario for comma separated keys - for use with key rotation
+  // example: DOTENV_KEY="dotenv://:key_1234@dotenvx.com/vault/.env.vault?environment=prod,dotenv://:key_7890@dotenvx.com/vault/.env.vault?environment=prod"
+  const keys = _dotenvKey(options).split(',')
+  const length = keys.length
+
+  let decrypted
+  for (let i = 0; i < length; i++) {
+    try {
+      // Get full key
+      const key = keys[i].trim()
+
+      // Get instructions for decrypt
+      const attrs = _instructions(result, key)
+
+      // Decrypt
+      decrypted = DotenvModule.decrypt(attrs.ciphertext, attrs.key)
+
+      break
+    } catch (error) {
+      // last key
+      if (i + 1 >= length) {
+        throw error
+      }
+      // try next key
+    }
+  }
+
+  // Parse decrypted .env string
+  return DotenvModule.parse(decrypted)
+}
+
+function _log (message) {
+  console.log(`[dotenv@${version}][INFO] ${message}`)
+}
+
+function _warn (message) {
+  console.log(`[dotenv@${version}][WARN] ${message}`)
+}
+
+function _debug (message) {
+  console.log(`[dotenv@${version}][DEBUG] ${message}`)
+}
+
+function _dotenvKey (options) {
+  // prioritize developer directly setting options.DOTENV_KEY
+  if (options && options.DOTENV_KEY && options.DOTENV_KEY.length > 0) {
+    return options.DOTENV_KEY
+  }
+
+  // secondary infra already contains a DOTENV_KEY environment variable
+  if (process.env.DOTENV_KEY && process.env.DOTENV_KEY.length > 0) {
+    return process.env.DOTENV_KEY
+  }
+
+  // fallback to empty string
+  return ''
+}
+
+function _instructions (result, dotenvKey) {
+  // Parse DOTENV_KEY. Format is a URI
+  let uri
+  try {
+    uri = new URL(dotenvKey)
+  } catch (error) {
+    if (error.code === 'ERR_INVALID_URL') {
+      const err = new Error('INVALID_DOTENV_KEY: Wrong format. Must be in valid uri format like dotenv://:key_1234@dotenvx.com/vault/.env.vault?environment=development')
+      err.code = 'INVALID_DOTENV_KEY'
+      throw err
+    }
+
+    throw error
+  }
+
+  // Get decrypt key
+  const key = uri.password
+  if (!key) {
+    const err = new Error('INVALID_DOTENV_KEY: Missing key part')
+    err.code = 'INVALID_DOTENV_KEY'
+    throw err
+  }
+
+  // Get environment
+  const environment = uri.searchParams.get('environment')
+  if (!environment) {
+    const err = new Error('INVALID_DOTENV_KEY: Missing environment part')
+    err.code = 'INVALID_DOTENV_KEY'
+    throw err
+  }
+
+  // Get ciphertext payload
+  const environmentKey = `DOTENV_VAULT_${environment.toUpperCase()}`
+  const ciphertext = result.parsed[environmentKey] // DOTENV_VAULT_PRODUCTION
+  if (!ciphertext) {
+    const err = new Error(`NOT_FOUND_DOTENV_ENVIRONMENT: Cannot locate environment ${environmentKey} in your .env.vault file.`)
+    err.code = 'NOT_FOUND_DOTENV_ENVIRONMENT'
+    throw err
+  }
+
+  return { ciphertext, key }
+}
+
+function _vaultPath (options) {
+  let possibleVaultPath = null
+
+  if (options && options.path && options.path.length > 0) {
+    if (Array.isArray(options.path)) {
+      for (const filepath of options.path) {
+        if (fs.existsSync(filepath)) {
+          possibleVaultPath = filepath.endsWith('.vault') ? filepath : `${filepath}.vault`
+        }
+      }
+    } else {
+      possibleVaultPath = options.path.endsWith('.vault') ? options.path : `${options.path}.vault`
+    }
+  } else {
+    possibleVaultPath = path.resolve(process.cwd(), '.env.vault')
+  }
+
+  if (fs.existsSync(possibleVaultPath)) {
+    return possibleVaultPath
+  }
+
+  return null
+}
+
+function _resolveHome (envPath) {
+  return envPath[0] === '~' ? path.join(os.homedir(), envPath.slice(1)) : envPath
+}
+
+function _configVault (options) {
+  _log('Loading env from encrypted .env.vault')
+
+  const parsed = DotenvModule._parseVault(options)
+
+  let processEnv = process.env
+  if (options && options.processEnv != null) {
+    processEnv = options.processEnv
+  }
+
+  DotenvModule.populate(processEnv, parsed, options)
+
+  return { parsed }
+}
+
+function configDotenv (options) {
+  const dotenvPath = path.resolve(process.cwd(), '.env')
+  let encoding = 'utf8'
+  const debug = Boolean(options && options.debug)
+
+  if (options && options.encoding) {
+    encoding = options.encoding
+  } else {
+    if (debug) {
+      _debug('No encoding is specified. UTF-8 is used by default')
+    }
+  }
+
+  let optionPaths = [dotenvPath] // default, look for .env
+  if (options && options.path) {
+    if (!Array.isArray(options.path)) {
+      optionPaths = [_resolveHome(options.path)]
+    } else {
+      optionPaths = [] // reset default
+      for (const filepath of options.path) {
+        optionPaths.push(_resolveHome(filepath))
+      }
+    }
+  }
+
+  // Build the parsed data in a temporary object (because we need to return it).  Once we have the final
+  // parsed data, we will combine it with process.env (or options.processEnv if provided).
+  let lastError
+  const parsedAll = {}
+  for (const path of optionPaths) {
+    try {
+      // Specifying an encoding returns a string instead of a buffer
+      const parsed = DotenvModule.parse(fs.readFileSync(path, { encoding }))
+
+      DotenvModule.populate(parsedAll, parsed, options)
+    } catch (e) {
+      if (debug) {
+        _debug(`Failed to load ${path} ${e.message}`)
+      }
+      lastError = e
+    }
+  }
+
+  let processEnv = process.env
+  if (options && options.processEnv != null) {
+    processEnv = options.processEnv
+  }
+
+  DotenvModule.populate(processEnv, parsedAll, options)
+
+  if (lastError) {
+    return { parsed: parsedAll, error: lastError }
+  } else {
+    return { parsed: parsedAll }
+  }
+}
+
+// Populates process.env from .env file
+function config (options) {
+  // fallback to original dotenv if DOTENV_KEY is not set
+  if (_dotenvKey(options).length === 0) {
+    return DotenvModule.configDotenv(options)
+  }
+
+  const vaultPath = _vaultPath(options)
+
+  // dotenvKey exists but .env.vault file does not exist
+  if (!vaultPath) {
+    _warn(`You set DOTENV_KEY but you are missing a .env.vault file at ${vaultPath}. Did you forget to build it?`)
+
+    return DotenvModule.configDotenv(options)
+  }
+
+  return DotenvModule._configVault(options)
+}
+
+function decrypt (encrypted, keyStr) {
+  const key = Buffer.from(keyStr.slice(-64), 'hex')
+  let ciphertext = Buffer.from(encrypted, 'base64')
+
+  const nonce = ciphertext.subarray(0, 12)
+  const authTag = ciphertext.subarray(-16)
+  ciphertext = ciphertext.subarray(12, -16)
+
+  try {
+    const aesgcm = crypto.createDecipheriv('aes-256-gcm', key, nonce)
+    aesgcm.setAuthTag(authTag)
+    return `${aesgcm.update(ciphertext)}${aesgcm.final()}`
+  } catch (error) {
+    const isRange = error instanceof RangeError
+    const invalidKeyLength = error.message === 'Invalid key length'
+    const decryptionFailed = error.message === 'Unsupported state or unable to authenticate data'
+
+    if (isRange || invalidKeyLength) {
+      const err = new Error('INVALID_DOTENV_KEY: It must be 64 characters long (or more)')
+      err.code = 'INVALID_DOTENV_KEY'
+      throw err
+    } else if (decryptionFailed) {
+      const err = new Error('DECRYPTION_FAILED: Please check your DOTENV_KEY')
+      err.code = 'DECRYPTION_FAILED'
+      throw err
+    } else {
+      throw error
+    }
+  }
+}
+
+// Populate process.env with parsed values
+function populate (processEnv, parsed, options = {}) {
+  const debug = Boolean(options && options.debug)
+  const override = Boolean(options && options.override)
+
+  if (typeof parsed !== 'object') {
+    const err = new Error('OBJECT_REQUIRED: Please check the processEnv argument being passed to populate')
+    err.code = 'OBJECT_REQUIRED'
+    throw err
+  }
+
+  // Set process.env
+  for (const key of Object.keys(parsed)) {
+    if (Object.prototype.hasOwnProperty.call(processEnv, key)) {
+      if (override === true) {
+        processEnv[key] = parsed[key]
+      }
+
+      if (debug) {
+        if (override === true) {
+          _debug(`"${key}" is already defined and WAS overwritten`)
+        } else {
+          _debug(`"${key}" is already defined and was NOT overwritten`)
+        }
+      }
+    } else {
+      processEnv[key] = parsed[key]
+    }
+  }
+}
+
+const DotenvModule = {
+  configDotenv,
+  _configVault,
+  _parseVault,
+  config,
+  decrypt,
+  parse,
+  populate
+}
+
+module.exports.configDotenv = DotenvModule.configDotenv
+module.exports._configVault = DotenvModule._configVault
+module.exports._parseVault = DotenvModule._parseVault
+module.exports.config = DotenvModule.config
+module.exports.decrypt = DotenvModule.decrypt
+module.exports.parse = DotenvModule.parse
+module.exports.populate = DotenvModule.populate
+
+module.exports = DotenvModule
+
+
+/***/ }),
+/* 173 */
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("os");
+
+/***/ }),
+/* 174 */
+/***/ ((module) => {
+
+"use strict";
+module.exports = /*#__PURE__*/JSON.parse('{"name":"dotenv","version":"16.4.5","description":"Loads environment variables from .env file","main":"lib/main.js","types":"lib/main.d.ts","exports":{".":{"types":"./lib/main.d.ts","require":"./lib/main.js","default":"./lib/main.js"},"./config":"./config.js","./config.js":"./config.js","./lib/env-options":"./lib/env-options.js","./lib/env-options.js":"./lib/env-options.js","./lib/cli-options":"./lib/cli-options.js","./lib/cli-options.js":"./lib/cli-options.js","./package.json":"./package.json"},"scripts":{"dts-check":"tsc --project tests/types/tsconfig.json","lint":"standard","lint-readme":"standard-markdown","pretest":"npm run lint && npm run dts-check","test":"tap tests/*.js --100 -Rspec","test:coverage":"tap --coverage-report=lcov","prerelease":"npm test","release":"standard-version"},"repository":{"type":"git","url":"git://github.com/motdotla/dotenv.git"},"funding":"https://dotenvx.com","keywords":["dotenv","env",".env","environment","variables","config","settings"],"readmeFilename":"README.md","license":"BSD-2-Clause","devDependencies":{"@definitelytyped/dtslint":"^0.0.133","@types/node":"^18.11.3","decache":"^4.6.1","sinon":"^14.0.1","standard":"^17.0.0","standard-markdown":"^7.1.0","standard-version":"^9.5.0","tap":"^16.3.0","tar":"^6.1.11","typescript":"^4.8.4"},"engines":{"node":">=12"},"browser":{"fs":false}}');
 
 /***/ })
 /******/ 	]);
