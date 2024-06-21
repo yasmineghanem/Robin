@@ -1,516 +1,438 @@
 {
-    "intents": [
+    "intents": 
+    [
         {
-            "intent": "Variable Declaration",
-            "keywords": [
-                "declare variable",
-                "create variable",
-                "initialize a new variable",
-                "Create a new variable.",
-                "Declare a variable.",
-                "Initiate a new variable.",
-                "Set up a variable.",
-                "Introduce a new variable.",
-                "Establish a variable.",
-                "Declare a fresh variable.",
-                "Instantiate a variable.",
-                "Define a variable.",
-                "Declare an integer variable named 'count'.",
-                "Create a string variable called 'message'.",
-                "Initialize a float variable named 'temperature'.",
-                "Declare a boolean variable 'is_enabled' and set it to True.",
-                "Create a list variable 'numbers' to store numeric values.",
-                "Initialize a dictionary variable 'user_data' for storing user information.",
-                "Declare a constant variable 'PI' and set it to 3.14.",
-                "Create a tuple variable 'coordinates' for storing (x, y) pairs.",
-                "Initialize a set variable 'unique_values' with distinct elements.",
-                "Declare a variable 'config' and assign a configuration object."
-            ],
-            "responses": [
-                "variable declaration intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": true,
-                "responses": [
-                    "declare a new variable %%NAME%% with value %%VALUE%%",
-                    "declare a new function %%NAME%% with parameters %%PARAMS%%"
-                ]
-            },
-            "entities": []
-            
+            "intent": "Varibale Declaration",
+            "keywords": [ 
+                "temp equals 'string'",
+                "y equals 5",
+                "x equals 10",                
+                "is finished equals false",
+                "is verified equals true",
+                "declare a new variable x of type int with value 5",
+                "declare a new variable x of type float with value 6.5",
+                "declare a new variable number of type double and assign 5.5 to it",
+                "define a variable named temp and assign 'string' to it",
+                "create a variable named x and assign 5 to it", 
+                "create a variable named item and assign 8 to it", 
+                "create variable with the name var and value 7089", 
+                "define an empty array named arr", 
+                "initiate a new variable named var2 and assign 'message' to it", 
+                "declare a new variable age of type int with value 25", 
+                "define a variable named count and assign integer 10 to it", 
+                "create a variable named score and assign 0 to it", 
+                "initiate a new variable named quantity and set it to 100", 
+                "declare a new variable pi of type float with value 3.14", 
+                "define a variable named weight and assign float 75.5 to it", 
+                "create a variable named distance and set it to 12.34", 
+                "initiate a new variable named height and assign float value 180.2", 
+                "declare a new variable temperature of type double and set it to 98.6", 
+                "define a variable named velocity and assign double 299792458.0 to it", 
+                "create a variable named precision and set it to 0.000001", 
+                "initiate a new variable named ratio and assign double value 1.618033", 
+                "declare a new variable username of type string and set it to 'admin'", 
+                "define a variable named greeting and assign string 'hello world' to it", 
+                "create a variable named title and set it to 'Introduction to Programming'", 
+                "initiate a new variable named note and assign string value 'remember to save'", 
+                "declare a new variable is active of type bool and set it to true", 
+                "define a variable named is finished and assign boolean false to it", 
+                "create a variable named is open and set it to true", 
+                "initiate a new variable named is verified and assign bool value false", 
+                "declare an empty list named items", 
+                "define an array called numbers and initialize it with values [1, 2, 3, 4, 5]", 
+                "create a variable named fruits and set it to ['apple', 'banana', 'cherry']", 
+                "initiate a new list named temperatures and assign it values [20.5, 21.0, 19.8]", 
+                "declare an empty dictionary named user", 
+                "create a variable with the name inventory and set it to {'apple': 10, 'banana': 20}", 
+                "initiate a new dictionary with config as the name and assign it values {'debug': True, 'verbose': False}" 
+            ]
         },
         {
             "intent": "Function Declaration",
             "keywords": [
-                "declare function",
-                "define a new function named",
-                "create function"            
-            ],
-            "responses": [
-                "function declaration intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": true,
-                "responses": [
-                    "declare a new variable %%NAME%% with value %%VALUE%%",
-                    "declare a new function %%NAME%% with parameters %%PARAMS%%"
-                ]
-            },
-            "entities": []
-            
+                "declare a function named add that takes two parameters a and b and returns an int",
+                "define a new function with the name subtract that takes two arguments x and y and returns an int",
+                "create a function named func that returns a string",
+                "write a function and name it calculate that takes two arguments num1 and num2 and returns a float",
+                "write a function named test that takes a parameter name",
+                "create a function under the name display that takes message as a parameter",
+                "define a new function that takes name and age and name it greet",
+                "declare function named print that takes a string message",
+                "define a function numbers that has two parameters x and y and returns a float",
+                "write a function named search that takes a list called arr as a parameter", 
+                "create a function named sum that takes a list of numbers as an argument", 
+                "define a method named multiply that takes a list of integers", 
+                "declare a new method called max length that takes a list of strings", 
+                "write me a new function and call it sequence that takes name age and is active as parameters", 
+                "declare a method and name is valid that takes a string username", 
+                "create a new function named is valid that takes a string password", 
+                "define a function with the name get balance that takes an account number", 
+                "a function has the name depth first search and parameters a b and c", 
+                "a function named breadth first search with parameters x y and z", 
+                "a method with the name binary search and parameters arr and key", 
+                "create a functions that takes an array called numbers and an int named target", 
+                "under the name of cosine similarity write a function that takes list1 and list2", 
+                "with the name of euclidean distance define a function that takes parameters x1 y1 x2 y2", 
+                "define a function named best name that takes an array named names", 
+                "define a new function with the name concatenate that takes two string arguments str1 and str2 and returns a string",  
+                "create a function named initialize", 
+                "write a function and name it average that takes a list of numbers and returns a float", 
+                "write a function named login that takes parameters username and password", 
+                "create a function under the name show details that takes two parameters name and details", 
+                "define a new function that takes email and password and name it authenticate", 
+                "declare function named log that takes a string message and a log level", 
+                "define a function compute area that takes two parameters width and height and returns a float", 
+                "write a function named search item that takes an array called items and a string key" 
+                
+            ]
+        },
+        {
+            "intent": "Class Declaration",
+            "keywords": [    
+                "define a class called person",
+                "declare a class named student",
+                "create a class with the name employee",
+                "declare a class under the name customer",
+                "define a class named car",
+                "create a class and name it book",
+                "declare a class employee that extends person",
+                "define a class student that inherits from person",
+                "create a class named customer that extends user",
+                "declare a class called vehicle that inherits from car", 
+                "create the class car which extends vehicle", 
+                "define a class named book that inherits from item", 
+                "write the class person", 
+                "define the class student", 
+                "declare a class named super class", 
+                "create a class with the name sub class that extends super class", 
+                "declare the class base class", 
+                "define a class under the name derived class that inherits from base class", 
+                "create a class named parent class", 
+                "define a class with the name of consumer" 
+            ]
         },
         {
             "intent": "Assignment Operation",
             "keywords": [
-                "assign",
-                "assign the value",
-                "set",
-                "set the varible to value",
-                "put",
-                "put the value",
-                "store",
-                "store the value",
-                "Set the variable 'count' to 10.",
-                "Initialize 'price' with the value 19.99.",
-                "Let 'quantity' be equal to 100.",
-                "Store the result in the variable 'result'.",
-                "Give 'score' the value of 95.",
-                "Put 3.14 into the variable 'pi'.",
-                "Update 'counter' to 0.",
-                "Assign the string 'Hello' to 'greeting'.",
-                "Initialize 'temperature' with 22.5 degrees.",
-                "Assign the value 5 to the variable 'total'.",
-                "Assign the value 10 to the variable 'count'.",
-                "Set the string 'Hello' to the variable 'greeting'.",
-                "Initialize the variable 'pi' with the value 3.14159.",
-                "Assign the result of 'x + y' to the variable 'sum'.",
-                "Store the user input in the variable 'user_response'.",
-                "Set the list [1, 2, 3] to the variable 'numbers'.",
-                "Assign the current date to the variable 'current_date'.",
-                "Initialize the boolean variable 'is_ready' to False.",
-                "Assign the square root of 'x' to the variable 'root_x'.",
-                "Set the dictionary {'key': 'value'} to the variable 'data'."
-            ],
-            "responses": [
-                "assignment intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
+                "assign the value 5 to the variable x",
+                "assign the value 10 to the variable y",
+                "set the string hello to the variable message",
+                "assign the value 3.14 to pi",
+                "put my name is john in the variable name",
+                "insert 100 into the variable count",
+                "set is valid to true",
+                "assign the value 20 to age",
+                "assign the value 30 to the variable salary",
+                "set the variable is active to false", 
+                "put i am a student in the variable statement", 
+                "x equals y",  
+                "name equals noah", 
+                "age is equal to 23", 
+                "set the salary to 50000", 
+                "assign the variable x to the variable y", 
+                "is valid equals true", 
+                "set var1 to 11", 
+                "copy the value of x to y", 
+                "set value to 74914", 
+                "set character to a", 
+                "update name1 with name2", 
+                "update array1 with array2", 
+                "set the value of i to 0", 
+                "update name to adam", 
+                "update is valid to false", 
+                "store 9843 to the variable num", 
+                "assign the values 1 2 and 3 to the list arr", 
+                "put the values apple banana cherry in the list fruits", 
+                "assign the values {name: 'john, age: 23} to the variable person", 
+                "person of age equals 23", 
+                "assign the values 1 2 3 4 and 5 to the list numbers" 
+            ]
         },
         {
             "intent": "Conditional Statement",
             "keywords": [
-                "compare",
-                "and",
-                "or",
-                "if",
-                "else",
-                "condition",
-                "condition statement",
-                "equal",
-                "not equal",
-                "compare between",
-                "greater than",
-                "smaller than" ,
-                "If the temperature is above 30 degrees, turn on the air conditioner.",
-                "When the account balance is less than $10, send a low balance alert.",
-                "If the input is not valid, display an error message.",
-                "When the variable 'status' is 'active', proceed with the operation.",
-                "Check whether the file exists; if so, open it for editing.",
-                "If the number is even, double it; otherwise, leave it unchanged.",
-                "Evaluate the condition and execute the code block if it's true.",
-                "If the customer is a premium member, offer a discount.",
-                "Check if the response code is 200; if not, handle the error."     ,
-                "Check if the user is logged in; if true, show the dashboard."
-            ],
-            "responses": [
-                "conditoinal intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
+                "if x equals y",
+                "if name equals noah",
+                "if age is greater than 23",
+                "if salary is less than 50000",
+                "if is valid is true",
+                "if var1 is equal to 11",
+                "check if x and y are equal",
+                "check if is finished is true",
+                "check whether flag is false",
+                "if x is not equal to y", 
+                "if count is greater than 100", 
+                "if count is less than size", 
+                "check if is valid is false", 
+                "if var1 and var2 are equal", 
+                "if x is equal to y", 
+                "if salary is more than 50000", 
+                "if temp is smaller than name", 
+                "check if test is none", 
+                "check whether a and b are not equal", 
+                "check if a and b are the same", 
+                "if x is more than y", 
+                "check if x is less than y", 
+                "check if temp1 and temp2 are the same" 
+            ]
         },
         {
-            "intent": "Iterative Operation",
+            "intent": "Iterative Statement",
             "keywords": [
-                "loop",
-                "for",
-                "while",
-                "do",
-                "do while",
-                "repeat",
-                "iterate",
-                "iterate over",
-                "iterate through",
-                "search",
-                "search for",
-                "search in",
-                "Run a 'for' loop to iterate over the array elements.",
-                "Implement a 'while' loop until the condition is false.",
-                "Use a 'foreach' loop to iterate through the collection.",
-                "Apply a 'do-while' loop for at least one iteration.",
-                "Execute a 'for' loop from 1 to 10 for incremental steps.",
-                "Run a 'while' loop until the user input is valid.",
-                "Utilize a 'for' loop to process each character in the string.",
-                "Implement a 'do-while' loop to prompt the user until they confirm.",
-                "Use a 'foreach' loop for concurrent processing of elements.",
-                "Apply a nested 'for' loop to traverse a two-dimensional array.",
-                "Iterate through the list and perform an action on each item.",
-                "Repeat the process until a certain condition is met.",
-                "Cycle through the elements and update their values.",
-                "Continue processing until the specified criteria are satisfied.",
-                "Go through the dataset and apply a transformation to each entry.",
-                "Loop over the array and check for specific conditions.",
-                "Perform an iterative operation on the given input.",
-                "Iterate over the collection and extract relevant information.",
-                "Keep executing the code block until a stopping condition is reached.",
-                "Run a loop to handle multiple cases based on user input."
-            ],
-            "responses": [
-                "iterative intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
-        },
-        {
-            "intent": "Insertion",
-            "keywords": [
-                "Insert a semicolon at the end of the line.",
-                "Place a space between the function parameters.",
-                "Include a semicolon to terminate the statement.",
-                "Append a colon to the label.",
-                "Put a space around the arithmetic operator.",
-                "Insert a semicolon to complete the statement.",
-                "Add a colon for indentation.",
-                "Include a space before and after the assignment operator.",
-                "Place a semicolon to end the block.",
-                "Add a colon after the condition.",
-                "Insert a semicolon at the end of line 5.",
-                "Add a colon after the condition in line 10.",
-                "Place a space between parameters on line 15.",
-                "Include a semicolon to terminate the statement at line 8.",
-                "Append a colon to the label in line 3.",
-                "Put a space around the arithmetic operator on line 12.",
-                "Insert a semicolon to complete the statement at line 6.",
-                "Add a colon for indentation in line 20.",
-                "Include a space before and after the assignment operator on line 13.",
-                "Place a semicolon to end the block at line 25."
-        
-            ],
-            "responses": [
-                "Insertion intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
+                "create a for loop from 0 to 10",
+                "write a while loop that runs until x is less than 5",
+                "create a while loop until flag is false",
+                "write a for loop that iterates over an array of length 100",
+                "iterate from 1 to 100 using a for loop",
+                "using a while loop iterate while count is greater than 0", 
+                "while true",
+                "for i in range 10",
+                "for i in range 1 to 50", 
+                "while flag is true", 
+                "while is valid is false", 
+                "for i in range 0 to 100", 
+                "use a for loop to iterate from 10 to 0", 
+                "loop from 10 to 99 using a for loop", 
+                "while x is less than 100", 
+                "while false",  
+                "create a for loop from 0 to n", 
+                "for x in range 100", 
+                "for j in range 1 to 10", 
+                "while x is more than 0", 
+                "while x and y are equal", 
+                "create a while loop with the condition x is equal to y", 
+                "write a for loop that iterates 100 times" 
+
+            ]
         },
         {
             "intent": "Array Operation",
             "keywords": [
-                "Perform element-wise addition on two arrays.",
-                "Apply a filter to the array to select specific elements.",
-                "Combine two arrays into a new array.",
-                "Find the maximum value in the array.",
-                "Transpose the rows and columns of the matrix.",
-                "Multiply each element in the array by a scalar.",
-                "Concatenate multiple arrays along a specified axis.",
-                "Search for a particular element in the array.",
-                "Sort the elements of the array in ascending order.",
-                "Sort the elements of the array in descending order.",
-                "calculate the total of elements in the list.",
-                "transform each item in the array.",
-                "select specific elements from the list.",
-                "Combine lists.",
-                "Determine the maximum value in the array.",
-                "Determine the minimum value in the array.",
-                "Transpose a matrix .",
-                "Multiply each element by a scalar.",
-                "Concatenate lists using.",
-                "Check for element existence with in keyword in Python.",
-                "Sort the list in ascending order.",
-                "Sort the list in descending order."
-        
-            ],
-            "responses": [
-                "Array intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
+                "add the value 5 to the list arr",
+                "append x to the list numbers",
+                "sum all elements in the array average",
+                "find the maximum value in the list numbers",
+                "find the minimum value in the array values",
+                "append x to numbers",
+                "append 100 to the list nums",
+                "add 5 to list temp",
+                "extend the list numbers with the list values",
+                "append john to the list names",  
+                "get the sum of array values", 
+                "get the length of the list names", 
+                "get the size of the list numbers", 
+                "append cuurent name to names", 
+                "append current age to ages", 
+                "sort the array nums", 
+                "remove john from names", 
+                "remove the value 5 from numbers", 
+                "delete 100 from the list nums", 
+                "reverse the list values", 
+                "reverse the array names", 
+                "get the sum of the list values", 
+                "clear all elements in the list names", 
+                "clear the array arr", 
+                "clear the list nodes", 
+                "get the max of the array vars", 
+                "get the min of the list vals", 
+                "get the min from numbers", 
+                "find the max of nums", 
+                "sort the current array" 
+
+            ]
         },
         {
-            "intent": "Operators",
-            "keywords": [
-                "operators"
-            ],
-            "responses": [
-                "iterative intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
+            "intent": "Bitwise Operation",
+            "keywords":[
+                "Perform a bitwise and operation on x and y",
+                "Make a bitwise or operation on a and b",
+                "Do a bitwise xor operation on x and y",
+                "Have a bitwise not operation on a",
+                "Perform a bitwise left shift operation on x by 2",
+                "Perform a bitwise right shift operation on a by 3",
+                "a and b",
+                "c xor d",
+                "not num",
+                "x or y", 
+                "a shift left by 2", 
+                "b shift right by 4", 
+                "bitwise and x and y", 
+                "bitwise or a and b", 
+                "bitwise xor x and y" 
+            ]
         },
         {
-            "intent": "OOP Operations",
-            "keywords": [
-                "Create a class 'Student' with a constructor initializing name and ID.",
-                "Instantiate an object 'apple' from the 'Fruit' class with color and taste.",
-                "Implement inheritance by creating a 'SUV' class derived from 'Car'.",
-                "Encapsulate the 'BankAccount' class to protect the balance attribute.",
-                "Extend the 'Shape' class to include a 'Triangle' with additional properties.",
-                "Demonstrate polymorphism with 'add()' method accepting different data types.",
-                "Declare a constant 'PI' in the 'Circle' class for mathematical calculations.",
-                "Instantiate a 'Person' object and call the 'get_age()' method.",
-                "Abstract the 'Animal' class with common methods for 'Dog' and 'Cat'.",
-                "Create a class named 'Car' with attributes for make, model, and year.",
-                "Define a method 'calculate_area()' in the 'Rectangle' class.",
-                "Instantiate an object of the 'Person' class with name and age.",
-                "Implement encapsulation by making the attributes of the 'Book' class private.",
-                "Inherit the 'Employee' class from the 'Person' class for shared properties.",
-                "Override the 'display()' method in the 'Child' class for custom behavior.",
-                "Use polymorphism by accepting different types in the 'calculate()' method.",
-                "Declare a static variable 'counter' in the 'Counter' class.",
-                "Instantiate an object 'circle' from the 'Circle' class with a radius.",
-                "Implement abstraction by defining abstract methods in the 'Shape' class.",
-                "Define a method 'calculate_salary()' in the 'Employee' class."
-        
-            ],
-            "responses": [
-                "OOP intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
+            "intent": "Mathematical Operation",
+            "keywords":[
+                "Add x and y",
+                "Subtract a from b",                 
+                "Multiply x by y",                 
+                "Divide a by b",                 
+                "Get the remainder of x divided by y",                 
+                "Get the modulus of a divided by b",
+                "Raise x to the power of y",
+                "Get the square root of x",
+                "perform num1 plus num2",
+                "val1 plus val2", 
+                "num1 minus num2", 
+                "calculate num1 minus num2", 
+                "compute a divided b", 
+                "calculate c times d", 
+                "compute salary multiplied by 0.001", 
+                "age times 3", 
+                "1000 plus 3", 
+                "sum a and b", 
+                "subtract 100 from salary", 
+                "number divided 100", 
+                "calculate salary to the power of 2", 
+                "x to the power of y", 
+                "number to the power of 4", 
+                "current mod 2", 
+                "wight divided 20", 
+                "height divided by 100", 
+                "8 divided 2", 
+                "x power 3", 
+                "10 power x", 
+                "compute the remainder of x divided 3" 
+
+            ]
+        },
+        {
+            "intent": "Membership Operation",
+            "keywords":[
+                "Check if x is in the list arr",
+                "Check if y is not in the set unique",
+                "Check if z is in the dictionary words",
+                "Check if a is not in the tuple y",
+                "if number is in numbers",
+                "if value is not in values",
+                "check if node is in visited nodes",
+                "if node is not in visited nodes",
+                "check whether number is in the tuple t",
+                "check whether word is not in words", 
+                "if number not in numbers", 
+                "if word in words" 
+
+            ]
         },
         {
             "intent": "Casting",
-            "keywords": [
-                "Convert an integer to a float using type casting.",
-                "Cast a string to an integer using the 'int()' function.",
-                "Change a float to an integer using the 'int()' function.",
-                "Perform explicit casting from a string to a boolean.",
-                "Convert a number to a string using the 'str()' function.",
-                "Cast a character to its ASCII value using 'ord()'.",
-                "Change a boolean to an integer using type casting.",
-                "Convert a list to a tuple using the 'tuple()' function.",
-                "Cast a string representation of a number to a float.",
-                "Change a float to a string using the 'str()' function.",
-                "Convert the variable 'num_str' from a string to an integer.",
-                "Cast the 'temperature' variable from a float to an integer.",
-                "Change the boolean 'flag_bool' to an integer.",
-                "Transform the list 'num_list_str' to integers and store in 'num_list_int'.",
-                "Convert the string 'grade_char' to an integer or another suitable type.",
-                "Change the float 'price_float' to an integer or a string, depending on the use case.",
-                "Cast the integer 'quantity_int' to a boolean.",
-                "Convert the variable 'count' from an integer to a string.",
-                "Transform the character 'grade_char' to its ASCII value or another relevant representation."
-        
-            ],
-            "responses": [
-                "casting intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
+            "keywords":[
+                "Cast x to an integer",
+                "Convert y to a float",
+                "Change type to a string",
+                "Cast temp to a double",
+                "make number an int",
+                "convert value to string",
+                "cast x to float",
+                "change salary to float",
+                "make age a string",
+                "convert message to list", 
+                "change name to a string", 
+                "cast the tuple x to list", 
+                "cast fruits to a set", 
+                "make numbers a set", 
+                "make temp a tuple", 
+                "change the variable var to a list", 
+                "convert the variable message to a list", 
+                "cast result to a set", 
+                "convert the value 1000 to int", 
+                "cast 46876 to float" 
+            ]
         },
         {
-            "intent": "Exception Handling",
+            "intent": "I-O Operation",
             "keywords": [
-                "Include error handling for potential exceptions in this block of code.",
-                "Implement a mechanism to catch errors and handle exceptions gracefully.",
-                "Surround this code with a try-catch block to manage unexpected issues.",
-                "Add a layer of protection by incorporating exception handling in this section.",
-                "Wrap the critical section with error-handling logic to ensure robustness.",
-                "Guard against runtime errors by using a try-except structure.",
-                "Handle exceptions gracefully to prevent unexpected crashes.",
-                "Surround the risky operation with a try-catch block for error recovery.",
-                "Incorporate defensive programming by adding exception handling here.",
-                "Use a try-except block to manage potential errors during execution.",
-                "Ensure fault tolerance by incorporating a try-except structure.",
-                "Guard against runtime errors using a catch block for graceful handling.",
-                "Surround this critical section with a try-catch block for error resilience.",
-                "Implement defensive programming with a mechanism to catch unexpected issues.",
-                "Wrap this code snippet in a try-except to manage potential exceptions.",
-                "Add a layer of error protection using a try-catch structure.",
-                "Handle unforeseen errors gracefully by implementing exception handling.",
-                "Secure this section with a try-catch to capture and manage exceptions.",
-                "Use a try-except block for better control over unexpected runtime errors.",
-                "Incorporate a try-catch mechanism to gracefully handle exceptional cases."
-        
-            ],
-            "responses": [
-                "exception handling intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
-        },
-        {
-            "intent": "I/O Operations",
-            "keywords": [
-                "Read user input from the console and store it in a variable.",
-                "Take input from the user through the console for further processing.",
-                "Output the result to the console for user feedback.",
-                "Print a menu to the console for user navigation.",
-                "Read multiple values from the console and assign them to variables.",
-                "Display a formatted message on the console with dynamic content.",
-                "Prompt the user in the console for a yes/no response.",
-                "Take numerical input from the console for calculations.",
-                "Output the contents of an array to the console.",
-                "Accept a filename from the user via the console for file operations.",
-                "Display error messages on the console for debugging purposes.",
-                "Read a password input from the console with hidden characters.",
-                "Prompt the user in the console to confirm an action.",
-                "Take input from the console to set program configurations.",
-                "Print a series of lines to the console for informational purposes.",
-                "Display a progress indicator on the console for lengthy operations.",
-                "Take input from the console to customize program settings.",
-                "Output tabular data to the console in a readable format.",
-                "Read user preferences from the console for personalized interactions.",
-                "Display a message on the console to prompt user interaction."
-        
-            ],
-            "responses": [
-                "IO intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
+                "Take input from user for their name",
+                "Read from a user and put in variable x",
+                "Ask the user to input their age",
+                "Promt the user to enter their email",
+                "output the variable result",
+                "Print Error",
+                "Print x",
+                "Show the error message err",
+                "Display age",
+                "Write y", 
+                "Print the following message program ends here", 
+                "Prompt the user to enter their password", 
+                "Take input from user for their address", 
+                "Ask the user to input their phone number", 
+                "Read from a user and put in variable email", 
+                "Get the user's feedback and store it in feedback variable", 
+                "Prompt the user to enter their username", 
+                "Ask the user to input the current date", 
+                "Take input from user for their birth year", 
+                "Request the user to provide their favorite color", 
+                "Read from a user and put in variable zip code", 
+                "Print the variable user input", 
+                "Output the result", 
+                "Print Success", 
+                "Display the final score", 
+                "Show the warning message warning", 
+                "Print the variable total", 
+                "Output the name", 
+                "Print the following message welcome to the program", 
+                "Show message", 
+                "Display the result" 
+            ]
         },
         {
             "intent": "Assertion",
-            "keywords": [
-                "Include assert statements to confirm that the array index is within bounds.",
-                "Use assertions to verify that the function result matches the expected output.",
-                "Implement assert checks to ensure the validity of input parameters.",
-                "Embed assert statements to confirm the non-emptiness of a critical data structure.",
-                "Include assertions to validate the consistency of internal data representations.",
-                "Utilize assert checks to ensure that file handles are properly initialized.",
-                "Introduce assert statements to confirm the correctness of mathematical calculations.",
-                "Use assertions to enforce the expected state of an object after method calls.",
-                "Embed assert statements to validate preconditions for algorithmic functions.",
-                "Include assert checks to verify the integrity of database queries and results.",
-                "Use assert statements to catch unexpected conditions during iterative processes.",
-                "Implement assertions to ensure the invariance of class properties and attributes.",
-                "Include assert statements to confirm the proper initialization of global variables.",
-                "Utilize assertions for runtime validation of configuration file settings.",
-                "Embed assert checks to enforce constraints on user input before processing.",
-                "Introduce assert statements to catch potential divide-by-zero scenarios.",
-                "Use assertions to validate the correctness of state transitions in a finite state machine.",
-                "Include assert statements to confirm the expected behavior of concurrent processes.",
-                "Embed assert checks to enforce constraints on network communication protocols.",
-                "Utilize assertions for validating the consistency of serialized/deserialized data."
-        
-            ],
-            "responses": [
-                "Assertion intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
+            "keywords":[
+                "Assert that x is greater than or equal 0",
+                "Assert that y is smaller than or equal 100",
+                "Ensure that z is not equal to null",
+                "Confirm that b equals zero",
+                "assert length is equal 100",
+                "assert is valid is true",
+                "ensure start is less than or equal end",
+                "assert that sum equals expected sum",
+                "confirm name is not empty",
+                "assert count not equal 0" 
+            ]
         },
         {
             "intent": "Libraries",
-            "keywords": [
-                "Import the 'math' library for advanced mathematical functions.",
-                "Use the 'requests' library to make HTTP requests in the code.",
-                "Include the 'numpy' library for efficient array operations.",
-                "Import the 'random' module for generating random numbers.",
-                "Utilize the 'pandas' library for data manipulation and analysis.",
-                "Include the 'matplotlib' library for creating data visualizations.",
-                "Use the 'datetime' module to handle date and time operations.",
-                "Import the 'json' module for working with JSON data.",
-                "Include the 're' module for regular expression pattern matching.",
-                "Use the 'os' module for interacting with the operating system.",
-                "Import the 'csv' module to read and write CSV files.",
-                "Include the 'tkinter' library for creating graphical user interfaces.",
-                "Use the 'scikit-learn' library for machine learning tasks.",
-                "Import the 'beautifulsoup4' library for web scraping.",
-                "Include the 'tensorflow' library for deep learning applications.",
-                "Use the 'flask' library to create web applications.",
-                "Import the 'sqlite3' module for working with SQLite databases.",
-                "Include the 'networkx' library for graph-based algorithms.",
-                "Use the 'socket' module for network communication tasks.",
-                "Import the 'unittest' module for writing and running unit tests."
-            ],
-            "responses": [
-                "Libraries intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
-        },
-        {
-            "intent": "IDE Interactions",
             "keywords":[
-                "IDE"
-            ],
-            "responses": [
-                "IDE Interactions intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
+                "Import the math library",
+                "Use the random library",
+                "Include the os library",
+                "Add the sys library",
+                "Use json to work with JSON data",
+                "import the datetime library",
+                "import the pandas library",
+                "import numpy",
+                "import matplotlib",
+                "import math", 
+                "add the pytorch library to the imports", 
+                "import tensor flow", 
+                "use the seaborn library", 
+                "import nltk", 
+                "import the scikit learn library", 
+                "include numpy to use", 
+                "include the open cv library", 
+                "import open cv", 
+                "import csv library", 
+                "use the os library" 
+            ]
         },
         {
             "intent": "File System",
             "keywords":[
-                "create a file",
-                "open file"
-            ],
-            "responses": [
-                "File System intent detected"
-            ],
-            "extension": {
-                "function":"",
-                "entities": false,
-                "responses": []
-            },
-            "entities": []
-        }
+                
+            ]
+        },
+        {
+            "intent": "IDE Operation",
+            "keywords":[
+                
+            ]
+        },
+        {
+            "intent": "Comments",
+            "keywords": [
 
+            ]
+        }
     ]
 }
