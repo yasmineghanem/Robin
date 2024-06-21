@@ -1,0 +1,20 @@
+define a class called person.
+declare a class named student.
+create a class with the name employee.
+declare a class under the name customer.
+define a class named car.
+create a class and name it book.
+declare a class employee that extends person.
+define a class student that inherits from person.
+create a class named customer that extends user.
+declare a class called vehicle that inherits from car.
+create the class car which extends vehicle.
+define a class named book that inherits from item.
+write the class person.
+define the class student.
+declare a class named super class.
+create a class with the name sub class that extends super class.
+declare the class base class.
+define a class under the name derived class that inherits from base class.
+create a class named parent class.
+define a class with the name of consumer.

@@ -1,0 +1,23 @@
+if x equals y.
+if name equals noah.
+if age is greater than 23.
+if salary is less than 50000.
+if is valid is true.
+if var1 is equal to 11.
+check if x and y are equal.
+check if is finished is true.
+check whether flag is false.
+if x is not equal to y.
+if count is greater than 100.
+if count is less than size.
+check if is valid is false.
+if var1 and var2 are equal.
+if x is equal to y.
+if salary is more than 50000.
+if temp is smaller than name.
+check if test is none.
+check whether a and b are not equal.
+check if a and b are the same.
+if x is more than y.
+check if x is less than y.
+check if temp1 and temp2 are the same.

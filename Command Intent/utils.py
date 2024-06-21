@@ -4,6 +4,7 @@ import random
 import nltk
 import json
 
+
 def clean(line):
     '''
     This function cleans the line by removing all the special characters and punctuations
@@ -22,6 +23,7 @@ def clean(line):
             cleaned_line += ' '
     cleaned_line = ' '.join(cleaned_line.split())
     return cleaned_line
+
 
 def load_data(file_path):
     '''
@@ -54,10 +56,64 @@ def load_data(file_path):
             for keyword in intent['keywords']:
                 corpus.append(clean(keyword))
                 corpus_intents.append(intent['intent'])
-            
+
             responses.append(intent['responses'][0])
-    
+
     return unique_intents, corpus, corpus_intents, responses
-    
+
+
+def reformat_json(file_path):
+    '''
+    This function reformats the json file to make it more readable
+
+    Args:
+        - file_path (str) : path of the dataset
+
+    Returns:
+        - None
+    '''
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+
+    with open(file_path, 'w') as f:
+        json.dump(data, f, indent=4)
+
+
+def prepare_ner_dataset(file_path):
+    '''
+    This function prepares the NER dataset from the intents
+
+    It reads the text for each intent and write it to a file to be passed to the annotator
+
+    Args:
+        - file_path (str) : path of the dataset
+    '''
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+
+        intents = data["intents"]
+
+        for intent in intents:
+            # create a list to store the sentences for each intent
+            corpus = []
+
+            for keyword in intent["keywords"]:
+                corpus.append(keyword)
+
+            # add a period at the end of each sentence
+            corpus = [sentence +
+                      ".\n" for sentence in corpus if sentence[-1] != "."]
+
+            # join the sentences with a space
+            corpus = " ".join(corpus)
+
+            # rename the file to the intent name
+            file_name = intent["intent"].lower().replace(" ", "_") + ".txt"
+
+            # write the corpus to the file
+            with open(f'./ner_dataset/{file_name}', 'w') as f:
+                f.write(corpus)
+
+
 def augment_data(file_path):
     pass

@@ -1,0 +1,30 @@
+add the value 5 to the list arr.
+append x to the list numbers.
+sum all elements in the array average.
+find the maximum value in the list numbers.
+find the minimum value in the array values.
+append x to numbers.
+append 100 to the list nums.
+add 5 to list temp.
+extend the list numbers with the list values.
+append john to the list names.
+get the sum of array values.
+get the length of the list names.
+get the size of the list numbers.
+append cuurent name to names.
+append current age to ages.
+sort the array nums.
+remove john from names.
+remove the value 5 from numbers.
+delete 100 from the list nums.
+reverse the list values.
+reverse the array names.
+get the sum of the list values.
+clear all elements in the list names.
+clear the array arr.
+clear the list nodes.
+get the max of the array vars.
+get the min of the list vals.
+get the min from numbers.
+find the max of nums.
+sort the current array.

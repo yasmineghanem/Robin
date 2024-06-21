@@ -1,0 +1,30 @@
+Add x and y.
+Subtract a from b.
+Multiply x by y.
+Divide a by b.
+Get the remainder of x divided by y.
+Get the modulus of a divided by b.
+Raise x to the power of y.
+Get the square root of x.
+perform num1 plus num2.
+val1 plus val2.
+num1 minus num2.
+calculate num1 minus num2.
+compute a divided b.
+calculate c times d.
+compute salary multiplied by 0.001.
+age times 3.
+1000 plus 3.
+sum a and b.
+subtract 100 from salary.
+number divided 100.
+calculate salary to the power of 2.
+x to the power of y.
+number to the power of 4.
+current mod 2.
+wight divided 20.
+height divided by 100.
+8 divided 2.
+x power 3.
+10 power x.
+compute the remainder of x divided 3.

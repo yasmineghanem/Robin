@@ -1,0 +1,15 @@
+Perform a bitwise and operation on x and y.
+Make a bitwise or operation on a and b.
+Do a bitwise xor operation on x and y.
+Have a bitwise not operation on a.
+Perform a bitwise left shift operation on x by 2.
+Perform a bitwise right shift operation on a by 3.
+a and b.
+c xor d.
+not num.
+x or y.
+a shift left by 2.
+b shift right by 4.
+bitwise and x and y.
+bitwise or a and b.
+bitwise xor x and y.

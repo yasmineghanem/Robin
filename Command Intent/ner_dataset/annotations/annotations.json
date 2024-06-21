@@ -1,0 +1,819 @@
+{
+    "annotations":
+    {
+        "variable declaration": [
+        [
+            "temp equals 'string'.\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        4,
+                        "VAR"
+                    ],
+                    [
+                        12,
+                        20,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "y equals 5.\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        1,
+                        "VAR"
+                    ],
+                    [
+                        9,
+                        10,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "x equals 10.\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        1,
+                        "VAR"
+                    ],
+                    [
+                        9,
+                        11,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "is finished equals false.\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        11,
+                        "VAR"
+                    ],
+                    [
+                        19,
+                        24,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "is verified equals true.\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        11,
+                        "VAR"
+                    ],
+                    [
+                        19,
+                        23,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a new variable x of type int with value 5.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        24,
+                        "VAR"
+                    ],
+                    [
+                        33,
+                        36,
+                        "TYPE"
+                    ],
+                    [
+                        48,
+                        49,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a new variable x of type float with value 6.5.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        24,
+                        "VAR"
+                    ],
+                    [
+                        33,
+                        38,
+                        "TYPE"
+                    ],
+                    [
+                        50,
+                        53,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a new variable number of type double and assign 5.5 to it.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        29,
+                        "VAR"
+                    ],
+                    [
+                        38,
+                        44,
+                        "TYPE"
+                    ],
+                    [
+                        56,
+                        59,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a variable named temp and assign 'string' to it.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        28,
+                        "VAR"
+                    ],
+                    [
+                        40,
+                        48,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a variable named x and assign 5 to it.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        25,
+                        "VAR"
+                    ],
+                    [
+                        37,
+                        38,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a variable named item and assign 8 to it.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        28,
+                        "VAR"
+                    ],
+                    [
+                        40,
+                        41,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create variable with the name var and value 7089.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        33,
+                        "VAR"
+                    ],
+                    [
+                        44,
+                        48,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define an empty array named arr.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        15,
+                        "VAL"
+                    ],
+                    [
+                        16,
+                        21,
+                        "TYPE"
+                    ],
+                    [
+                        28,
+                        31,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "initiate a new variable named var2 and assign 'message' to it.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        34,
+                        "VAR"
+                    ],
+                    [
+                        46,
+                        55,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a new variable age of type int with value 25.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        26,
+                        "VAR"
+                    ],
+                    [
+                        35,
+                        38,
+                        "TYPE"
+                    ],
+                    [
+                        50,
+                        52,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a variable named count and assign integer 10 to it.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        29,
+                        "VAR"
+                    ],
+                    [
+                        41,
+                        48,
+                        "TYPE"
+                    ],
+                    [
+                        49,
+                        51,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a variable named score and assign 0 to it.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        29,
+                        "VAR"
+                    ],
+                    [
+                        41,
+                        42,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "initiate a new variable named quantity and set it to 100.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        38,
+                        "VAR"
+                    ],
+                    [
+                        53,
+                        56,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a new variable pi of type float with value 3.14.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        25,
+                        "VAR"
+                    ],
+                    [
+                        34,
+                        39,
+                        "TYPE"
+                    ],
+                    [
+                        51,
+                        55,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a variable named weight and assign float 75.5 to it.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        30,
+                        "VAR"
+                    ],
+                    [
+                        42,
+                        47,
+                        "TYPE"
+                    ],
+                    [
+                        48,
+                        52,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a variable named distance and set it to 12.34.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        32,
+                        "VAR"
+                    ],
+                    [
+                        47,
+                        52,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "initiate a new variable named height and assign float value 180.2.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        36,
+                        "VAR"
+                    ],
+                    [
+                        48,
+                        53,
+                        "TYPE"
+                    ],
+                    [
+                        60,
+                        65,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a new variable temperature of type double and set it to 98.6.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        34,
+                        "VAR"
+                    ],
+                    [
+                        43,
+                        49,
+                        "TYPE"
+                    ],
+                    [
+                        64,
+                        68,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a variable named velocity and assign double 299792458.0 to it.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        32,
+                        "VAR"
+                    ],
+                    [
+                        44,
+                        50,
+                        "TYPE"
+                    ],
+                    [
+                        51,
+                        62,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a variable named precision and set it to 0.000001.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        33,
+                        "VAR"
+                    ],
+                    [
+                        48,
+                        56,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "initiate a new variable named ratio and assign double value 1.618033.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        35,
+                        "VAR"
+                    ],
+                    [
+                        47,
+                        53,
+                        "TYPE"
+                    ],
+                    [
+                        60,
+                        68,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a new variable username of type string and set it to 'admin'.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        31,
+                        "VAR"
+                    ],
+                    [
+                        40,
+                        46,
+                        "TYPE"
+                    ],
+                    [
+                        61,
+                        68,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a variable named greeting and assign string 'hello world' to it.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        32,
+                        "VAR"
+                    ],
+                    [
+                        44,
+                        50,
+                        "TYPE"
+                    ],
+                    [
+                        51,
+                        64,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a variable named title and set it to 'Introduction to Programming'.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        29,
+                        "VAR"
+                    ],
+                    [
+                        44,
+                        73,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "initiate a new variable named note and assign string value 'remember to save'.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        34,
+                        "VAR"
+                    ],
+                    [
+                        46,
+                        52,
+                        "TYPE"
+                    ],
+                    [
+                        59,
+                        77,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a new variable is active of type bool and set it to true.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        32,
+                        "VAR"
+                    ],
+                    [
+                        41,
+                        45,
+                        "TYPE"
+                    ],
+                    [
+                        60,
+                        64,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a variable named is finished and assign boolean false to it.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        35,
+                        "VAR"
+                    ],
+                    [
+                        47,
+                        54,
+                        "TYPE"
+                    ],
+                    [
+                        55,
+                        60,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a variable named is open and set it to true.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        31,
+                        "VAR"
+                    ],
+                    [
+                        46,
+                        50,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "initiate a new variable named is verified and assign bool value false.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        41,
+                        "VAR"
+                    ],
+                    [
+                        53,
+                        57,
+                        "TYPE"
+                    ],
+                    [
+                        64,
+                        69,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare an empty list named items.\r",
+            {
+                "entities": [
+                    [
+                        11,
+                        16,
+                        "VAL"
+                    ],
+                    [
+                        17,
+                        21,
+                        "TYPE"
+                    ],
+                    [
+                        28,
+                        33,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define an array called numbers and initialize it with values [1, 2, 3, 4, 5].\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        15,
+                        "TYPE"
+                    ],
+                    [
+                        23,
+                        30,
+                        "VAR"
+                    ],
+                    [
+                        61,
+                        76,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a variable named fruits and set it to ['apple', 'banana', 'cherry'].\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        30,
+                        "VAR"
+                    ],
+                    [
+                        45,
+                        74,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "initiate a new list named temperatures and assign it values [20.5, 21.0, 19.8].\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        19,
+                        "TYPE"
+                    ],
+                    [
+                        26,
+                        38,
+                        "VAR"
+                    ],
+                    [
+                        60,
+                        78,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare an empty dictionary named user.\r",
+            {
+                "entities": [
+                    [
+                        11,
+                        16,
+                        "VAL"
+                    ],
+                    [
+                        17,
+                        27,
+                        "TYPE"
+                    ],
+                    [
+                        34,
+                        38,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a variable with the name inventory and set it to {'apple': 10, 'banana': 20}.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        41,
+                        "VAR"
+                    ],
+                    [
+                        56,
+                        83,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "initiate a new dictionary with config as the name and assign it values {'debug': True, 'verbose': False}.",
+            {
+                "entities": [
+                    [
+                        15,
+                        25,
+                        "TYPE"
+                    ],
+                    [
+                        31,
+                        37,
+                        "VAR"
+                    ],
+                    [
+                        71,
+                        104,
+                        "VAL"
+                    ]
+                ]
+            }
+        ]
+    ]
+    }
+}

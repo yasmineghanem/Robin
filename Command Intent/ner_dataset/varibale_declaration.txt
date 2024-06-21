@@ -1,0 +1,41 @@
+temp equals 'string'.
+y equals 5.
+x equals 10.
+is finished equals false.
+is verified equals true.
+declare a new variable x of type int with value 5.
+declare a new variable x of type float with value 6.5.
+declare a new variable number of type double and assign 5.5 to it.
+define a variable named temp and assign 'string' to it.
+create a variable named x and assign 5 to it.
+create a variable named item and assign 8 to it.
+create variable with the name var and value 7089.
+define an empty array named arr.
+initiate a new variable named var2 and assign 'message' to it.
+declare a new variable age of type int with value 25.
+define a variable named count and assign integer 10 to it.
+create a variable named score and assign 0 to it.
+initiate a new variable named quantity and set it to 100.
+declare a new variable pi of type float with value 3.14.
+define a variable named weight and assign float 75.5 to it.
+create a variable named distance and set it to 12.34.
+initiate a new variable named height and assign float value 180.2.
+declare a new variable temperature of type double and set it to 98.6.
+define a variable named velocity and assign double 299792458.0 to it.
+create a variable named precision and set it to 0.000001.
+initiate a new variable named ratio and assign double value 1.618033.
+declare a new variable username of type string and set it to 'admin'.
+define a variable named greeting and assign string 'hello world' to it.
+create a variable named title and set it to 'Introduction to Programming'.
+initiate a new variable named note and assign string value 'remember to save'.
+declare a new variable is active of type bool and set it to true.
+define a variable named is finished and assign boolean false to it.
+create a variable named is open and set it to true.
+initiate a new variable named is verified and assign bool value false.
+declare an empty list named items.
+define an array called numbers and initialize it with values [1, 2, 3, 4, 5].
+create a variable named fruits and set it to ['apple', 'banana', 'cherry'].
+initiate a new list named temperatures and assign it values [20.5, 21.0, 19.8].
+declare an empty dictionary named user.
+create a variable with the name inventory and set it to {'apple': 10, 'banana': 20}.
+initiate a new dictionary with config as the name and assign it values {'debug': True, 'verbose': False}.

@@ -1,0 +1,31 @@
+Take input from user for their name.
+Read from a user and put in variable x.
+Ask the user to input their age.
+Promt the user to enter their email.
+output the variable result.
+Print Error.
+Print x.
+Show the error message err.
+Display age.
+Write y.
+Print the following message program ends here.
+Prompt the user to enter their password.
+Take input from user for their address.
+Ask the user to input their phone number.
+Read from a user and put in variable email.
+Get the user's feedback and store it in feedback variable.
+Prompt the user to enter their username.
+Ask the user to input the current date.
+Take input from user for their birth year.
+Request the user to provide their favorite color.
+Read from a user and put in variable zip code.
+Print the variable user input.
+Output the result.
+Print Success.
+Display the final score.
+Show the warning message warning.
+Print the variable total.
+Output the name.
+Print the following message welcome to the program.
+Show message.
+Display the result.

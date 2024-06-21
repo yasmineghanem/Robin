@@ -1,0 +1,33 @@
+declare a function named add that takes two parameters a and b and returns an int.
+define a new function with the name subtract that takes two arguments x and y and returns an int.
+create a function named func that returns a string.
+write a function and name it calculate that takes two arguments num1 and num2 and returns a float.
+write a function named test that takes a parameter name.
+create a function under the name display that takes message as a parameter.
+define a new function that takes name and age and name it greet.
+declare function named print that takes a string message.
+define a function numbers that has two parameters x and y and returns a float.
+write a function named search that takes a list called arr as a parameter.
+create a function named sum that takes a list of numbers as an argument.
+define a method named multiply that takes a list of integers.
+declare a new method called max length that takes a list of strings.
+write me a new function and call it sequence that takes name age and is active as parameters.
+declare a method and name is valid that takes a string username.
+create a new function named is valid that takes a string password.
+define a function with the name get balance that takes an account number.
+a function has the name depth first search and parameters a b and c.
+a function named breadth first search with parameters x y and z.
+a method with the name binary search and parameters arr and key.
+create a functions that takes an array called numbers and an int named target.
+under the name of cosine similarity write a function that takes list1 and list2.
+with the name of euclidean distance define a function that takes parameters x1 y1 x2 y2.
+define a function named best name that takes an array named names.
+define a new function with the name concatenate that takes two string arguments str1 and str2 and returns a string.
+create a function named initialize.
+write a function and name it average that takes a list of numbers and returns a float.
+write a function named login that takes parameters username and password.
+create a function under the name show details that takes two parameters name and details.
+define a new function that takes email and password and name it authenticate.
+declare function named log that takes a string message and a log level.
+define a function compute area that takes two parameters width and height and returns a float.
+write a function named search item that takes an array called items and a string key.

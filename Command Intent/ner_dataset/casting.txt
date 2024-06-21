@@ -1,0 +1,20 @@
+Cast x to an integer.
+Convert y to a float.
+Change type to a string.
+Cast temp to a double.
+make number an int.
+convert value to string.
+cast x to float.
+change salary to float.
+make age a string.
+convert message to list.
+change name to a string.
+cast the tuple x to list.
+cast fruits to a set.
+make numbers a set.
+make temp a tuple.
+change the variable var to a list.
+convert the variable message to a list.
+cast result to a set.
+convert the value 1000 to int.
+cast 46876 to float.

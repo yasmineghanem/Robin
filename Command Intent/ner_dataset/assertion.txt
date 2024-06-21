@@ -1,0 +1,10 @@
+Assert that x is greater than or equal 0.
+Assert that y is smaller than or equal 100.
+Ensure that z is not equal to null.
+Confirm that b equals zero.
+assert length is equal 100.
+assert is valid is true.
+ensure start is less than or equal end.
+assert that sum equals expected sum.
+confirm name is not empty.
+assert count not equal 0.

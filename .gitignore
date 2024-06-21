@@ -2,3 +2,5 @@ node_modules
 /.*/node_modules
 /Command Execution/node_modules
 .vscode
+Command Intent/model-best
+Command Intent/model-last

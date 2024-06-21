@@ -1,0 +1,32 @@
+assign the value 5 to the variable x.
+assign the value 10 to the variable y.
+set the string hello to the variable message.
+assign the value 3.14 to pi.
+put my name is john in the variable name.
+insert 100 into the variable count.
+set is valid to true.
+assign the value 20 to age.
+assign the value 30 to the variable salary.
+set the variable is active to false.
+put i am a student in the variable statement.
+x equals y.
+name equals noah.
+age is equal to 23.
+set the salary to 50000.
+assign the variable x to the variable y.
+is valid equals true.
+set var1 to 11.
+copy the value of x to y.
+set value to 74914.
+set character to a.
+update name1 with name2.
+update array1 with array2.
+set the value of i to 0.
+update name to adam.
+update is valid to false.
+store 9843 to the variable num.
+assign the values 1 2 and 3 to the list arr.
+put the values apple banana cherry in the list fruits.
+assign the values {name: 'john, age: 23} to the variable person.
+person of age equals 23.
+assign the values 1 2 3 4 and 5 to the list numbers.

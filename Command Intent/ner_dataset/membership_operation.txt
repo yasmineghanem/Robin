@@ -1,0 +1,12 @@
+Check if x is in the list arr.
+Check if y is not in the set unique.
+Check if z is in the dictionary words.
+Check if a is not in the tuple y.
+if number is in numbers.
+if value is not in values.
+check if node is in visited nodes.
+if node is not in visited nodes.
+check whether number is in the tuple t.
+check whether word is not in words.
+if number not in numbers.
+if word in words.

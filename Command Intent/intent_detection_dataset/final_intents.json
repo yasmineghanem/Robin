@@ -4483,7 +4483,7 @@
             ]
         },
         {
-            "intent": "I/O Operation",
+            "intent": "I-O Operation",
             "keywords": [
                 "Take input from user for their name",
                 "Read from a user and put in variable x",
