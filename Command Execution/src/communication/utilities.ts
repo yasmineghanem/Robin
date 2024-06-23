@@ -27,3 +27,12 @@ export const executeCommand = (command: string, data: any, successHandler: any, 
         (err) => errorHandler(err, res)
     );
 };
+
+export const showMessage = (message: string) => {
+    vscode.window.showInformationMessage(message);
+
+};
+
+export const showError = (message: string) => {
+    vscode.window.showErrorMessage(message);
+}

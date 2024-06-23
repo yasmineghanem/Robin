@@ -24,9 +24,9 @@ export abstract class CodeGenerator {
      */
     abstract declareFunction(
         name: string,
-        returnType: string,
         parameters: { name: string, type: string }[],
-        body: string[]
+        body?: string[],
+        returnType?: string,
     ): string;
 
     /**

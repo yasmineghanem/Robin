@@ -34,7 +34,7 @@ export class PythonCodeGenerator extends CodeGenerator {
         }
         return !this.reservedKeywords.includes(name);
     }
-        
+
 
     private isValidFunctionName(name: string): boolean {
         return this.isValidVariableName(name);
@@ -50,7 +50,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     wrapInCodeBlock(lines: string[]): string {
         return lines.map(line => `    ${line}`).join('\n');
     }
-    
+
     /**
      * Add Indentation to the code
      * 4 spaces before each line (if multiline)
@@ -67,7 +67,7 @@ export class PythonCodeGenerator extends CodeGenerator {
         if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid variable name: ${name}`);
         }
-        return `${name} = ${initialValue !== undefined ? initialValue : 'None'}`;
+        return `${name} = ${initialValue !== undefined ? initialValue : 'None'}\n`;
     }
 
     /**
@@ -77,14 +77,14 @@ export class PythonCodeGenerator extends CodeGenerator {
         if (!this.isValidConstantName(name)) {
             throw new Error(`Invalid constant name: ${name}`);
         }
-        return `${name} = ${value}`;
+        return `${name.toUpperCase()} = ${value}\n`;
     }
 
     /**
      * Assign variables
     **/
     assignVariable(name: string, value: any): string {
-        return `${name} = ${value}`;
+        return `${name} = ${value}\n`;
     }
 
     /**
@@ -92,14 +92,23 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Call function
      * Return statement
     **/
-    declareFunction(name: string, returnType: string, parameters: { name: string, type: string }[], body: string[]): string {
+    declareFunction(name: string, parameters: { name: string, value?: any }[], body?: string[], returnType?: string,): string {
         if (!this.isValidFunctionName(name)) {
             throw new Error(`Invalid function name: ${name}`);
         }
-        const params = parameters.map(p => p.name).join(', ');
-        const bodyCode = this.wrapInCodeBlock(body);
 
-        return `def ${name}(${params}) -> ${returnType}:\n${bodyCode}`;
+        // check if valid parameters names
+        if (parameters.some(p => !this.isValidVariableName(p.name))) {
+            throw new Error(`Invalid parameter name`);
+        }
+
+        // sort the parameters so that the ones without a value come first
+        parameters.sort((a, b) => a.value === undefined ? -1 : 1);
+
+        const params = parameters.map(p => `${p.name}${p.value ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}` : ''}`).join(', ');
+        const functionHeader = `def ${name}(${params}):`;
+        const functionBody = this.wrapInCodeBlock(body ?? [""]);
+        return `${functionHeader}\n${functionBody}`;
     }
 
     generateFunctionCall(name: string, args: string[]): string {
