@@ -1,7 +1,32 @@
 import { CodeGenerator } from "./codeGenerator";
-
+import pythonReservedKeywords from "./language specifics/pythonReserved.json";
 export class PythonCodeGenerator extends CodeGenerator {
-    declareVariable(name: string, initialValue?: any): string {
+
+    // constructor
+
+    /**
+     * Declare reserved keywords for each programming language
+     */
+
+    protected reservedKeywords: Array<string>;
+
+    constructor() {
+        super();
+        this.reservedKeywords = pythonReservedKeywords.reservedKeywords;
+    }
+
+    private isValidVariableName(name: string): boolean {
+        const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+        if (!pattern.test(name)) {
+            return false;
+        }
+        return !this.reservedKeywords.includes(name);
+    }
+    
+    declareVariable(name: string, type?: string, initialValue?: any): string {
+        if (!this.isValidVariableName(name)) {
+            throw new Error(`Invalid variable name: ${name}`);
+        }
         return `${name} = ${initialValue !== undefined ? initialValue : 'None'}`;
     }
 

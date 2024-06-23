@@ -25463,6 +25463,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const code_1 = __webpack_require__(166);
+const pythonCodeGenerator_1 = __webpack_require__(175);
 // utilities
 const pythonReservedKeywords = new Set([
     "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class", "continue",
@@ -25489,18 +25490,10 @@ const declareVariable = () => {
     vscode.commands.registerCommand(code_1.DECLARE_VARIABLE, async (args) => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
-            const name = args.name;
-            const value = args.value ?? "None";
-            if (!isValidVariableName(name)) {
-                vscode.window.showErrorMessage("Invalid variable name");
-                return {
-                    success: false,
-                    message: "Invalid variable name"
-                };
-            }
-            const line = `\n${name} = ${JSON.stringify(value)}`;
+            // assuming python
+            let codeGen = new pythonCodeGenerator_1.PythonCodeGenerator();
             let s = await editor.edit(editBuilder => {
-                editBuilder.insert(getCurrentPosition(editor), line);
+                editBuilder.insert(getCurrentPosition(editor), codeGen.declareVariable(args.name, args.type, args.value));
             });
             if (!s) {
                 vscode.window.showErrorMessage("Failed to declare variable");
@@ -26022,6 +26015,87 @@ module.exports = require("os");
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"name":"dotenv","version":"16.4.5","description":"Loads environment variables from .env file","main":"lib/main.js","types":"lib/main.d.ts","exports":{".":{"types":"./lib/main.d.ts","require":"./lib/main.js","default":"./lib/main.js"},"./config":"./config.js","./config.js":"./config.js","./lib/env-options":"./lib/env-options.js","./lib/env-options.js":"./lib/env-options.js","./lib/cli-options":"./lib/cli-options.js","./lib/cli-options.js":"./lib/cli-options.js","./package.json":"./package.json"},"scripts":{"dts-check":"tsc --project tests/types/tsconfig.json","lint":"standard","lint-readme":"standard-markdown","pretest":"npm run lint && npm run dts-check","test":"tap tests/*.js --100 -Rspec","test:coverage":"tap --coverage-report=lcov","prerelease":"npm test","release":"standard-version"},"repository":{"type":"git","url":"git://github.com/motdotla/dotenv.git"},"funding":"https://dotenvx.com","keywords":["dotenv","env",".env","environment","variables","config","settings"],"readmeFilename":"README.md","license":"BSD-2-Clause","devDependencies":{"@definitelytyped/dtslint":"^0.0.133","@types/node":"^18.11.3","decache":"^4.6.1","sinon":"^14.0.1","standard":"^17.0.0","standard-markdown":"^7.1.0","standard-version":"^9.5.0","tap":"^16.3.0","tar":"^6.1.11","typescript":"^4.8.4"},"engines":{"node":">=12"},"browser":{"fs":false}}');
+
+/***/ }),
+/* 175 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PythonCodeGenerator = void 0;
+const codeGenerator_1 = __webpack_require__(176);
+const pythonReserved_json_1 = __importDefault(__webpack_require__(177));
+class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
+    // constructor
+    /**
+     * Declare reserved keywords for each programming language
+     */
+    reservedKeywords;
+    constructor() {
+        super();
+        this.reservedKeywords = pythonReserved_json_1.default.reservedKeywords;
+    }
+    isValidVariableName(name) {
+        const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+        if (!pattern.test(name)) {
+            return false;
+        }
+        return !this.reservedKeywords.includes(name);
+    }
+    declareVariable(name, type, initialValue) {
+        if (!this.isValidVariableName(name)) {
+            throw new Error(`Invalid variable name: ${name}`);
+        }
+        return `${name} = ${initialValue !== undefined ? initialValue : 'None'}`;
+    }
+    declareFunction(name, returnType, parameters, body) {
+        const params = parameters.map(p => p.name).join(', ');
+        const bodyCode = this.wrapInCodeBlock(body);
+        return `def ${name}(${params}) -> ${returnType}:\n${bodyCode}`;
+    }
+    declareClass(name, properties, methods) {
+        const props = properties.map(p => `self.${p.name} = None`).join('\n        ');
+        const initMethod = `def __init__(self):\n        ${props}`;
+        const methodCode = methods.join('\n\n    ');
+        return `class ${name}:\n    ${initMethod}\n\n    ${methodCode}`;
+    }
+    generateImport(module, entities) {
+        return `from ${module} import ${entities.join(', ')}`;
+    }
+    wrapInCodeBlock(lines) {
+        return lines.map(line => `    ${line}`).join('\n');
+    }
+}
+exports.PythonCodeGenerator = PythonCodeGenerator;
+
+
+/***/ }),
+/* 176 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+/**
+ * A generic abstract class providing the necessary methods for code generation, like declaring variables, functions...etc
+ * This class/interface needs to be implemented for each programming language that needs to be supported
+ */
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CodeGenerator = void 0;
+class CodeGenerator {
+}
+exports.CodeGenerator = CodeGenerator;
+
+
+/***/ }),
+/* 177 */
+/***/ ((module) => {
+
+"use strict";
+module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"]}');
 
 /***/ })
 /******/ 	]);

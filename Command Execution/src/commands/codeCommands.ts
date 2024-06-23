@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { DECLARE_FUNCTION, DECLARE_VARIABLE, GET_AST } from '../constants/code';
+import { PythonCodeGenerator } from '../code generation/pythonCodeGenerator';
 
 
 
@@ -41,22 +42,15 @@ const declareVariable = () => {
 
         const editor = vscode.window.activeTextEditor;
         if (editor) {
-            const name = args.name;
-            const value = args.value ?? "None";
-            if (!isValidVariableName(name)) {
-                vscode.window.showErrorMessage("Invalid variable name");
-                return {
-                    success: false,
-                    message: "Invalid variable name"
-                };
 
-            }
-            const line = `\n${name} = ${JSON.stringify(value)}`;
+            
+            // assuming python
+            let codeGen = new PythonCodeGenerator();
 
             let s = await editor.edit(editBuilder => {
-                editBuilder.insert(getCurrentPosition(editor), line);
+                editBuilder.insert(getCurrentPosition(editor), 
+                codeGen.declareVariable(args.name, args.type, args.value));
             });
-
 
             if (!s) {
                 vscode.window.showErrorMessage("Failed to declare variable");
@@ -105,10 +99,10 @@ const declareVariable = () => {
 const declareFunction = () => {
 
     vscode.commands.registerCommand(DECLARE_FUNCTION, async (args) => {
-    const editor = vscode.window.activeTextEditor;
+        const editor = vscode.window.activeTextEditor;
         if (editor) {
             // console.log(args)
-            const name = args.name;            
+            const name = args.name;
 
 
             if (!isValidVariableName(name)) {
