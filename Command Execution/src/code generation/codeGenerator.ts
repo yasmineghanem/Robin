@@ -4,6 +4,16 @@
  */
 
 export abstract class CodeGenerator {
+
+    /**
+     * Declare reserved keywords for each programming language
+     */
+
+    protected reservedKeywords: Set<string>;
+    
+    constructor(reservedKeywords: string[]) {
+        this.reservedKeywords = new Set(reservedKeywords);
+    }
     /**
      * Declares a variable in the target programming language.
      * @param name The name of the variable.
