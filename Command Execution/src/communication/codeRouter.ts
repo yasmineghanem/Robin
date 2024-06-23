@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DECLARE_FUNCTION, DECLARE_VARIABLE } from '../constants/code';
+import { DECLARE_FUNCTION, DECLARE_VARIABLE, GET_AST } from '../constants/code';
 import { errorHandler, executeCommand, successHandler } from './utilities';
 import express, { Request, Response } from "express";
 
@@ -33,4 +33,17 @@ router.post('/declare-function',
     }
 );
 
+// get AST
+router.get('/ast',
+    (req: Request, res: Response) => {
+        // const data = req.body;
+        executeCommand(
+            GET_AST,
+            {},
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
 export default router;

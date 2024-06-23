@@ -31,7 +31,7 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test",
-    "start-microservice": "node ./src/microservices/ast/index.js"
+    "start-microservice": "nodemon ./src/microservices/ast/index.js"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

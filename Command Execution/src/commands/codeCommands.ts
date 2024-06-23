@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { DECLARE_FUNCTION, DECLARE_VARIABLE } from '../constants/code';
-// import Parser from 'tree-sitter';
-// import Python from 'tree-sitter-python';
+import { DECLARE_FUNCTION, DECLARE_VARIABLE, GET_AST } from '../constants/code';
+
+
 
 // utilities
 const pythonReservedKeywords: Set<string> = new Set([
@@ -38,13 +38,6 @@ interface Parameter {
 // declare variable
 const declareVariable = () => {
     vscode.commands.registerCommand(DECLARE_VARIABLE, async (args) => {
-        //Create output channel
-        let orange = vscode.window.createOutputChannel("Orange");
-
-        //Write to output.
-        orange.appendLine("I am a banana.");
-        // print to output channel
-        orange.show();
 
         const editor = vscode.window.activeTextEditor;
         if (editor) {
@@ -90,33 +83,7 @@ const declareVariable = () => {
     });
 
 
-    //     // read the current file and get its parse tree
-    //     const editor = vscode.window.activeTextEditor;
-    //     if (!editor) {
-    //         vscode.window.showErrorMessage('No active text editor.');
-    //         return {
-    //             success: false,
-    //             message: "No active text editor"
-    //         };
-    //     }
-    //     // const text = editor.document.getText();
-    //     // const parser = new Parser();
-    //     // parser.setLanguage(Python);
-    //     // const tree = parser.parse(text);
-    //     // const root = tree.rootNode;
-    //     // const cursorPosition = editor.selection.active;
-    //     // const currentNode = root.namedDescendantForPosition({
-    //     //     row: cursorPosition.line,
-    //     //     column: cursorPosition.character
-    //     // });
 
-
-    //     return {
-    //         success: true,
-    //         message: "Variable declared successfully"
-    //     }
-    // }
-    // )
 };
 
 
@@ -138,10 +105,11 @@ const declareVariable = () => {
 const declareFunction = () => {
 
     vscode.commands.registerCommand(DECLARE_FUNCTION, async (args) => {
-        const editor = vscode.window.activeTextEditor;
+    const editor = vscode.window.activeTextEditor;
         if (editor) {
             // console.log(args)
-            const name = args.name;
+            const name = args.name;            
+
 
             if (!isValidVariableName(name)) {
                 vscode.window.showErrorMessage("Invalid function name");
@@ -210,10 +178,44 @@ const declareFunction = () => {
     });
 };
 
+const getAST = () => {
+    vscode.commands.registerCommand(
+        GET_AST,
+        async (args) => {
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                const text = editor.document.getText();
+
+                // get the corresponding AST from the microservice
+                const response = await fetch("http://localhost:2806/ast", {
+                    method: "POST",
+                    body: JSON.stringify({ code: text }),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                const data: any = await response.json();
+                // console.log();
+                console.log("ROBIN FILTER \n" + data);
+
+                return {
+                    success: true,
+                    message: "AST retrieved successfully",
+                    data: data
+                };
+            }
+        }
+    );
+
+
+};
+
 const registerCodeCommands = () => {
     const commands = [
         declareVariable,
-        declareFunction
+        declareFunction,
+        getAST
 
     ];
 

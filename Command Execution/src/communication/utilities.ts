@@ -1,11 +1,15 @@
 import * as vscode from 'vscode';
 
-import {Response } from "express";
+import { Response } from "express";
 
 export const successHandler = (response: any, res: Response) => {
     if (response.success) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Variable declared successfully!' }));
+        if (response) {
+            res.end(JSON.stringify(response));
+        } else {
+            res.end(JSON.stringify({ message: "Operation done successfully" }));
+        }
     } else {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: response.message }));

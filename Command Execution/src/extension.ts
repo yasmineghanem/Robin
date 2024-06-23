@@ -12,8 +12,11 @@ require('dotenv').config({
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	
 	// register all commands
 	registerAllCommands();
+
+
 	server.listen(process.env.SERVER_HOST_PORT || 3000, () => {
 		// activate extension by executing hello world command
 		vscode.commands.executeCommand("robin.activate");

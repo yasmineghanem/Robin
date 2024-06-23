@@ -118,20 +118,6 @@ server.use('/file-system', fileSystemRouter_1.default);
 server.use('/ide', IDERouter_1.default);
 server.use('/code', codeRouter_1.default);
 // endpoints
-// server.post("/declare-var", (req, res) => {
-//   const data = req.body;
-//   const args = req.query;
-//   vscode.commands.executeCommand("robin.declareVariable", args, data).then(
-//     () => {
-//       res.writeHead(200, { "Content-Type": "text/plain" });
-//       res.end("Command executed successfully");
-//     },
-//     (err) => {
-//       res.writeHead(500, { "Content-Type": "text/plain" });
-//       res.end("Failed to execute command");
-//     }
-//   );
-// });
 server.post("/declare-func", (req, res) => {
     const data = req.body;
     const args = req.query;
@@ -24787,6 +24773,11 @@ router.post('/declare-function', (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.DECLARE_FUNCTION, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// get AST
+router.get('/ast', (req, res) => {
+    // const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.GET_AST, {}, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 exports["default"] = router;
 
 
@@ -24797,9 +24788,10 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
 exports.DECLARE_VARIABLE = "robin.declareVariable";
 exports.DECLARE_FUNCTION = "robin.declareFunction";
+exports.GET_AST = "robin.getAST";
 
 
 /***/ }),
@@ -24837,7 +24829,12 @@ const vscode = __importStar(__webpack_require__(1));
 const successHandler = (response, res) => {
     if (response.success) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Variable declared successfully!' }));
+        if (response) {
+            res.end(JSON.stringify(response));
+        }
+        else {
+            res.end(JSON.stringify({ message: "Operation done successfully" }));
+        }
     }
     else {
         res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -25010,8 +25007,6 @@ const fileName = () => vscode.commands.registerCommand('robin.fileName', () => {
 const registerAllCommands = () => {
     const commands = [
         activateRobin,
-        // declareVariable,
-        // declareFunction,
         declareClass,
         goToLocation,
         fileName
@@ -25468,8 +25463,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const code_1 = __webpack_require__(166);
-// import Parser from 'tree-sitter';
-// import Python from 'tree-sitter-python';
 // utilities
 const pythonReservedKeywords = new Set([
     "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class", "continue",
@@ -25494,12 +25487,6 @@ function isValidVariableName(name) {
 // declare variable
 const declareVariable = () => {
     vscode.commands.registerCommand(code_1.DECLARE_VARIABLE, async (args) => {
-        //Create output channel
-        let orange = vscode.window.createOutputChannel("Orange");
-        //Write to output.
-        orange.appendLine("I am a banana.");
-        // print to output channel
-        orange.show();
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             const name = args.name;
@@ -25536,31 +25523,6 @@ const declareVariable = () => {
             };
         }
     });
-    //     // read the current file and get its parse tree
-    //     const editor = vscode.window.activeTextEditor;
-    //     if (!editor) {
-    //         vscode.window.showErrorMessage('No active text editor.');
-    //         return {
-    //             success: false,
-    //             message: "No active text editor"
-    //         };
-    //     }
-    //     // const text = editor.document.getText();
-    //     // const parser = new Parser();
-    //     // parser.setLanguage(Python);
-    //     // const tree = parser.parse(text);
-    //     // const root = tree.rootNode;
-    //     // const cursorPosition = editor.selection.active;
-    //     // const currentNode = root.namedDescendantForPosition({
-    //     //     row: cursorPosition.line,
-    //     //     column: cursorPosition.character
-    //     // });
-    //     return {
-    //         success: true,
-    //         message: "Variable declared successfully"
-    //     }
-    // }
-    // )
 };
 // declare function
 // {
@@ -25643,10 +25605,35 @@ const declareFunction = () => {
         }
     });
 };
+const getAST = () => {
+    vscode.commands.registerCommand(code_1.GET_AST, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const text = editor.document.getText();
+            // get the corresponding AST from the microservice
+            const response = await fetch("http://localhost:2806/ast", {
+                method: "POST",
+                body: JSON.stringify({ code: text }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const data = await response.json();
+            // console.log();
+            console.log("ROBIN FILTER \n" + data);
+            return {
+                success: true,
+                message: "AST retrieved successfully",
+                data: data
+            };
+        }
+    });
+};
 const registerCodeCommands = () => {
     const commands = [
         declareVariable,
-        declareFunction
+        declareFunction,
+        getAST
     ];
     commands.forEach((command) => {
         command();

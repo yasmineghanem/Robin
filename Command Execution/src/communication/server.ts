@@ -19,20 +19,6 @@ server.use('/code', codeRouter);
 
 
 // endpoints
-// server.post("/declare-var", (req, res) => {
-//   const data = req.body;
-//   const args = req.query;
-//   vscode.commands.executeCommand("robin.declareVariable", args, data).then(
-//     () => {
-//       res.writeHead(200, { "Content-Type": "text/plain" });
-//       res.end("Command executed successfully");
-//     },
-//     (err) => {
-//       res.writeHead(500, { "Content-Type": "text/plain" });
-//       res.end("Failed to execute command");
-//     }
-//   );
-// });
 server.post("/declare-func", (req, res) => {
   const data = req.body;
   const args = req.query;
