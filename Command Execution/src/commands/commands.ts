@@ -130,8 +130,6 @@ const fileName = () => vscode.commands.registerCommand('robin.fileName', () => {
 const registerAllCommands = () => {
   const commands = [
     activateRobin,
-    // declareVariable,
-    // declareFunction,
     declareClass,
     goToLocation,
     fileName

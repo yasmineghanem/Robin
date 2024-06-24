@@ -1,33 +1,52 @@
-import * as vscode from 'vscode';
-import { DECLARE_FUNCTION, DECLARE_VARIABLE } from '../constants/code';
+import * as vscode from "vscode";
+import {
+    ADD_WHITESPACE,
+    DECLARE_CONSTANT,
+    DECLARE_FUNCTION,
+    DECLARE_VARIABLE,
+    FILE_EXT_FAILURE,
+    FUNCTION_CALL,
+    FUNCTION_CALL_FAILURE,
+    FUNCTION_CALL_SUCCESS,
+    FUNCTION_FAILURE,
+    FUNCTION_SUCCESS,
+    GET_AST,
+    NO_ACTIVE_TEXT_EDITOR,
+    VARIABLE_FAILURE,
+    VARIABLE_SUCCESS,
+    WHITE_SPACE_FAILURE,
+    WHITE_SPACE_SUCCESS,
+} from "../constants/code";
+import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
+import { showError, showMessage } from "../communication/utilities";
+import { EXTENSIONS } from "../constants/constants";
 
 // utilities
-const pythonReservedKeywords: Set<string> = new Set([
-    "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class", "continue",
-    "def", "del", "elif", "else", "except", "finally", "for", "from", "global", "if", "import", "in",
-    "is", "lambda", "nonlocal", "not", "or", "pass", "raise", "return", "try", "while", "with", "yield"
-]);
 
 const getCurrentPosition = (editor: vscode.TextEditor): vscode.Position => {
     const position = editor.selection.active;
     return position;
 };
 
-function isValidVariableName(name: string): boolean {
-    const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
-    if (!pattern.test(name)) {
-        return false;
-    }
-    return !pythonReservedKeywords.has(name);
-}
+const getFileExtension = (editor: vscode.TextEditor): string | undefined => {
+    return editor.document.fileName.split(".").pop();
+};
 
-// interfaces
-interface Parameter {
-    name: string;
-    value?: any;
-}
+const handleFailure = (message: string): any => {
+    showError(message);
+    return {
+        success: false,
+        message: message,
+    };
+};
 
-
+const handleSuccess = (message: string): any => {
+    showMessage(message);
+    return {
+        success: true,
+        message: message,
+    };
+};
 
 // {
 //     "name": "x",
@@ -38,48 +57,83 @@ const declareVariable = () => {
     vscode.commands.registerCommand(DECLARE_VARIABLE, async (args) => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
-            const name = args.name;
-            const value = args.value ?? "None";
-            if (!isValidVariableName(name)) {
-                vscode.window.showErrorMessage("Invalid variable name");
-                return {
-                    success: false,
-                    message: "Invalid variable name"
-                };
+            // check for extension
+            const ext = getFileExtension(editor);
 
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
             }
-            const line = `\n${name} = ${JSON.stringify(value)}`;
 
-            let s = await editor.edit(editBuilder => {
-                editBuilder.insert(getCurrentPosition(editor), line);
+            let s = await editor.edit((editBuilder) => {
+                editBuilder.insert(
+                    getCurrentPosition(editor),
+                    codeGenerator.declareVariable(args.name, args.type, args.value)
+                );
             });
 
-
             if (!s) {
-                vscode.window.showErrorMessage("Failed to declare variable");
-                return {
-                    success: false,
-                    message: "Failed to declare variable"
-                };
-
+                return handleFailure(VARIABLE_FAILURE);
             }
-            vscode.window.showInformationMessage("Variable declared successfully");
-            return {
-                success: true,
-                message: "Variable declared successfully"
-            };
 
-
-        } else {
-            vscode.window.showErrorMessage('No active text editor.');
-            return {
-                success: false,
-                message: "No active text editor"
-            };
+            return handleSuccess(VARIABLE_SUCCESS);
         }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
 };
 
+// declare constant
+const declareConstant = () => {
+    vscode.commands.registerCommand(DECLARE_CONSTANT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            try {
+
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.declareConstant(args.name, args.value)
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(VARIABLE_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(VARIABLE_FAILURE);
+            }
+
+            return handleSuccess(VARIABLE_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+
+};
 
 // declare function
 // {
@@ -97,85 +151,160 @@ const declareVariable = () => {
 // }
 
 const declareFunction = () => {
-
     vscode.commands.registerCommand(DECLARE_FUNCTION, async (args) => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
-            // console.log(args)
-            const name = args.name;
+            // check for extension
+            const ext = getFileExtension(editor);
 
-            if (!isValidVariableName(name)) {
-                vscode.window.showErrorMessage("Invalid function name");
-                return {
-                    success: false,
-                    message: "Invalid function name"
-                };
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
             }
 
-            const parameters = args.parameters ?? [];
-            // sort the parameters so that the parameters with values are last
-            parameters.sort((a: Parameter, b: Parameter) => {
-                if ('value' in a && !('value' in b)) {
-                    return 1; // a has value, b does not -> a comes after b
-                } else if (!('value' in a) && 'value' in b) {
-                    return -1; // a does not have value, b does -> a comes before b
-                }
-                return 0; // both have value or both do not have value -> keep original order
-            });
+            try {
+                const code = codeGenerator.declareFunction(
+                    args.name,
+                    args.parameters ?? []
+                );
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), code);
+                });
 
-            // console.log(parameters, parameters.length)
-            let line1 = "\ndef " + name + "(";
-            for (let i = 0; i < parameters.length; i++) {
-                if (!isValidVariableName(parameters[i].name)) {
-                    return {
-                        success: false,
-                        message: "Invalid variable name"
-                    };
+                if (!s) {
+                    return handleFailure(FUNCTION_FAILURE);
                 }
 
-                if (i) { line1 += ", "; }
-                line1 += parameters[i]['name'];
-
-                if (parameters[i]['value']) {
-                    line1 += ' = ' + JSON.stringify(parameters[i]['value']);
-
-                }
+                return handleSuccess(FUNCTION_SUCCESS);
+            } catch (e) {
+                return handleFailure(FUNCTION_FAILURE);
             }
-            line1 += "):\n\t";
-            let s = await editor.edit(editBuilder => {
-                editBuilder.insert(getCurrentPosition(editor), line1);
-            });
-
-            if (!s) {
-                vscode.window.showErrorMessage("Failed to declare function");
-                return {
-                    success: false,
-                    message: "Failed to declare function"
-                };
-
-            }
-            vscode.window.showInformationMessage("Function declared successfully");
-            return {
-                success: true,
-                message: "Function declared successfully"
-            };
         }
-        else {
-            vscode.window.showErrorMessage('No active text editor.');
-            return {
-                success: false,
-                message: "No active text editor"
-            };
-        }
-
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
 };
 
-const registerCodeCommands = () => {
-    const commands = [
-        declareVariable,
-        declareFunction
+const getAST = () => {
+    vscode.commands.registerCommand(GET_AST, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const text = editor.document.getText();
 
+            // get the corresponding AST from the microservice
+            const response = await fetch("http://localhost:2806/ast", {
+                method: "POST",
+                body: JSON.stringify({ code: text }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const data: any = await response.json();
+            // console.log();
+            console.log("ROBIN FILTER \n" + data);
+
+            return {
+                success: true,
+                message: "AST retrieved successfully",
+                data: data,
+            };
+        }
+    });
+};
+
+// {
+//     "name": "x_string",
+//         "args": [
+//             {
+//                 "name": "x",
+//                 "value": "test"
+//             },
+//             {
+//                 "name": "y",
+//                 "value": "test"
+//             }
+//         ]
+// }
+
+// function call
+const functionCall = () => {
+    vscode.commands.registerCommand(FUNCTION_CALL, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            let s = await editor.edit((editBuilder) => {
+                editBuilder.insert(
+                    getCurrentPosition(editor),
+                    codeGenerator.generateFunctionCall(args.name, args.args)
+                );
+            });
+
+            if (!s) {
+                return handleFailure(FUNCTION_CALL_FAILURE);
+            }
+
+            return handleSuccess(FUNCTION_CALL_SUCCESS);
+        }
+    });
+};
+
+
+// white space
+const addWhiteSpace = () => {
+    vscode.commands.registerCommand(ADD_WHITESPACE, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+
+        if (editor) {
+
+            let codeGenerator = new PythonCodeGenerator();
+            let s = await editor.edit((editBuilder) => {
+                editBuilder.insert(
+                    getCurrentPosition(editor),
+                    codeGenerator.addWhiteSpace(
+                        args.type,
+                        args?.count
+                    )
+                );
+            });
+
+            if (!s) {
+                return handleFailure(WHITE_SPACE_FAILURE);
+            }
+
+            return handleSuccess(WHITE_SPACE_SUCCESS);
+        }
+    });
+};
+
+
+
+const registerCodeCommands = () => {
+    const commands = [declareVariable, declareFunction, getAST, functionCall, declareConstant,
+
+        addWhiteSpace
     ];
 
     commands.forEach((command) => {

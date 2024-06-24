@@ -30,7 +30,8 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "start-microservice": "nodemon ./src/microservices/ast/index.js"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -51,6 +52,7 @@
   "dependencies": {
     "axios": "^1.6.7",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2"
   }
 }
