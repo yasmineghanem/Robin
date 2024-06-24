@@ -39,7 +39,7 @@ const vscode = __importStar(__webpack_require__(1));
 const server_1 = __importDefault(__webpack_require__(2));
 const commands_1 = __importDefault(__webpack_require__(168));
 const path_1 = __importDefault(__webpack_require__(7));
-(__webpack_require__(172).config)({
+(__webpack_require__(175).config)({
     path: path_1.default.resolve(__dirname, '../.env')
 }); // Load environment variables from .env
 // This method is called when your extension is activated
@@ -24807,6 +24807,20 @@ router.post('/declare-function', (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.DECLARE_FUNCTION, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// function call
+router.post('/function-call', (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.FUNCTION_CALL, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// declare constant
+router.post('/declare-constant', (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.DECLARE_CONSTANT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// add whitespace
+router.get('/add-whitespace', (req, res) => {
+    (0, utilities_1.executeCommand)(code_1.ADD_WHITESPACE, req.query, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // get AST
 router.get('/ast', (req, res) => {
     // const data = req.body;
@@ -24822,10 +24836,13 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
 exports.DECLARE_VARIABLE = "robin.declareVariable";
 exports.DECLARE_FUNCTION = "robin.declareFunction";
 exports.GET_AST = "robin.getAST";
+exports.FUNCTION_CALL = "robin.functionCall";
+exports.DECLARE_CONSTANT = "robin.declareConstant";
+exports.ADD_WHITESPACE = "robin.addWhitespace";
 /**
  * Variable declaration messages
  */
@@ -24837,7 +24854,11 @@ exports.FILE_EXT_FAILURE = "Unsupported file extension";
  */
 exports.FUNCTION_SUCCESS = "Function declared successfully";
 exports.FUNCTION_FAILURE = "Failed to declare function";
+exports.FUNCTION_CALL_SUCCESS = "Function call successfully";
+exports.FUNCTION_CALL_FAILURE = "Failed to call function";
 exports.NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
+exports.WHITE_SPACE_SUCCESS = "White space added successfully!";
+exports.WHITE_SPACE_FAILURE = "Failed to add white space!";
 
 
 /***/ }),
@@ -25517,8 +25538,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const code_1 = __webpack_require__(166);
-const pythonCodeGenerator_1 = __webpack_require__(175);
+const pythonCodeGenerator_1 = __webpack_require__(172);
 const utilities_1 = __webpack_require__(167);
+const constants_1 = __webpack_require__(178);
 // utilities
 const getCurrentPosition = (editor) => {
     const position = editor.selection.active;
@@ -25526,6 +25548,20 @@ const getCurrentPosition = (editor) => {
 };
 const getFileExtension = (editor) => {
     return editor.document.fileName.split(".").pop();
+};
+const handleFailure = (message) => {
+    (0, utilities_1.showError)(message);
+    return {
+        success: false,
+        message: message,
+    };
+};
+const handleSuccess = (message) => {
+    (0, utilities_1.showMessage)(message);
+    return {
+        success: true,
+        message: message,
+    };
 };
 // {
 //     "name": "x",
@@ -25540,32 +25576,58 @@ const declareVariable = () => {
             const ext = getFileExtension(editor);
             let codeGenerator;
             switch (ext) {
-                case "py":
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
                     codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
                     break;
                 default:
-                    (0, utilities_1.showError)(code_1.FILE_EXT_FAILURE);
-                    return {
-                        success: false,
-                        message: code_1.FILE_EXT_FAILURE,
-                    };
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             let s = await editor.edit((editBuilder) => {
                 editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareVariable(args.name, args.type, args.value));
             });
             if (!s) {
-                (0, utilities_1.showError)(code_1.VARIABLE_FAILURE);
-                return {
-                    success: false,
-                    message: code_1.VARIABLE_FAILURE,
-                };
+                return handleFailure(code_1.VARIABLE_FAILURE);
             }
-            (0, utilities_1.showMessage)(code_1.VARIABLE_SUCCESS);
-            return {
-                success: true,
-                message: code_1.VARIABLE_SUCCESS,
-            };
+            return handleSuccess(code_1.VARIABLE_SUCCESS);
         }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+// declare constant
+const declareConstant = () => {
+    vscode.commands.registerCommand(code_1.DECLARE_CONSTANT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareConstant(args.name, args.value));
+                });
+                if (!s) {
+                    return handleFailure(code_1.VARIABLE_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.VARIABLE_FAILURE);
+            }
+            return handleSuccess(code_1.VARIABLE_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
 // declare function
@@ -25590,15 +25652,14 @@ const declareFunction = () => {
             const ext = getFileExtension(editor);
             let codeGenerator;
             switch (ext) {
-                case "py":
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
                     codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
                     break;
                 default:
-                    (0, utilities_1.showError)(code_1.FILE_EXT_FAILURE);
-                    return {
-                        success: false,
-                        message: code_1.FILE_EXT_FAILURE,
-                    };
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
                 const code = codeGenerator.declareFunction(args.name, args.parameters ?? []);
@@ -25606,33 +25667,15 @@ const declareFunction = () => {
                     editBuilder.insert(getCurrentPosition(editor), code);
                 });
                 if (!s) {
-                    (0, utilities_1.showError)(code_1.FUNCTION_FAILURE);
-                    return {
-                        success: false,
-                        message: code_1.FUNCTION_FAILURE,
-                    };
+                    return handleFailure(code_1.FUNCTION_FAILURE);
                 }
-                (0, utilities_1.showMessage)(code_1.FUNCTION_SUCCESS);
-                return {
-                    success: true,
-                    message: code_1.FUNCTION_SUCCESS,
-                };
+                return handleSuccess(code_1.FUNCTION_SUCCESS);
             }
             catch (e) {
-                (0, utilities_1.showError)(code_1.FUNCTION_FAILURE);
-                return {
-                    success: false,
-                    message: code_1.FUNCTION_FAILURE,
-                };
+                return handleFailure(code_1.FUNCTION_FAILURE);
             }
         }
-        // else {
-        //     showError("No active text editor.");
-        //     return {
-        //         success: false,
-        //         message: "No active text editor",
-        //     };
-        // }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
 const getAST = () => {
@@ -25659,8 +25702,67 @@ const getAST = () => {
         }
     });
 };
+// {
+//     "name": "x_string",
+//         "args": [
+//             {
+//                 "name": "x",
+//                 "value": "test"
+//             },
+//             {
+//                 "name": "y",
+//                 "value": "test"
+//             }
+//         ]
+// }
+// function call
+const functionCall = () => {
+    vscode.commands.registerCommand(code_1.FUNCTION_CALL, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            let s = await editor.edit((editBuilder) => {
+                editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateFunctionCall(args.name, args.args));
+            });
+            if (!s) {
+                return handleFailure(code_1.FUNCTION_CALL_FAILURE);
+            }
+            return handleSuccess(code_1.FUNCTION_CALL_SUCCESS);
+        }
+    });
+};
+// white space
+const addWhiteSpace = () => {
+    vscode.commands.registerCommand(code_1.ADD_WHITESPACE, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            let codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+            let s = await editor.edit((editBuilder) => {
+                editBuilder.insert(getCurrentPosition(editor), codeGenerator.addWhiteSpace(args.type, args?.count));
+            });
+            if (!s) {
+                return handleFailure(code_1.WHITE_SPACE_FAILURE);
+            }
+            return handleSuccess(code_1.WHITE_SPACE_SUCCESS);
+        }
+    });
+};
 const registerCodeCommands = () => {
-    const commands = [declareVariable, declareFunction, getAST];
+    const commands = [declareVariable, declareFunction, getAST, functionCall, declareConstant,
+        addWhiteSpace
+    ];
     commands.forEach((command) => {
         command();
     });
@@ -25670,13 +25772,276 @@ exports["default"] = registerCodeCommands;
 
 /***/ }),
 /* 172 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PythonCodeGenerator = void 0;
+const codeEnums_1 = __webpack_require__(179);
+const codeGenerator_1 = __webpack_require__(173);
+const pythonReserved_json_1 = __importDefault(__webpack_require__(174));
+class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
+    /**
+     * Declare reserved keywords for each programming language
+    **/
+    reservedKeywords;
+    // constructor
+    constructor() {
+        super();
+        this.reservedKeywords = pythonReserved_json_1.default.reservedKeywords;
+    }
+    //**********************Utility functions**********************//
+    /**
+     * Check if the variable name is valid and not a reserved keyword
+    **/
+    isValidVariableName(name) {
+        const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+        if (!pattern.test(name)) {
+            return false;
+        }
+        return !this.reservedKeywords.includes(name);
+    }
+    isValidConstantName(name) {
+        const pattern = /^[A-Z_][A-Z0-9_]*$/;
+        if (!pattern.test(name)) {
+            return false;
+        }
+        return !this.reservedKeywords.includes(name);
+    }
+    isValidFunctionName(name) {
+        return this.isValidVariableName(name);
+    }
+    isValidClassName(name) {
+        return this.isValidVariableName(name);
+    }
+    /**
+     * wrap code in a code block with '`' character
+    **/
+    wrapInCodeBlock(lines) {
+        return lines.map(line => `    ${line}`).join('\n');
+    }
+    /**
+     * Add Indentation to the code
+     * 4 spaces before each line (if multiline)
+    **/
+    addIndentation(code) {
+        return code.split('\n').map(line => `    ${line}`).join('\n');
+    }
+    //********************************************//
+    /**
+     * Declare variables
+    **/
+    declareVariable(name, type, initialValue) {
+        if (!this.isValidVariableName(name)) {
+            throw new Error(`Invalid variable name: ${name}`);
+        }
+        return `${name} = ${initialValue !== undefined ? initialValue : 'None'}\n`;
+    }
+    /**
+     * Declare constants
+    **/
+    declareConstant(name, value) {
+        if (!this.isValidConstantName(name.toUpperCase())) {
+            throw new Error(`Invalid constant name: ${name}`);
+        }
+        return `${name.toUpperCase()} = ${value}\n`;
+    }
+    /**
+     * Assign variables
+    **/
+    assignVariable(name, value) {
+        return `${name} = ${value}\n`;
+    }
+    /**
+     * Declare function
+     * Call function
+     * Return statement
+    **/
+    declareFunction(name, parameters, body, returnType) {
+        if (!this.isValidFunctionName(name)) {
+            throw new Error(`Invalid function name: ${name}`);
+        }
+        // check if valid parameters names
+        if (parameters.some(p => !this.isValidVariableName(p.name))) {
+            throw new Error(`Invalid parameter name`);
+        }
+        // sort the parameters so that the ones without a value come first
+        parameters.sort((a, b) => a.value === undefined ? -1 : 1);
+        const params = parameters.map(p => `${p.name}${p.value ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}` : ''}`).join(', ');
+        const functionHeader = `def ${name}(${params}):`;
+        const functionBody = this.wrapInCodeBlock(body ?? [""]);
+        return `${functionHeader}\n${functionBody}`;
+    }
+    // {
+    //     "name": "x_string",
+    //         "args": [
+    //             {
+    //                 "name": "x",
+    //                 "value": "test"
+    //             },
+    //             {
+    //                 "name": "y",
+    //                 "value": "test"
+    //             }
+    //         ]
+    // }
+    generateFunctionCall(name, args) {
+        const params = args.map(p => p.name ? `${p.name} = 
+                ${typeof p.value === "string" ? `"${p.value}"` : p.value}` :
+            typeof p.value === "string" ? `"${p.value}"` : p.value).join(', ');
+        return `${name}(${params}) \n`;
+    }
+    generateReturn(value) {
+        return `return ${value ?? ""} `;
+    }
+    /**
+     * Declare Class
+    **/
+    declareClass(name, properties, methods) {
+        if (!this.isValidClassName(name)) {
+            throw new Error(`Invalid class name: ${name} `);
+        }
+        const props = properties.map(p => `self.${p.name} = None`).join('\n        ');
+        const initMethod = `def __init__(self): \n        ${props} `;
+        const methodCode = methods.join('\n\n    ');
+        return `class $ { name }: \n    ${initMethod} \n\n    ${methodCode} `;
+    }
+    /**
+     * Import modules
+    **/
+    generateModuleImport(module, entities) {
+        return `from ${module} import ${entities.join(', ')} `;
+    }
+    generateImport(module) {
+        return `import ${module} `;
+    }
+    /**
+     * Conditional statements
+     * if, if-else
+    **/
+    generateIf(condition, body) {
+        return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
+    }
+    generateIfElse(condition, ifBody, elseBody) {
+        const ifCode = `if ${condition}: \n${this.wrapInCodeBlock(ifBody)} `;
+        const elseCode = elseBody ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} ` : '';
+        return `${ifCode}${elseCode} `;
+    }
+    /**
+     * Loop statements
+     * for, while, do-while
+    **/
+    generateForLoop(variable, iterable, body) {
+        const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
+        return loopCode;
+    }
+    generateWhileLoop(condition, body) {
+        const loopCode = `while ${condition}: \n${this.wrapInCodeBlock(body)} `;
+        return loopCode;
+    }
+    /**
+     * Identity operators
+     * is, is not
+    **/
+    generateIdentityOperation(left, operator, right) {
+        return `${left} ${operator} ${right} `;
+    }
+    /**
+     * Membership operation
+     * in, not in
+    **/
+    generateMembershipOperation(left, operator, right) {
+        return `${left} ${operator} ${right} `;
+    }
+    /**
+     * Logical operators
+     * and, or, not
+    **/
+    generateLogicalOperation(left, operator, right) {
+        return `${left} ${operator} ${right} `;
+    }
+    /**
+     * Comparison operators
+     * <, >, <=, >=, ==, !=
+    **/
+    generateComparisonOperation(left, operator, right) {
+        return `${left} ${operator} ${right} `;
+    }
+    /**
+     * Arithmetic operators
+     * +, -, *, /, %, // , **
+    **/
+    generateArithmeticOperation(left, operator, right) {
+        return `${left} ${operator} ${right} `;
+    }
+    /**
+     * Bitwise operators
+     * &, |, ^, ~, <<, >>
+    **/
+    generateBitwiseOperation(left, operator, right) {
+        return `${left} ${operator} ${right} `;
+    }
+    /**
+     * White spaces
+     */
+    addWhiteSpace(type, count) {
+        let ws;
+        switch (type) {
+            case codeEnums_1.Whitespace.Space:
+                ws = ' ';
+                break;
+            case codeEnums_1.Whitespace.Tab:
+                ws = '\t';
+                break;
+            case codeEnums_1.Whitespace.NewLine:
+                ws = '\n';
+                break;
+            default:
+                ws = ' ';
+        }
+        return ws.repeat(count ?? 1);
+    }
+}
+exports.PythonCodeGenerator = PythonCodeGenerator;
+
+
+/***/ }),
+/* 173 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+/**
+ * A generic abstract class providing the necessary methods for code generation, like declaring variables, functions...etc
+ * This class/interface needs to be implemented for each programming language that needs to be supported
+ */
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CodeGenerator = void 0;
+class CodeGenerator {
+}
+exports.CodeGenerator = CodeGenerator;
+
+
+/***/ }),
+/* 174 */
+/***/ ((module) => {
+
+"use strict";
+module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"]}');
+
+/***/ }),
+/* 175 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const fs = __webpack_require__(25)
 const path = __webpack_require__(7)
-const os = __webpack_require__(173)
+const os = __webpack_require__(176)
 const crypto = __webpack_require__(138)
-const packageJson = __webpack_require__(174)
+const packageJson = __webpack_require__(177)
 
 const version = packageJson.version
 
@@ -26036,244 +26401,48 @@ module.exports = DotenvModule
 
 
 /***/ }),
-/* 173 */
+/* 176 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("os");
 
 /***/ }),
-/* 174 */
+/* 177 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"name":"dotenv","version":"16.4.5","description":"Loads environment variables from .env file","main":"lib/main.js","types":"lib/main.d.ts","exports":{".":{"types":"./lib/main.d.ts","require":"./lib/main.js","default":"./lib/main.js"},"./config":"./config.js","./config.js":"./config.js","./lib/env-options":"./lib/env-options.js","./lib/env-options.js":"./lib/env-options.js","./lib/cli-options":"./lib/cli-options.js","./lib/cli-options.js":"./lib/cli-options.js","./package.json":"./package.json"},"scripts":{"dts-check":"tsc --project tests/types/tsconfig.json","lint":"standard","lint-readme":"standard-markdown","pretest":"npm run lint && npm run dts-check","test":"tap tests/*.js --100 -Rspec","test:coverage":"tap --coverage-report=lcov","prerelease":"npm test","release":"standard-version"},"repository":{"type":"git","url":"git://github.com/motdotla/dotenv.git"},"funding":"https://dotenvx.com","keywords":["dotenv","env",".env","environment","variables","config","settings"],"readmeFilename":"README.md","license":"BSD-2-Clause","devDependencies":{"@definitelytyped/dtslint":"^0.0.133","@types/node":"^18.11.3","decache":"^4.6.1","sinon":"^14.0.1","standard":"^17.0.0","standard-markdown":"^7.1.0","standard-version":"^9.5.0","tap":"^16.3.0","tar":"^6.1.11","typescript":"^4.8.4"},"engines":{"node":">=12"},"browser":{"fs":false}}');
 
 /***/ }),
-/* 175 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.PythonCodeGenerator = void 0;
-const codeGenerator_1 = __webpack_require__(176);
-const pythonReserved_json_1 = __importDefault(__webpack_require__(177));
-class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
-    /**
-     * Declare reserved keywords for each programming language
-    **/
-    reservedKeywords;
-    // constructor
-    constructor() {
-        super();
-        this.reservedKeywords = pythonReserved_json_1.default.reservedKeywords;
-    }
-    //**********************Utility functions**********************//
-    /**
-     * Check if the variable name is valid and not a reserved keyword
-    **/
-    isValidVariableName(name) {
-        const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
-        if (!pattern.test(name)) {
-            return false;
-        }
-        return !this.reservedKeywords.includes(name);
-    }
-    isValidConstantName(name) {
-        const pattern = /^[A-Z_][A-Z0-9_]*$/;
-        if (!pattern.test(name)) {
-            return false;
-        }
-        return !this.reservedKeywords.includes(name);
-    }
-    isValidFunctionName(name) {
-        return this.isValidVariableName(name);
-    }
-    isValidClassName(name) {
-        return this.isValidVariableName(name);
-    }
-    /**
-     * wrap code in a code block with '`' character
-    **/
-    wrapInCodeBlock(lines) {
-        return lines.map(line => `    ${line}`).join('\n');
-    }
-    /**
-     * Add Indentation to the code
-     * 4 spaces before each line (if multiline)
-    **/
-    addIndentation(code) {
-        return code.split('\n').map(line => `    ${line}`).join('\n');
-    }
-    //********************************************//
-    /**
-     * Declare variables
-    **/
-    declareVariable(name, type, initialValue) {
-        if (!this.isValidVariableName(name)) {
-            throw new Error(`Invalid variable name: ${name}`);
-        }
-        return `${name} = ${initialValue !== undefined ? initialValue : 'None'}\n`;
-    }
-    /**
-     * Declare constants
-    **/
-    declareConstant(name, value) {
-        if (!this.isValidConstantName(name)) {
-            throw new Error(`Invalid constant name: ${name}`);
-        }
-        return `${name.toUpperCase()} = ${value}\n`;
-    }
-    /**
-     * Assign variables
-    **/
-    assignVariable(name, value) {
-        return `${name} = ${value}\n`;
-    }
-    /**
-     * Declare function
-     * Call function
-     * Return statement
-    **/
-    declareFunction(name, parameters, body, returnType) {
-        if (!this.isValidFunctionName(name)) {
-            throw new Error(`Invalid function name: ${name}`);
-        }
-        // check if valid parameters names
-        if (parameters.some(p => !this.isValidVariableName(p.name))) {
-            throw new Error(`Invalid parameter name`);
-        }
-        // sort the parameters so that the ones without a value come first
-        parameters.sort((a, b) => a.value === undefined ? -1 : 1);
-        const params = parameters.map(p => `${p.name}${p.value ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}` : ''}`).join(', ');
-        const functionHeader = `def ${name}(${params}):`;
-        const functionBody = this.wrapInCodeBlock(body ?? [""]);
-        return `${functionHeader}\n${functionBody}`;
-    }
-    generateFunctionCall(name, args) {
-        return `${name}(${args.join(', ')})`;
-    }
-    generateReturn(value) {
-        return `return ${value}`;
-    }
-    /**
-     * Declare Class
-    **/
-    declareClass(name, properties, methods) {
-        if (!this.isValidClassName(name)) {
-            throw new Error(`Invalid class name: ${name}`);
-        }
-        const props = properties.map(p => `self.${p.name} = None`).join('\n        ');
-        const initMethod = `def __init__(self):\n        ${props}`;
-        const methodCode = methods.join('\n\n    ');
-        return `class ${name}:\n    ${initMethod}\n\n    ${methodCode}`;
-    }
-    /**
-     * Import modules
-    **/
-    generateModuleImport(module, entities) {
-        return `from ${module} import ${entities.join(', ')}`;
-    }
-    generateImport(module) {
-        return `import ${module}`;
-    }
-    /**
-     * Conditional statements
-     * if, if-else
-    **/
-    generateIf(condition, body) {
-        return `if ${condition}:\n${this.wrapInCodeBlock(body)}`;
-    }
-    generateIfElse(condition, ifBody, elseBody) {
-        const ifCode = `if ${condition}:\n${this.wrapInCodeBlock(ifBody)}`;
-        const elseCode = elseBody ? `\nelse:\n${this.wrapInCodeBlock(elseBody)}` : '';
-        return `${ifCode}${elseCode}`;
-    }
-    /**
-     * Loop statements
-     * for, while, do-while
-    **/
-    generateForLoop(variable, iterable, body) {
-        const loopCode = `for ${variable} in ${iterable}:\n${this.wrapInCodeBlock(body)}`;
-        return loopCode;
-    }
-    generateWhileLoop(condition, body) {
-        const loopCode = `while ${condition}:\n${this.wrapInCodeBlock(body)}`;
-        return loopCode;
-    }
-    /**
-     * Identity operators
-     * is, is not
-    **/
-    generateIdentityOperation(left, operator, right) {
-        return `${left} ${operator} ${right}`;
-    }
-    /**
-     * Membership operation
-     * in, not in
-    **/
-    generateMembershipOperation(left, operator, right) {
-        return `${left} ${operator} ${right}`;
-    }
-    /**
-     * Logical operators
-     * and, or, not
-    **/
-    generateLogicalOperation(left, operator, right) {
-        return `${left} ${operator} ${right}`;
-    }
-    /**
-     * Comparison operators
-     * <, >, <=, >=, ==, !=
-    **/
-    generateComparisonOperation(left, operator, right) {
-        return `${left} ${operator} ${right}`;
-    }
-    /**
-     * Arithmetic operators
-     * +, -, *, /, %, // , **
-    **/
-    generateArithmeticOperation(left, operator, right) {
-        return `${left} ${operator} ${right}`;
-    }
-    /**
-     * Bitwise operators
-     * &, |, ^, ~, <<, >>
-    **/
-    generateBitwiseOperation(left, operator, right) {
-        return `${left} ${operator} ${right}`;
-    }
-}
-exports.PythonCodeGenerator = PythonCodeGenerator;
-
-
-/***/ }),
-/* 176 */
+/* 178 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
-/**
- * A generic abstract class providing the necessary methods for code generation, like declaring variables, functions...etc
- * This class/interface needs to be implemented for each programming language that needs to be supported
- */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CodeGenerator = void 0;
-class CodeGenerator {
-}
-exports.CodeGenerator = CodeGenerator;
+exports.EXTENSIONS = void 0;
+exports.EXTENSIONS = {
+    PYTHON: "py",
+    JUPYTER: "ipynb"
+};
 
 
 /***/ }),
-/* 177 */
-/***/ ((module) => {
+/* 179 */
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"]}');
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Whitespace = void 0;
+var Whitespace;
+(function (Whitespace) {
+    Whitespace["Space"] = "space";
+    Whitespace["Tab"] = "tab";
+    Whitespace["NewLine"] = "newLine";
+})(Whitespace || (exports.Whitespace = Whitespace = {}));
+
 
 /***/ })
 /******/ 	]);

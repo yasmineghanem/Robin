@@ -3,6 +3,8 @@
  * This class/interface needs to be implemented for each programming language that needs to be supported
  */
 
+import { Whitespace } from "../constants/enums/codeEnums";
+
 export abstract class CodeGenerator {
 
     /**
@@ -56,4 +58,10 @@ export abstract class CodeGenerator {
      * @returns The code string for the wrapped code block.
      */
     // abstract wrapInCodeBlock(lines: string[]): string;
+
+    /**
+     * Add white spaces
+     * 
+     */
+    abstract addWhiteSpace(type: Whitespace, count?: number): string;
 }

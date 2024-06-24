@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DECLARE_FUNCTION, DECLARE_VARIABLE, GET_AST, NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
+import { ADD_WHITESPACE, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FUNCTION_CALL, GET_AST, NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
 import { errorHandler, executeCommand, showError, successHandler } from './utilities';
 import express, { Request, Response } from "express";
 
@@ -43,6 +43,47 @@ router.post('/declare-function',
     }
 );
 
+// function call
+router.post('/function-call',
+    (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            FUNCTION_CALL,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
+
+// declare constant
+router.post('/declare-constant',
+    (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            DECLARE_CONSTANT,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
+
+// add whitespace
+router.get('/add-whitespace',
+    (req: Request, res: Response) => {
+        executeCommand(
+            ADD_WHITESPACE,
+            req.query,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
+
 // get AST
 router.get('/ast',
     (req: Request, res: Response) => {
@@ -56,4 +97,6 @@ router.get('/ast',
         );
     }
 );
+
+
 export default router;

@@ -1,5 +1,7 @@
+import { Whitespace } from "../constants/enums/codeEnums";
 import { CodeGenerator } from "./codeGenerator";
 import pythonReservedKeywords from "./language specifics/pythonReserved.json";
+
 export class PythonCodeGenerator extends CodeGenerator {
 
 
@@ -7,7 +9,6 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Declare reserved keywords for each programming language
     **/
     protected reservedKeywords: Array<string>;
-
 
     // constructor
     constructor() {
@@ -74,7 +75,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Declare constants
     **/
     declareConstant(name: string, value: any): string {
-        if (!this.isValidConstantName(name)) {
+        if (!this.isValidConstantName(name.toUpperCase())) {
             throw new Error(`Invalid constant name: ${name}`);
         }
         return `${name.toUpperCase()} = ${value}\n`;
@@ -111,12 +112,32 @@ export class PythonCodeGenerator extends CodeGenerator {
         return `${functionHeader}\n${functionBody}`;
     }
 
-    generateFunctionCall(name: string, args: string[]): string {
-        return `${name}(${args.join(', ')})`;
+    // {
+    //     "name": "x_string",
+    //         "args": [
+    //             {
+    //                 "name": "x",
+    //                 "value": "test"
+    //             },
+    //             {
+    //                 "name": "y",
+    //                 "value": "test"
+    //             }
+    //         ]
+    // }
+
+    generateFunctionCall(name: string, args: { name?: string, value: any }[]): string {
+        const params = args.map(p =>
+            p.name ? `${p.name} = 
+                ${typeof p.value === "string" ? `"${p.value}"` : p.value}` :
+                typeof p.value === "string" ? `"${p.value}"` : p.value
+        ).join(', ');
+        return `${name}(${params}) \n`;
+
     }
 
-    generateReturn(value: string): string {
-        return `return ${value}`;
+    generateReturn(value?: string): string {
+        return `return ${value ?? ""} `;
     }
 
     /**
@@ -124,24 +145,24 @@ export class PythonCodeGenerator extends CodeGenerator {
     **/
     declareClass(name: string, properties: { name: string, type: string }[], methods: string[]): string {
         if (!this.isValidClassName(name)) {
-            throw new Error(`Invalid class name: ${name}`);
+            throw new Error(`Invalid class name: ${name} `);
         }
         const props = properties.map(p => `self.${p.name} = None`).join('\n        ');
-        const initMethod = `def __init__(self):\n        ${props}`;
+        const initMethod = `def __init__(self): \n        ${props} `;
         const methodCode = methods.join('\n\n    ');
 
-        return `class ${name}:\n    ${initMethod}\n\n    ${methodCode}`;
+        return `class $ { name }: \n    ${initMethod} \n\n    ${methodCode} `;
     }
 
     /**
      * Import modules
     **/
     generateModuleImport(module: string, entities: string[]): string {
-        return `from ${module} import ${entities.join(', ')}`;
+        return `from ${module} import ${entities.join(', ')} `;
     }
 
     generateImport(module: string): string {
-        return `import ${module}`;
+        return `import ${module} `;
     }
 
     /**
@@ -149,12 +170,12 @@ export class PythonCodeGenerator extends CodeGenerator {
      * if, if-else
     **/
     generateIf(condition: string, body: string[]): string {
-        return `if ${condition}:\n${this.wrapInCodeBlock(body)}`;
+        return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
     }
     generateIfElse(condition: string, ifBody: string[], elseBody?: string[]): string {
-        const ifCode = `if ${condition}:\n${this.wrapInCodeBlock(ifBody)}`;
-        const elseCode = elseBody ? `\nelse:\n${this.wrapInCodeBlock(elseBody)}` : '';
-        return `${ifCode}${elseCode}`;
+        const ifCode = `if ${condition}: \n${this.wrapInCodeBlock(ifBody)} `;
+        const elseCode = elseBody ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} ` : '';
+        return `${ifCode}${elseCode} `;
     }
 
     /**
@@ -162,12 +183,12 @@ export class PythonCodeGenerator extends CodeGenerator {
      * for, while, do-while
     **/
     generateForLoop(variable: string, iterable: string, body: string[]): string {
-        const loopCode = `for ${variable} in ${iterable}:\n${this.wrapInCodeBlock(body)}`;
+        const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
         return loopCode;
     }
 
     generateWhileLoop(condition: string, body: string[]): string {
-        const loopCode = `while ${condition}:\n${this.wrapInCodeBlock(body)}`;
+        const loopCode = `while ${condition}: \n${this.wrapInCodeBlock(body)} `;
         return loopCode;
     }
 
@@ -176,7 +197,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * is, is not
     **/
     generateIdentityOperation(left: string, operator: 'is' | 'is not', right: string): string {
-        return `${left} ${operator} ${right}`;
+        return `${left} ${operator} ${right} `;
     }
 
     /**
@@ -184,7 +205,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * in, not in
     **/
     generateMembershipOperation(left: string, operator: 'in' | 'not in', right: string): string {
-        return `${left} ${operator} ${right}`;
+        return `${left} ${operator} ${right} `;
     }
 
     /**
@@ -192,7 +213,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * and, or, not
     **/
     generateLogicalOperation(left: string, operator: 'and' | 'or' | 'not', right: string): string {
-        return `${left} ${operator} ${right}`;
+        return `${left} ${operator} ${right} `;
     }
 
     /**
@@ -200,7 +221,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * <, >, <=, >=, ==, !=
     **/
     generateComparisonOperation(left: string, operator: '<' | '>' | '<=' | '>=' | '==' | '!=', right: string): string {
-        return `${left} ${operator} ${right}`;
+        return `${left} ${operator} ${right} `;
     }
 
     /**
@@ -208,7 +229,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * +, -, *, /, %, // , **
     **/
     generateArithmeticOperation(left: string, operator: '+' | '-' | '*' | '/' | '%' | '//' | '**', right: string): string {
-        return `${left} ${operator} ${right}`;
+        return `${left} ${operator} ${right} `;
     }
 
     /**
@@ -216,9 +237,35 @@ export class PythonCodeGenerator extends CodeGenerator {
      * &, |, ^, ~, <<, >>
     **/
     generateBitwiseOperation(left: string, operator: '&' | '|' | '^' | '~' | '<<' | '>>', right: string): string {
-        return `${left} ${operator} ${right}`;
+        return `${left} ${operator} ${right} `;
     }
 
 
+
+    /**
+     * White spaces
+     */
+    addWhiteSpace(
+        type: Whitespace,
+        count?: number,
+    ): string {
+        let ws;
+        switch (type) {
+            case Whitespace.Space:
+                ws = ' ';
+                break;
+            case Whitespace.Tab:
+                ws = '\t';
+                break;
+            case Whitespace.NewLine:
+                ws = '\n';
+                break;
+            default:
+                ws = ' ';
+
+        }
+        return ws.repeat(count ?? 1);
+
+    }
 
 }
