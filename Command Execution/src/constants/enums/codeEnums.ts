@@ -10,3 +10,29 @@ export enum ForLoop {
     Iterable = "iterable",
     Enumerate = "enumerate",
 }
+
+export enum ArithmeticOperator {
+    Addition = "+",
+    Subtraction = "-",
+    Multiplication = "*",
+    Division = "/",
+    Modulus = "%",
+    Exponentiation = "**",
+    FloorDivision = "//",
+}
+
+export enum ComparisonOperator {
+    EqualTo = "==",
+    NotEqualTo = "!=",
+    GreaterThan = ">",
+    GreaterThanOrEqualTo = ">=",
+    LessThan = "<",
+    LessThanOrEqualTo = "<=",
+}
+
+
+export enum LogicalOperator {
+    And = "and",
+    Or = "or",
+    Not = "not",
+}

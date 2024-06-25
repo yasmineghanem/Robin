@@ -17,6 +17,7 @@ import {
     NO_ACTIVE_TEXT_EDITOR,
     VARIABLE_FAILURE,
     VARIABLE_SUCCESS,
+    WHILE_LOOP,
     WHITE_SPACE_FAILURE,
     WHITE_SPACE_SUCCESS,
 } from "../constants/code";
@@ -354,6 +355,51 @@ const forLoop = () => {
 
 };
 
+const whileLoop = () => {
+    vscode.commands.registerCommand(WHILE_LOOP, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateWhileLoop(
+                            args.condition,
+                            args?.body
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(LOOP_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(LOOP_FAILURE);
+            }
+
+            return handleSuccess(LOOP_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+
 const registerCodeCommands = () => {
     const commands = [declareVariable,
         declareFunction,
@@ -361,7 +407,8 @@ const registerCodeCommands = () => {
         functionCall,
         declareConstant,
         addWhiteSpace,
-        forLoop
+        forLoop,
+        whileLoop
     ];
 
     commands.forEach((command) => {

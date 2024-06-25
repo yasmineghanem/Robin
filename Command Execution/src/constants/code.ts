@@ -8,6 +8,7 @@ export const FUNCTION_CALL = "robin.functionCall";
 export const DECLARE_CONSTANT = "robin.declareConstant"
 export const ADD_WHITESPACE = "robin.addWhitespace";
 export const FOR_LOOP = "robin.forLoop";
+export const WHILE_LOOP = "robin.whileLoop";
 
 
 /**

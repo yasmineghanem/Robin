@@ -24821,6 +24821,10 @@ router.post("/for-loop", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.FOR_LOOP, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+router.post("/while-loop", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.WHILE_LOOP, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // add whitespace
 router.get('/add-whitespace', (req, res) => {
     (0, utilities_1.executeCommand)(code_1.ADD_WHITESPACE, req.query, utilities_1.successHandler, utilities_1.errorHandler, res);
@@ -24840,7 +24844,7 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.FOR_LOOP = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.WHILE_LOOP = exports.FOR_LOOP = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
 /**
  * Commands
  */
@@ -24851,6 +24855,7 @@ exports.FUNCTION_CALL = "robin.functionCall";
 exports.DECLARE_CONSTANT = "robin.declareConstant";
 exports.ADD_WHITESPACE = "robin.addWhitespace";
 exports.FOR_LOOP = "robin.forLoop";
+exports.WHILE_LOOP = "robin.whileLoop";
 /**
  * Variable declaration messages
  */
@@ -25813,6 +25818,40 @@ const forLoop = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
+const whileLoop = () => {
+    vscode.commands.registerCommand(code_1.WHILE_LOOP, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateWhileLoop(args.condition, args?.body));
+                });
+                if (!s) {
+                    return handleFailure(code_1.LOOP_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.LOOP_FAILURE);
+            }
+            return handleSuccess(code_1.LOOP_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
 const registerCodeCommands = () => {
     const commands = [declareVariable,
         declareFunction,
@@ -25820,7 +25859,8 @@ const registerCodeCommands = () => {
         functionCall,
         declareConstant,
         addWhiteSpace,
-        forLoop
+        forLoop,
+        whileLoop
     ];
     commands.forEach((command) => {
         command();
@@ -26032,7 +26072,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
     }
     generateWhileLoop(condition, body) {
-        const loopCode = `while ${condition}: \n${this.wrapInCodeBlock(body)} `;
+        const conditionCode = condition.map(c => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`).join(' ');
+        const loopCode = `while ${conditionCode}: \n${this.wrapInCodeBlock(body ?? [''])} `;
         return loopCode;
     }
     /**
@@ -26108,7 +26149,7 @@ exports.PythonCodeGenerator = PythonCodeGenerator;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ForLoop = exports.Whitespace = void 0;
+exports.LogicalOperator = exports.ComparisonOperator = exports.ArithmeticOperator = exports.ForLoop = exports.Whitespace = void 0;
 var Whitespace;
 (function (Whitespace) {
     Whitespace["Space"] = "space";
@@ -26121,6 +26162,31 @@ var ForLoop;
     ForLoop["Iterable"] = "iterable";
     ForLoop["Enumerate"] = "enumerate";
 })(ForLoop || (exports.ForLoop = ForLoop = {}));
+var ArithmeticOperator;
+(function (ArithmeticOperator) {
+    ArithmeticOperator["Addition"] = "+";
+    ArithmeticOperator["Subtraction"] = "-";
+    ArithmeticOperator["Multiplication"] = "*";
+    ArithmeticOperator["Division"] = "/";
+    ArithmeticOperator["Modulus"] = "%";
+    ArithmeticOperator["Exponentiation"] = "**";
+    ArithmeticOperator["FloorDivision"] = "//";
+})(ArithmeticOperator || (exports.ArithmeticOperator = ArithmeticOperator = {}));
+var ComparisonOperator;
+(function (ComparisonOperator) {
+    ComparisonOperator["EqualTo"] = "==";
+    ComparisonOperator["NotEqualTo"] = "!=";
+    ComparisonOperator["GreaterThan"] = ">";
+    ComparisonOperator["GreaterThanOrEqualTo"] = ">=";
+    ComparisonOperator["LessThan"] = "<";
+    ComparisonOperator["LessThanOrEqualTo"] = "<=";
+})(ComparisonOperator || (exports.ComparisonOperator = ComparisonOperator = {}));
+var LogicalOperator;
+(function (LogicalOperator) {
+    LogicalOperator["And"] = "and";
+    LogicalOperator["Or"] = "or";
+    LogicalOperator["Not"] = "not";
+})(LogicalOperator || (exports.LogicalOperator = LogicalOperator = {}));
 
 
 /***/ }),

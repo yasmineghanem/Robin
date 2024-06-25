@@ -1,7 +1,15 @@
-import { ForLoop, Whitespace } from "../constants/enums/codeEnums";
+import { ArithmeticOperator, ComparisonOperator, ForLoop, LogicalOperator, Whitespace } from "../constants/enums/codeEnums";
 import { CodeGenerator } from "./codeGenerator";
 import pythonReservedKeywords from "./language specifics/pythonReserved.json";
 
+
+interface Condition {
+    logicalOperator: LogicalOperator,
+    left: string;
+    operator: ArithmeticOperator | ComparisonOperator;
+    right: string;
+
+}
 export class PythonCodeGenerator extends CodeGenerator {
 
 
@@ -234,8 +242,12 @@ export class PythonCodeGenerator extends CodeGenerator {
         return `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
 
     }
-    generateWhileLoop(condition: string, body: string[]): string {
-        const loopCode = `while ${condition}: \n${this.wrapInCodeBlock(body)} `;
+
+
+    generateWhileLoop(condition: Condition[], body?: string[]): string {
+
+        const conditionCode = condition.map(c => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`).join(' ');
+        const loopCode = `while ${conditionCode}: \n${this.wrapInCodeBlock(body ?? [''])} `;
         return loopCode;
     }
 
