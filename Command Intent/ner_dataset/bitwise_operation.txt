@@ -1,15 +1,97 @@
-Perform a bitwise and operation on x and y.
-Make a bitwise or operation on a and b.
-Do a bitwise xor operation on x and y.
-Have a bitwise not operation on a.
-Perform a bitwise left shift operation on x by 2.
-Perform a bitwise right shift operation on a by 3.
-a and b.
-c xor d.
-not num.
-x or y.
-a shift left by 2.
-b shift right by 4.
-bitwise and x and y.
-bitwise or a and b.
-bitwise xor x and y.
+perform a bitwise xor on creation date and 150.
+apply a bitwise not on current date and -25.
+do a bitwise not on country code and 1.
+make a bitwise right shift on element and 4.
+carry out a bitwise right shift on end time and 0.
+do a bitwise xor on item array and 550.
+make a bitwise or on geo coordinates and 4.
+carry out a bitwise xor on employee record and 9.
+perform a bitwise left shift on k and -5.
+make a bitwise left shift on pos and 2500.
+apply a bitwise right shift on user age and user age.
+apply a bitwise right shift on category type and category type.
+carry out a bitwise right shift on element and element.
+do a bitwise left shift on inventory level and inventory level.
+carry out a bitwise xor on supplier name and supplier name.
+carry out a bitwise right shift on colleague email and colleague email.
+perform a bitwise and on delivery address and delivery address.
+apply a bitwise or on is deleted and is deleted.
+carry out a bitwise not on user status and user status.
+carry out a bitwise xor on result and result.
+apply a bitwise xor on counter and counter.
+make a bitwise right shift on zip code and zip code.
+apply a bitwise xor on result table and result table.
+make a bitwise xor on position and position.
+apply a bitwise not operation on result and -45.
+do a bitwise and operation on item array and 450.
+carry out a bitwise not operation on order number and -4.
+perform a bitwise or operation on i and 1500.
+perform a bitwise right shift operation on end date and 150.
+carry out a bitwise left shift operation on account balance and 5.
+carry out a bitwise or operation on index and 0.
+apply a bitwise right shift operation on feature flags and 2500.
+carry out a bitwise and operation on building number and 4.
+apply a bitwise right shift operation on default config and 2000.
+carry out a bitwise or operation on user login and 0.
+carry out a bitwise xor operation on budget allocation and 40.
+perform a bitwise or operation on product price and 2.
+make a bitwise or operation on i and -5.
+do a bitwise not operation on user gender and -15.
+carry out a bitwise or operation on key and key.
+apply a bitwise left shift operation on total amount and total amount.
+apply a bitwise not operation on counter and counter.
+do a bitwise not operation on discount rate and discount rate.
+apply a bitwise not operation on user list and user list.
+make a bitwise and operation on max value and max value.
+make a bitwise right shift operation on feature flags and feature flags.
+carry out a bitwise xor operation on creation date and creation date.
+carry out a bitwise xor operation on region name and region name.
+do a bitwise and operation on pos and pos.
+apply a bitwise or operation on is approved and is approved.
+bitwise is logged in right shift is logged in.
+bitwise partner name not partner name.
+bitwise config path and config path.
+bitwise zip code and zip code.
+bitwise iteration or iteration.
+bitwise gross income not gross income.
+bitwise colleague email left shift colleague email.
+bitwise product name and product name.
+bitwise discount rate and discount rate.
+bitwise secondary contact right shift secondary contact.
+bitwise step not step.
+bitwise is approved xor is approved.
+bitwise time elapsed xor time elapsed.
+bitwise partner name right shift partner name.
+bitwise expiry date xor 2000.
+bitwise street name xor 450.
+bitwise product set and -30.
+bitwise reorder point and 2500.
+bitwise transaction amount and 6.
+bitwise config path and 50.
+bitwise user type right shift 10.
+bitwise settings and 3500.
+bitwise due date left shift -4.
+bitwise result table xor 30.
+bitwise or position and -15.
+bitwise not city name and 55.
+bitwise right shift account balance and -2.
+bitwise right shift guardian name and 1.
+bitwise right shift alternate address and 30.
+bitwise right shift budget allocation and 2500.
+bitwise left shift mentor id and 1.
+bitwise right shift budget allocation and -35.
+bitwise or has access and 0.
+bitwise xor product id and 550.
+bitwise left shift counter and 45.
+bitwise left shift user age and user age.
+bitwise and supplier name and supplier name.
+bitwise xor system properties and system properties.
+bitwise xor user profile and user profile.
+bitwise left shift map location and map location.
+bitwise not data frame and data frame.
+bitwise right shift colleague email and colleague email.
+bitwise xor is deleted and is deleted.
+bitwise and office location and office location.
+bitwise and end time and end time.
+bitwise or user preferences and user preferences.
+bitwise left shift user id and user id.

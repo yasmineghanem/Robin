@@ -1,23 +1,113 @@
-if x equals y.
-if name equals noah.
-if age is greater than 23.
-if salary is less than 50000.
-if is valid is true.
-if var1 is equal to 11.
-check if x and y are equal.
-check if is finished is true.
-check whether flag is false.
-if x is not equal to y.
-if count is greater than 100.
-if count is less than size.
-check if is valid is false.
-if var1 and var2 are equal.
-if x is equal to y.
-if salary is more than 50000.
-if temp is smaller than name.
-check if test is none.
-check whether a and b are not equal.
-check if a and b are the same.
-if x is more than y.
-check if x is less than y.
-check if temp1 and temp2 are the same.
+whether inventory level is less than 252525.
+whether step is less than or equal -8.2345.
+if k is greater than 212121.
+whether account balance is more than user experience.
+whether result is greater than or equal unsupervised learning.
+whether preferences is not equal -0.999999.
+whether user location equals deep learning models.
+whether mentor id is equal HYPERTEXT MARKUP LANGUAGE.
+if is approved equals machine learning.
+if product description is less than -1.602176634.
+whether index is less than or equal -8.8888.
+if category type is more than 212121.
+if i is less than or equal 131313.
+if environment is less than 505050.
+whether sibling count is less than software development.
+if value is less than or equal value.
+if sibling count equals sibling count.
+whether user email is equal user email.
+whether completed equals completed.
+if product id is not equal product id.
+if feature flags is more than feature flags.
+if region name is less than region name.
+if country code equals country code.
+if creation date is equal creation date.
+if order queue is not equal order queue.
+whether product set is not equal product set.
+if is visible equals is visible.
+check if start date equals continuous integration.
+check if user status is greater than or equal DATA VISUALIZATION.
+check if start time is less than or equal hypertext markup language.
+check if has access is less than OpenAI GPT-4.
+check if time stamp is less than -987.
+check whether user status is less than or equal -0.707.
+check whether discount rate is equal openai gpt-4.
+check if string buffer is greater than or equal 5.5.
+check if has errors equals -42.0.
+check whether stock quantity is equal -1.0.
+check if step is equal -1e-07.
+check whether mentor id is more than unit testing.
+check whether start date is more than start date.
+check if k equals k.
+check whether user preferences is less than user preferences.
+check if user name is greater than user name.
+check whether item is less than item.
+check if tax rate is equal tax rate.
+check if reorder point is greater than reorder point.
+check if emergency contact equals emergency contact.
+check if number list is greater than or equal number list.
+check if counter is more than counter.
+check if creation date is less than creation date.
+check whether stock quantity is less than stock quantity.
+whether user preferences and user preferences are the same.
+whether index and index are the same.
+if alternate address and alternate address are the same.
+whether net profit and net profit are the same.
+whether current date and current date are the same.
+if time elapsed and time elapsed are the same.
+whether i and i are the same.
+whether stock quantity and stock quantity are the same.
+if value and value are the same.
+if country code and country code are the same.
+whether user type and user type are the same.
+if min value and min value are the same.
+whether sibling count and -999999 are the same.
+if config path and -9.87654321 are the same.
+whether reorder point and 212121 are the same.
+whether settings and 7.1234 are the same.
+if user profile and -987 are the same.
+whether user id and DATA MINING are the same.
+whether user profile and -42.0 are the same.
+whether result and 30303 are the same.
+whether end time and Algorithm Design are the same.
+if category type and -1011 are the same.
+if is visible and 9.81 are the same.
+whether time elapsed and 888888 are the same.
+whether user id and -1011 are the same.
+if inventory level and inventory level are equal.
+whether user preferences and user preferences are equal.
+if delivery address and delivery address are equal.
+whether end time and end time are equal.
+if data and data are equal.
+whether is logged in and is logged in are equal.
+if primary contact and primary contact are equal.
+whether k and k are equal.
+if map location and map location are equal.
+if inventory level and inventory level are equal.
+whether counter and counter are equal.
+if product price and product price are equal.
+whether has access and speech recognition are equal.
+whether budget allocation and -1.1 are equal.
+if inventory level and -0.67891 are equal.
+if number list and 444444 are equal.
+if net profit and 1.7976931348623157 are equal.
+whether order number and Continuous Integration are equal.
+whether count and object oriented programming are equal.
+whether alternate address and Hello World are equal.
+whether user age and unsupervised learning are equal.
+if net profit and -456 are equal.
+check if time stamp is -606060.
+check if secondary contact is Version Control System.
+check whether settings is COMPUTER VISION.
+check if i is 0.31415.
+check if gross income is -1.61803398875.
+check if user login is 0.999999.
+check if customer map is TECHNICAL SUPPORT.
+check if data is -8.2345.
+check if city name is openai gpt-4.
+check whether time stamp is semi-supervised learning.
+check whether preferences is Deep Learning Models.
+check whether geo coordinates is hello world.
+check if system properties is 232323.
+check if i is front end development.
+check whether data is Software Development.

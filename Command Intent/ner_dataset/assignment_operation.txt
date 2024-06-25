@@ -1,32 +1,108 @@
-assign the value 5 to the variable x.
-assign the value 10 to the variable y.
-set the string hello to the variable message.
-assign the value 3.14 to pi.
-put my name is john in the variable name.
-insert 100 into the variable count.
-set is valid to true.
-assign the value 20 to age.
-assign the value 30 to the variable salary.
-set the variable is active to false.
-put i am a student in the variable statement.
-x equals y.
-name equals noah.
-age is equal to 23.
-set the salary to 50000.
-assign the variable x to the variable y.
-is valid equals true.
-set var1 to 11.
-copy the value of x to y.
-set value to 74914.
-set character to a.
-update name1 with name2.
-update array1 with array2.
-set the value of i to 0.
-update name to adam.
-update is valid to false.
-store 9843 to the variable num.
-assign the values 1 2 and 3 to the list arr.
-put the values apple banana cherry in the list fruits.
-assign the values {name: 'john, age: 23} to the variable person.
-person of age equals 23.
-assign the values 1 2 3 4 and 5 to the list numbers.
+start time equals continuous integration.
+total revenue equals clustering algorithms.
+sibling count equals [1, 2, 3, 4, 5].
+country code equals 272727.
+default config equals 3.14, 2.71, 1.41, 1.73, 0.57.
+product price equals 0.12345.
+completed equals 3.3333.
+time elapsed equals 789.
+counter equals -222222.
+creation date equals functional programming.
+index equals Front End Development.
+user status equals -5.5 5.5 -10.1 10.1 and 0.0.
+user settings equals {'key1': 1, 'key2': 2, 'key3': 3}.
+loop index equals python programming.
+supplier name equals supplier name.
+step equals step.
+product description equals product description.
+user role equals user role.
+expense report equals expense report.
+start time equals start time.
+counter equals counter.
+user list equals user list.
+region name equals region name.
+alternate address equals alternate address.
+index equals index.
+result table is equal to john, doe, alice, bob.
+transaction amount is equal to 27182.
+office location is equal to [apple, banana, cherry].
+is active is equal to -7654321.
+city name is equal to 3.14, 2.71, 1.41, 1.73, 0.57.
+app config is equal to -242424.
+discount rate is equal to 45.
+settings is equal to -606060.
+count is equal to data visualization.
+loop index is equal to version control system.
+counter is equal to 27182.
+order number is equal to {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}.
+user email is equal to 111111.
+step is equal to [apple, banana, cherry].
+net profit is equal to net profit.
+budget allocation is equal to budget allocation.
+key is equal to key.
+step is equal to step.
+schedule time is equal to schedule time.
+country code is equal to country code.
+city name is equal to city name.
+last updated is equal to last updated.
+result is equal to result.
+city name is equal to city name.
+put Artificial Intelligence to end date.
+store INFORMATION TECHNOLOGY to due date.
+insert 12345.6789 to start time.
+assign -1010101 to number list.
+update 0.12345 to creation date.
+put -0.707 to app config.
+copy algorithm design to order queue.
+assign apple, banana and cherry to city name.
+put CASCADING STYLE SHEETS to user age.
+set apple, banana and cherry to partner name.
+put project management to info.
+place Back End Development to data frame.
+set this is a test to end time.
+insert 0.12345 to start date.
+copy {'name': 'Alice', 'age': 30, 'city': 'New York'} to main address.
+assign is approved to is approved.
+insert schedule time to schedule time.
+assign app config to app config.
+update office location to office location.
+store index to index.
+place data to data.
+place primary contact to primary contact.
+assign counter to counter.
+assign guardian name to guardian name.
+insert result table to result table.
+insert discount rate to discount rate.
+put file path to file path.
+put k to k.
+assign user id to user id.
+insert city name to city name.
+store the value -777777 to product description.
+assign the value 171717 to secondary contact.
+assign the value 8675309 to user settings.
+set the value 5.6789 to start time.
+put the value supervised learning to completed.
+copy the value -242424 to discount rate.
+insert the value -1010101 to building number.
+put the value FUNCTIONAL PROGRAMMING to employee record.
+copy the value 5.5 to item.
+set the value 232323 to product price.
+place the value -54321 to product set.
+assign the value graphical user interface to debit amount.
+put the value 0.000123 to settings.
+insert the value [apple, banana, cherry] to time elapsed.
+place the value Deep Learning Models to the variable delivery address.
+put the value -0.666667 to the variable user settings.
+insert the value 1e-06 to the variable i.
+update the value graphical user interface to the variable supplier name.
+update the value 1.23456789 to the variable user gender.
+insert the value 0.707 to the variable min value.
+put the value supervised learning to the variable street name.
+update the value Data Science to the variable index.
+copy the value -121212 to the variable completed.
+set the value [100, 200, 300, 400, 500] to the variable customer map.
+store the value 252525 to the variable is deleted.
+assign the value -0.4567 to the variable max value.
+copy the value hello, world, foo, bar, baz to the variable user email.
+place the value -7654321 to the variable debit amount.
+copy the value 27182 to the variable expense report.

@@ -1,23 +1,158 @@
-create a for loop from 0 to 10.
-write a while loop that runs until x is less than 5.
-create a while loop until flag is false.
-write a for loop that iterates over an array of length 100.
-iterate from 1 to 100 using a for loop.
-using a while loop iterate while count is greater than 0.
-while true.
-for i in range 10.
-for i in range 1 to 50.
-while flag is true.
-while is valid is false.
-for i in range 0 to 100.
-use a for loop to iterate from 10 to 0.
-loop from 10 to 99 using a for loop.
-while x is less than 100.
-while false.
-create a for loop from 0 to n.
-for x in range 100.
-for j in range 1 to 10.
-while x is more than 0.
-while x and y are equal.
-create a while loop with the condition x is equal to y.
-write a for loop that iterates 100 times.
+write a for loop from 1500 to 1500 with step 1500 for category type.
+make a for loop from 9 to 9 with step 9 for is approved.
+using a for loop from 400 to 400 with step 400 for preferences.
+make a for loop from 4 to 4 with step 4 for user login.
+create a for loop from 30 to 30 with step 30 for gross income.
+write a for loop from 55 to 55 with step 55 for customer map.
+use a for loop from 300 to 300 with step 300 for string buffer.
+using a for loop from 15 to 15 with step 15 for supplier name.
+write a for loop from 10 to 10 with step 10 for is deleted.
+use a for loop from -15 to -15 with step -15 for counter.
+use a for loop from -15 to -15 with step -15 for default config.
+use a for loop from 200 to 200 with step 200 for order number.
+using a for loop from 10 to 10 with step 10 for mentor id.
+using a for loop from 0 to 0.
+use a for loop from 3000 to 3000.
+using a for loop from 150 to 150.
+write a for loop from 10 to 10.
+use a for loop from 550 to 550.
+create a for loop from 350 to 350.
+create a for loop from 20 to 20.
+use a for loop from 4500 to 4500.
+using a for loop from 2000 to 2000.
+using a for loop from 15 to 15.
+using a for loop from 550 to 550.
+make a for loop from -15 to -15.
+use a for loop from 3 to 3.
+generate a for loop from 5000 to 5000.
+create a for loop from 1000 to 1000.
+generate a while loop iterate while user list is less than user list.
+using a while loop iterate while building number is not equal building number.
+create a while loop iterate while loop index equals loop index.
+using a while loop iterate while delivery address is not equal delivery address.
+write a while loop iterate while user gender is greater than user gender.
+make a while loop iterate while start date is greater than or equal start date.
+generate a while loop iterate while office location is equal office location.
+make a while loop iterate while zip code is less than or equal zip code.
+generate a while loop iterate while map location is less than or equal map location.
+use a while loop iterate while is active equals is active.
+using a while loop iterate while current date is greater than current date.
+create a while loop iterate while sibling count is less than sibling count.
+using a while loop iterate while sibling count is more than sibling count.
+make a while loop iterate while count is greater than or equal count.
+use a while loop with condition total amount equals total amount.
+use a while loop with condition employee record is more than employee record.
+make a while loop with condition default config is more than default config.
+use a while loop with condition is verified is greater than is verified.
+write a while loop with condition is logged in is less than or equal is logged in.
+create a while loop with condition j is equal j.
+use a while loop with condition file path is more than file path.
+make a while loop with condition street name is greater than street name.
+use a while loop with condition sibling count equals sibling count.
+make a while loop with condition position is equal position.
+create a while loop with condition data is greater than data.
+use a while loop iterate while stock quantity is greater than or equal 2.
+use a while loop iterate while position is greater than 0.
+generate a while loop iterate while string buffer is not equal -15.
+generate a while loop iterate while product name is more than 20.
+create a while loop iterate while end date is equal 500.
+create a while loop iterate while config path is greater than or equal 2500.
+make a while loop iterate while map location is greater than 55.
+create a while loop iterate while geo coordinates is not equal 7.
+make a while loop iterate while reorder point equals -15.
+make a while loop iterate while inventory level is equal 1500.
+using a while loop iterate while user settings is equal -20.
+use a while loop iterate while counter is greater than 400.
+use a while loop with condition file path is not equal -25.
+using a while loop with condition loop index is more than 6.
+write a while loop with condition schedule time equals -4.
+using a while loop with condition city name is equal 3000.
+using a while loop with condition customer map is not equal 100.
+make a while loop with condition user settings is less than -3.
+generate a while loop with condition number list is less than 1.
+generate a while loop with condition user status is equal 20.
+create a while loop with condition secondary contact is less than or equal 20.
+create a while loop with condition settings is less than or equal 20.
+for total amount in range -30 to -30 with step -30.
+for employee record in range 40 to 40 with step 40.
+for account balance in range 30 to 30 with step 30.
+for creation date in range -15 to -15 with step -15.
+for geo coordinates in range 400 to 400 with step 400.
+for temp in range 0 to 0 with step 0.
+for building number in range -20 to -20 with step -20.
+for primary contact in range -15 to -15 with step -15.
+for zip code in range 10 to 10 with step 10.
+for min value in range 200 to 200 with step 200.
+for main address in range 40 to 40 with step 40.
+for user id in range 2500 to 2500 with step 2500.
+for user age in range 35 to 35 with step 35.
+for account balance in range 0 to 0.
+for is verified in range 8 to 8.
+for completed in range 400 to 400.
+for item in range 15 to 15.
+for j in range 150 to 150.
+for preferences in range -15 to -15.
+for user name in range 10 to 10.
+for temp in range 20 to 20.
+for key in range 30 to 30.
+for temp in range 15 to 15.
+for map location in range 0 to 0.
+for product set in range 50 to 50.
+for completed in range 3500 to 3500.
+for preferences in range -5 to -5.
+for start time in range 7.
+for is approved in range 3000.
+for index in range -20.
+for user name in range -15.
+for default config in range -15.
+for current date in range 9.
+for environment in range 100.
+for secondary contact in range 15.
+for has access in range 20.
+for is logged in in range -20.
+for index in range 0.
+for user list in range 10.
+for is visible in range 300.
+for pos in range -25.
+for colleague email in range 5500.
+while user role is greater than or equal user role.
+while inventory level is equal inventory level.
+while index is less than or equal index.
+while product id is not equal product id.
+while counter equals counter.
+while partner name is less than or equal partner name.
+while index is equal index.
+while transaction amount equals transaction amount.
+while expense report is greater than or equal expense report.
+while category type is greater than category type.
+while user name is less than or equal user name.
+while number list is less than 30.
+while temp is less than or equal 40.
+while preferences is more than 20.
+while min value is less than 2000.
+while order number is greater than or equal 350.
+while user age is greater than or equal 6.
+while counter equals 35.
+while i is greater than or equal 4500.
+while zip code is greater than or equal -45.
+while zip code equals 6.
+while user location equals 7.
+while product price is greater than 400.
+while settings is more than 3500.
+while count is less than or equal 40.
+while is visible equals 4500.
+loop form 5000 to 5000 using a for loop.
+repeat form -5 to -5 using a for loop.
+repeat form -25 to -25 using a for loop.
+loop form 2 to 2 using a for loop.
+iterate form 100 to 100 using a for loop.
+repeat form 2 to 2 using a for loop.
+repeat form 45 to 45 using a for loop.
+iterate form -20 to -20 using a for loop.
+iterate form -3 to -3 using a for loop.
+iterate form 350 to 350 using a for loop.
+iterate form 10 to 10 using a for loop.
+iterate form 5 to 5 using a for loop.
+iterate form -20 to -20 using a for loop.
+iterate form 15 to 15 using a for loop.
+loop form -5 to -5 using a for loop.

@@ -1,20 +1,78 @@
-Cast x to an integer.
-Convert y to a float.
-Change type to a string.
-Cast temp to a double.
-make number an int.
-convert value to string.
-cast x to float.
-change salary to float.
-make age a string.
-convert message to list.
-change name to a string.
-cast the tuple x to list.
-cast fruits to a set.
-make numbers a set.
-make temp a tuple.
-change the variable var to a list.
-convert the variable message to a list.
-cast result to a set.
-convert the value 1000 to int.
-cast 46876 to float.
+make budget allocation to int.
+transform guardian name to int.
+cast creation date to float.
+change user gender to string.
+make product name to list.
+convert average score to char.
+transform average score to set.
+change order queue to integer.
+transform default config to char.
+transform config path to string.
+convert tax rate to list.
+make account balance to dictionary.
+cast feature flags to int type.
+make product id to set type.
+make is visible to int type.
+change end date to int type.
+make has errors to integer type.
+make partner name to dictionary type.
+make has errors to dictionary type.
+transform is enabled to int type.
+cast user preferences to string type.
+change reorder point to list type.
+transform order number to int type.
+change system properties to array type.
+transform time elapsed to float type.
+transform result to float type.
+change is visible to double type.
+make -202020 to array.
+change 1234567 to dictionary.
+cast 12345 to array.
+change 6.02214076 to int.
+change -54321 to double.
+convert -3.3 to char.
+transform 444444 to char.
+cast -1011 to dictionary.
+transform -2020202 to string.
+convert 0.31415 to double.
+make the variable config path to a float.
+convert the variable item array to a integer.
+convert the variable preferences to a double.
+transform the variable j to a string.
+make the variable building number to a char.
+cast the variable sibling count to a dictionary.
+transform the variable options to a set.
+cast the variable pos to a set.
+make the variable result table to a string.
+transform the variable is deleted to a dictionary.
+cast the variable time stamp to a integer.
+cast the variable product name to a char.
+make the variable is verified to a int.
+cast the variable map location to a dictionary.
+change the variable total amount to a list.
+transform the value -987 to a float.
+cast the value -161616 to a integer.
+change the value 45 to a dictionary.
+change the value 90 to a double.
+change the value -121212 to a array.
+change the value 0.707 to a int.
+change the value -9876 to a set.
+make the value 8675309 to a char.
+change the value -0.000123 to a set.
+convert the value 1.0 to a array.
+convert the value 444444 to a array.
+cast the value 9.3456 to a string.
+transform the value 0.31415 to a double.
+transform the employee record to a list.
+transform the count to a integer.
+transform the default config to a char.
+transform the delivery address to a set.
+make the average score to a set.
+make the average score to a string.
+make the expense report to a double.
+make the primary contact to a char.
+change the is active to a int.
+cast the stock quantity to a float.
+make the element to a dictionary.
+make the inventory level to a char.
+change the max value to a float.

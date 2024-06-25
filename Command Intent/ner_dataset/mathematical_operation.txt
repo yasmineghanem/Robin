@@ -1,30 +1,138 @@
-Add x and y.
-Subtract a from b.
-Multiply x by y.
-Divide a by b.
-Get the remainder of x divided by y.
-Get the modulus of a divided by b.
-Raise x to the power of y.
-Get the square root of x.
-perform num1 plus num2.
-val1 plus val2.
-num1 minus num2.
-calculate num1 minus num2.
-compute a divided b.
-calculate c times d.
-compute salary multiplied by 0.001.
-age times 3.
-1000 plus 3.
-sum a and b.
-subtract 100 from salary.
-number divided 100.
-calculate salary to the power of 2.
-x to the power of y.
-number to the power of 4.
-current mod 2.
-wight divided 20.
-height divided by 100.
-8 divided 2.
-x power 3.
-10 power x.
-compute the remainder of x divided 3.
+remainder pos and pos.
+add step and step.
+divide index and index.
+add average score and average score.
+modulus settings and settings.
+modulus user age and user age.
+sum order queue and order queue.
+modulus item array and item array.
+modulus index and index.
+sum user login and user login.
+subtract loop index and loop index.
+square position and position.
+remainder result table and result table.
+root options and options.
+remainder credit limit and value.
+add user email and value.
+multiply total amount and value.
+power category type and value.
+divide is enabled and value.
+power counter and value.
+divide data and value.
+modulus net profit and value.
+add data frame and value.
+root debit amount and value.
+root last updated and value.
+multiply partner name and value.
+square -0.707 and -0.707.
+root 5.6789 and 5.6789.
+square 0.12345 and 0.12345.
+root 6789 and 6789.
+square -1.61803398875 and -1.61803398875.
+multiply -6.62607015 and -6.62607015.
+subtract -161616 and -161616.
+sum 12345.6789 and 12345.6789.
+power -2020202 and -2020202.
+add -3.3 and -3.3.
+divide 5.6789 and 5.6789.
+power -606060 and -606060.
+root 131313 and 131313.
+square 1.23456789 and 1.23456789.
+sum -0.666667 and -0.666667.
+find the sum of pos and -9876.
+find the square of is logged in and 888888.
+compute the plus of result table and 3.3333.
+work out the divide of user gender and -8.8888.
+find the sum of delivery address and -1e-07.
+compute the subtract of user id and -181818.
+work out the divide of result and -2020202.
+determine the subtract of product id and 6.02214076.
+work out the sum of user gender and -8.2345.
+calculate the root of user list and 0.12345.
+solve the multiply of time stamp and time stamp.
+determine the root of partner name and partner name.
+compute the square of key and key.
+work out the add of customer map and customer map.
+calculate the plus of zip code and zip code.
+get  the power of is logged in and is logged in.
+evaluate the square of credit limit and credit limit.
+compute the plus of is logged in and is logged in.
+get  the divide of product id and product id.
+solve the modulus of user role and user role.
+determine the multiply of feature flags and feature flags.
+get  the sum of category type and category type.
+calculate the multiply of index and index.
+calculate the plus of key and key.
+find order queue modulus order queue.
+solve schedule time power schedule time.
+calculate is deleted divide is deleted.
+get  net profit root net profit.
+find schedule time multiply schedule time.
+find user preferences add user preferences.
+find order number plus order number.
+evaluate is verified multiply is verified.
+compute user role multiply user role.
+determine is deleted plus is deleted.
+get  secondary contact plus secondary contact.
+compute customer map plus customer map.
+get  current date root current date.
+determine creation date sum creation date.
+find stock quantity sum 212121.
+solve supplier name sum 2.2250738585072014.
+work out geo coordinates plus -555555.
+calculate user settings plus 5.0.
+calculate product price root -1.1.
+compute is logged in multiply -1e-07.
+solve result table plus 0.000123.
+get  user type divide -9.87654321.
+compute temp plus -0.707.
+get  is visible divide -9.87654321.
+work out -141414 plus -141414.
+find -8.2345 root -8.2345.
+get  -9876 modulus -9876.
+compute 27182 sum 27182.
+determine 12345.6789 subtract 12345.6789.
+determine 888888 sum 888888.
+compute 0 square 0.
+calculate -80808 power -80808.
+compute -80808 subtract -80808.
+get  1.1 remainder 1.1.
+evaluate -6.62607015 subtract -6.62607015.
+work out -31415 subtract -31415.
+work out -1.1 plus -1.1.
+evaluate 0.999999 square 0.999999.
+find -0.4567 root -0.4567.
+is visible power is visible.
+user login modulus user login.
+due date sum due date.
+j root j.
+user profile power user profile.
+colleague email remainder colleague email.
+category type square category type.
+max value remainder max value.
+creation date power creation date.
+max value power max value.
+position remainder position.
+data frame power data frame.
+time stamp modulus time stamp.
+config path power 0.707.
+account balance power 272727.
+iteration power 272727.
+time elapsed root 3.3333.
+data frame add 70707.
+emergency contact modulus 6789.
+product price add -6.62607015.
+result table modulus -9876.
+index square -987.
+count divide -456.
+i divide 171717.
+-242424 square -242424.
+-9876 plus -9876.
+-0.27182 add -0.27182.
+-54321 power -54321.
+-40404 multiply -40404.
+-42.0 root -42.0.
+-6.62607015 root -6.62607015.
+-9876 square -9876.
+-161616 divide -161616.
+-6.789 subtract -6.789.

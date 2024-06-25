@@ -1,12 +1,114 @@
-Check if x is in the list arr.
-Check if y is not in the set unique.
-Check if z is in the dictionary words.
-Check if a is not in the tuple y.
-if number is in numbers.
-if value is not in values.
-check if node is in visited nodes.
-if node is not in visited nodes.
-check whether number is in the tuple t.
-check whether word is not in words.
-if number not in numbers.
-if word in words.
+check whether item array is in set middleware stack.
+check if user email is in dictionary headers.
+check whether user list is in array biases.
+check if city name is in collection records.
+check whether key is in collection leaderboards.
+check whether user age is in the budget items.
+check if options is in the ip addresses.
+check whether temp is in the info array.
+check if j is in the views.
+check whether mentor id is in the windows.
+check whether user type is in the addresses.
+if user gender is in item collection.
+if reorder point is in links.
+if gross income is in element list.
+if index is in variable array.
+whether is active is in scripts.
+whether end time is in message queue.
+if min value is in button array.
+if product description is in the set revenues.
+whether completed is in the set model parameters.
+if info is in the map labels.
+if data is in the dictionary financial statements.
+whether region name is in the array accounts.
+if supplier name is in the set dialog boxes.
+check if product set is not in array methods.
+check if time elapsed is not in set variable array.
+check whether file path is not in array dns records.
+check whether is logged in is not in array sliders.
+check if partner name is not in dictionary feature vectors.
+check if partner name is not in array discounts.
+check if mentor id is not in array review ratings.
+check whether index is not in the files.
+check whether j is not in the js functions.
+check whether environment is not in the button array.
+check if map location is not in the results.
+check if settings is not in the expense reports.
+check whether debit amount is not in the list.
+check whether schedule time is not in the api endpoints.
+check whether debit amount is not in the inventory stock.
+if position is not in inventory stock.
+whether total amount is not in connection pool.
+if info is not in labels.
+if zip code is not in achievements.
+whether counter is not in player scores.
+if completed is not in files.
+whether item array is not in samples.
+whether item array is not in middlewares.
+if is visible is not in responses.
+if user name is not in the dictionary config settings.
+whether office location is not in the list expense reports.
+if has errors is not in the collection customer records.
+if has access is not in the set layout components.
+whether net profit is not in the collection character stats.
+whether guardian name is not in the array loan details.
+if expense report is not in the map cities.
+whether reorder point is not in the collection shipment details.
+if app config is not in the map transaction history.
+check if is visible is in list user profiles.
+check if stock quantity is in dictionary text fields.
+check if max value is in set cookie values.
+check if total revenue is in collection request queue.
+check if supplier name is in set packets.
+check if feature flags is in map vectors.
+check whether current date is in dictionary results.
+check if start date is in array functions.
+check whether options is in dictionary game levels.
+check if Artificial Intelligence is in the results.
+check whether Code Review is in the matrices.
+check if -9876 is in the shopping cart.
+check if user experience is in the cookie values.
+check if 2.2250738585072014 is in the classes.
+check if CLUSTERING ALGORITHMS is in the samples.
+check if debugging session is in the session tokens.
+if javascript framework is in routes.
+if -7654321 is in measurement data.
+whether System Architecture is in forms.
+whether 0.707 is in coordinate array.
+if JAVASCRIPT FRAMEWORK is in properties.
+whether -1.1 is in scripts.
+whether 101010 is in statistical data.
+whether Continuous Integration is in the list number series.
+whether cascading style sheets is in the dictionary sessions.
+whether 505050 is in the dictionary products.
+if -0.707 is in the list orders.
+if Front End Development is in the set ports.
+check if 0.707 is not in set features.
+check if statistical methods is not in dictionary discounts.
+check if STATISTICAL METHODS is not in list packet list.
+check if Software Development is not in collection model parameters.
+check if 7.1234 is not in set message queue.
+check if Database Management is not in collection endpoint list.
+check whether 2.99792458 is not in dictionary sliders.
+check whether version control system is not in collection reviews.
+check whether 0 is not in the expenses.
+check if SEMI-SUPERVISED LEARNING is not in the list.
+check if 3.14159 is not in the parameters.
+check whether deep learning models is not in the orders.
+check if This is a test is not in the headers.
+check whether Database Management is not in the expenses.
+check if front end development is not in the vector list.
+if semi-supervised learning is not in character stats.
+if System Architecture is not in frequencies.
+whether JAVASCRIPT FRAMEWORK is not in parameters.
+if Front End Development is not in inventories.
+if 131313 is not in result list.
+if 131313 is not in list.
+if 6789 is not in game levels.
+whether true is not in the collection biases.
+whether hypertext markup language is not in the dictionary epochs.
+whether -14142 is not in the array radioButtons.
+if 30303 is not in the set invoice list.
+if 6789 is not in the map inventory items.
+if unit testing is not in the collection session variables.
+whether user interface is not in the map form fields.

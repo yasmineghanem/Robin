@@ -1,33 +1,112 @@
-declare a function named add that takes two parameters a and b and returns an int.
-define a new function with the name subtract that takes two arguments x and y and returns an int.
-create a function named func that returns a string.
-write a function and name it calculate that takes two arguments num1 and num2 and returns a float.
-write a function named test that takes a parameter name.
-create a function under the name display that takes message as a parameter.
-define a new function that takes name and age and name it greet.
-declare function named print that takes a string message.
-define a function numbers that has two parameters x and y and returns a float.
-write a function named search that takes a list called arr as a parameter.
-create a function named sum that takes a list of numbers as an argument.
-define a method named multiply that takes a list of integers.
-declare a new method called max length that takes a list of strings.
-write me a new function and call it sequence that takes name age and is active as parameters.
-declare a method and name is valid that takes a string username.
-create a new function named is valid that takes a string password.
-define a function with the name get balance that takes an account number.
-a function has the name depth first search and parameters a b and c.
-a function named breadth first search with parameters x y and z.
-a method with the name binary search and parameters arr and key.
-create a functions that takes an array called numbers and an int named target.
-under the name of cosine similarity write a function that takes list1 and list2.
-with the name of euclidean distance define a function that takes parameters x1 y1 x2 y2.
-define a function named best name that takes an array named names.
-define a new function with the name concatenate that takes two string arguments str1 and str2 and returns a string.
-create a function named initialize.
-write a function and name it average that takes a list of numbers and returns a float.
-write a function named login that takes parameters username and password.
-create a function under the name show details that takes two parameters name and details.
-define a new function that takes email and password and name it authenticate.
-declare function named log that takes a string message and a log level.
-define a function compute area that takes two parameters width and height and returns a float.
-write a function named search item that takes an array called items and a string key.
+write a procedure named rayleigh quotient iteration algorithm.
+write a procedure named rayleigh quotient iteration algorithm.
+make a subroutine named subtract.
+write a method with the name householder algorithm.
+declare a method under the name rayleigh quotient iteration algorithm.
+create a method named as sort.
+declare a method titled as householder transformation.
+declare a method called householder algorithm.
+write a procedure with the name inverse power iteration.
+define a method under the name determinant.
+declare a function titled update.
+write a new routine under the name cholesky algorithm with parameters emergency contact and return type int.
+define a new method labelled cholesky algorithm containing parameters string buffer and return type list.
+create a new function identified cofactor with parameters is enabled and return type string.
+define a new method identified as gram-schmidt algorithm consisting of parameters tax rate and return type boolean.
+create a new routine titled as update including parameters pos and return type void.
+make a new subroutine with name eigenvector that needs parameters i and return type void.
+define a new function name it insert including parameters partner name and return type float.
+define a new subroutine name it adjoint with parameters expense report and return type char.
+create a new procedure labelled rayleigh quotient iteration containing parameters main address and return type int.
+declare a new procedure name it qr algorithm that requires parameters debit amount and return type double.
+make a new procedure with name singular value algorithm that accepts parameters completed and return type int.
+write a new function name it divide with parameters total revenue and return type string.
+define a new routine called as inverse power iteration algorithm comprising parameters result table and return type character.
+create a method under the name add having parameters creation date and return type float.
+make a routine titled shuffle consisting of parameters user type and return type character.
+declare a function identified as update with parameters order queue and return type string.
+make a subroutine identified inverse power iteration algorithm that takes parameters environment and return type list.
+make a subroutine call it givens rotation algorithm with parameters user gender and return type float.
+create a procedure called as rotate including parameters j and return type bool.
+write a function named gram-schmidt algorithm including parameters secondary contact and return type int.
+declare a method named as power iteration containing parameters iteration and return type float.
+make a subroutine labelled as split that accepts parameters end date and return type character.
+declare a procedure labelled as merge that accepts parameters average score and return type char.
+make a subroutine with the name svd algorithm containing parameters geo coordinates and return type char.
+create a procedure called svd algorithm including parameters due date and return type bool.
+define a procedure titled as givens rotation algorithm that requires parameters step and return type double.
+titled as rank define a method.
+labelled as shuffle write a procedure.
+titled as split declare a function.
+name it cholesky algorithm make a function.
+identified as power create a method.
+identified as multiply create a subroutine.
+labelled transpose matrix make a method.
+with name merge declare a method.
+labelled givens rotation algorithm make a procedure.
+call it qr algorithm create a procedure.
+under the name transpose declare a function.
+name it rayleigh quotient iteration algorithm declare a method.
+called householder algorithm write a new function comprising parameters key and return type void.
+labelled search declare a new routine having parameters config path and return type boolean.
+labelled jacobi eigenvalue algorithm declare a new method that accepts parameters user settings and return type boolean.
+named lu algorithm create a new function with parameters expense report and return type char.
+titled as shuffle declare a new method that accepts parameters data, info and item and return type void.
+under the name givens rotation algorithm write a new procedure with parameters time stamp and return type int.
+titled qr algorithm write a new routine consisting of parameters expense report and return type list.
+name it inverse power iteration algorithm define a new function containing parameters guardian name and return type void.
+under the name power iteration declare a new subroutine containing parameters user list and return type void.
+labelled qr algorithm create a new method that requires parameters budget allocation and return type array.
+identified as power iteration algorithm write a new routine consisting of parameters product id and return type bool.
+call it lu decomposition make a new method consisting of parameters user status and return type array.
+labelled householder algorithm create a new routine consisting of parameters emergency contact and return type boolean.
+write a procedure call it cholesky decomposition that requires parameters preferences and returns char.
+define a procedure identified divide consisting of parameters total amount and returns string.
+make a procedure with name singular value decomposition that requires parameters guardian name and returns integer.
+make a subroutine identified as rayleigh quotient iteration algorithm that requires parameters transaction amount and returns string.
+write a subroutine labelled as power iteration algorithm with parameters value count and returns void.
+make a method called adjoint consisting of parameters item array and returns char.
+create a subroutine with the name transpose consisting of parameters item array and returns array.
+create a procedure with the name singular value algorithm that needs parameters current date and returns integer.
+define a routine identified qr algorithm that requires parameters data, info and item and returns boolean.
+declare a subroutine identified as inverse power iteration algorithm that needs parameters employee record and returns string.
+write a method labelled as householder algorithm that requires parameters end date and returns character.
+write a method with the name sort consisting of parameters user email and returns void.
+declare a subroutine called singular value that needs parameters schedule time and returns int.
+declare a function named as inverse power iteration algorithm comprising parameters debit amount and returns list.
+define a procedure named rayleigh quotient iteration algorithm that accepts parameters creation date and returns integer.
+define a subroutine titled jacobi eigenvalue algorithm containing parameters user gender.
+declare a procedure labelled power iteration algorithm containing parameters schedule time.
+define a subroutine titled as qr algorithm that takes parameters sibling count.
+create a subroutine titled lu algorithm that needs parameters budget allocation.
+write a function call it lu algorithm having parameters product price.
+define a function titled as inverse power iteration algorithm that requires parameters app config.
+declare a method under the name qr algorithm consisting of parameters product price.
+create a function identified as lu algorithm comprising parameters user age.
+declare a method titled jacobi eigenvalue algorithm containing parameters country code.
+write a routine labelled as reverse that accepts parameters colleague email.
+create a method identified svd algorithm with parameters has errors.
+declare a subroutine that returns float and with the name rayleigh quotient iteration.
+define a routine that returns list and with name svd algorithm.
+make a subroutine that returns char and called search.
+define a procedure that returns character and called jacobi eigenvalue algorithm.
+make a function that returns dictionary and identified as svd algorithm.
+make a function that returns string and with name transpose matrix.
+write a routine that returns array and identified shuffle.
+define a routine that returns bool and titled as determinant.
+declare a method that returns void and titled as gram-schmidt algorithm.
+write a routine that returns double and labelled as prime.
+make a routine that returns integer and with the name givens rotation algorithm.
+declare a subroutine that returns char and named householder algorithm.
+create a function that returns double and titled singular value algorithm and having parameters expiry date.
+create a routine that returns boolean and name it cholesky algorithm and that accepts parameters category type.
+declare a method that returns character and named cholesky decomposition and including parameters last updated.
+define a routine that returns array and called qr decomposition and consisting of parameters product id.
+create a procedure that returns string and labelled as reverse and consisting of parameters file path.
+make a method that returns list and called as givens rotation algorithm and that requires parameters result, start, end.
+define a procedure that returns integer and labelled as rank and that requires parameters i.
+make a subroutine that returns character and identified singular value algorithm and that takes parameters app config.
+declare a function that returns void and identified eigenvalue and that accepts parameters total amount.
+define a method that returns double and titled power and with parameters time elapsed.
+create a method that returns int and with the name givens rotation algorithm and comprising parameters system properties.
+declare a method that returns char and under the name power iteration algorithm and including parameters emergency contact.

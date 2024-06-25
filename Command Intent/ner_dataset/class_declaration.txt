@@ -1,20 +1,38 @@
-define a class called person.
-declare a class named student.
-create a class with the name employee.
-declare a class under the name customer.
-define a class named car.
-create a class and name it book.
-declare a class employee that extends person.
-define a class student that inherits from person.
-create a class named customer that extends user.
-declare a class called vehicle that inherits from car.
-create the class car which extends vehicle.
-define a class named book that inherits from item.
-write the class person.
-define the class student.
-declare a class named super class.
-create a class with the name sub class that extends super class.
-declare the class base class.
-define a class under the name derived class that inherits from base class.
-create a class named parent class.
-define a class with the name of consumer.
+make a class with the name Score.
+create a class titled Dropdown.
+create a class labelled Invoice.
+define a class name it Product.
+make a class named Account.
+create a class titled as Linked List.
+write a class labelled as View.
+define a class called Account.
+make a class call it Hyperparameter Tuner.
+create a class labelled as Product.
+define a class call it Checkout.
+write a class identified Product Catalog.
+define a class labelled as Invoice.
+declare a class labelled Tree Node.
+define a class called as TextBox.
+create a new class with name FormHandler.
+create a new class called Portfolio.
+define a new class called Payment Gateway.
+define a new class called as Request Handler.
+create a new class named HttpRequest.
+define a new class name it Trainer.
+write a new class with the name Protocol.
+declare a new class with name Tax.
+write a new class named Binary Tree.
+create a new class identified as Socket.
+write a new class with name Integrator.
+declare a new class with the name Transaction.
+make a new class labelled as Trainer.
+under the name Stack create a class.
+labelled HttpResponse make a class.
+labelled Invoice create a class.
+under the name CheckBox write a class.
+with the name Random Generator write a class.
+titled as Session create a class.
+identified Solver make a class.
+identified Authenticator create a class.
+called as Dropdown create a class.
+call it Trainer create a class.

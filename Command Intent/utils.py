@@ -1,8 +1,10 @@
 import nlpaug.augmenter.word as naw
+import nlpaug.augmenter.char as nac
 import numpy as np
 import random
-import nltk
 import json
+from string import Formatter
+import itertools
 
 
 def clean(line):
@@ -116,4 +118,117 @@ def prepare_ner_dataset(file_path):
 
 
 def augment_data(file_path):
-    pass
+    '''
+    This function augments the data in the dataset
+
+    It take the intent keywords and augments them using the synonym augmenter and inserts spelling mistakes in the keywords and saves the augmented data to a new file
+
+    Args:
+        - file_path (str) : path of the dataset
+    '''
+
+    with open(file_path, 'r') as intents_file:
+        data = json.load(intents_file)
+
+        intents = data["intents"]
+
+        for intent in intents:
+            current_intent = intent["intent"]
+            print(current_intent)
+            default_parameters = intent["default parameters"]
+        
+            templates = intent["patterns"]
+
+            formatted_templates = []
+
+            print(len(templates))
+            
+            for template in templates:
+
+                if len(templates) < 15:
+                    random_number = random.randint(10, 15)
+                else:
+                    random_number = random.randint(5, 10)
+
+                for _ in range(random_number):
+
+                    filtered_parameters = {field_name for _, field_name, _, _ in Formatter().parse(template) if field_name}
+                    
+                    final_parameters = {key: default_parameters[key] for key in filtered_parameters}
+
+                    if intent["intent"] == "Variable Declaration":
+                        if "datatype" in final_parameters:
+
+                            # we check if the type is in the template then we check the type to choose the appropriate synonyms
+                            final_parameters["datatype"] = random.choice(intent["synonyms"]["datatype"])
+
+                            match final_parameters["datatype"]:
+                                case "int" | "integer":
+                                    final_parameters["value"] = random.choice(intent["synonyms"]["value"]["integer"])
+                                case "float" | "double":
+                                    final_parameters["value"] = random.choice(intent["synonyms"]["value"]["float"])
+                                case "string":
+                                    final_parameters["value"] = random.choice(intent["synonyms"]["value"]["string"])
+                                case "char" | "character":
+                                    final_parameters["value"] = chr(random.randint(32, 123))
+                                case "bool" | "boolean":
+                                    final_parameters["value"] = random.choice(intent["synonyms"]["value"]["boolean"])
+                                case "array" | "list":
+                                    final_parameters["value"] = random.choice(intent["synonyms"]["value"]["list"])
+                                case "dictionary":
+                                    final_parameters["value"] = random.choice(intent["synonyms"]["value"]["dictionary"])
+                        else:
+                            final_parameters["value"] = random.choice(list(itertools.chain(*intent["synonyms"]["value"].values())))
+                        
+                    for parameter in final_parameters:
+
+                        if intent["intent"] == "Variable Declaration":
+                            if parameter == "value" or parameter == "datatype":
+                                continue
+                        if parameter == "value":
+                            if type(intent["synonyms"]["value"]) == dict:
+                                final_parameters["value"] = random.choice(list(itertools.chain(*intent["synonyms"]["value"].values())))
+                                continue
+                        
+                        if parameter == "variable_1" or parameter == "variable_2":
+                            final_parameters[parameter] = random.choice(intent["synonyms"]["variable"])
+                            continue
+
+                        synonyms = intent["synonyms"].get(parameter, [])
+                        final_parameters[parameter] = random.choice(synonyms)
+
+                    formatted_string = template.format(**final_parameters)
+
+                    formatted_templates.append(formatted_string)
+
+            intent["formatted patterns"] = formatted_templates
+
+            print(len(formatted_templates))
+
+            with open(file_path, 'w') as file:
+                json.dump(data, file, indent=4)
+
+def ner_dataset_pre_annotations(file_path):
+    
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+
+        intents = data["intents"]
+
+        for intent in intents:
+
+            corpus = []
+
+            for example in intent["formatted patterns"]:
+                corpus.append(example)
+
+
+            # add a period at the end of each sentence
+            corpus = [sentence + ".\n" for sentence in corpus if sentence[-1] != "."]
+
+            # join the sentences with a space
+            corpus = " ".join(corpus)
+
+            file_name = intent["intent"].lower().replace(" ", "_") + ".txt"
+            with open(f'./ner_dataset/{file_name}', 'w') as f:
+                f.write(corpus)
