@@ -5,12 +5,15 @@ import {
     DECLARE_FUNCTION,
     DECLARE_VARIABLE,
     FILE_EXT_FAILURE,
+    FOR_LOOP,
     FUNCTION_CALL,
     FUNCTION_CALL_FAILURE,
     FUNCTION_CALL_SUCCESS,
     FUNCTION_FAILURE,
     FUNCTION_SUCCESS,
     GET_AST,
+    LOOP_FAILURE,
+    LOOP_SUCCESS,
     NO_ACTIVE_TEXT_EDITOR,
     VARIABLE_FAILURE,
     VARIABLE_SUCCESS,
@@ -299,12 +302,66 @@ const addWhiteSpace = () => {
     });
 };
 
+// {
+//     "type": "range",
+//     "iterator": [
+//         "i"
+//     ],
+//     "start": "1",
+//     "end": "5"
+//     //   "step": ""
+// }
+const forLoop = () => {
+    vscode.commands.registerCommand(FOR_LOOP, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
 
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateForLoop(args.type, args)
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(LOOP_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(LOOP_FAILURE);
+            }
+
+            return handleSuccess(LOOP_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+
+};
 
 const registerCodeCommands = () => {
-    const commands = [declareVariable, declareFunction, getAST, functionCall, declareConstant,
-
-        addWhiteSpace
+    const commands = [declareVariable,
+        declareFunction,
+        getAST,
+        functionCall,
+        declareConstant,
+        addWhiteSpace,
+        forLoop
     ];
 
     commands.forEach((command) => {

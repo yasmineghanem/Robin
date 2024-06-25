@@ -4,3 +4,9 @@ export enum Whitespace {
     Tab = 'tab',
     NewLine = 'newLine',
 }
+
+export enum ForLoop {
+    Range = "range",
+    Iterable = "iterable",
+    Enumerate = "enumerate",
+}

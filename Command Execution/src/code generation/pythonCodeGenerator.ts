@@ -1,4 +1,4 @@
-import { Whitespace } from "../constants/enums/codeEnums";
+import { ForLoop, Whitespace } from "../constants/enums/codeEnums";
 import { CodeGenerator } from "./codeGenerator";
 import pythonReservedKeywords from "./language specifics/pythonReserved.json";
 
@@ -182,11 +182,58 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Loop statements
      * for, while, do-while
     **/
-    generateForLoop(variable: string, iterable: string, body: string[]): string {
-        const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
+    // generateForLoop(variable: string, iterable: string, body: string[]): string {
+    //     const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
+    //     return loopCode;
+    // }
+    generateForLoop(type: ForLoop, params: any, body?: string[]): string {
+        switch (type) {
+            case ForLoop.Range:
+                return this.generateRangeLoop(params, body);
+            case ForLoop.Iterable:
+                return this.generateIterableLoop(params, body);
+            case ForLoop.Enumerate:
+                return this.generateEnumerateLoop(params, body);
+            default:
+                return `for `;
+        }
+
+    }
+
+
+    generateIterableLoop(
+        params: { iterators: string[], iterable: string },
+        body?: string[]
+    ): string {
+        const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}: \n${this.wrapInCodeBlock(body ?? [''])} `;
         return loopCode;
     }
 
+
+
+    generateRangeLoop(
+        params: { iterators: string[], start: number, end: number, step?: number },
+        body?: string[]
+    ): string {
+        const { iterators, start, end, step } = params;
+        // if there's no step and no start, just return range of the end
+        if (!step && !start) {
+            return `for ${iterators.join(", ")} in range(${end ?? ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+        }
+        // if there's no step, just return range of start and end
+        if (!step) {
+            return `for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${end ?? ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+        }
+        // if there's a step, return range of start, end and step
+        return `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${end ?? ''}, ${step}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+    }
+
+
+    generateEnumerateLoop(params: { iterators: string[], iterable: string, start?: number }, body?: string[]): string {
+        const { iterators, iterable, start } = params;
+        return `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+
+    }
     generateWhileLoop(condition: string, body: string[]): string {
         const loopCode = `while ${condition}: \n${this.wrapInCodeBlock(body)} `;
         return loopCode;

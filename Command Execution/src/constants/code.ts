@@ -1,9 +1,14 @@
+/**
+ * Commands
+ */
 export const DECLARE_VARIABLE = "robin.declareVariable";
 export const DECLARE_FUNCTION = "robin.declareFunction";
 export const GET_AST = "robin.getAST";
 export const FUNCTION_CALL = "robin.functionCall";
 export const DECLARE_CONSTANT = "robin.declareConstant"
 export const ADD_WHITESPACE = "robin.addWhitespace";
+export const FOR_LOOP = "robin.forLoop";
+
 
 /**
  * Variable declaration messages
@@ -29,3 +34,7 @@ export const NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
 
 export const WHITE_SPACE_SUCCESS = "White space added successfully!";
 export const WHITE_SPACE_FAILURE = "Failed to add white space!";
+
+// loops
+export const LOOP_SUCCESS = "Loop created successfully!";
+export const LOOP_FAILURE = "Failed to create loop!";

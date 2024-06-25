@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ADD_WHITESPACE, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FUNCTION_CALL, GET_AST, NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
+import { ADD_WHITESPACE, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FOR_LOOP, FUNCTION_CALL, GET_AST, NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
 import { errorHandler, executeCommand, showError, successHandler } from './utilities';
 import express, { Request, Response } from "express";
 
@@ -63,6 +63,19 @@ router.post('/declare-constant',
         const data = req.body;
         executeCommand(
             DECLARE_CONSTANT,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
+
+router.post("/for-loop",
+    (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            FOR_LOOP,
             data,
             successHandler,
             errorHandler,

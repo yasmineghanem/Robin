@@ -39,7 +39,7 @@ const vscode = __importStar(__webpack_require__(1));
 const server_1 = __importDefault(__webpack_require__(2));
 const commands_1 = __importDefault(__webpack_require__(168));
 const path_1 = __importDefault(__webpack_require__(7));
-(__webpack_require__(175).config)({
+(__webpack_require__(177).config)({
     path: path_1.default.resolve(__dirname, '../.env')
 }); // Load environment variables from .env
 // This method is called when your extension is activated
@@ -24817,6 +24817,10 @@ router.post('/declare-constant', (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.DECLARE_CONSTANT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+router.post("/for-loop", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.FOR_LOOP, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // add whitespace
 router.get('/add-whitespace', (req, res) => {
     (0, utilities_1.executeCommand)(code_1.ADD_WHITESPACE, req.query, utilities_1.successHandler, utilities_1.errorHandler, res);
@@ -24836,13 +24840,17 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.FOR_LOOP = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+/**
+ * Commands
+ */
 exports.DECLARE_VARIABLE = "robin.declareVariable";
 exports.DECLARE_FUNCTION = "robin.declareFunction";
 exports.GET_AST = "robin.getAST";
 exports.FUNCTION_CALL = "robin.functionCall";
 exports.DECLARE_CONSTANT = "robin.declareConstant";
 exports.ADD_WHITESPACE = "robin.addWhitespace";
+exports.FOR_LOOP = "robin.forLoop";
 /**
  * Variable declaration messages
  */
@@ -24859,6 +24867,9 @@ exports.FUNCTION_CALL_FAILURE = "Failed to call function";
 exports.NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
 exports.WHITE_SPACE_SUCCESS = "White space added successfully!";
 exports.WHITE_SPACE_FAILURE = "Failed to add white space!";
+// loops
+exports.LOOP_SUCCESS = "Loop created successfully!";
+exports.LOOP_FAILURE = "Failed to create loop!";
 
 
 /***/ }),
@@ -25540,7 +25551,7 @@ const vscode = __importStar(__webpack_require__(1));
 const code_1 = __webpack_require__(166);
 const pythonCodeGenerator_1 = __webpack_require__(172);
 const utilities_1 = __webpack_require__(167);
-const constants_1 = __webpack_require__(178);
+const constants_1 = __webpack_require__(176);
 // utilities
 const getCurrentPosition = (editor) => {
     const position = editor.selection.active;
@@ -25759,9 +25770,57 @@ const addWhiteSpace = () => {
         }
     });
 };
+// {
+//     "type": "range",
+//     "iterator": [
+//         "i"
+//     ],
+//     "start": "1",
+//     "end": "5"
+//     //   "step": ""
+// }
+const forLoop = () => {
+    vscode.commands.registerCommand(code_1.FOR_LOOP, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateForLoop(args.type, args));
+                });
+                if (!s) {
+                    return handleFailure(code_1.LOOP_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.LOOP_FAILURE);
+            }
+            return handleSuccess(code_1.LOOP_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
 const registerCodeCommands = () => {
-    const commands = [declareVariable, declareFunction, getAST, functionCall, declareConstant,
-        addWhiteSpace
+    const commands = [declareVariable,
+        declareFunction,
+        getAST,
+        functionCall,
+        declareConstant,
+        addWhiteSpace,
+        forLoop
     ];
     commands.forEach((command) => {
         command();
@@ -25781,9 +25840,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PythonCodeGenerator = void 0;
-const codeEnums_1 = __webpack_require__(179);
-const codeGenerator_1 = __webpack_require__(173);
-const pythonReserved_json_1 = __importDefault(__webpack_require__(174));
+const codeEnums_1 = __webpack_require__(173);
+const codeGenerator_1 = __webpack_require__(174);
+const pythonReserved_json_1 = __importDefault(__webpack_require__(175));
 class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Declare reserved keywords for each programming language
@@ -25935,9 +25994,42 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Loop statements
      * for, while, do-while
     **/
-    generateForLoop(variable, iterable, body) {
-        const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
+    // generateForLoop(variable: string, iterable: string, body: string[]): string {
+    //     const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
+    //     return loopCode;
+    // }
+    generateForLoop(type, params, body) {
+        switch (type) {
+            case codeEnums_1.ForLoop.Range:
+                return this.generateRangeLoop(params, body);
+            case codeEnums_1.ForLoop.Iterable:
+                return this.generateIterableLoop(params, body);
+            case codeEnums_1.ForLoop.Enumerate:
+                return this.generateEnumerateLoop(params, body);
+            default:
+                return `for `;
+        }
+    }
+    generateIterableLoop(params, body) {
+        const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}: \n${this.wrapInCodeBlock(body ?? [''])} `;
         return loopCode;
+    }
+    generateRangeLoop(params, body) {
+        const { iterators, start, end, step } = params;
+        // if there's no step and no start, just return range of the end
+        if (!step && !start) {
+            return `for ${iterators.join(", ")} in range(${end ?? ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+        }
+        // if there's no step, just return range of start and end
+        if (!step) {
+            return `for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${end ?? ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+        }
+        // if there's a step, return range of start, end and step
+        return `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${end ?? ''}, ${step}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+    }
+    generateEnumerateLoop(params, body) {
+        const { iterators, iterable, start } = params;
+        return `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
     }
     generateWhileLoop(condition, body) {
         const loopCode = `while ${condition}: \n${this.wrapInCodeBlock(body)} `;
@@ -26015,6 +26107,28 @@ exports.PythonCodeGenerator = PythonCodeGenerator;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ForLoop = exports.Whitespace = void 0;
+var Whitespace;
+(function (Whitespace) {
+    Whitespace["Space"] = "space";
+    Whitespace["Tab"] = "tab";
+    Whitespace["NewLine"] = "newLine";
+})(Whitespace || (exports.Whitespace = Whitespace = {}));
+var ForLoop;
+(function (ForLoop) {
+    ForLoop["Range"] = "range";
+    ForLoop["Iterable"] = "iterable";
+    ForLoop["Enumerate"] = "enumerate";
+})(ForLoop || (exports.ForLoop = ForLoop = {}));
+
+
+/***/ }),
+/* 174 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
 /**
  * A generic abstract class providing the necessary methods for code generation, like declaring variables, functions...etc
  * This class/interface needs to be implemented for each programming language that needs to be supported
@@ -26027,21 +26141,35 @@ exports.CodeGenerator = CodeGenerator;
 
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"]}');
 
 /***/ }),
-/* 175 */
+/* 176 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EXTENSIONS = void 0;
+exports.EXTENSIONS = {
+    PYTHON: "py",
+    JUPYTER: "ipynb"
+};
+
+
+/***/ }),
+/* 177 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const fs = __webpack_require__(25)
 const path = __webpack_require__(7)
-const os = __webpack_require__(176)
+const os = __webpack_require__(178)
 const crypto = __webpack_require__(138)
-const packageJson = __webpack_require__(177)
+const packageJson = __webpack_require__(179)
 
 const version = packageJson.version
 
@@ -26401,48 +26529,18 @@ module.exports = DotenvModule
 
 
 /***/ }),
-/* 176 */
+/* 178 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("os");
 
 /***/ }),
-/* 177 */
+/* 179 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"name":"dotenv","version":"16.4.5","description":"Loads environment variables from .env file","main":"lib/main.js","types":"lib/main.d.ts","exports":{".":{"types":"./lib/main.d.ts","require":"./lib/main.js","default":"./lib/main.js"},"./config":"./config.js","./config.js":"./config.js","./lib/env-options":"./lib/env-options.js","./lib/env-options.js":"./lib/env-options.js","./lib/cli-options":"./lib/cli-options.js","./lib/cli-options.js":"./lib/cli-options.js","./package.json":"./package.json"},"scripts":{"dts-check":"tsc --project tests/types/tsconfig.json","lint":"standard","lint-readme":"standard-markdown","pretest":"npm run lint && npm run dts-check","test":"tap tests/*.js --100 -Rspec","test:coverage":"tap --coverage-report=lcov","prerelease":"npm test","release":"standard-version"},"repository":{"type":"git","url":"git://github.com/motdotla/dotenv.git"},"funding":"https://dotenvx.com","keywords":["dotenv","env",".env","environment","variables","config","settings"],"readmeFilename":"README.md","license":"BSD-2-Clause","devDependencies":{"@definitelytyped/dtslint":"^0.0.133","@types/node":"^18.11.3","decache":"^4.6.1","sinon":"^14.0.1","standard":"^17.0.0","standard-markdown":"^7.1.0","standard-version":"^9.5.0","tap":"^16.3.0","tar":"^6.1.11","typescript":"^4.8.4"},"engines":{"node":">=12"},"browser":{"fs":false}}');
-
-/***/ }),
-/* 178 */
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXTENSIONS = void 0;
-exports.EXTENSIONS = {
-    PYTHON: "py",
-    JUPYTER: "ipynb"
-};
-
-
-/***/ }),
-/* 179 */
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Whitespace = void 0;
-var Whitespace;
-(function (Whitespace) {
-    Whitespace["Space"] = "space";
-    Whitespace["Tab"] = "tab";
-    Whitespace["NewLine"] = "newLine";
-})(Whitespace || (exports.Whitespace = Whitespace = {}));
-
 
 /***/ })
 /******/ 	]);
