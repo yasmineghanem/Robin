@@ -4,6 +4,7 @@
  */
 
 import { Whitespace } from "../constants/enums/codeEnums";
+import { AssignmentOperators } from "../constants/enums/codeEnums";
 
 export abstract class CodeGenerator {
 
@@ -15,6 +16,15 @@ export abstract class CodeGenerator {
      * @returns The code string for the variable declaration.
      */
     abstract declareVariable(name: string, type?: string, initialValue?: any): string;
+
+    /**
+     * Declares a constant in the target programming language.
+     * @param name The name of the constant.
+     * @param type The type of the constant.
+     * @param value The value of the constant.
+     * @returns The code string for the constant declaration.
+     */
+    abstract declareConstant(name: string, type?: string, value?: any): string;
 
     /**
      * Declares a function in the target programming language.
@@ -45,12 +55,118 @@ export abstract class CodeGenerator {
     ): string;
 
     /**
+     * Assign a value to a variable in the target programming language.
+     * @param name The name of the variable.
+     * @param value The value to assign to the variable.
+     * @returns The code string for the variable assignment.
+     * @throws An error if the variable name is invalid.
+     * @throws An error if the variable is not declared.
+     * @throws An error if the value is not valid for the variable type.
+     */
+        abstract assignVariable(name: string, value: any, type: AssignmentOperators): string;
+
+
+    /**
      * Generates an import statement in the target programming language.
      * @param module The module to import from.
      * @param entities The entities to import from the module.
      * @returns The code string for the import statement.
      */
     abstract generateImport(module: string, entities: string[]): string;
+    abstract generateModuleImport(module: string, entities: string[]): string;
+
+    /**
+     * Generates a comment in the target programming language.
+     * @param content The content of the comment.
+     * @returns The code string for the comment.
+     */
+    abstract generateLineComment(content: string): string;
+    abstract generateBlockComment(content: string): string;
+
+    /**
+     * Generates a function call in the target programming language.
+     * @param name The name of the function to call.
+     * @param args The arguments to pass to the function.
+     * @returns The code string for the function call.
+     */
+    abstract generateFunctionCall(name: string, args: { name?: string, value: any }[]): string;
+
+
+    /**
+     * Generates a return statement in the target programming language.
+     * @param value The value to return.
+     * @returns The code string for the return statement.
+     */
+    abstract generateReturn(value?: string): string;
+
+    /**
+     * Generates a conditional statement in the target programming language.
+     * @param condition The condition of the statement.
+     * @param body The body of the statement as an array of strings, each representing a line of code.
+     * @returns The code string for the conditional statement.
+     * @throws An error if the condition is not valid.
+    */
+    abstract generateIf(condition: string, body: string[]): string;
+    abstract generateIfElse(condition: string, body: string[]): string;
+
+    /**
+     * Generates a loop statement in the target programming language.
+     * @param variable The variable to iterate over in the loop.
+     * @param iterable The iterable to loop over.
+     * @param body The body of the loop as an array of strings, each representing a line of code.
+     * @returns The code string for the loop statement.
+     */
+    abstract generateForLoop(variable: string, iterable: string, body: string[]): string;
+    abstract generateWhileLoop(condition: string, body: string[]): string;
+
+
+    /**
+     * Generates Identity Operator in the target programming language.
+     * @param variable The variable to compare.
+     * @param value The value to compare.
+     * @returns The code string for the identity operator.
+    */
+    abstract generateIdentityOperation(left: string, operator: 'is' | 'is not', right: string): string;
+
+    /**
+     * Generates Membership Operator in the target programming language.
+     * @param variable The variable to compare.
+     * @param value The value to compare.
+     * @returns The code string for the membership operator.
+    */
+    abstract generateMembershipOperation(left: string, operator: 'in' | 'not in', right: string): string;
+
+    /**
+     * Generates Logical Operator in the target programming language.
+     * @param variable The variable to compare.
+     * @param value The value to compare.
+     * @returns The code string for the logical operator.
+    */
+    abstract generateLogicalOperation(left: string, operator: 'and' | 'or' | 'not', right: string): string;
+
+    /**
+     * Generates Comparison Operator in the target programming language.
+     * @param variable The variable to compare.
+     * @param value The value to compare.
+     * @returns The code string for the comparison operator.
+    */
+    abstract generateComparisonOperation(left: string, operator: '<' | '>' | '<=' | '>=' | '==' | '!=', right: string): string;
+
+    /**
+     * Generates Arithmetic Operator in the target programming language.
+     * @param variable The variable to compare.
+     * @param value The value to compare.
+     * @returns The code string for the arithmetic operator.
+    */
+    abstract generateArithmeticOperation(left: string, operator: '+' | '-' | '*' | '/' | '%' | '//', right: string): string;
+
+    /**
+     * Generates Bitwise Operator in the target programming language.
+     * @param variable The variable to compare.
+     * @param value The value to compare.
+     * @returns The code string for the bitwise operator.
+    */
+    abstract generateBitwiseOperation(left: string, operator: '&' | '|' | '^' | '<<' | '>>' | '~', right: string): string;
 
     /**
      * Wraps the provided code lines into a code block, e.g., a function or class body.

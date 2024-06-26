@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ADD_WHITESPACE, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FUNCTION_CALL, GET_AST, NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
+import { ADD_WHITESPACE, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, ASSIGN_VARIABLE, FUNCTION_CALL, GET_AST, NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
 import { errorHandler, executeCommand, showError, successHandler } from './utilities';
 import express, { Request, Response } from "express";
 
@@ -21,6 +21,20 @@ router.post('/declare-variable',
         const data = req.body;
         executeCommand(
             DECLARE_VARIABLE,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
+
+// assign variable
+router.post('/assign-variable',
+    (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            ASSIGN_VARIABLE,
             data,
             successHandler,
             errorHandler,

@@ -4,6 +4,7 @@ export const GET_AST = "robin.getAST";
 export const FUNCTION_CALL = "robin.functionCall";
 export const DECLARE_CONSTANT = "robin.declareConstant"
 export const ADD_WHITESPACE = "robin.addWhitespace";
+export const ASSIGN_VARIABLE = "robin.assignVariable";
 
 /**
  * Variable declaration messages
@@ -22,6 +23,11 @@ export const FUNCTION_FAILURE = "Failed to declare function";
 export const FUNCTION_CALL_SUCCESS = "Function call successfully";
 export const FUNCTION_CALL_FAILURE = "Failed to call function";
 
+/**
+ * Variable Assignment messages
+*/
+export const ASSIGNMENT_SUCCESS = "Variable assigned successfully";
+export const ASSIGNMENT_FAILURE = "Failed to assign variable";
 
 
 export const NO_ACTIVE_TEXT_EDITOR = "No active text editor!";

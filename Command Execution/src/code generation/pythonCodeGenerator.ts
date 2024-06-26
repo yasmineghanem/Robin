@@ -1,4 +1,4 @@
-import { Whitespace } from "../constants/enums/codeEnums";
+import { AssignmentOperators, Whitespace } from "../constants/enums/codeEnums";
 import { CodeGenerator } from "./codeGenerator";
 import pythonReservedKeywords from "./language specifics/pythonReserved.json";
 
@@ -84,8 +84,39 @@ export class PythonCodeGenerator extends CodeGenerator {
     /**
      * Assign variables
     **/
-    assignVariable(name: string, value: any): string {
-        return `${name} = ${value}\n`;
+    assignVariable(name: string, value: any, type: AssignmentOperators): string {
+        //Check before if RHS is same type as LHS
+        ///////// we need function to check the type of the variable /////////
+        switch (type) {
+            case AssignmentOperators.Equals:
+                return `${name} = ${value}\n`;
+            case AssignmentOperators.PlusEquals:
+                return `${name} += ${value}\n`;
+            case AssignmentOperators.MinusEquals:
+                return `${name} -= ${value}\n`;
+            case AssignmentOperators.MultiplyEquals:
+                return `${name} *= ${value}\n`;
+            case AssignmentOperators.DivideEquals:
+                return `${name} /= ${value}\n`;
+            case AssignmentOperators.FloorDivideEquals:
+                return `${name} //= ${value}\n`;
+            case AssignmentOperators.ModulusEquals:
+                return `${name} %= ${value}\n`;
+            case AssignmentOperators.ExponentEquals:
+                return `${name} **= ${value}\n`;
+            case AssignmentOperators.AndEquals:
+                return `${name} &= ${value}\n`;
+            case AssignmentOperators.OrEquals:
+                return `${name} |= ${value}\n`;
+            case AssignmentOperators.XorEquals:
+                return `${name} ^= ${value}\n`;
+            case AssignmentOperators.LeftShiftEquals:
+                return `${name} <<= ${value}\n`;
+            case AssignmentOperators.RightShiftEquals:
+                return `${name} >>= ${value}\n`;
+            default:
+                throw new Error(`Invalid assignment type: ${type}`);
+        }
     }
 
     /**
@@ -266,6 +297,19 @@ export class PythonCodeGenerator extends CodeGenerator {
         }
         return ws.repeat(count ?? 1);
 
+    }
+
+    /**
+     * Comments
+     * Single line comments
+     * Multi line comments
+    **/
+    generateLineComment(content: string): string {
+        return `# ${content} `;
+    }
+
+    generateBlockComment(content: string): string {
+        return `''' ${content} ''' `;
     }
 
 }
