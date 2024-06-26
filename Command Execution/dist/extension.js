@@ -24833,6 +24833,10 @@ router.post("/operation", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.OPERATION, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+router.post("/conditional", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.CONDITIONAL, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // get AST
 router.get('/ast', (req, res) => {
     // const data = req.body;
@@ -24848,7 +24852,7 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
 /**
  * Commands
  */
@@ -24861,6 +24865,7 @@ exports.ADD_WHITESPACE = "robin.addWhitespace";
 exports.FOR_LOOP = "robin.forLoop";
 exports.WHILE_LOOP = "robin.whileLoop";
 exports.OPERATION = "robin.operation";
+exports.CONDITIONAL = "robin.conditional";
 /**
  * Variable declaration messages
  */
@@ -25895,6 +25900,41 @@ const operation = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
+// conditional 
+const conditional = () => {
+    vscode.commands.registerCommand(code_1.CONDITIONAL, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateConditional(args));
+                });
+                if (!s) {
+                    return handleFailure(code_1.OPERATION_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.OPERATION_FAILURE);
+            }
+            return handleSuccess(code_1.OPERATION_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
 const registerCodeCommands = () => {
     const commands = [declareVariable,
         declareFunction,
@@ -25904,7 +25944,8 @@ const registerCodeCommands = () => {
         addWhiteSpace,
         forLoop,
         whileLoop,
-        operation
+        operation,
+        conditional
     ];
     commands.forEach((command) => {
         command();
@@ -26184,6 +26225,43 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     generateOperation(left, operator, right) {
         return `${left} ${operator} ${right} `;
+    }
+    // [
+    //     {
+    //         "keyword": "if",
+    //         "condition": [
+    //             {
+    //                 "left": "x",
+    //                 "operator": ">",
+    //                 "right": "5"
+    //             },
+    //             {
+    //                 "logicalOperator": "and",
+    //                 "left": "x",
+    //                 "operator": ">",
+    //                 "right": "5"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "keyword": "else"
+    //     }
+    // ]
+    generateConditional(conditions) {
+        let code = '';
+        conditions.forEach(c => {
+            if (c.keyword === 'if' || c.keyword === 'elif') {
+                code += `${c.keyword} ${c.condition?.map(cond => `${cond.logicalOperator ?? ""} ${cond.left} ${cond.operator} ${cond.right}`).join(' ')}: \n`;
+            }
+            else {
+                code += `\nelse: \n`;
+                // body
+                // if (c.body) {
+                //     code += `${this.wrapInCodeBlock(c.body)} `;
+                // }
+            }
+        });
+        return code;
     }
 }
 exports.PythonCodeGenerator = PythonCodeGenerator;

@@ -1,12 +1,12 @@
-import { ArithmeticOperator, ComparisonOperator, ForLoop, LogicalOperator, Operator, Whitespace } from "../constants/enums/codeEnums";
+import { ForLoop, LogicalOperator, Operator, Whitespace } from "../constants/enums/codeEnums";
 import { CodeGenerator } from "./codeGenerator";
 import pythonReservedKeywords from "./language specifics/pythonReserved.json";
 
 
 interface Condition {
-    logicalOperator: LogicalOperator,
+    logicalOperator?: LogicalOperator,
     left: string;
-    operator: ArithmeticOperator | ComparisonOperator;
+    operator: Operator;
     right: string;
 
 }
@@ -335,5 +335,44 @@ export class PythonCodeGenerator extends CodeGenerator {
         return `${left} ${operator} ${right} `;
     }
 
+    // [
+    //     {
+    //         "keyword": "if",
+    //         "condition": [
+    //             {
+    //                 "left": "x",
+    //                 "operator": ">",
+    //                 "right": "5"
+    //             },
+    //             {
+    //                 "logicalOperator": "and",
+    //                 "left": "x",
+    //                 "operator": ">",
+    //                 "right": "5"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "keyword": "else"
+    //     }
+    // ]
+    generateConditional(
+        conditions: { keyword: 'if' | 'else' | 'elif', condition?: Condition[], body?: string[] }[]
+    ): string {
+        let code = '';
+        conditions.forEach(c => {
+            if (c.keyword === 'if' || c.keyword === 'elif') {
+                code += `${c.keyword} ${c.condition?.map(cond => `${cond.logicalOperator ?? ""} ${cond.left} ${cond.operator} ${cond.right}`).join(' ')}: \n`;
+            }
 
+            else {
+                code += `\nelse: \n`;
+                // body
+                // if (c.body) {
+                //     code += `${this.wrapInCodeBlock(c.body)} `;
+                // }
+            }
+        });
+        return code;
+    }
 }
