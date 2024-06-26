@@ -1,4 +1,4 @@
-import { ArithmeticOperator, ComparisonOperator, ForLoop, LogicalOperator, Whitespace } from "../constants/enums/codeEnums";
+import { ArithmeticOperator, ComparisonOperator, ForLoop, LogicalOperator, Operator, Whitespace } from "../constants/enums/codeEnums";
 import { CodeGenerator } from "./codeGenerator";
 import pythonReservedKeywords from "./language specifics/pythonReserved.json";
 
@@ -326,5 +326,14 @@ export class PythonCodeGenerator extends CodeGenerator {
         return ws.repeat(count ?? 1);
 
     }
+
+    generateOperation(
+        left: string,
+        operator: Operator,
+        right: string
+    ): string {
+        return `${left} ${operator} ${right} `;
+    }
+
 
 }

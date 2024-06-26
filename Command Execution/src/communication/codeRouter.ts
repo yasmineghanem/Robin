@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ADD_WHITESPACE, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FOR_LOOP, FUNCTION_CALL, GET_AST, NO_ACTIVE_TEXT_EDITOR, WHILE_LOOP } from '../constants/code';
+import { ADD_WHITESPACE, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FOR_LOOP, FUNCTION_CALL, GET_AST, NO_ACTIVE_TEXT_EDITOR, OPERATION, WHILE_LOOP } from '../constants/code';
 import { errorHandler, executeCommand, showError, successHandler } from './utilities';
 import express, { Request, Response } from "express";
 
@@ -110,6 +110,20 @@ router.get('/add-whitespace',
         );
     }
 );
+
+router.post("/operation",
+    (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            OPERATION,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
+
 
 // get AST
 router.get('/ast',

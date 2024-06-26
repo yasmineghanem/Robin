@@ -15,6 +15,9 @@ import {
     LOOP_FAILURE,
     LOOP_SUCCESS,
     NO_ACTIVE_TEXT_EDITOR,
+    OPERATION,
+    OPERATION_FAILURE,
+    OPERATION_SUCCESS,
     VARIABLE_FAILURE,
     VARIABLE_SUCCESS,
     WHILE_LOOP,
@@ -400,6 +403,54 @@ const whileLoop = () => {
     });
 };
 
+// operation
+const operation = () => {
+    vscode.commands.registerCommand(OPERATION, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateOperation(
+                            args.left,
+                            args.operator,
+                            args.right
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(OPERATION_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(OPERATION_FAILURE);
+            }
+
+            return handleSuccess(OPERATION_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+
+};
+
 const registerCodeCommands = () => {
     const commands = [declareVariable,
         declareFunction,
@@ -408,7 +459,8 @@ const registerCodeCommands = () => {
         declareConstant,
         addWhiteSpace,
         forLoop,
-        whileLoop
+        whileLoop,
+        operation
     ];
 
     commands.forEach((command) => {

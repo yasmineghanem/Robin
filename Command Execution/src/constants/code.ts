@@ -9,6 +9,7 @@ export const DECLARE_CONSTANT = "robin.declareConstant"
 export const ADD_WHITESPACE = "robin.addWhitespace";
 export const FOR_LOOP = "robin.forLoop";
 export const WHILE_LOOP = "robin.whileLoop";
+export const OPERATION = "robin.operation";
 
 
 /**
@@ -39,3 +40,7 @@ export const WHITE_SPACE_FAILURE = "Failed to add white space!";
 // loops
 export const LOOP_SUCCESS = "Loop created successfully!";
 export const LOOP_FAILURE = "Failed to create loop!";
+
+// operation
+export const OPERATION_SUCCESS = "Operation created successfully!";
+export const OPERATION_FAILURE = "Failed to create operation!";

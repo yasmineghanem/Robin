@@ -24829,6 +24829,10 @@ router.post("/while-loop", (req, res) => {
 router.get('/add-whitespace', (req, res) => {
     (0, utilities_1.executeCommand)(code_1.ADD_WHITESPACE, req.query, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+router.post("/operation", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.OPERATION, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // get AST
 router.get('/ast', (req, res) => {
     // const data = req.body;
@@ -24844,7 +24848,7 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.WHILE_LOOP = exports.FOR_LOOP = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
 /**
  * Commands
  */
@@ -24856,6 +24860,7 @@ exports.DECLARE_CONSTANT = "robin.declareConstant";
 exports.ADD_WHITESPACE = "robin.addWhitespace";
 exports.FOR_LOOP = "robin.forLoop";
 exports.WHILE_LOOP = "robin.whileLoop";
+exports.OPERATION = "robin.operation";
 /**
  * Variable declaration messages
  */
@@ -24875,6 +24880,9 @@ exports.WHITE_SPACE_FAILURE = "Failed to add white space!";
 // loops
 exports.LOOP_SUCCESS = "Loop created successfully!";
 exports.LOOP_FAILURE = "Failed to create loop!";
+// operation
+exports.OPERATION_SUCCESS = "Operation created successfully!";
+exports.OPERATION_FAILURE = "Failed to create operation!";
 
 
 /***/ }),
@@ -25852,6 +25860,41 @@ const whileLoop = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
+// operation
+const operation = () => {
+    vscode.commands.registerCommand(code_1.OPERATION, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateOperation(args.left, args.operator, args.right));
+                });
+                if (!s) {
+                    return handleFailure(code_1.OPERATION_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.OPERATION_FAILURE);
+            }
+            return handleSuccess(code_1.OPERATION_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
 const registerCodeCommands = () => {
     const commands = [declareVariable,
         declareFunction,
@@ -25860,7 +25903,8 @@ const registerCodeCommands = () => {
         declareConstant,
         addWhiteSpace,
         forLoop,
-        whileLoop
+        whileLoop,
+        operation
     ];
     commands.forEach((command) => {
         command();
@@ -26138,6 +26182,9 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         return ws.repeat(count ?? 1);
     }
+    generateOperation(left, operator, right) {
+        return `${left} ${operator} ${right} `;
+    }
 }
 exports.PythonCodeGenerator = PythonCodeGenerator;
 
@@ -26149,7 +26196,7 @@ exports.PythonCodeGenerator = PythonCodeGenerator;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.LogicalOperator = exports.ComparisonOperator = exports.ArithmeticOperator = exports.ForLoop = exports.Whitespace = void 0;
+exports.MembershipOperator = exports.IdentityOperator = exports.BitwiseOperator = exports.LogicalOperator = exports.ComparisonOperator = exports.ArithmeticOperator = exports.ForLoop = exports.Whitespace = void 0;
 var Whitespace;
 (function (Whitespace) {
     Whitespace["Space"] = "space";
@@ -26187,6 +26234,25 @@ var LogicalOperator;
     LogicalOperator["Or"] = "or";
     LogicalOperator["Not"] = "not";
 })(LogicalOperator || (exports.LogicalOperator = LogicalOperator = {}));
+var BitwiseOperator;
+(function (BitwiseOperator) {
+    BitwiseOperator["And"] = "&";
+    BitwiseOperator["Or"] = "|";
+    BitwiseOperator["Xor"] = "^";
+    BitwiseOperator["LeftShift"] = "<<";
+    BitwiseOperator["RightShift"] = ">>";
+    BitwiseOperator["Invert"] = "~";
+})(BitwiseOperator || (exports.BitwiseOperator = BitwiseOperator = {}));
+var IdentityOperator;
+(function (IdentityOperator) {
+    IdentityOperator["Is"] = "is";
+    IdentityOperator["IsNot"] = "is not";
+})(IdentityOperator || (exports.IdentityOperator = IdentityOperator = {}));
+var MembershipOperator;
+(function (MembershipOperator) {
+    MembershipOperator["In"] = "in";
+    MembershipOperator["NotIn"] = "not in";
+})(MembershipOperator || (exports.MembershipOperator = MembershipOperator = {}));
 
 
 /***/ }),

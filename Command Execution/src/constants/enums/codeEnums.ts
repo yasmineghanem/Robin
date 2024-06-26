@@ -36,3 +36,24 @@ export enum LogicalOperator {
     Or = "or",
     Not = "not",
 }
+
+export enum BitwiseOperator {
+    And = "&",
+    Or = "|",
+    Xor = "^",
+    LeftShift = "<<",
+    RightShift = ">>",
+    Invert = "~",
+}
+
+export enum IdentityOperator {
+    Is = "is",
+    IsNot = "is not",
+
+}
+
+export enum MembershipOperator {
+    In = "in",
+    NotIn = "not in",
+}
+export type Operator = ArithmeticOperator | ComparisonOperator | LogicalOperator | BitwiseOperator;
