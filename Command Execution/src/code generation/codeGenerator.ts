@@ -63,7 +63,7 @@ export abstract class CodeGenerator {
      * @throws An error if the variable is not declared.
      * @throws An error if the value is not valid for the variable type.
      */
-        abstract assignVariable(name: string, value: any, type: AssignmentOperators): string;
+        abstract assignVariable(name: string, value: any, type: string): string;
 
 
     /**

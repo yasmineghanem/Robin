@@ -39,7 +39,7 @@ const vscode = __importStar(__webpack_require__(1));
 const server_1 = __importDefault(__webpack_require__(2));
 const commands_1 = __importDefault(__webpack_require__(168));
 const path_1 = __importDefault(__webpack_require__(7));
-(__webpack_require__(175).config)({
+(__webpack_require__(177).config)({
     path: path_1.default.resolve(__dirname, '../.env')
 }); // Load environment variables from .env
 // This method is called when your extension is activated
@@ -24802,6 +24802,11 @@ router.post('/declare-variable', (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.DECLARE_VARIABLE, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// assign variable
+router.post('/assign-variable', (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.ASSIGN_VARIABLE, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // declare function
 router.post('/declare-function', (req, res) => {
     const data = req.body;
@@ -24821,6 +24826,16 @@ router.post('/declare-constant', (req, res) => {
 router.get('/add-whitespace', (req, res) => {
     (0, utilities_1.executeCommand)(code_1.ADD_WHITESPACE, req.query, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// Import
+router.post('/import', (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.IMPORT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// Module Import 
+router.post('/module-import', (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.IMPORT_MODULE, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // get AST
 router.get('/ast', (req, res) => {
     // const data = req.body;
@@ -24836,13 +24851,16 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.IMPORT_MODULE = exports.IMPORT = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
 exports.DECLARE_VARIABLE = "robin.declareVariable";
 exports.DECLARE_FUNCTION = "robin.declareFunction";
 exports.GET_AST = "robin.getAST";
 exports.FUNCTION_CALL = "robin.functionCall";
 exports.DECLARE_CONSTANT = "robin.declareConstant";
 exports.ADD_WHITESPACE = "robin.addWhitespace";
+exports.ASSIGN_VARIABLE = "robin.assignVariable";
+exports.IMPORT = "robin.import";
+exports.IMPORT_MODULE = "robin.importModule";
 /**
  * Variable declaration messages
  */
@@ -24856,6 +24874,16 @@ exports.FUNCTION_SUCCESS = "Function declared successfully";
 exports.FUNCTION_FAILURE = "Failed to declare function";
 exports.FUNCTION_CALL_SUCCESS = "Function call successfully";
 exports.FUNCTION_CALL_FAILURE = "Failed to call function";
+/**
+ * Variable Assignment messages
+*/
+exports.ASSIGNMENT_SUCCESS = "Variable assigned successfully";
+exports.ASSIGNMENT_FAILURE = "Failed to assign variable";
+/**
+ * Import messages
+ */
+exports.IMPORT_SUCCESS = "Import successful";
+exports.IMPORT_FAILURE = "Failed to import";
 exports.NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
 exports.WHITE_SPACE_SUCCESS = "White space added successfully!";
 exports.WHITE_SPACE_FAILURE = "Failed to add white space!";
@@ -25540,7 +25568,7 @@ const vscode = __importStar(__webpack_require__(1));
 const code_1 = __webpack_require__(166);
 const pythonCodeGenerator_1 = __webpack_require__(172);
 const utilities_1 = __webpack_require__(167);
-const constants_1 = __webpack_require__(178);
+const constants_1 = __webpack_require__(176);
 // utilities
 const getCurrentPosition = (editor) => {
     const position = editor.selection.active;
@@ -25594,6 +25622,36 @@ const declareVariable = () => {
             return handleSuccess(code_1.VARIABLE_SUCCESS);
         }
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+const assignVariable = () => {
+    vscode.commands.registerCommand(code_1.ASSIGN_VARIABLE, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            let codeGenerator;
+            switch (getFileExtension(editor)) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.assignVariable(args.name, args.value, args.type));
+                });
+                if (!s) {
+                    return handleFailure(code_1.ASSIGNMENT_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.ASSIGNMENT_FAILURE);
+            }
+            return handleSuccess(code_1.ASSIGNMENT_SUCCESS);
+        }
     });
 };
 // declare constant
@@ -25761,6 +25819,7 @@ const addWhiteSpace = () => {
 };
 const registerCodeCommands = () => {
     const commands = [declareVariable, declareFunction, getAST, functionCall, declareConstant,
+        assignVariable,
         addWhiteSpace
     ];
     commands.forEach((command) => {
@@ -25781,9 +25840,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PythonCodeGenerator = void 0;
-const codeEnums_1 = __webpack_require__(179);
-const codeGenerator_1 = __webpack_require__(173);
-const pythonReserved_json_1 = __importDefault(__webpack_require__(174));
+const codeEnums_1 = __webpack_require__(173);
+const codeGenerator_1 = __webpack_require__(174);
+const pythonReserved_json_1 = __importDefault(__webpack_require__(175));
 class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Declare reserved keywords for each programming language
@@ -25853,8 +25912,39 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Assign variables
     **/
-    assignVariable(name, value) {
-        return `${name} = ${value}\n`;
+    assignVariable(name, value, type) {
+        //Check before if RHS is same type as LHS
+        ///////// we need function to check the type of the variable /////////
+        switch (type) {
+            case codeEnums_1.AssignmentOperators.Equals:
+                return `${name} = ${value}\n`;
+            case codeEnums_1.AssignmentOperators.PlusEquals:
+                return `${name} += ${value}\n`;
+            case codeEnums_1.AssignmentOperators.MinusEquals:
+                return `${name} -= ${value}\n`;
+            case codeEnums_1.AssignmentOperators.MultiplyEquals:
+                return `${name} *= ${value}\n`;
+            case codeEnums_1.AssignmentOperators.DivideEquals:
+                return `${name} /= ${value}\n`;
+            case codeEnums_1.AssignmentOperators.FloorDivideEquals:
+                return `${name} //= ${value}\n`;
+            case codeEnums_1.AssignmentOperators.ModulusEquals:
+                return `${name} %= ${value}\n`;
+            case codeEnums_1.AssignmentOperators.ExponentEquals:
+                return `${name} **= ${value}\n`;
+            case codeEnums_1.AssignmentOperators.AndEquals:
+                return `${name} &= ${value}\n`;
+            case codeEnums_1.AssignmentOperators.OrEquals:
+                return `${name} |= ${value}\n`;
+            case codeEnums_1.AssignmentOperators.XorEquals:
+                return `${name} ^= ${value}\n`;
+            case codeEnums_1.AssignmentOperators.LeftShiftEquals:
+                return `${name} <<= ${value}\n`;
+            case codeEnums_1.AssignmentOperators.RightShiftEquals:
+                return `${name} >>= ${value}\n`;
+            default:
+                throw new Error(`Invalid assignment type: ${type}`);
+        }
     }
     /**
      * Declare function
@@ -25986,6 +26076,12 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return `${left} ${operator} ${right} `;
     }
     /**
+     * Assertion
+    **/
+    generateAssertion(variable, value, type) {
+        return "ok";
+    }
+    /**
      * White spaces
      */
     addWhiteSpace(type, count) {
@@ -26005,12 +26101,112 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         return ws.repeat(count ?? 1);
     }
+    /**
+     * Comments
+     * Single line comments
+     * Multi line comments
+    **/
+    generateLineComment(content) {
+        return `# ${content} `;
+    }
+    generateBlockComment(content) {
+        return `''' ${content} ''' `;
+    }
 }
 exports.PythonCodeGenerator = PythonCodeGenerator;
 
 
 /***/ }),
 /* 173 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AssertionOperators = exports.UnaryOperators = exports.BitwiseOperators = exports.LogicalOperators = exports.ComparisonOperators = exports.ArithmeticOperators = exports.IdentityOperators = exports.MembershipOperators = exports.AssignmentOperators = exports.Whitespace = void 0;
+var Whitespace;
+(function (Whitespace) {
+    Whitespace["Space"] = "space";
+    Whitespace["Tab"] = "tab";
+    Whitespace["NewLine"] = "newLine";
+})(Whitespace || (exports.Whitespace = Whitespace = {}));
+var AssignmentOperators;
+(function (AssignmentOperators) {
+    AssignmentOperators["Equals"] = "=";
+    AssignmentOperators["PlusEquals"] = "+=";
+    AssignmentOperators["MinusEquals"] = "-=";
+    AssignmentOperators["MultiplyEquals"] = "*=";
+    AssignmentOperators["DivideEquals"] = "/=";
+    AssignmentOperators["FloorDivideEquals"] = "//=";
+    AssignmentOperators["ModulusEquals"] = "%=";
+    AssignmentOperators["ExponentEquals"] = "**=";
+    AssignmentOperators["AndEquals"] = "&=";
+    AssignmentOperators["OrEquals"] = "|=";
+    AssignmentOperators["XorEquals"] = "^=";
+    AssignmentOperators["LeftShiftEquals"] = "<<=";
+    AssignmentOperators["RightShiftEquals"] = ">>=";
+})(AssignmentOperators || (exports.AssignmentOperators = AssignmentOperators = {}));
+var MembershipOperators;
+(function (MembershipOperators) {
+    MembershipOperators["In"] = "in";
+    MembershipOperators["NotIn"] = "not in";
+})(MembershipOperators || (exports.MembershipOperators = MembershipOperators = {}));
+var IdentityOperators;
+(function (IdentityOperators) {
+    IdentityOperators["Is"] = "is";
+    IdentityOperators["IsNot"] = "is not";
+})(IdentityOperators || (exports.IdentityOperators = IdentityOperators = {}));
+var ArithmeticOperators;
+(function (ArithmeticOperators) {
+    ArithmeticOperators["Addition"] = "+";
+    ArithmeticOperators["Subtraction"] = "-";
+    ArithmeticOperators["Multiplication"] = "*";
+    ArithmeticOperators["Division"] = "/";
+    ArithmeticOperators["FloorDivision"] = "//";
+    ArithmeticOperators["Modulus"] = "%";
+    ArithmeticOperators["Exponentiation"] = "**";
+})(ArithmeticOperators || (exports.ArithmeticOperators = ArithmeticOperators = {}));
+var ComparisonOperators;
+(function (ComparisonOperators) {
+    ComparisonOperators["Equal"] = "==";
+    ComparisonOperators["NotEqual"] = "!=";
+    ComparisonOperators["LessThan"] = "<";
+    ComparisonOperators["GreaterThan"] = ">";
+    ComparisonOperators["LessThanOrEqual"] = "<=";
+    ComparisonOperators["GreaterThanOrEqual"] = ">=";
+})(ComparisonOperators || (exports.ComparisonOperators = ComparisonOperators = {}));
+var LogicalOperators;
+(function (LogicalOperators) {
+    LogicalOperators["And"] = "and";
+    LogicalOperators["Or"] = "or";
+    LogicalOperators["Not"] = "not";
+})(LogicalOperators || (exports.LogicalOperators = LogicalOperators = {}));
+var BitwiseOperators;
+(function (BitwiseOperators) {
+    BitwiseOperators["And"] = "&";
+    BitwiseOperators["Or"] = "|";
+    BitwiseOperators["Xor"] = "^";
+    BitwiseOperators["LeftShift"] = "<<";
+    BitwiseOperators["RightShift"] = ">>";
+})(BitwiseOperators || (exports.BitwiseOperators = BitwiseOperators = {}));
+var UnaryOperators;
+(function (UnaryOperators) {
+    UnaryOperators["Positive"] = "+";
+    UnaryOperators["Negative"] = "-";
+    UnaryOperators["Not"] = "not";
+    UnaryOperators["BitwiseNot"] = "~";
+})(UnaryOperators || (exports.UnaryOperators = UnaryOperators = {}));
+var AssertionOperators;
+(function (AssertionOperators) {
+    AssertionOperators["LessThanOrEqual"] = "<=";
+    AssertionOperators["GreaterThanOrEqual"] = ">=";
+    AssertionOperators["Equal"] = "==";
+    AssertionOperators["NotEqual"] = "!=";
+})(AssertionOperators || (exports.AssertionOperators = AssertionOperators = {}));
+
+
+/***/ }),
+/* 174 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -26027,21 +26223,35 @@ exports.CodeGenerator = CodeGenerator;
 
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"]}');
 
 /***/ }),
-/* 175 */
+/* 176 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EXTENSIONS = void 0;
+exports.EXTENSIONS = {
+    PYTHON: "py",
+    JUPYTER: "ipynb"
+};
+
+
+/***/ }),
+/* 177 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const fs = __webpack_require__(25)
 const path = __webpack_require__(7)
-const os = __webpack_require__(176)
+const os = __webpack_require__(178)
 const crypto = __webpack_require__(138)
-const packageJson = __webpack_require__(177)
+const packageJson = __webpack_require__(179)
 
 const version = packageJson.version
 
@@ -26401,48 +26611,18 @@ module.exports = DotenvModule
 
 
 /***/ }),
-/* 176 */
+/* 178 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("os");
 
 /***/ }),
-/* 177 */
+/* 179 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"name":"dotenv","version":"16.4.5","description":"Loads environment variables from .env file","main":"lib/main.js","types":"lib/main.d.ts","exports":{".":{"types":"./lib/main.d.ts","require":"./lib/main.js","default":"./lib/main.js"},"./config":"./config.js","./config.js":"./config.js","./lib/env-options":"./lib/env-options.js","./lib/env-options.js":"./lib/env-options.js","./lib/cli-options":"./lib/cli-options.js","./lib/cli-options.js":"./lib/cli-options.js","./package.json":"./package.json"},"scripts":{"dts-check":"tsc --project tests/types/tsconfig.json","lint":"standard","lint-readme":"standard-markdown","pretest":"npm run lint && npm run dts-check","test":"tap tests/*.js --100 -Rspec","test:coverage":"tap --coverage-report=lcov","prerelease":"npm test","release":"standard-version"},"repository":{"type":"git","url":"git://github.com/motdotla/dotenv.git"},"funding":"https://dotenvx.com","keywords":["dotenv","env",".env","environment","variables","config","settings"],"readmeFilename":"README.md","license":"BSD-2-Clause","devDependencies":{"@definitelytyped/dtslint":"^0.0.133","@types/node":"^18.11.3","decache":"^4.6.1","sinon":"^14.0.1","standard":"^17.0.0","standard-markdown":"^7.1.0","standard-version":"^9.5.0","tap":"^16.3.0","tar":"^6.1.11","typescript":"^4.8.4"},"engines":{"node":">=12"},"browser":{"fs":false}}');
-
-/***/ }),
-/* 178 */
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXTENSIONS = void 0;
-exports.EXTENSIONS = {
-    PYTHON: "py",
-    JUPYTER: "ipynb"
-};
-
-
-/***/ }),
-/* 179 */
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Whitespace = void 0;
-var Whitespace;
-(function (Whitespace) {
-    Whitespace["Space"] = "space";
-    Whitespace["Tab"] = "tab";
-    Whitespace["NewLine"] = "newLine";
-})(Whitespace || (exports.Whitespace = Whitespace = {}));
-
 
 /***/ })
 /******/ 	]);

@@ -87,9 +87,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     assignVariable(name: string, value: any, type: string): string {
         //Check before if RHS is same type as LHS
         ///////// we need function to check the type of the variable /////////
-        if (type in AssignmentOperators) {
-            
-        }
+        
         switch (type) {
             case AssignmentOperators.Equals:
                 return `${name} = ${value}\n`;
@@ -277,7 +275,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     /**
      * Assertion
     **/
-    generateAssertion(variable: string, value: any, type: AssertionOperators): string{
+    generateAssertion(variable: string, value: any, type: AssertionOperators): string {
         return "ok";
 
     }

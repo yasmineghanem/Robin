@@ -99,19 +99,37 @@ const assignVariable = () => {
 
         if (editor) {
 
-            let codeGenerator = new PythonCodeGenerator();
-            let s = await editor.edit((editBuilder) => {
-                editBuilder.insert(
-                    getCurrentPosition(editor),
-                    codeGenerator.assignVariable(
-                        args.name,
-                        args.value,
-                        args.type
-                    )
-                );
-            });
 
-            if (!s) {
+            let codeGenerator;
+
+            switch (getFileExtension(editor)) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.assignVariable(
+                            args.name,
+                            args.value,
+                            args.type
+                        )
+                    );
+                });
+                if (!s) {
+                    return handleFailure(ASSIGNMENT_FAILURE);
+                }
+            }
+            catch (e) {
                 return handleFailure(ASSIGNMENT_FAILURE);
             }
 
