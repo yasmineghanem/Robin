@@ -1,20 +1,28 @@
 import * as vscode from "vscode";
 import {
     ADD_WHITESPACE,
+    CONDITIONAL,
     DECLARE_CONSTANT,
     DECLARE_FUNCTION,
     DECLARE_VARIABLE,
     ASSIGN_VARIABLE,
     FILE_EXT_FAILURE,
+    FOR_LOOP,
     FUNCTION_CALL,
     FUNCTION_CALL_FAILURE,
     FUNCTION_CALL_SUCCESS,
     FUNCTION_FAILURE,
     FUNCTION_SUCCESS,
     GET_AST,
+    LOOP_FAILURE,
+    LOOP_SUCCESS,
     NO_ACTIVE_TEXT_EDITOR,
+    OPERATION,
+    OPERATION_FAILURE,
+    OPERATION_SUCCESS,
     VARIABLE_FAILURE,
     VARIABLE_SUCCESS,
+    WHILE_LOOP,
     WHITE_SPACE_FAILURE,
     WHITE_SPACE_SUCCESS,
     ASSIGNMENT_FAILURE,
@@ -347,12 +355,209 @@ const addWhiteSpace = () => {
     });
 };
 
+// {
+//     "type": "range",
+//     "iterator": [
+//         "i"
+//     ],
+//     "start": "1",
+//     "end": "5"
+//     //   "step": ""
+// }
+const forLoop = () => {
+    vscode.commands.registerCommand(FOR_LOOP, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
 
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateForLoop(args.type, args)
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(LOOP_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(LOOP_FAILURE);
+            }
+
+            return handleSuccess(LOOP_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+
+};
+
+const whileLoop = () => {
+    vscode.commands.registerCommand(WHILE_LOOP, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateWhileLoop(
+                            args.condition,
+                            args?.body
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(LOOP_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(LOOP_FAILURE);
+            }
+
+            return handleSuccess(LOOP_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+
+// operation
+const operation = () => {
+    vscode.commands.registerCommand(OPERATION, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateOperation(
+                            args.left,
+                            args.operator,
+                            args.right
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(OPERATION_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(OPERATION_FAILURE);
+            }
+
+            return handleSuccess(OPERATION_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+
+};
+
+
+// conditional 
+const conditional = () => {
+    vscode.commands.registerCommand(CONDITIONAL, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateConditional(args)
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(OPERATION_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(OPERATION_FAILURE);
+            }
+
+            return handleSuccess(OPERATION_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+
+
+}
 
 const registerCodeCommands = () => {
-    const commands = [declareVariable, declareFunction, getAST, functionCall, declareConstant,
-        assignVariable,
-        addWhiteSpace
+    const commands = [declareVariable,
+        declareFunction,
+        getAST,
+        functionCall,
+        declareConstant,
+        addWhiteSpace,
+        forLoop,
+        whileLoop,
+        operation,
+        conditional,
+        assignVariable
     ];
 
     commands.forEach((command) => {

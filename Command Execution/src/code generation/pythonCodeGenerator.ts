@@ -1,7 +1,15 @@
-import { ArithmeticOperators, AssertionOperators, AssignmentOperators, BitwiseOperators, ComparisonOperators, IdentityOperators, LogicalOperators, MembershipOperators, Whitespace } from "../constants/enums/codeEnums";
+import { ArithmeticOperators, AssertionOperators, AssignmentOperators, BitwiseOperators, ComparisonOperators, ForLoop, IdentityOperators, LogicalOperators, MembershipOperators, Operator, Whitespace } from "../constants/enums/codeEnums";
 import { CodeGenerator } from "./codeGenerator";
 import pythonReservedKeywords from "./language specifics/pythonReserved.json";
 
+
+interface Condition {
+    logicalOperator?: LogicalOperators,
+    left: string;
+    operator: Operator;
+    right: string;
+
+}
 export class PythonCodeGenerator extends CodeGenerator {
 
 
@@ -87,7 +95,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     assignVariable(name: string, value: any, type: string): string {
         //Check before if RHS is same type as LHS
         ///////// we need function to check the type of the variable /////////
-        
+
         switch (type) {
             case AssignmentOperators.Equals:
                 return `${name} = ${value}\n`;
@@ -214,13 +222,64 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Loop statements
      * for, while, do-while
     **/
-    generateForLoop(variable: string, iterable: string, body: string[]): string {
-        const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
+    // generateForLoop(variable: string, iterable: string, body: string[]): string {
+    //     const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
+    //     return loopCode;
+    // }
+    generateForLoop(type: ForLoop, params: any, body?: string[]): string {
+        switch (type) {
+            case ForLoop.Range:
+                return this.generateRangeLoop(params, body);
+            case ForLoop.Iterable:
+                return this.generateIterableLoop(params, body);
+            case ForLoop.Enumerate:
+                return this.generateEnumerateLoop(params, body);
+            default:
+                return `for `;
+        }
+
+    }
+
+
+    generateIterableLoop(
+        params: { iterators: string[], iterable: string },
+        body?: string[]
+    ): string {
+        const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}: \n${this.wrapInCodeBlock(body ?? [''])} `;
         return loopCode;
     }
 
-    generateWhileLoop(condition: string, body: string[]): string {
-        const loopCode = `while ${condition}: \n${this.wrapInCodeBlock(body)} `;
+
+
+    generateRangeLoop(
+        params: { iterators: string[], start: number, end: number, step?: number },
+        body?: string[]
+    ): string {
+        const { iterators, start, end, step } = params;
+        // if there's no step and no start, just return range of the end
+        if (!step && !start) {
+            return `for ${iterators.join(", ")} in range(${end ?? ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+        }
+        // if there's no step, just return range of start and end
+        if (!step) {
+            return `for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${end ?? ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+        }
+        // if there's a step, return range of start, end and step
+        return `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${end ?? ''}, ${step}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+    }
+
+
+    generateEnumerateLoop(params: { iterators: string[], iterable: string, start?: number }, body?: string[]): string {
+        const { iterators, iterable, start } = params;
+        return `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+
+    }
+
+
+    generateWhileLoop(condition: Condition[], body?: string[]): string {
+
+        const conditionCode = condition.map(c => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`).join(' ');
+        const loopCode = `while ${conditionCode}: \n${this.wrapInCodeBlock(body ?? [''])} `;
         return loopCode;
     }
 
@@ -321,4 +380,52 @@ export class PythonCodeGenerator extends CodeGenerator {
         return `''' ${content} ''' `;
     }
 
+    generateOperation(
+        left: string,
+        operator: Operator,
+        right: string
+    ): string {
+        return `${left} ${operator} ${right} `;
+    }
+
+    // [
+    //     {
+    //         "keyword": "if",
+    //         "condition": [
+    //             {
+    //                 "left": "x",
+    //                 "operator": ">",
+    //                 "right": "5"
+    //             },
+    //             {
+    //                 "logicalOperator": "and",
+    //                 "left": "x",
+    //                 "operator": ">",
+    //                 "right": "5"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "keyword": "else"
+    //     }
+    // ]
+    generateConditional(
+        conditions: { keyword: 'if' | 'else' | 'elif', condition?: Condition[], body?: string[] }[]
+    ): string {
+        let code = '';
+        conditions.forEach(c => {
+            if (c.keyword === 'if' || c.keyword === 'elif') {
+                code += `${c.keyword} ${c.condition?.map(cond => `${cond.logicalOperator ?? ""} ${cond.left} ${cond.operator} ${cond.right}`).join(' ')}: \n`;
+            }
+
+            else {
+                code += `\nelse: \n`;
+                // body
+                // if (c.body) {
+                //     code += `${this.wrapInCodeBlock(c.body)} `;
+                // }
+            }
+        });
+        return code;
+    }
 }

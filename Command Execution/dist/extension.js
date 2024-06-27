@@ -24822,6 +24822,14 @@ router.post('/declare-constant', (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.DECLARE_CONSTANT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+router.post("/for-loop", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.FOR_LOOP, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+router.post("/while-loop", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.WHILE_LOOP, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // add whitespace
 router.get('/add-whitespace', (req, res) => {
     (0, utilities_1.executeCommand)(code_1.ADD_WHITESPACE, req.query, utilities_1.successHandler, utilities_1.errorHandler, res);
@@ -24831,10 +24839,19 @@ router.post('/import', (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.IMPORT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// Operation
+router.post("/operation", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.OPERATION, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // Module Import 
 router.post('/module-import', (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.IMPORT_MODULE, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+router.post("/conditional", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.CONDITIONAL, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
 // get AST
 router.get('/ast', (req, res) => {
@@ -24851,7 +24868,10 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.IMPORT_MODULE = exports.IMPORT = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+/**
+ * Commands
+ */
 exports.DECLARE_VARIABLE = "robin.declareVariable";
 exports.DECLARE_FUNCTION = "robin.declareFunction";
 exports.GET_AST = "robin.getAST";
@@ -24861,6 +24881,10 @@ exports.ADD_WHITESPACE = "robin.addWhitespace";
 exports.ASSIGN_VARIABLE = "robin.assignVariable";
 exports.IMPORT = "robin.import";
 exports.IMPORT_MODULE = "robin.importModule";
+exports.FOR_LOOP = "robin.forLoop";
+exports.WHILE_LOOP = "robin.whileLoop";
+exports.OPERATION = "robin.operation";
+exports.CONDITIONAL = "robin.conditional";
 /**
  * Variable declaration messages
  */
@@ -24887,6 +24911,12 @@ exports.IMPORT_FAILURE = "Failed to import";
 exports.NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
 exports.WHITE_SPACE_SUCCESS = "White space added successfully!";
 exports.WHITE_SPACE_FAILURE = "Failed to add white space!";
+// loops
+exports.LOOP_SUCCESS = "Loop created successfully!";
+exports.LOOP_FAILURE = "Failed to create loop!";
+// operation
+exports.OPERATION_SUCCESS = "Operation created successfully!";
+exports.OPERATION_FAILURE = "Failed to create operation!";
 
 
 /***/ }),
@@ -25817,10 +25847,165 @@ const addWhiteSpace = () => {
         }
     });
 };
+// {
+//     "type": "range",
+//     "iterator": [
+//         "i"
+//     ],
+//     "start": "1",
+//     "end": "5"
+//     //   "step": ""
+// }
+const forLoop = () => {
+    vscode.commands.registerCommand(code_1.FOR_LOOP, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateForLoop(args.type, args));
+                });
+                if (!s) {
+                    return handleFailure(code_1.LOOP_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.LOOP_FAILURE);
+            }
+            return handleSuccess(code_1.LOOP_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+const whileLoop = () => {
+    vscode.commands.registerCommand(code_1.WHILE_LOOP, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateWhileLoop(args.condition, args?.body));
+                });
+                if (!s) {
+                    return handleFailure(code_1.LOOP_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.LOOP_FAILURE);
+            }
+            return handleSuccess(code_1.LOOP_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+// operation
+const operation = () => {
+    vscode.commands.registerCommand(code_1.OPERATION, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateOperation(args.left, args.operator, args.right));
+                });
+                if (!s) {
+                    return handleFailure(code_1.OPERATION_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.OPERATION_FAILURE);
+            }
+            return handleSuccess(code_1.OPERATION_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+// conditional 
+const conditional = () => {
+    vscode.commands.registerCommand(code_1.CONDITIONAL, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateConditional(args));
+                });
+                if (!s) {
+                    return handleFailure(code_1.OPERATION_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.OPERATION_FAILURE);
+            }
+            return handleSuccess(code_1.OPERATION_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
 const registerCodeCommands = () => {
-    const commands = [declareVariable, declareFunction, getAST, functionCall, declareConstant,
-        assignVariable,
-        addWhiteSpace
+    const commands = [declareVariable,
+        declareFunction,
+        getAST,
+        functionCall,
+        declareConstant,
+        addWhiteSpace,
+        forLoop,
+        whileLoop,
+        operation,
+        conditional,
+        assignVariable
     ];
     commands.forEach((command) => {
         command();
@@ -26025,12 +26210,46 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Loop statements
      * for, while, do-while
     **/
-    generateForLoop(variable, iterable, body) {
-        const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
+    // generateForLoop(variable: string, iterable: string, body: string[]): string {
+    //     const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
+    //     return loopCode;
+    // }
+    generateForLoop(type, params, body) {
+        switch (type) {
+            case codeEnums_1.ForLoop.Range:
+                return this.generateRangeLoop(params, body);
+            case codeEnums_1.ForLoop.Iterable:
+                return this.generateIterableLoop(params, body);
+            case codeEnums_1.ForLoop.Enumerate:
+                return this.generateEnumerateLoop(params, body);
+            default:
+                return `for `;
+        }
+    }
+    generateIterableLoop(params, body) {
+        const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}: \n${this.wrapInCodeBlock(body ?? [''])} `;
         return loopCode;
     }
+    generateRangeLoop(params, body) {
+        const { iterators, start, end, step } = params;
+        // if there's no step and no start, just return range of the end
+        if (!step && !start) {
+            return `for ${iterators.join(", ")} in range(${end ?? ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+        }
+        // if there's no step, just return range of start and end
+        if (!step) {
+            return `for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${end ?? ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+        }
+        // if there's a step, return range of start, end and step
+        return `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${end ?? ''}, ${step}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+    }
+    generateEnumerateLoop(params, body) {
+        const { iterators, iterable, start } = params;
+        return `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+    }
     generateWhileLoop(condition, body) {
-        const loopCode = `while ${condition}: \n${this.wrapInCodeBlock(body)} `;
+        const conditionCode = condition.map(c => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`).join(' ');
+        const loopCode = `while ${conditionCode}: \n${this.wrapInCodeBlock(body ?? [''])} `;
         return loopCode;
     }
     /**
@@ -26112,6 +26331,46 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     generateBlockComment(content) {
         return `''' ${content} ''' `;
     }
+    generateOperation(left, operator, right) {
+        return `${left} ${operator} ${right} `;
+    }
+    // [
+    //     {
+    //         "keyword": "if",
+    //         "condition": [
+    //             {
+    //                 "left": "x",
+    //                 "operator": ">",
+    //                 "right": "5"
+    //             },
+    //             {
+    //                 "logicalOperator": "and",
+    //                 "left": "x",
+    //                 "operator": ">",
+    //                 "right": "5"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "keyword": "else"
+    //     }
+    // ]
+    generateConditional(conditions) {
+        let code = '';
+        conditions.forEach(c => {
+            if (c.keyword === 'if' || c.keyword === 'elif') {
+                code += `${c.keyword} ${c.condition?.map(cond => `${cond.logicalOperator ?? ""} ${cond.left} ${cond.operator} ${cond.right}`).join(' ')}: \n`;
+            }
+            else {
+                code += `\nelse: \n`;
+                // body
+                // if (c.body) {
+                //     code += `${this.wrapInCodeBlock(c.body)} `;
+                // }
+            }
+        });
+        return code;
+    }
 }
 exports.PythonCodeGenerator = PythonCodeGenerator;
 
@@ -26123,7 +26382,7 @@ exports.PythonCodeGenerator = PythonCodeGenerator;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AssertionOperators = exports.UnaryOperators = exports.BitwiseOperators = exports.LogicalOperators = exports.ComparisonOperators = exports.ArithmeticOperators = exports.IdentityOperators = exports.MembershipOperators = exports.AssignmentOperators = exports.Whitespace = void 0;
+exports.MembershipOperator = exports.IdentityOperator = exports.BitwiseOperator = exports.LogicalOperator = exports.ComparisonOperator = exports.ArithmeticOperator = exports.ForLoop = exports.AssertionOperators = exports.UnaryOperators = exports.BitwiseOperators = exports.LogicalOperators = exports.ComparisonOperators = exports.ArithmeticOperators = exports.IdentityOperators = exports.MembershipOperators = exports.AssignmentOperators = exports.Whitespace = void 0;
 var Whitespace;
 (function (Whitespace) {
     Whitespace["Space"] = "space";
@@ -26203,6 +26462,56 @@ var AssertionOperators;
     AssertionOperators["Equal"] = "==";
     AssertionOperators["NotEqual"] = "!=";
 })(AssertionOperators || (exports.AssertionOperators = AssertionOperators = {}));
+var ForLoop;
+(function (ForLoop) {
+    ForLoop["Range"] = "range";
+    ForLoop["Iterable"] = "iterable";
+    ForLoop["Enumerate"] = "enumerate";
+})(ForLoop || (exports.ForLoop = ForLoop = {}));
+var ArithmeticOperator;
+(function (ArithmeticOperator) {
+    ArithmeticOperator["Addition"] = "+";
+    ArithmeticOperator["Subtraction"] = "-";
+    ArithmeticOperator["Multiplication"] = "*";
+    ArithmeticOperator["Division"] = "/";
+    ArithmeticOperator["Modulus"] = "%";
+    ArithmeticOperator["Exponentiation"] = "**";
+    ArithmeticOperator["FloorDivision"] = "//";
+})(ArithmeticOperator || (exports.ArithmeticOperator = ArithmeticOperator = {}));
+var ComparisonOperator;
+(function (ComparisonOperator) {
+    ComparisonOperator["EqualTo"] = "==";
+    ComparisonOperator["NotEqualTo"] = "!=";
+    ComparisonOperator["GreaterThan"] = ">";
+    ComparisonOperator["GreaterThanOrEqualTo"] = ">=";
+    ComparisonOperator["LessThan"] = "<";
+    ComparisonOperator["LessThanOrEqualTo"] = "<=";
+})(ComparisonOperator || (exports.ComparisonOperator = ComparisonOperator = {}));
+var LogicalOperator;
+(function (LogicalOperator) {
+    LogicalOperator["And"] = "and";
+    LogicalOperator["Or"] = "or";
+    LogicalOperator["Not"] = "not";
+})(LogicalOperator || (exports.LogicalOperator = LogicalOperator = {}));
+var BitwiseOperator;
+(function (BitwiseOperator) {
+    BitwiseOperator["And"] = "&";
+    BitwiseOperator["Or"] = "|";
+    BitwiseOperator["Xor"] = "^";
+    BitwiseOperator["LeftShift"] = "<<";
+    BitwiseOperator["RightShift"] = ">>";
+    BitwiseOperator["Invert"] = "~";
+})(BitwiseOperator || (exports.BitwiseOperator = BitwiseOperator = {}));
+var IdentityOperator;
+(function (IdentityOperator) {
+    IdentityOperator["Is"] = "is";
+    IdentityOperator["IsNot"] = "is not";
+})(IdentityOperator || (exports.IdentityOperator = IdentityOperator = {}));
+var MembershipOperator;
+(function (MembershipOperator) {
+    MembershipOperator["In"] = "in";
+    MembershipOperator["NotIn"] = "not in";
+})(MembershipOperator || (exports.MembershipOperator = MembershipOperator = {}));
 
 
 /***/ }),

@@ -63,7 +63,7 @@ export abstract class CodeGenerator {
      * @throws An error if the variable is not declared.
      * @throws An error if the value is not valid for the variable type.
      */
-        abstract assignVariable(name: string, value: any, type: string): string;
+    abstract assignVariable(name: string, value: any, type: string): string;
 
 
     /**
@@ -117,7 +117,7 @@ export abstract class CodeGenerator {
      * @returns The code string for the loop statement.
      */
     abstract generateForLoop(variable: string, iterable: string, body: string[]): string;
-    abstract generateWhileLoop(condition: string, body: string[]): string;
+    abstract generateWhileLoop(condition: any[], body?: string[]): string;
 
 
     /**

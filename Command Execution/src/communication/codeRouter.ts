@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ADD_WHITESPACE, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, IMPORT, IMPORT_MODULE , ASSIGN_VARIABLE, FUNCTION_CALL, GET_AST, NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
+import { ADD_WHITESPACE, ASSIGN_VARIABLE, CONDITIONAL, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FOR_LOOP, FUNCTION_CALL, GET_AST, IMPORT, IMPORT_MODULE, NO_ACTIVE_TEXT_EDITOR, OPERATION, WHILE_LOOP } from '../constants/code';
 import { errorHandler, executeCommand, showError, successHandler } from './utilities';
 import express, { Request, Response } from "express";
 
@@ -85,6 +85,33 @@ router.post('/declare-constant',
     }
 );
 
+router.post("/for-loop",
+    (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            FOR_LOOP,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
+
+router.post("/while-loop",
+    (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            WHILE_LOOP,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
+
+
 // add whitespace
 router.get('/add-whitespace',
     (req: Request, res: Response) => {
@@ -112,6 +139,20 @@ router.post('/import',
     }
 );
 
+// Operation
+router.post("/operation",
+    (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            OPERATION,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
+
 // Module Import 
 router.post('/module-import',
     (req: Request, res: Response) => {
@@ -126,6 +167,19 @@ router.post('/module-import',
     }
 );
 
+
+router.post("/conditional"
+    , (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            CONDITIONAL,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
 
 
 // get AST
