@@ -3,7 +3,7 @@
  * This class/interface needs to be implemented for each programming language that needs to be supported
  */
 
-import { Whitespace } from "../constants/enums/codeEnums";
+import { ArithmeticOperators, BitwiseOperators, ComparisonOperators, IdentityOperators, LogicalOperators, MembershipOperators, Whitespace, AssertionOperators } from "../constants/enums/codeEnums";
 import { AssignmentOperators } from "../constants/enums/codeEnums";
 
 export abstract class CodeGenerator {
@@ -126,7 +126,7 @@ export abstract class CodeGenerator {
      * @param value The value to compare.
      * @returns The code string for the identity operator.
     */
-    abstract generateIdentityOperation(left: string, operator: 'is' | 'is not', right: string): string;
+    abstract generateIdentityOperation(left: string, operator: IdentityOperators, right: string): string;
 
     /**
      * Generates Membership Operator in the target programming language.
@@ -134,7 +134,7 @@ export abstract class CodeGenerator {
      * @param value The value to compare.
      * @returns The code string for the membership operator.
     */
-    abstract generateMembershipOperation(left: string, operator: 'in' | 'not in', right: string): string;
+    abstract generateMembershipOperation(left: string, operator: MembershipOperators, right: string): string;
 
     /**
      * Generates Logical Operator in the target programming language.
@@ -142,7 +142,7 @@ export abstract class CodeGenerator {
      * @param value The value to compare.
      * @returns The code string for the logical operator.
     */
-    abstract generateLogicalOperation(left: string, operator: 'and' | 'or' | 'not', right: string): string;
+    abstract generateLogicalOperation(left: string, operator: LogicalOperators, right: string): string;
 
     /**
      * Generates Comparison Operator in the target programming language.
@@ -150,7 +150,7 @@ export abstract class CodeGenerator {
      * @param value The value to compare.
      * @returns The code string for the comparison operator.
     */
-    abstract generateComparisonOperation(left: string, operator: '<' | '>' | '<=' | '>=' | '==' | '!=', right: string): string;
+    abstract generateComparisonOperation(left: string, operator: ComparisonOperators, right: string): string;
 
     /**
      * Generates Arithmetic Operator in the target programming language.
@@ -158,7 +158,7 @@ export abstract class CodeGenerator {
      * @param value The value to compare.
      * @returns The code string for the arithmetic operator.
     */
-    abstract generateArithmeticOperation(left: string, operator: '+' | '-' | '*' | '/' | '%' | '//', right: string): string;
+    abstract generateArithmeticOperation(left: string, operator: ArithmeticOperators, right: string): string;
 
     /**
      * Generates Bitwise Operator in the target programming language.
@@ -166,7 +166,7 @@ export abstract class CodeGenerator {
      * @param value The value to compare.
      * @returns The code string for the bitwise operator.
     */
-    abstract generateBitwiseOperation(left: string, operator: '&' | '|' | '^' | '<<' | '>>' | '~', right: string): string;
+    abstract generateBitwiseOperation(left: string, operator: BitwiseOperators, right: string): string;
 
     /**
      * Wraps the provided code lines into a code block, e.g., a function or class body.
@@ -174,6 +174,16 @@ export abstract class CodeGenerator {
      * @returns The code string for the wrapped code block.
      */
     // abstract wrapInCodeBlock(lines: string[]): string;
+
+
+    /**
+     * Make Assertion in the target programming language.
+     * @param variable The variable to compare.
+     * @param value The value to compare.
+     * @returns The code string for the assertion.
+     * @throws An error if the assertion is not valid.
+    */
+    abstract generateAssertion(variable: string, value: any, type: AssertionOperators): string;
 
     /**
      * Add white spaces

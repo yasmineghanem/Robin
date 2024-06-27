@@ -21,6 +21,16 @@ export enum AssignmentOperators {
     RightShiftEquals = '>>='
 }
 
+export enum MembershipOperators {
+    In = 'in',
+    NotIn = 'not in'
+}
+
+export enum IdentityOperators {
+    Is = 'is',
+    IsNot = 'is not'
+}
+
 export enum ArithmeticOperators {
     Addition = '+',
     Subtraction = '-',
@@ -61,3 +71,9 @@ export enum UnaryOperators {
     BitwiseNot = '~'
 }
 
+export enum AssertionOperators {
+    LessThanOrEqual = '<=',
+    GreaterThanOrEqual = '>=',
+    Equal = '==',
+    NotEqual = '!='
+}

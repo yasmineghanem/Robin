@@ -1,4 +1,4 @@
-import { AssignmentOperators, Whitespace } from "../constants/enums/codeEnums";
+import { ArithmeticOperators, AssertionOperators, AssignmentOperators, BitwiseOperators, ComparisonOperators, IdentityOperators, LogicalOperators, MembershipOperators, Whitespace } from "../constants/enums/codeEnums";
 import { CodeGenerator } from "./codeGenerator";
 import pythonReservedKeywords from "./language specifics/pythonReserved.json";
 
@@ -84,9 +84,12 @@ export class PythonCodeGenerator extends CodeGenerator {
     /**
      * Assign variables
     **/
-    assignVariable(name: string, value: any, type: AssignmentOperators): string {
+    assignVariable(name: string, value: any, type: string): string {
         //Check before if RHS is same type as LHS
         ///////// we need function to check the type of the variable /////////
+        if (type in AssignmentOperators) {
+            
+        }
         switch (type) {
             case AssignmentOperators.Equals:
                 return `${name} = ${value}\n`;
@@ -227,7 +230,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Identity operators
      * is, is not
     **/
-    generateIdentityOperation(left: string, operator: 'is' | 'is not', right: string): string {
+    generateIdentityOperation(left: string, operator: IdentityOperators, right: string): string {
         return `${left} ${operator} ${right} `;
     }
 
@@ -235,7 +238,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Membership operation 
      * in, not in
     **/
-    generateMembershipOperation(left: string, operator: 'in' | 'not in', right: string): string {
+    generateMembershipOperation(left: string, operator: MembershipOperators, right: string): string {
         return `${left} ${operator} ${right} `;
     }
 
@@ -243,7 +246,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Logical operators
      * and, or, not
     **/
-    generateLogicalOperation(left: string, operator: 'and' | 'or' | 'not', right: string): string {
+    generateLogicalOperation(left: string, operator: LogicalOperators, right: string): string {
         return `${left} ${operator} ${right} `;
     }
 
@@ -251,7 +254,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Comparison operators
      * <, >, <=, >=, ==, !=
     **/
-    generateComparisonOperation(left: string, operator: '<' | '>' | '<=' | '>=' | '==' | '!=', right: string): string {
+    generateComparisonOperation(left: string, operator: ComparisonOperators, right: string): string {
         return `${left} ${operator} ${right} `;
     }
 
@@ -259,7 +262,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Arithmetic operators
      * +, -, *, /, %, // , **
     **/
-    generateArithmeticOperation(left: string, operator: '+' | '-' | '*' | '/' | '%' | '//' | '**', right: string): string {
+    generateArithmeticOperation(left: string, operator: ArithmeticOperators, right: string): string {
         return `${left} ${operator} ${right} `;
     }
 
@@ -267,8 +270,16 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Bitwise operators
      * &, |, ^, ~, <<, >>
     **/
-    generateBitwiseOperation(left: string, operator: '&' | '|' | '^' | '~' | '<<' | '>>', right: string): string {
+    generateBitwiseOperation(left: string, operator: BitwiseOperators, right: string): string {
         return `${left} ${operator} ${right} `;
+    }
+
+    /**
+     * Assertion
+    **/
+    generateAssertion(variable: string, value: any, type: AssertionOperators): string{
+        return "ok";
+
     }
 
 

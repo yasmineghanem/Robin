@@ -6,7 +6,7 @@ export const DECLARE_CONSTANT = "robin.declareConstant"
 export const ADD_WHITESPACE = "robin.addWhitespace";
 export const ASSIGN_VARIABLE = "robin.assignVariable";
 export const IMPORT = "robin.import";
-export const IMPORT_MODULE = "robin.import";
+export const IMPORT_MODULE = "robin.importModule";
 
 
 /**

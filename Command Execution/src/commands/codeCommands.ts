@@ -4,6 +4,7 @@ import {
     DECLARE_CONSTANT,
     DECLARE_FUNCTION,
     DECLARE_VARIABLE,
+    ASSIGN_VARIABLE,
     FILE_EXT_FAILURE,
     FUNCTION_CALL,
     FUNCTION_CALL_FAILURE,
@@ -16,6 +17,8 @@ import {
     VARIABLE_SUCCESS,
     WHITE_SPACE_FAILURE,
     WHITE_SPACE_SUCCESS,
+    ASSIGNMENT_FAILURE,
+    ASSIGNMENT_SUCCESS,
 } from "../constants/code";
 import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
 import { showError, showMessage } from "../communication/utilities";
@@ -87,6 +90,33 @@ const declareVariable = () => {
             return handleSuccess(VARIABLE_SUCCESS);
         }
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+
+const assignVariable = () => {
+    vscode.commands.registerCommand(ASSIGN_VARIABLE, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+
+        if (editor) {
+
+            let codeGenerator = new PythonCodeGenerator();
+            let s = await editor.edit((editBuilder) => {
+                editBuilder.insert(
+                    getCurrentPosition(editor),
+                    codeGenerator.assignVariable(
+                        args.name,
+                        args.value,
+                        args.type
+                    )
+                );
+            });
+
+            if (!s) {
+                return handleFailure(ASSIGNMENT_FAILURE);
+            }
+
+            return handleSuccess(ASSIGNMENT_SUCCESS);
+        }
     });
 };
 
@@ -303,7 +333,7 @@ const addWhiteSpace = () => {
 
 const registerCodeCommands = () => {
     const commands = [declareVariable, declareFunction, getAST, functionCall, declareConstant,
-
+        assignVariable,
         addWhiteSpace
     ];
 
