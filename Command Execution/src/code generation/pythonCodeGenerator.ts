@@ -428,4 +428,12 @@ export class PythonCodeGenerator extends CodeGenerator {
         });
         return code;
     }
+
+    generateArrayOperation(
+        name: string,
+        operation: string,
+    ): string {
+        // pack, uno
+        return ""
+    }
 }

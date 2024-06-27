@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ADD_WHITESPACE, ASSIGN_VARIABLE, CONDITIONAL, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FOR_LOOP, FUNCTION_CALL, GET_AST, IMPORT, IMPORT_MODULE, NO_ACTIVE_TEXT_EDITOR, OPERATION, WHILE_LOOP } from '../constants/code';
+import { ADD_WHITESPACE, ASSIGN_VARIABLE, CONDITIONAL, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FOR_LOOP, FUNCTION_CALL, GET_AST, IMPORT_LIBRARY, IMPORT_MODULE, NO_ACTIVE_TEXT_EDITOR, OPERATION, WHILE_LOOP } from '../constants/code';
 import { errorHandler, executeCommand, showError, successHandler } from './utilities';
 import express, { Request, Response } from "express";
 
@@ -126,11 +126,11 @@ router.get('/add-whitespace',
 );
 
 // Import
-router.post('/import',
+router.post('/import-library',
     (req: Request, res: Response) => {
         const data = req.body;
         executeCommand(
-            IMPORT,
+            IMPORT_LIBRARY,
             data,
             successHandler,
             errorHandler,
@@ -138,6 +138,21 @@ router.post('/import',
         );
     }
 );
+
+// Module Import 
+router.post('/import-module',
+    (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            IMPORT_MODULE,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
+
 
 // Operation
 router.post("/operation",
@@ -153,19 +168,6 @@ router.post("/operation",
     }
 );
 
-// Module Import 
-router.post('/module-import',
-    (req: Request, res: Response) => {
-        const data = req.body;
-        executeCommand(
-            IMPORT_MODULE,
-            data,
-            successHandler,
-            errorHandler,
-            res
-        );
-    }
-);
 
 
 router.post("/conditional"

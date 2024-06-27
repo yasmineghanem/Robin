@@ -8,14 +8,13 @@ export const FUNCTION_CALL = "robin.functionCall";
 export const DECLARE_CONSTANT = "robin.declareConstant"
 export const ADD_WHITESPACE = "robin.addWhitespace";
 export const ASSIGN_VARIABLE = "robin.assignVariable";
-export const IMPORT = "robin.import";
+export const IMPORT_LIBRARY = "robin.importLibrary";
 export const IMPORT_MODULE = "robin.importModule";
 export const FOR_LOOP = "robin.forLoop";
 export const WHILE_LOOP = "robin.whileLoop";
 export const OPERATION = "robin.operation";
 export const CONDITIONAL = "robin.conditional";
-
-
+export const ARRAY_OPERATION = "robin.arrayOperation";
 /**
  * Variable declaration messages
  */
