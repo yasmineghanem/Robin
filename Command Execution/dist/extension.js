@@ -26382,7 +26382,7 @@ exports.PythonCodeGenerator = PythonCodeGenerator;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.MembershipOperator = exports.IdentityOperator = exports.BitwiseOperator = exports.LogicalOperator = exports.ComparisonOperator = exports.ArithmeticOperator = exports.ForLoop = exports.AssertionOperators = exports.UnaryOperators = exports.BitwiseOperators = exports.LogicalOperators = exports.ComparisonOperators = exports.ArithmeticOperators = exports.IdentityOperators = exports.MembershipOperators = exports.AssignmentOperators = exports.Whitespace = void 0;
+exports.ForLoop = exports.AssertionOperators = exports.UnaryOperators = exports.BitwiseOperators = exports.LogicalOperators = exports.ComparisonOperators = exports.ArithmeticOperators = exports.IdentityOperators = exports.MembershipOperators = exports.AssignmentOperators = exports.Whitespace = void 0;
 var Whitespace;
 (function (Whitespace) {
     Whitespace["Space"] = "space";
@@ -26447,13 +26447,13 @@ var BitwiseOperators;
     BitwiseOperators["Xor"] = "^";
     BitwiseOperators["LeftShift"] = "<<";
     BitwiseOperators["RightShift"] = ">>";
+    BitwiseOperators["BitwiseNot"] = "~";
 })(BitwiseOperators || (exports.BitwiseOperators = BitwiseOperators = {}));
 var UnaryOperators;
 (function (UnaryOperators) {
     UnaryOperators["Positive"] = "+";
     UnaryOperators["Negative"] = "-";
     UnaryOperators["Not"] = "not";
-    UnaryOperators["BitwiseNot"] = "~";
 })(UnaryOperators || (exports.UnaryOperators = UnaryOperators = {}));
 var AssertionOperators;
 (function (AssertionOperators) {
@@ -26468,50 +26468,6 @@ var ForLoop;
     ForLoop["Iterable"] = "iterable";
     ForLoop["Enumerate"] = "enumerate";
 })(ForLoop || (exports.ForLoop = ForLoop = {}));
-var ArithmeticOperator;
-(function (ArithmeticOperator) {
-    ArithmeticOperator["Addition"] = "+";
-    ArithmeticOperator["Subtraction"] = "-";
-    ArithmeticOperator["Multiplication"] = "*";
-    ArithmeticOperator["Division"] = "/";
-    ArithmeticOperator["Modulus"] = "%";
-    ArithmeticOperator["Exponentiation"] = "**";
-    ArithmeticOperator["FloorDivision"] = "//";
-})(ArithmeticOperator || (exports.ArithmeticOperator = ArithmeticOperator = {}));
-var ComparisonOperator;
-(function (ComparisonOperator) {
-    ComparisonOperator["EqualTo"] = "==";
-    ComparisonOperator["NotEqualTo"] = "!=";
-    ComparisonOperator["GreaterThan"] = ">";
-    ComparisonOperator["GreaterThanOrEqualTo"] = ">=";
-    ComparisonOperator["LessThan"] = "<";
-    ComparisonOperator["LessThanOrEqualTo"] = "<=";
-})(ComparisonOperator || (exports.ComparisonOperator = ComparisonOperator = {}));
-var LogicalOperator;
-(function (LogicalOperator) {
-    LogicalOperator["And"] = "and";
-    LogicalOperator["Or"] = "or";
-    LogicalOperator["Not"] = "not";
-})(LogicalOperator || (exports.LogicalOperator = LogicalOperator = {}));
-var BitwiseOperator;
-(function (BitwiseOperator) {
-    BitwiseOperator["And"] = "&";
-    BitwiseOperator["Or"] = "|";
-    BitwiseOperator["Xor"] = "^";
-    BitwiseOperator["LeftShift"] = "<<";
-    BitwiseOperator["RightShift"] = ">>";
-    BitwiseOperator["Invert"] = "~";
-})(BitwiseOperator || (exports.BitwiseOperator = BitwiseOperator = {}));
-var IdentityOperator;
-(function (IdentityOperator) {
-    IdentityOperator["Is"] = "is";
-    IdentityOperator["IsNot"] = "is not";
-})(IdentityOperator || (exports.IdentityOperator = IdentityOperator = {}));
-var MembershipOperator;
-(function (MembershipOperator) {
-    MembershipOperator["In"] = "in";
-    MembershipOperator["NotIn"] = "not in";
-})(MembershipOperator || (exports.MembershipOperator = MembershipOperator = {}));
 
 
 /***/ }),

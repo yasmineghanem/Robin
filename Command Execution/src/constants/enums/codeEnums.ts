@@ -61,14 +61,15 @@ export enum BitwiseOperators {
     Or = '|',
     Xor = '^',
     LeftShift = '<<',
-    RightShift = '>>'
+    RightShift = '>>',
+    BitwiseNot = '~'
+
 }
 
 export enum UnaryOperators {
     Positive = '+',
     Negative = '-',
     Not = 'not',
-    BitwiseNot = '~'
 }
 
 export enum AssertionOperators {
@@ -83,49 +84,5 @@ export enum ForLoop {
     Enumerate = "enumerate",
 }
 
-export enum ArithmeticOperator {
-    Addition = "+",
-    Subtraction = "-",
-    Multiplication = "*",
-    Division = "/",
-    Modulus = "%",
-    Exponentiation = "**",
-    FloorDivision = "//",
-}
 
-export enum ComparisonOperator {
-    EqualTo = "==",
-    NotEqualTo = "!=",
-    GreaterThan = ">",
-    GreaterThanOrEqualTo = ">=",
-    LessThan = "<",
-    LessThanOrEqualTo = "<=",
-}
-
-
-export enum LogicalOperator {
-    And = "and",
-    Or = "or",
-    Not = "not",
-}
-
-export enum BitwiseOperator {
-    And = "&",
-    Or = "|",
-    Xor = "^",
-    LeftShift = "<<",
-    RightShift = ">>",
-    Invert = "~",
-}
-
-export enum IdentityOperator {
-    Is = "is",
-    IsNot = "is not",
-
-}
-
-export enum MembershipOperator {
-    In = "in",
-    NotIn = "not in",
-}
-export type Operator = ArithmeticOperator | ComparisonOperator | LogicalOperator | BitwiseOperator;
+export type Operator = ArithmeticOperators | ComparisonOperators | LogicalOperators | BitwiseOperators | MembershipOperators;
