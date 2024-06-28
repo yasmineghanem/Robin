@@ -13,3 +13,12 @@ export const NEW_TERMINAL = "robin.newTerminal";
 
 // kill terminal
 export const KILL_TERMINAL = "robin.killTerminal";
+
+// paste
+export const PASTE = "robin.paste";
+
+// copy
+export const COPY = "robin.copy";
+
+// cut
+export const CUT = "robin.cut";

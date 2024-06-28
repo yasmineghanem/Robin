@@ -24726,6 +24726,34 @@ router.get("/kill-terminal", (req, res) => {
         res.end(JSON.stringify(err));
     });
 });
+// copy
+router.get("/copy", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.COPY).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Copied!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+router.get("/paste", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.PASTE).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Pasted!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+router.get("/cut", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.CUT).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Cut!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
 exports["default"] = router;
 
 
@@ -24737,7 +24765,7 @@ exports["default"] = router;
 
 // commands
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
+exports.CUT = exports.COPY = exports.PASTE = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
 exports.GO_TO_LINE = "robin.goToLine";
 // go to file
 exports.GO_TO_FILE = "robin.goToFile";
@@ -24747,6 +24775,12 @@ exports.FOCUS_TERMINAL = "robin.focusTerminal";
 exports.NEW_TERMINAL = "robin.newTerminal";
 // kill terminal
 exports.KILL_TERMINAL = "robin.killTerminal";
+// paste
+exports.PASTE = "robin.paste";
+// copy
+exports.COPY = "robin.copy";
+// cut
+exports.CUT = "robin.cut";
 
 
 /***/ }),
@@ -25588,6 +25622,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const IDE_1 = __webpack_require__(164);
 const fs_1 = __importDefault(__webpack_require__(25));
+const code_1 = __webpack_require__(166);
 // go to line
 const goToLine = () => vscode.commands.registerCommand(IDE_1.GO_TO_LINE, (data) => {
     const editor = vscode.window.activeTextEditor;
@@ -25641,6 +25676,59 @@ const newTerminal = () => vscode.commands.registerCommand(IDE_1.NEW_TERMINAL, ()
 const killTerminal = () => vscode.commands.registerCommand(IDE_1.KILL_TERMINAL, () => {
     vscode.commands.executeCommand('workbench.action.terminal.kill');
 });
+const paste = () => vscode.commands.registerCommand(IDE_1.PASTE, async () => {
+    // implement the paste itself
+    // check if the cursor is selecting an area, replace it with the clipboard content
+    // if not, paste the clipboard content at the current cursor position
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const selection = editor.selection;
+        const text = await vscode.env.clipboard.readText();
+        editor.edit(editBuilder => {
+            editBuilder.replace(selection, text);
+        });
+    }
+    else {
+        vscode.window.showErrorMessage('No active text editor.');
+        return {
+            success: false,
+            message: code_1.NO_ACTIVE_TEXT_EDITOR
+        };
+    }
+});
+// cut
+const cut = () => vscode.commands.registerCommand(IDE_1.CUT, () => {
+    // implement the cut itself
+    // check if the cursor is selecting an area, copy it to clipboard and replace it with an empty string
+    // if not, copy the current line to clipboard
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const selection = editor.selection;
+        const text = editor.document.getText(selection);
+        if (text) {
+            vscode.env.clipboard.writeText(text);
+            editor.edit(editBuilder => {
+                editBuilder.replace(selection, '');
+            });
+        }
+        else {
+            const line = editor.document.lineAt(selection.active.line);
+            vscode.env.clipboard.writeText(line.text);
+            editor.edit(editBuilder => {
+                editBuilder.delete(line.range);
+            });
+        }
+    }
+    else {
+        vscode.window.showErrorMessage('No active text editor.');
+        return {
+            success: false,
+            message: code_1.NO_ACTIVE_TEXT_EDITOR
+        };
+    }
+});
+// copy
+const copy = () => vscode.commands.registerCommand(IDE_1.COPY, () => vscode.commands.executeCommand('editor.action.clipboardCopyAction'));
 // register commands
 const registerIDECommands = () => {
     const commands = [
@@ -25648,7 +25736,10 @@ const registerIDECommands = () => {
         goToFile,
         focusTerminal,
         newTerminal,
-        killTerminal
+        killTerminal,
+        paste,
+        cut,
+        copy
     ];
     commands.forEach(command => command());
 };
