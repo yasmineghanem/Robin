@@ -24849,6 +24849,37 @@ router.post("/operation", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.OPERATION, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// Assertion
+router.post("/assertion", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.ASSERTION, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// Casting
+router.post("/type-casting", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.TYPE_CASTING, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// User input
+router.post("/user-input", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.USER_INPUT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// Print
+router.post("/print", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.PRINT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// Line comment
+router.post("/line-comment", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.LINE_COMMENT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// Block comment
+router.post("/block-comment", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.BLOCK_COMMENT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// Conditional
 router.post("/conditional", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.CONDITIONAL, data, utilities_1.successHandler, utilities_1.errorHandler, res);
@@ -24868,7 +24899,7 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
 /**
  * Commands
  */
@@ -24886,6 +24917,12 @@ exports.WHILE_LOOP = "robin.whileLoop";
 exports.OPERATION = "robin.operation";
 exports.CONDITIONAL = "robin.conditional";
 exports.ARRAY_OPERATION = "robin.arrayOperation";
+exports.ASSERTION = "robin.assertion";
+exports.TYPE_CASTING = "robin.typeCasting";
+exports.USER_INPUT = "robin.userInput";
+exports.PRINT = "robin.print";
+exports.LINE_COMMENT = "robin.lineComment";
+exports.BLOCK_COMMENT = "robin.blockComment";
 /**
  * Variable declaration messages
  */
@@ -24909,6 +24946,36 @@ exports.ASSIGNMENT_FAILURE = "Failed to assign variable";
  */
 exports.IMPORT_SUCCESS = "Import successful";
 exports.IMPORT_FAILURE = "Failed to import";
+/**
+ * Assertion
+ */
+exports.ASSERTION_SUCCESS = "Assertion successful";
+exports.ASSERTION_FAILURE = "Failed to assert";
+/**
+ * Casting
+*/
+exports.CASTING_SUCCESS = "Casting successful";
+exports.CASTING_FAILURE = "Failed to cast";
+/**
+ *  User Input
+*/
+exports.USER_INPUT_SUCCESS = "User input successful";
+exports.USER_INPUT_FAILURE = "Failed to get user input";
+/**
+ * Print
+*/
+exports.PRINT_SUCCESS = "Print successful";
+exports.PRINT_FAILURE = "Failed to print";
+/**
+ * Line Comment
+*/
+exports.LINE_COMMENT_SUCCESS = "Line comment successful";
+exports.LINE_COMMENT_FAILURE = "Failed to comment line";
+/**
+ * Block Comment
+*/
+exports.BLOCK_COMMENT_SUCCESS = "Block comment successful";
+exports.BLOCK_COMMENT_FAILURE = "Failed to comment block";
 exports.NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
 exports.WHITE_SPACE_SUCCESS = "White space added successfully!";
 exports.WHITE_SPACE_FAILURE = "Failed to add white space!";
@@ -26016,7 +26083,7 @@ const importLibrary = () => {
             // try catch
             try {
                 let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateImport(args));
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateImportLibrary(args.library));
                 });
                 if (!s) {
                     return handleFailure(code_1.IMPORT_FAILURE);
@@ -26051,7 +26118,7 @@ const importModule = () => {
             // try catch
             try {
                 let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateModuleImport(args.module, args.entities));
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateImportModule(args.library, args?.modules));
                 });
                 if (!s) {
                     return handleFailure(code_1.IMPORT_FAILURE);
@@ -26061,6 +26128,76 @@ const importModule = () => {
                 return handleFailure(code_1.IMPORT_FAILURE);
             }
             return handleSuccess(code_1.IMPORT_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+// assertion
+const assertion = () => {
+    vscode.commands.registerCommand(code_1.ASSERTION, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateAssertion(args.variable, args.value, args.type));
+                });
+                if (!s) {
+                    return handleFailure(code_1.ASSERTION_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.ASSERTION_FAILURE);
+            }
+            return handleSuccess(code_1.ASSERTION_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+// casting
+const typeCasting = () => {
+    vscode.commands.registerCommand(code_1.TYPE_CASTING, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateCasting(args.variable, args.type));
+                });
+                if (!s) {
+                    return handleFailure(code_1.CASTING_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.CASTING_FAILURE);
+            }
+            return handleSuccess(code_1.CASTING_SUCCESS);
         }
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
@@ -26100,6 +26237,144 @@ const arrayOperations = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
+// user input
+const userInput = () => {
+    vscode.commands.registerCommand(code_1.USER_INPUT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateUserInput(args.variable, args.message));
+                });
+                if (!s) {
+                    return handleFailure(code_1.USER_INPUT_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.USER_INPUT_FAILURE);
+            }
+            return handleSuccess(code_1.USER_INPUT_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+// print
+const printConsole = () => {
+    vscode.commands.registerCommand(code_1.PRINT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generatePrint(args.variable, args.type));
+                });
+                if (!s) {
+                    return handleFailure(code_1.PRINT_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.PRINT_FAILURE);
+            }
+            return handleSuccess(code_1.PRINT_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+const lineComment = () => {
+    vscode.commands.registerCommand(code_1.LINE_COMMENT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateLineComment(args.content));
+                });
+                if (!s) {
+                    return handleFailure(code_1.LINE_COMMENT_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.LINE_COMMENT_FAILURE);
+            }
+            return handleSuccess(code_1.LINE_COMMENT_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+const blockComment = () => {
+    vscode.commands.registerCommand(code_1.BLOCK_COMMENT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateBlockComment(args.content));
+                });
+                if (!s) {
+                    return handleFailure(code_1.BLOCK_COMMENT_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.BLOCK_COMMENT_FAILURE);
+            }
+            return handleSuccess(code_1.BLOCK_COMMENT_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
 const registerCodeCommands = () => {
     const commands = [declareVariable,
         declareFunction,
@@ -26114,7 +26389,13 @@ const registerCodeCommands = () => {
         assignVariable,
         importLibrary,
         importModule,
-        arrayOperations
+        arrayOperations,
+        assertion,
+        typeCasting,
+        userInput,
+        printConsole,
+        lineComment,
+        blockComment,
     ];
     commands.forEach((command) => {
         command();
@@ -26209,6 +26490,9 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     assignVariable(name, value, type) {
         //Check before if RHS is same type as LHS
         ///////// we need function to check the type of the variable /////////
+        if (!Object.values(codeEnums_1.AssignmentOperators).includes(type)) {
+            throw new Error(`Invalid assignment type: ${type}`);
+        }
         switch (type) {
             case codeEnums_1.AssignmentOperators.Equals:
                 return `${name} = ${value}\n`;
@@ -26292,16 +26576,16 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         const props = properties.map(p => `self.${p.name} = None`).join('\n        ');
         const initMethod = `def __init__(self): \n        ${props} `;
         const methodCode = methods.join('\n\n    ');
-        return `class $ { name }: \n    ${initMethod} \n\n    ${methodCode} `;
+        return `class ${name}: \n    ${initMethod} \n\n    ${methodCode} `;
     }
     /**
      * Import modules
     **/
-    generateModuleImport(module, entities) {
-        return `from ${module} import ${entities.join(', ')} `;
+    generateImportModule(library, modules) {
+        return `from ${library} import ${modules.join(', ')}\n`;
     }
-    generateImport(module) {
-        return `import ${module} `;
+    generateImportLibrary(library) {
+        return `import ${library}\n`;
     }
     /**
      * Conditional statements
@@ -26407,7 +26691,55 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Assertion
     **/
     generateAssertion(variable, value, type) {
-        return "ok";
+        if (!Object.values(codeEnums_1.AssertionOperators).includes(type)) {
+            throw new Error(`Invalid assertion type: ${type}`);
+        }
+        switch (type) {
+            case codeEnums_1.AssertionOperators.Equal:
+                return `assert ${variable} == ${value}\n`;
+            case codeEnums_1.AssertionOperators.NotEqual:
+                return `assert ${variable} != ${value}\n`;
+            case codeEnums_1.AssertionOperators.GreaterThanOrEqual:
+                return `assert ${variable} >= ${value}\n`;
+            case codeEnums_1.AssertionOperators.LessThanOrEqual:
+                return `assert ${variable} <= ${value}\n`;
+            default:
+                throw new Error(`Invalid assertion type: ${type}`);
+        }
+    }
+    /**
+     * Generate Casting
+    **/
+    generateCasting(value, type) {
+        if (!Object.values(codeEnums_1.CastingTypes).includes(type)) {
+            throw new Error(`Invalid casting type: ${type}`);
+        }
+        switch (type) {
+            case codeEnums_1.CastingTypes.Integer:
+                return `int(${value})\n`;
+            case codeEnums_1.CastingTypes.Float:
+                return `float(${value})\n`;
+            case codeEnums_1.CastingTypes.String:
+                return `str(${value})\n`;
+            case codeEnums_1.CastingTypes.Boolean:
+                return `bool(${value})\n`;
+            case codeEnums_1.CastingTypes.List:
+                return `list(${value})\n`;
+            case codeEnums_1.CastingTypes.Tuple:
+                return `tuple(${value})\n`;
+            case codeEnums_1.CastingTypes.Set:
+                return `set(${value})\n`;
+            case codeEnums_1.CastingTypes.Dictionary:
+                return `dict(${value})\n`;
+            default:
+                throw new Error(`Invalid casting type: ${type}`);
+        }
+    }
+    generateUserInput(variable, message) {
+        return `${variable} = input(${message ? message : ''})\n`;
+    }
+    generatePrint(value, type) {
+        return `print(${value})\n`;
     }
     /**
      * White spaces
@@ -26435,10 +26767,10 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Multi line comments
     **/
     generateLineComment(content) {
-        return `# ${content} `;
+        return `# ${content}\n`;
     }
     generateBlockComment(content) {
-        return `''' ${content} ''' `;
+        return `''' ${content} '''\n`;
     }
     generateOperation(left, operator, right) {
         return `${left} ${operator} ${right} `;
@@ -26495,7 +26827,7 @@ exports.PythonCodeGenerator = PythonCodeGenerator;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ForLoop = exports.AssertionOperators = exports.UnaryOperators = exports.BitwiseOperators = exports.LogicalOperators = exports.ComparisonOperators = exports.ArithmeticOperators = exports.IdentityOperators = exports.MembershipOperators = exports.AssignmentOperators = exports.Whitespace = void 0;
+exports.CastingTypes = exports.ForLoop = exports.AssertionOperators = exports.UnaryOperators = exports.BitwiseOperators = exports.LogicalOperators = exports.ComparisonOperators = exports.ArithmeticOperators = exports.IdentityOperators = exports.MembershipOperators = exports.AssignmentOperators = exports.Whitespace = void 0;
 var Whitespace;
 (function (Whitespace) {
     Whitespace["Space"] = "space";
@@ -26581,6 +26913,17 @@ var ForLoop;
     ForLoop["Iterable"] = "iterable";
     ForLoop["Enumerate"] = "enumerate";
 })(ForLoop || (exports.ForLoop = ForLoop = {}));
+var CastingTypes;
+(function (CastingTypes) {
+    CastingTypes["Integer"] = "int";
+    CastingTypes["Float"] = "float";
+    CastingTypes["String"] = "str";
+    CastingTypes["Boolean"] = "bool";
+    CastingTypes["List"] = "list";
+    CastingTypes["Tuple"] = "tuple";
+    CastingTypes["Set"] = "set";
+    CastingTypes["Dictionary"] = "dict";
+})(CastingTypes || (exports.CastingTypes = CastingTypes = {}));
 
 
 /***/ }),
@@ -26595,6 +26938,7 @@ var ForLoop;
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CodeGenerator = void 0;
+// import { AssignmentOperators } from "../constants/enums/codeEnums";
 class CodeGenerator {
 }
 exports.CodeGenerator = CodeGenerator;

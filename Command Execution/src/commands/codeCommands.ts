@@ -31,7 +31,25 @@ import {
     ASSIGNMENT_SUCCESS,
     IMPORT_SUCCESS,
     IMPORT_FAILURE,
-    ARRAY_OPERATION
+    ARRAY_OPERATION,
+    ASSERTION,
+    ASSERTION_FAILURE,
+    ASSERTION_SUCCESS,
+    TYPE_CASTING,
+    CASTING_FAILURE,
+    CASTING_SUCCESS,
+    USER_INPUT,
+    USER_INPUT_FAILURE,
+    USER_INPUT_SUCCESS,
+    PRINT,
+    PRINT_FAILURE,
+    PRINT_SUCCESS,
+    LINE_COMMENT,
+    LINE_COMMENT_FAILURE,
+    LINE_COMMENT_SUCCESS,
+    BLOCK_COMMENT,
+    BLOCK_COMMENT_FAILURE,
+    BLOCK_COMMENT_SUCCESS,
 
 } from "../constants/code";
 import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
@@ -578,7 +596,9 @@ const importLibrary = () => {
                 let s = await editor.edit((editBuilder) => {
                     editBuilder.insert(
                         getCurrentPosition(editor),
-                        codeGenerator.generateImport(args)
+                        codeGenerator.generateImportLibrary(
+                            args.library
+                        )
                     );
                 });
 
@@ -622,9 +642,9 @@ const importModule = () => {
                 let s = await editor.edit((editBuilder) => {
                     editBuilder.insert(
                         getCurrentPosition(editor),
-                        codeGenerator.generateModuleImport(
-                            args.module,
-                            args.entities
+                        codeGenerator.generateImportModule(
+                            args.library,
+                            args?.modules
                         )
                     );
                 });
@@ -642,6 +662,101 @@ const importModule = () => {
     });
 
 };
+
+// assertion
+const assertion = () => {
+    vscode.commands.registerCommand(ASSERTION, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateAssertion(
+                            args.variable,
+                            args.value,
+                            args.type
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(ASSERTION_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(ASSERTION_FAILURE);
+            }
+
+            return handleSuccess(ASSERTION_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+
+}
+
+// casting
+const typeCasting = () => {
+    vscode.commands.registerCommand(TYPE_CASTING, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateCasting(
+                            args.variable,
+                            args.type
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(CASTING_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(CASTING_FAILURE);
+            }
+
+            return handleSuccess(CASTING_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+
+}
 
 // array operations (pack, unpack, zip, unzip)
 const arrayOperations = () => {
@@ -692,6 +807,188 @@ const arrayOperations = () => {
 
 }
 
+// user input
+const userInput = () => {
+    vscode.commands.registerCommand(USER_INPUT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateUserInput(
+                            args.variable,
+                            args.message
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(USER_INPUT_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(USER_INPUT_FAILURE);
+            }
+
+            return handleSuccess(USER_INPUT_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+
+
+}
+
+// print
+const printConsole = () => {
+    vscode.commands.registerCommand(PRINT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generatePrint(
+                            args.variable,
+                            args.type
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(PRINT_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(PRINT_FAILURE);
+            }
+
+            return handleSuccess(PRINT_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+}
+
+const lineComment = () => {
+    vscode.commands.registerCommand(LINE_COMMENT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateLineComment(
+                            args.content
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(LINE_COMMENT_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(LINE_COMMENT_FAILURE);
+            }
+
+            return handleSuccess(LINE_COMMENT_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+}
+
+
+const blockComment = () => {
+    vscode.commands.registerCommand(BLOCK_COMMENT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateBlockComment(
+                            args.content
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(BLOCK_COMMENT_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(BLOCK_COMMENT_FAILURE);
+            }
+
+            return handleSuccess(BLOCK_COMMENT_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+}
 const registerCodeCommands = () => {
     const commands = [declareVariable,
         declareFunction,
@@ -706,7 +1003,14 @@ const registerCodeCommands = () => {
         assignVariable,
         importLibrary,
         importModule,
-        arrayOperations
+        arrayOperations,
+        assertion,
+        typeCasting,
+        userInput,
+        printConsole,
+        lineComment,
+        blockComment,
+
     ];
 
     commands.forEach((command) => {

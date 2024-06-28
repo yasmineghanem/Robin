@@ -15,6 +15,13 @@ export const WHILE_LOOP = "robin.whileLoop";
 export const OPERATION = "robin.operation";
 export const CONDITIONAL = "robin.conditional";
 export const ARRAY_OPERATION = "robin.arrayOperation";
+export const ASSERTION = "robin.assertion";
+export const TYPE_CASTING = "robin.typeCasting";
+export const USER_INPUT = "robin.userInput";
+export const PRINT = "robin.print";
+export const LINE_COMMENT = "robin.lineComment";
+export const BLOCK_COMMENT = "robin.blockComment";
+
 /**
  * Variable declaration messages
  */
@@ -43,6 +50,43 @@ export const ASSIGNMENT_FAILURE = "Failed to assign variable";
  */
 export const IMPORT_SUCCESS = "Import successful";
 export const IMPORT_FAILURE = "Failed to import";
+
+/**
+ * Assertion
+ */
+export const ASSERTION_SUCCESS = "Assertion successful";
+export const ASSERTION_FAILURE = "Failed to assert";
+
+/**
+ * Casting
+*/
+export const CASTING_SUCCESS = "Casting successful";
+export const CASTING_FAILURE = "Failed to cast";
+
+/**
+ *  User Input
+*/
+export const USER_INPUT_SUCCESS = "User input successful";
+export const USER_INPUT_FAILURE = "Failed to get user input";
+
+/** 
+ * Print
+*/
+export const PRINT_SUCCESS = "Print successful";
+export const PRINT_FAILURE = "Failed to print";
+
+/**
+ * Line Comment
+*/
+export const LINE_COMMENT_SUCCESS = "Line comment successful";
+export const LINE_COMMENT_FAILURE = "Failed to comment line";
+
+/** 
+ * Block Comment
+*/ 
+export const BLOCK_COMMENT_SUCCESS = "Block comment successful";
+export const BLOCK_COMMENT_FAILURE = "Failed to comment block";
+
 
 export const NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
 

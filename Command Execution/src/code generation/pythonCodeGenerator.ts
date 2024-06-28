@@ -1,4 +1,4 @@
-import { ArithmeticOperators, AssertionOperators, AssignmentOperators, BitwiseOperators, ComparisonOperators, ForLoop, IdentityOperators, LogicalOperators, MembershipOperators, Operator, Whitespace } from "../constants/enums/codeEnums";
+import { ArithmeticOperators, AssertionOperators, AssignmentOperators, BitwiseOperators, CastingTypes, ComparisonOperators, ForLoop, IdentityOperators, LogicalOperators, MembershipOperators, Operator, Whitespace } from "../constants/enums/codeEnums";
 import { CodeGenerator } from "./codeGenerator";
 import pythonReservedKeywords from "./language specifics/pythonReserved.json";
 
@@ -95,7 +95,9 @@ export class PythonCodeGenerator extends CodeGenerator {
     assignVariable(name: string, value: any, type: string): string {
         //Check before if RHS is same type as LHS
         ///////// we need function to check the type of the variable /////////
-
+        if(!Object.values(AssignmentOperators).includes(type as AssignmentOperators)){
+            throw new Error(`Invalid assignment type: ${type}`);
+        }
         switch (type) {
             case AssignmentOperators.Equals:
                 return `${name} = ${value}\n`;
@@ -191,18 +193,18 @@ export class PythonCodeGenerator extends CodeGenerator {
         const initMethod = `def __init__(self): \n        ${props} `;
         const methodCode = methods.join('\n\n    ');
 
-        return `class $ { name }: \n    ${initMethod} \n\n    ${methodCode} `;
+        return `class ${name}: \n    ${initMethod} \n\n    ${methodCode} `;
     }
 
     /**
      * Import modules
     **/
-    generateModuleImport(module: string, entities: string[]): string {
-        return `from ${module} import ${entities.join(', ')} `;
+    generateImportModule(library: string, modules: string[]): string {
+        return `from ${library} import ${modules.join(', ')}\n`;
     }
 
-    generateImport(module: string): string {
-        return `import ${module} `;
+    generateImportLibrary(library: string): string {
+        return `import ${library}\n`;
     }
 
     /**
@@ -334,12 +336,61 @@ export class PythonCodeGenerator extends CodeGenerator {
     /**
      * Assertion
     **/
-    generateAssertion(variable: string, value: any, type: AssertionOperators): string {
-        return "ok";
+    generateAssertion(variable: string, value: any, type: string): string {
+        if(!Object.values(AssertionOperators).includes(type as AssertionOperators)){
+            throw new Error(`Invalid assertion type: ${type}`);
+        }
+       switch (type) {
+            case AssertionOperators.Equal:
+                return `assert ${variable} == ${value}\n`;
+            case AssertionOperators.NotEqual:
+                return `assert ${variable} != ${value}\n`;
+            case AssertionOperators.GreaterThanOrEqual:
+                return `assert ${variable} >= ${value}\n`;
+            case AssertionOperators.LessThanOrEqual:
+                return `assert ${variable} <= ${value}\n`;
+            default:
+                throw new Error(`Invalid assertion type: ${type}`);
+         }
 
     }
 
+    /**
+     * Generate Casting
+    **/
+    generateCasting(value: any, type: string): string {
+        if(!Object.values(CastingTypes).includes(type as CastingTypes)){
+            throw new Error(`Invalid casting type: ${type}`);
+        }
+        switch (type) {
+            case CastingTypes.Integer:
+                return `int(${value})\n`;
+            case CastingTypes.Float:
+                return `float(${value})\n`;
+            case CastingTypes.String:
+                return `str(${value})\n`;
+            case CastingTypes.Boolean:
+                return `bool(${value})\n`;
+            case CastingTypes.List:
+                return `list(${value})\n`;
+            case CastingTypes.Tuple:
+                return `tuple(${value})\n`;
+            case CastingTypes.Set:
+                return `set(${value})\n`;
+            case CastingTypes.Dictionary:
+                return `dict(${value})\n`;
+            default:
+                throw new Error(`Invalid casting type: ${type}`);
+        }
+    }
 
+    generateUserInput(variable: string, message?: string | undefined): string {
+        return `${variable} = input(${message ? message : ''})\n`;
+    }
+
+    generatePrint(value: any, type:string): string {
+        return `print(${value})\n`;
+    }
 
     /**
      * White spaces
@@ -373,11 +424,11 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Multi line comments
     **/
     generateLineComment(content: string): string {
-        return `# ${content} `;
+        return `# ${content}\n`;
     }
 
     generateBlockComment(content: string): string {
-        return `''' ${content} ''' `;
+        return `''' ${content} '''\n`;
     }
 
     generateOperation(

@@ -4,7 +4,7 @@
  */
 
 import { ArithmeticOperators, BitwiseOperators, ComparisonOperators, IdentityOperators, LogicalOperators, MembershipOperators, Whitespace, AssertionOperators } from "../constants/enums/codeEnums";
-import { AssignmentOperators } from "../constants/enums/codeEnums";
+// import { AssignmentOperators } from "../constants/enums/codeEnums";
 
 export abstract class CodeGenerator {
 
@@ -72,8 +72,8 @@ export abstract class CodeGenerator {
      * @param entities The entities to import from the module.
      * @returns The code string for the import statement.
      */
-    abstract generateImport(module: string, entities: string[]): string;
-    abstract generateModuleImport(module: string, entities: string[]): string;
+    abstract generateImportLibrary(library: string): string;
+    abstract generateImportModule(library: string, modules: string[]): string;
 
     /**
      * Generates a comment in the target programming language.
@@ -183,7 +183,30 @@ export abstract class CodeGenerator {
      * @returns The code string for the assertion.
      * @throws An error if the assertion is not valid.
     */
-    abstract generateAssertion(variable: string, value: any, type: AssertionOperators): string;
+    abstract generateAssertion(variable: string, value: any, type: string): string;
+
+    /**
+     * Generate Casting operations
+     * @param variable The variable to cast.
+     * @param type The type to cast to.
+     * @returns The code string for the casting operation.
+    */
+    abstract generateCasting(variable: string, type: string): string;
+
+    /**
+     * Generate user input
+     * @param variable The variable to store the input.
+     * @param message The message to display.
+     * @returns The code string for the user input operation.
+     */
+    abstract generateUserInput(variable: string, message?: string): string;
+
+    /**
+     * Generate print statement
+     * @param value The value to print.
+     * @returns The code string for the print statement.
+    */
+    abstract generatePrint(value: any): string;
 
     /**
      * Add white spaces

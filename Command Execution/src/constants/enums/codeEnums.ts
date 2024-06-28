@@ -1,3 +1,5 @@
+import exp from "constants";
+import e from "express";
 
 export enum Whitespace {
     Space = 'space',
@@ -82,6 +84,17 @@ export enum ForLoop {
     Range = "range",
     Iterable = "iterable",
     Enumerate = "enumerate",
+}
+
+export enum CastingTypes {
+    Integer = 'int',
+    Float = 'float',
+    String = 'str',
+    Boolean = 'bool',
+    List = 'list',
+    Tuple = 'tuple',
+    Set = 'set',
+    Dictionary = 'dict'
 }
 
 
