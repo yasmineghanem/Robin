@@ -382,12 +382,18 @@ export class PythonCodeGenerator extends CodeGenerator {
             default:
                 throw new Error(`Invalid casting type: ${type}`);
         }
-    }
+    }   
 
+    /**
+     * Generate User Input
+    **/
     generateUserInput(variable: string, message?: string | undefined): string {
         return `${variable} = input(${message ? message : ''})\n`;
     }
 
+    /**
+     * Generate Print
+    **/
     generatePrint(value: any, type:string): string {
         switch (type) {
             case 'string':
@@ -397,6 +403,21 @@ export class PythonCodeGenerator extends CodeGenerator {
             default:
                 return `print w khalas(${value})\n`;
         }
+    }
+
+    /**
+     * Read file
+    **/
+      //TODO: add options to read line, read all file, read character
+    generateReadFile(path: string, variable: any): string {
+        return `${variable} = open("${path}", 'r').read()\n`;
+    }
+
+    /**
+     * Write file
+    **/
+    generateWriteFile(path: string, content: any): string {
+        return `open("${path}", 'w').write("${content}")\n`;
     }
 
     /**
@@ -434,8 +455,8 @@ export class PythonCodeGenerator extends CodeGenerator {
         return `# ${content}\n`;
     }
 
-    generateBlockComment(content: string): string {
-        return `''' ${content} '''\n`;
+    generateBlockComment(content: string[]): string {
+        return `''' ${content.join("\n")} '''\n`;
     }
 
     generateOperation(

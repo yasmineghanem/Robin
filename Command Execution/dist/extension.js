@@ -24879,6 +24879,16 @@ router.post("/block-comment", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.BLOCK_COMMENT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// Read file
+router.post("/read-file", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.READ_FILE, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// Write file
+router.post("/write-file", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.WRITE_FILE, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // Conditional
 router.post("/conditional", (req, res) => {
     const data = req.body;
@@ -24899,7 +24909,8 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.NO_ACTIVE_TEXT_EDITOR = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = void 0;
 /**
  * Commands
  */
@@ -24923,6 +24934,8 @@ exports.USER_INPUT = "robin.userInput";
 exports.PRINT = "robin.print";
 exports.LINE_COMMENT = "robin.lineComment";
 exports.BLOCK_COMMENT = "robin.blockComment";
+exports.READ_FILE = "robin.readFile";
+exports.WRITE_FILE = "robin.writeFile";
 /**
  * Variable declaration messages
  */
@@ -24976,6 +24989,16 @@ exports.LINE_COMMENT_FAILURE = "Failed to comment line";
 */
 exports.BLOCK_COMMENT_SUCCESS = "Block comment successful";
 exports.BLOCK_COMMENT_FAILURE = "Failed to comment block";
+/**
+ * Read File
+*/
+exports.READ_FILE_SUCCESS = "Read file successful";
+exports.READ_FILE_FAILURE = "Failed to read file";
+/**
+ * Write File
+*/
+exports.WRITE_FILE_SUCCESS = "Write file successful";
+exports.WRITE_FILE_FAILURE = "Failed to write file";
 exports.NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
 exports.WHITE_SPACE_SUCCESS = "White space added successfully!";
 exports.WHITE_SPACE_FAILURE = "Failed to add white space!";
@@ -26307,6 +26330,7 @@ const printConsole = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
+// line comment
 const lineComment = () => {
     vscode.commands.registerCommand(code_1.LINE_COMMENT, async (args) => {
         const editor = vscode.window.activeTextEditor;
@@ -26341,6 +26365,7 @@ const lineComment = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
+// block comment
 const blockComment = () => {
     vscode.commands.registerCommand(code_1.BLOCK_COMMENT, async (args) => {
         const editor = vscode.window.activeTextEditor;
@@ -26375,6 +26400,77 @@ const blockComment = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
+// read from file
+const readFile = () => {
+    vscode.commands.registerCommand(code_1.READ_FILE, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateReadFile(args.path, args.variable));
+                });
+                if (!s) {
+                    return handleFailure(code_1.READ_FILE_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.READ_FILE_FAILURE);
+            }
+            return handleSuccess(code_1.READ_FILE_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+// write to file
+const writeFile = () => {
+    vscode.commands.registerCommand(code_1.WRITE_FILE, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateWriteFile(args.path, args.content));
+                });
+                if (!s) {
+                    return handleFailure(code_1.WRITE_FILE_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.WRITE_FILE_FAILURE);
+            }
+            return handleSuccess(code_1.WRITE_FILE_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+// register commands
 const registerCodeCommands = () => {
     const commands = [declareVariable,
         declareFunction,
@@ -26396,6 +26492,8 @@ const registerCodeCommands = () => {
         printConsole,
         lineComment,
         blockComment,
+        readFile,
+        writeFile
     ];
     commands.forEach((command) => {
         command();
@@ -26735,9 +26833,15 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 throw new Error(`Invalid casting type: ${type}`);
         }
     }
+    /**
+     * Generate User Input
+    **/
     generateUserInput(variable, message) {
         return `${variable} = input(${message ? message : ''})\n`;
     }
+    /**
+     * Generate Print
+    **/
     generatePrint(value, type) {
         switch (type) {
             case 'string':
@@ -26747,6 +26851,19 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             default:
                 return `print w khalas(${value})\n`;
         }
+    }
+    /**
+     * Read file
+    **/
+    //TODO: add options to read line, read all file, read character
+    generateReadFile(path, variable) {
+        return `${variable} = open("${path}", 'r').read()\n`;
+    }
+    /**
+     * Write file
+    **/
+    generateWriteFile(path, content) {
+        return `open("${path}", 'w').write("${content}")\n`;
     }
     /**
      * White spaces
@@ -26777,7 +26894,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return `# ${content}\n`;
     }
     generateBlockComment(content) {
-        return `''' ${content} '''\n`;
+        return `''' ${content.join("\n")} '''\n`;
     }
     generateOperation(left, operator, right) {
         return `${left} ${operator} ${right} `;

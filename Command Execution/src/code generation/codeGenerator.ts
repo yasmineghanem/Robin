@@ -81,7 +81,7 @@ export abstract class CodeGenerator {
      * @returns The code string for the comment.
      */
     abstract generateLineComment(content: string): string;
-    abstract generateBlockComment(content: string): string;
+    abstract generateBlockComment(content: string[]): string;
 
     /**
      * Generates a function call in the target programming language.
@@ -208,6 +208,23 @@ export abstract class CodeGenerator {
     */
     abstract generatePrint(value: any, type:string): string;
 
+    /**
+     * Generate read file operation
+     * @param path The name/path of the file.
+     * @param variable The variable to store the read content.
+     * @throws An error if the file path is invalid/not found.
+     * @returns The code string for the read file operation.
+    */
+    abstract generateReadFile(path: string, variable:any): string;
+
+    /**
+     * Generate write file operation
+     * @param path The name/path of the file.
+     * @param content The content to write.
+     * @returns The code string for the write file operation.
+     * @throws An error if the file path is invalid.
+    */
+    abstract generateWriteFile(path: string, content: any): string;
     /**
      * Add white spaces
      * 

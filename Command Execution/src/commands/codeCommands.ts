@@ -50,6 +50,12 @@ import {
     BLOCK_COMMENT,
     BLOCK_COMMENT_FAILURE,
     BLOCK_COMMENT_SUCCESS,
+    READ_FILE,
+    READ_FILE_FAILURE,
+    READ_FILE_SUCCESS,
+    WRITE_FILE,
+    WRITE_FILE_FAILURE,
+    WRITE_FILE_SUCCESS
 
 } from "../constants/code";
 import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
@@ -901,6 +907,8 @@ const printConsole = () => {
     });
 }
 
+
+// line comment
 const lineComment = () => {
     vscode.commands.registerCommand(LINE_COMMENT, async (args) => {
         const editor = vscode.window.activeTextEditor;
@@ -946,6 +954,7 @@ const lineComment = () => {
 }
 
 
+// block comment
 const blockComment = () => {
     vscode.commands.registerCommand(BLOCK_COMMENT, async (args) => {
         const editor = vscode.window.activeTextEditor;
@@ -989,6 +998,98 @@ const blockComment = () => {
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
 }
+
+// read from file
+const readFile = () => {
+    vscode.commands.registerCommand(READ_FILE, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateReadFile(
+                            args.path,
+                            args.variable
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(READ_FILE_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(READ_FILE_FAILURE);
+            }
+
+            return handleSuccess(READ_FILE_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+}
+// write to file
+const writeFile = () => {
+    vscode.commands.registerCommand(WRITE_FILE, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateWriteFile(
+                            args.path,
+                            args.content
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(WRITE_FILE_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(WRITE_FILE_FAILURE);
+            }
+
+            return handleSuccess(WRITE_FILE_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+}
+// register commands
 const registerCodeCommands = () => {
     const commands = [declareVariable,
         declareFunction,
@@ -1010,6 +1111,8 @@ const registerCodeCommands = () => {
         printConsole,
         lineComment,
         blockComment,
+        readFile,
+        writeFile
 
     ];
 

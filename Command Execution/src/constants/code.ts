@@ -21,6 +21,8 @@ export const USER_INPUT = "robin.userInput";
 export const PRINT = "robin.print";
 export const LINE_COMMENT = "robin.lineComment";
 export const BLOCK_COMMENT = "robin.blockComment";
+export const READ_FILE = "robin.readFile";
+export const WRITE_FILE = "robin.writeFile";
 
 /**
  * Variable declaration messages
@@ -87,6 +89,17 @@ export const LINE_COMMENT_FAILURE = "Failed to comment line";
 export const BLOCK_COMMENT_SUCCESS = "Block comment successful";
 export const BLOCK_COMMENT_FAILURE = "Failed to comment block";
 
+/**
+ * Read File
+*/
+export const READ_FILE_SUCCESS = "Read file successful";
+export const READ_FILE_FAILURE = "Failed to read file";
+
+/**
+ * Write File
+*/
+export const WRITE_FILE_SUCCESS = "Write file successful";
+export const WRITE_FILE_FAILURE = "Failed to write file";
 
 export const NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
 
