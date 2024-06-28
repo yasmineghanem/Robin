@@ -389,7 +389,14 @@ export class PythonCodeGenerator extends CodeGenerator {
     }
 
     generatePrint(value: any, type:string): string {
-        return `print(${value})\n`;
+        switch (type) {
+            case 'string':
+                return `print("${value}")\n`;
+            case 'variable':
+                return `print(${value})\n`;
+            default:
+                return `print w khalas(${value})\n`;
+        }
     }
 
     /**

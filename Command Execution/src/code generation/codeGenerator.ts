@@ -206,7 +206,7 @@ export abstract class CodeGenerator {
      * @param value The value to print.
      * @returns The code string for the print statement.
     */
-    abstract generatePrint(value: any): string;
+    abstract generatePrint(value: any, type:string): string;
 
     /**
      * Add white spaces

@@ -26739,7 +26739,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return `${variable} = input(${message ? message : ''})\n`;
     }
     generatePrint(value, type) {
-        return `print(${value})\n`;
+        switch (type) {
+            case 'string':
+                return `print("${value}")\n`;
+            case 'variable':
+                return `print(${value})\n`;
+            default:
+                return `print w khalas(${value})\n`;
+        }
     }
     /**
      * White spaces
