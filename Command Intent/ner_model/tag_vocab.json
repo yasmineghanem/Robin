@@ -1,0 +1,24 @@
+{
+    "word2id": {
+        "<PAD>": 0,
+        "B-VAR": 1,
+        "I-VAR": 2,
+        "O": 3,
+        "B-VAL": 4,
+        "I-VAL": 5,
+        "B-TYPE": 6,
+        "<START>": 7,
+        "<END>": 8
+    },
+    "id2word": [
+        "PAD",
+        "B-VAR",
+        "I-VAR",
+        "O",
+        "B-VAL",
+        "I-VAL",
+        "B-TYPE",
+        "<START>",
+        "<END>"
+    ]
+}
