@@ -7,6 +7,7 @@
 #include <chrono>
 #include <string>
 using namespace std;
+// using namespace std::chrono;
 const int step_size = 4;
 const int positive_pretection = 1;
 const int negative_pretection = -1;
@@ -383,28 +384,22 @@ void print_time()
     x++;
     start_time = end_time;
 }
-Learner *decision_stump(const vector<vector<double>> &X, const vector<int> &y, const vector<double> &weights, int feature_index, vector<int> &sorted_indices, vector<vector<double>> &X_sorted, vector<int> &y_sorted, vector<double> &weights_sorted)
+Learner *decision_stump(vector<vector<double>> &X, const vector<int> &y, const vector<double> &weights, int feature_index, vector<int> &sorted_indices, vector<vector<double> *> &X_sorted, vector<int> &y_sorted, vector<double> &weights_sorted)
 {
-
-    // start_time = std::chrono::high_resolution_clock::now();
-
     int n = y.size();
-
     for (int i = 0; i < n; i++)
     {
         sorted_indices[i] = i;
     }
     sort(sorted_indices.begin(), sorted_indices.end(), [&](int i, int j)
          { return X[i][feature_index] < X[j][feature_index]; });
-    // print_time();
     for (int i = 0; i < n; i++)
     {
-        X_sorted[i] = X[sorted_indices[i]];
+        X_sorted[i] = &(X[sorted_indices[i]]);
         y_sorted[i] = y[sorted_indices[i]];
         weights_sorted[i] = weights[sorted_indices[i]];
     }
-    // print_time();
-    double tau = X_sorted[0][feature_index] - 1;
+    double tau = (*X_sorted[0])[feature_index] - 1;
     double W_pos_above = 0;
     double W_neg_above = 0;
     for (int i = 0; i < n; i++)
@@ -418,16 +413,14 @@ Learner *decision_stump(const vector<vector<double>> &X, const vector<int> &y, c
             W_neg_above += weights_sorted[i];
         }
     }
-    // print_time();
-
     double W_pos_below = 0;
     double W_neg_below = 0;
     int curr_M = 0;
     int toggle = 1;
+
     Learner *cur_stump = new Learner(0, 1, 2, 0, 0);
     for (int j = 0; j < n; j++)
     {
-
         double error_pos = W_neg_above + W_pos_below;
         double error_neg = W_pos_above + W_neg_below;
         toggle = (error_pos <= error_neg) ? 1 : -1;
@@ -439,7 +432,6 @@ Learner *decision_stump(const vector<vector<double>> &X, const vector<int> &y, c
             cur_stump->polarity = toggle;
             cur_stump->margin = curr_M;
         }
-
         while (true)
         {
             if (y_sorted[j] == -1)
@@ -454,45 +446,54 @@ Learner *decision_stump(const vector<vector<double>> &X, const vector<int> &y, c
                 W_pos_above -= weights_sorted[j];
             }
 
-            if (j + 1 < n && X_sorted[j][feature_index] == X_sorted[j + 1][feature_index])
+            if (j + 1 < n && (*X_sorted[j])[feature_index] == (*X_sorted[j + 1])[feature_index])
                 j++;
             else
                 break;
         }
-
         if (j < n - 1)
         {
-            tau = (X_sorted[j][feature_index] + X_sorted[j + 1][feature_index]) / 2;
-            curr_M = X_sorted[j + 1][feature_index] - X_sorted[j][feature_index];
+            tau = ((*X_sorted[j])[feature_index] + (*X_sorted[j + 1])[feature_index]) / 2;
+            curr_M = (*X_sorted[j + 1])[feature_index] - (*X_sorted[j])[feature_index];
         }
     }
-    // print_time();
+
     return cur_stump;
 }
 
 // O(num_features * n)
-Learner *best_stump(const vector<vector<double>> &X, const vector<int> &y, const vector<double> &weights, int num_features)
+Learner *best_stump(vector<vector<double>> &X, const vector<int> &y, const vector<double> &weights, int num_features)
 {
 
     int n = X.size();
     vector<int> sorted_indices(n);
-    vector<vector<double>> X_sorted(n, vector<double>(X[0].size()));
+    vector<vector<double> *> X_sorted(n, nullptr);
     vector<int> y_sorted(n);
     vector<double> weights_sorted(n);
     Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted);
     start_time = std::chrono::high_resolution_clock::now();
-    for (int f = 1; f < 2; f++)
+    for (int f = 0; f < num_features; f++)
     {
         // if (f % 1000 == 0)
         // {
-        //     // duration = end_time - start_time;
+        //     duration = end_time - start_time;
         //     cout << "feature number " << f << endl;
-        //     std::cout << "Training time: " << duration.count() << " s\n";
+        //     std::cout << "single design stump time: " << duration.count() << " s\n";
+
+        //     start_time = chrono::high_resolution_clock::now();
+        //     int x = 0;
+        //     for (int i = 0; i < 1000; i++)
+        //     {
+        //         x++;
+        //     }
+        //     end_time = chrono::high_resolution_clock::now();
+        //     duration = end_time - start_time;
+        //     cout << "time for 1000 iterations : " << duration.count() << " s\n";
         // }
+
         // num_features is around 160K , this part could be run on cuda and lunch too many threads here
         // start_time = std::chrono::high_resolution_clock::now();
         Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted);
-        print_time();
         // end_time = std::chrono::high_resolution_clock::now();
         if (cur_stump->error < best_stump->error || (cur_stump->error == best_stump->error && cur_stump->margin > best_stump->margin))
         {
@@ -506,41 +507,3 @@ Learner *best_stump(const vector<vector<double>> &X, const vector<int> &y, const
     }
     return best_stump;
 }
-// vector<pair<double, int>> adaboost(const vector<vector<double>> &X, const vector<int> &y, int T)
-// {
-//     int n = X.size();
-//     vector<double> weights(n, 1.0 / n);
-//     vector<Learner *> learners;
-//     vector<double> alphas;
-
-//     for (int t = 0; t < T; t++)
-//     {
-//         Learner *cur_stump = best_stump(X, y, weights, X[0].size());
-//         double error = cur_stump->error;
-
-//         learners.push_back(cur_stump);
-//         cout << "erorr in layer : " << t << " is : " << error << endl;
-//         if (abs(error - 0) < err)
-//         {
-//             alphas.push_back(1);
-//             break;
-//         }
-//         double alpha = 0.5 * log((1 - error) / error);
-//         alphas.push_back(alpha);
-//         vector<int> prediction(n);
-//         double total_weight = 0;
-//         for (int i = 0; i < n; i++)
-//         {
-//             prediction[i] = cur_stump->predict(X[i]);
-//             weights[i] *= exp(-alpha * prediction[i] * y[i]);
-//             total_weight += weights[i];
-//         }
-
-//         for (int i = 0; i < n; i++)
-//         {
-//             weights[i] /= total_weight;
-//         }
-//     }
-
-//     return learners;
-// }

@@ -2,6 +2,7 @@
 #define ADA_BOOST_H
 #include <vector>
 #include <cmath>
+#include <string>
 #include <algorithm>
 using namespace std;
 

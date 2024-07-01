@@ -80,7 +80,7 @@ int main()
     std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
     std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
 
-    int num = 10;
+    int num = 1000;
     int width = 24, height = 24;
 
     auto pos_train = load_gray_images(train_pos_path, num);
@@ -137,9 +137,9 @@ int main()
         predeictions.push_back(classifier.predict(X_test[0]));
     }
     int index = 0;
-    for (auto X : predeictions)
-        cout << "h(x) = " << X << " , y = " << Y_test[index++] << " \n";
-    std::cout << std::endl;
+    // for (auto X : predeictions)
+    //     cout << "h(x) = " << X << " , y = " << Y_test[index++] << " \n";
+    // std::cout << std::endl;
 
     return 0;
 }

@@ -1,64 +1,34 @@
-#include <bits/stdc++.h>
-using namespace std;
-typedef long long ll;
-#define F first
-#define S second
-const int N = 5e3 + 10, mod = 1e9 + 7;
-int dp[N][N];
-vector<int> v, cnt;
-vector<pair<int, int>> valid;
-int goDp(int i, int idx = 1, int before = 0)
-{
-    if (i >= valid.size())
-        return 0;
-    int &ans = dp[i][idx];
-    if (~ans)
-        return ans;
-    int x = valid[i].S;
-    ans = goDp(i + 1, idx, before);
-    if (idx + cnt[x] + before <= valid[i].F)
-        ans = max(ans, 1 + goDp(i + 1, idx + cnt[x], before + 1));
-    return ans;
-}
+#include <iostream>
+#include <chrono>
 
-void solve(int tc)
-{
-    int n;
-    cin >> n;
-    v = cnt = vector<int>(n + 1);
-    set<int> nums;
-    for (int i = 0; i < n; i++)
-    {
-        cin >> v[i];
-        nums.insert(v[i]);
-        cnt[v[i]]++;
-    }
-    valid.resize(0);
-    vector<int> dist(nums.begin(), nums.end());
-    for (int i = 1; i < dist.size(); i++)
-    {
-        valid.push_back({i, dist[i]});
-    }
-    for (int i = 0; i <= n; i++)
-        for (int j = 0; j <= n; j++)
-            dp[i][j] = -1;
-    int ret = goDp(0, 0);
-    int ans = (int)dist.size() - ret;
-    cout << ans;
-}
+using namespace std;
+using namespace std::chrono;
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr), cout.tie(nullptr);
-    // freopen("in.txt", "r", stdin);
-    // freopen("out.txt", "w", stdout);
-    int t = 1;
-    cin >> t;
-    for (int tc = 1; tc <= t; tc++)
+    const int iterations = 100000000;
+    int intSum = 0;
+    double doubleSum = 0.0;
+
+    // Measure time for int operations
+    auto start = high_resolution_clock::now();
+    for (int i = 0; i < iterations; ++i)
     {
-        solve(tc);
-        cout << '\n';
+        intSum += i;
     }
+    auto end = high_resolution_clock::now();
+    auto intDuration = duration_cast<milliseconds>(end - start).count();
+    cout << "Time for int operations: " << intDuration << " ms" << endl;
+
+    // Measure time for double operations
+    start = high_resolution_clock::now();
+    for (int i = 0; i < iterations; ++i)
+    {
+        doubleSum += i;
+    }
+    end = high_resolution_clock::now();
+    auto doubleDuration = duration_cast<milliseconds>(end - start).count();
+    cout << "Time for double operations: " << doubleDuration << " ms" << endl;
+
     return 0;
 }
