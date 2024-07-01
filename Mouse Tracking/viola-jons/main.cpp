@@ -1,95 +1,31 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <filesystem>
 #include <chrono>
-#define STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#define STB_IMAGE_RESIZE_IMPLEMENTATION
-#include "stb_image.h"
 #include "AdaBoost.h"
 #include "utils.h"
-// namespace fs = std::filesystem;
+#include <map>
+#include <unordered_map>
 using namespace std;
-namespace fs = std::filesystem;
-std::vector<std::string> get_files(const std::string &path, int num = -1)
+
+enum mode
 {
-    std::vector<std::string> files;
-    for (const auto &entry : fs::directory_iterator(path))
-    {
-        if (entry.path().extension() == ".png" || entry.path().extension() == ".jpg" || entry.path().extension() == ".jpeg")
-        {
-            files.push_back(entry.path().string());
-            if (num != -1 && files.size() >= num)
-            {
-                break;
-            }
-        }
-    }
-    return files;
-}
+    TRAIN = 1,
+    TEST = 2
+};
+void train(const char *file, int layers = 1, int num = -1);
+void test(const char *file, int num = -1);
 
-vector<vector<vector<double>>> load_gray_images(const std::string &path, int num)
+void train(const char *file, int layers, int num)
 {
-    vector<vector<vector<double>>> images;
-    vector<string> files = get_files(path, num);
-
-    for (const auto &file : files)
-    {
-        int w, h, channels;
-        unsigned char *img = stbi_load(file.c_str(), &w, &h, &channels, 0);
-        if (img)
-        {
-            std::vector<double> grayscale_image(w * h);
-            if (channels > 1)
-                for (int i = 0; i < w * h; ++i)
-                {
-                    // Convert to grayscale assuming the image is in RGB format
-
-                    grayscale_image[i] = (0.0 + img[i * channels] + img[i * channels + 1] + img[i * channels + 2]) / channels;
-                }
-            else
-                for (int i = 0; i < w * h; ++i)
-                {
-                    grayscale_image[i] = img[i];
-                }
-
-            stbi_image_free(img);
-            // Allocate a 2D vector to store the grayscale image data
-            vector<vector<double>> imageVec(h, vector<double>(w));
-
-            // Convert to grayscale and copy data from 1D array to 2D vector
-            for (int i = 0; i < h; ++i)
-            {
-                for (int j = 0; j < w; ++j)
-                {
-                    int gray_index = (i * w + j) * channels;
-                    imageVec[i][j] = grayscale_image[gray_index];
-                }
-            }
-            images.push_back(imageVec);
-        }
-    }
-    return images;
-}
-
-int main()
-{
+    auto start_time = std::chrono::high_resolution_clock::now();
     std::string train_pos_path = "imgs/face_data_24_24/trainset/faces";
     std::string train_neg_path = "imgs/face_data_24_24/trainset/non-faces";
-    std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
-    std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
-
-    int num = 1000;
-    int width = 24, height = 24;
-
-    auto pos_train = load_gray_images(train_pos_path, num);
-    auto neg_train = load_gray_images(train_neg_path, num);
-    auto pos_test = load_gray_images(test_pos_path, num);
-    auto neg_test = load_gray_images(test_neg_path, num);
-
-    vector<vector<double>> X_train, X_test;
-    vector<int> Y_train, Y_test;
+    vector<vector<vector<double>>> pos_train, neg_train;
+    load_gray_images(train_pos_path, pos_train, num);
+    load_gray_images(train_neg_path, neg_train, num);
+    vector<vector<double>> X_train;
+    vector<int> Y_train;
     vector<vector<double>> II;
     for (const auto &img : pos_train)
     {
@@ -104,7 +40,82 @@ int main()
         X_train.push_back(compute_haar_like_features(img, II));
         Y_train.push_back(-1);
     }
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end_time - start_time;
+    std::cout << "time for loading data is : " << duration.count() << " s\n";
+    AdaBoost classifier(X_train, Y_train);
+    std::string save_file(file);
+    for (int i = 0; i < layers; i++)
+    {
+        // std::cout << "Training classifier " << 1 << " layers...\n";
+        std::cout << "Training classifier layer " << i + 1 << " \n";
+        start_time = std::chrono::high_resolution_clock::now();
+        classifier.train(1);
+        end_time = std::chrono::high_resolution_clock::now();
+        std::cout << "Classifier trained!\n";
+        duration = end_time - start_time;
+        std::cout << "Training time: " << duration.count() << " s\n";
+        std::cout << "saving model to " << save_file << endl;
+        classifier.saveAsText(save_file);
+        test("model2.txt", 400);
+        cout << "---------------------------------------------\n";
+    }
+}
 
+void calc_acuracy_metrices(vector<int> &Y_test, vector<int> &predeictions)
+{
+    // Initialize counters
+    int true_positive = 0, true_negative = 0;
+    int false_positive = 0, false_negative = 0;
+
+    // Calculate the counts for TP, TN, FP, and FN
+    for (size_t i = 0; i < Y_test.size(); ++i)
+    {
+        if (Y_test[i] == 1 && predeictions[i] == 1)
+        {
+            true_positive++;
+        }
+        else if (Y_test[i] == -1 && predeictions[i] == -1)
+        {
+            true_negative++;
+        }
+        else if (Y_test[i] == -1 && predeictions[i] == 1)
+        {
+            false_positive++;
+        }
+        else if (Y_test[i] == 1 && predeictions[i] == -1)
+        {
+            false_negative++;
+        }
+    }
+    // Calculate accuracy, error rate, false positive rate, and false negative rate
+    double accuracy = static_cast<double>(true_positive + true_negative) / Y_test.size();
+    double error_rate = static_cast<double>(false_positive + false_negative) / Y_test.size();
+    int total_positives = true_positive + false_negative;
+    int total_negatives = true_negative + false_positive;
+    double false_positive_rate = total_negatives > 0 ? static_cast<double>(false_positive) / total_negatives : 0;
+    double false_negative_rate = total_positives > 0 ? static_cast<double>(false_negative) / total_positives : 0;
+
+    // Print the results
+    cout << "Accuracy: " << accuracy << endl;
+    cout << "Error rate: " << error_rate << endl;
+    cout << "False positive rate: " << false_positive_rate << endl;
+    cout << "False negative rate: " << false_negative_rate << endl;
+}
+
+void test(const char *file, int num)
+{
+
+    AdaBoost classifier;
+    classifier.loadFromText(file);
+    std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
+    std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
+    vector<vector<vector<double>>> pos_test, neg_test;
+    load_gray_images(test_pos_path, pos_test, num);
+    load_gray_images(test_neg_path, neg_test, num);
+    vector<vector<double>> X_test;
+    vector<int> Y_test;
+    vector<vector<double>> II;
     for (const auto &img : pos_test)
     {
         integral_image(img, II);
@@ -118,28 +129,43 @@ int main()
         X_test.push_back(compute_haar_like_features(img, II));
         Y_test.push_back(-1);
     }
-
-    AdaBoost classifier(X_train, Y_train);
-    std::cout << "Training classifier 1 layer...\n";
-    auto start_time = std::chrono::high_resolution_clock::now();
-    classifier.train(1);
-    auto end_time = std::chrono::high_resolution_clock::now();
-    std::cout << "Classifier trained!\n";
-    std::chrono::duration<double> duration = end_time - start_time;
-    std::cout << "Training time: " << duration.count() << " s\n";
-    std::string file = "model.txt";
-    cout << "saving model to file" << endl;
-    classifier.saveAsText(file);
     // Example usage of the classifier
     vector<int> predeictions;
     for (auto &X : X_test)
     {
-        predeictions.push_back(classifier.predict(X_test[0]));
+        predeictions.push_back(classifier.predict(X));
     }
-    int index = 0;
-    // for (auto X : predeictions)
-    //     cout << "h(x) = " << X << " , y = " << Y_test[index++] << " \n";
-    // std::cout << std::endl;
+    calc_acuracy_metrices(Y_test, predeictions);
+}
 
+int main()
+{
+    mode current_mode = TRAIN;
+    // int mode;
+    // cout << "Enter 1 for training and 2 for testing : ";
+    // cin >> mode;
+    // if (mode == 1)
+    // {
+    //     current_mode = TRAIN;
+    // }
+    // else if (mode == 2)
+    // {
+    //     current_mode = TEST;
+    // }
+    // else
+    // {
+    //     cout << "Invalid mode\n";
+    //     return 0;
+    // }
+    if (current_mode == TRAIN)
+    {
+        train("model2.txt", 5, -1);
+        return 0;
+    }
+    else if (current_mode == TEST)
+    {
+        test("model2.txt", 400);
+        return 0;
+    }
     return 0;
 }

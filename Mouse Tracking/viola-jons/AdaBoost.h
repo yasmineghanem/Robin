@@ -16,6 +16,7 @@ public:
     vector<Learner *> learners;
     vector<double> alphas;
     AdaBoost(vector<vector<double>> X, vector<int> y);
+    AdaBoost();
     ~AdaBoost();
 
     void train(int T);

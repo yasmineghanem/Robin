@@ -6,6 +6,14 @@
 #include "learner.h"
 #include <chrono>
 #include <string>
+#include <filesystem>
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#define STB_IMAGE_RESIZE_IMPLEMENTATION
+#include "stb_image.h"
+using namespace std;
+namespace fs = std::filesystem;
+
 using namespace std;
 // using namespace std::chrono;
 const int step_size = 4;
@@ -384,8 +392,24 @@ void print_time()
     x++;
     start_time = end_time;
 }
-Learner *decision_stump(vector<vector<double>> &X, const vector<int> &y, const vector<double> &weights, int feature_index, vector<int> &sorted_indices, vector<vector<double> *> &X_sorted, vector<int> &y_sorted, vector<double> &weights_sorted)
+
+void update_learner(double W_pos_below, double W_neg_below, double W_pos_above, double W_neg_above, double tot_wights, double tau, double curr_M, Learner *cur_stump)
 {
+    double error_pos = W_pos_below + W_neg_above;
+    double error_neg = W_neg_below + W_pos_above;
+    int toggle = (error_pos <= error_neg) ? 1 : -1;
+    double error = min(error_pos, error_neg) / tot_wights;
+    if (error < cur_stump->error || (error == cur_stump->error && curr_M > cur_stump->margin))
+    {
+        cur_stump->error = error;
+        cur_stump->threshold = tau;
+        cur_stump->polarity = toggle;
+        cur_stump->margin = curr_M;
+    }
+}
+Learner *decision_stump(vector<vector<double>> &X, const vector<int> &y, const vector<double> &weights, int feature_index, vector<int> &sorted_indices, vector<vector<double> *> &X_sorted, vector<int> &y_sorted, vector<double> &weights_sorted, vector<double> &pos_weights_prefix, vector<double> &neg_weights_prefix)
+{
+    Learner *cur_stump = new Learner(0, 1, 2, 0, feature_index);
     int n = y.size();
     for (int i = 0; i < n; i++)
     {
@@ -399,53 +423,54 @@ Learner *decision_stump(vector<vector<double>> &X, const vector<int> &y, const v
         y_sorted[i] = y[sorted_indices[i]];
         weights_sorted[i] = weights[sorted_indices[i]];
     }
-    double tau = (*X_sorted[0])[feature_index] - 1;
-    double W_pos_above = 0;
-    double W_neg_above = 0;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cout << (*X_sorted[i])[feature_index] << " ";
+    // }
+    // cout << endl;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cout << y_sorted[i] << " ";
+    // }
+    // cout << endl;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cout << weights_sorted[i] << " ";
+    // }
+    // cout << endl;
     for (int i = 0; i < n; i++)
     {
         if (y_sorted[i] == 1)
         {
-            W_pos_above += weights_sorted[i];
+            pos_weights_prefix[i] = weights_sorted[i];
+            neg_weights_prefix[i] = 0;
         }
         else
         {
-            W_neg_above += weights_sorted[i];
+            neg_weights_prefix[i] = weights_sorted[i];
+            pos_weights_prefix[i] = 0;
+        }
+        if (i)
+        {
+            pos_weights_prefix[i] += pos_weights_prefix[i - 1];
+            neg_weights_prefix[i] += neg_weights_prefix[i - 1];
         }
     }
+    double tot_wights = pos_weights_prefix[n - 1] + neg_weights_prefix[n - 1];
+    double tau = (*X_sorted[0])[feature_index] - 1;
+    double W_pos_above = pos_weights_prefix[n - 1];
+    double W_neg_above = neg_weights_prefix[n - 1];
     double W_pos_below = 0;
     double W_neg_below = 0;
-    int curr_M = 0;
+    int curr_M = 1;
     int toggle = 1;
 
-    Learner *cur_stump = new Learner(0, 1, 2, 0, 0);
     for (int j = 0; j < n; j++)
     {
-        double error_pos = W_neg_above + W_pos_below;
-        double error_neg = W_pos_above + W_neg_below;
-        toggle = (error_pos <= error_neg) ? 1 : -1;
-        double error = min(error_pos, error_neg);
-        if (error < cur_stump->error || (error == cur_stump->error && curr_M > cur_stump->margin))
-        {
-            cur_stump->error = error;
-            cur_stump->threshold = tau;
-            cur_stump->polarity = toggle;
-            cur_stump->margin = curr_M;
-        }
+        update_learner(W_pos_below, W_neg_below, W_pos_above, W_neg_above, tot_wights, tau, curr_M, cur_stump);
+        // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
         while (true)
         {
-            if (y_sorted[j] == -1)
-            {
-                W_neg_below += weights_sorted[j];
-                W_neg_above -= weights_sorted[j];
-            }
-
-            else
-            {
-                W_pos_below += weights_sorted[j];
-                W_pos_above -= weights_sorted[j];
-            }
-
             if (j + 1 < n && (*X_sorted[j])[feature_index] == (*X_sorted[j + 1])[feature_index])
                 j++;
             else
@@ -455,8 +480,23 @@ Learner *decision_stump(vector<vector<double>> &X, const vector<int> &y, const v
         {
             tau = ((*X_sorted[j])[feature_index] + (*X_sorted[j + 1])[feature_index]) / 2;
             curr_M = (*X_sorted[j + 1])[feature_index] - (*X_sorted[j])[feature_index];
+            W_pos_above = pos_weights_prefix[n - 1] - pos_weights_prefix[j];
+            W_neg_above = neg_weights_prefix[n - 1] - neg_weights_prefix[j];
+            W_pos_below = pos_weights_prefix[j];
+            W_neg_below = neg_weights_prefix[j];
+        }
+        else
+        {
+            tau = (*X_sorted[j])[feature_index] + 1;
+            curr_M = 1;
+            W_pos_above = 0;
+            W_neg_above = 0;
+            W_pos_below = pos_weights_prefix[n - 1];
+            W_neg_below = neg_weights_prefix[n - 1];
         }
     }
+    update_learner(W_pos_below, W_neg_below, W_pos_above, W_neg_above, tot_wights, tau, curr_M, cur_stump);
+    // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
 
     return cur_stump;
 }
@@ -470,33 +510,17 @@ Learner *best_stump(vector<vector<double>> &X, const vector<int> &y, const vecto
     vector<vector<double> *> X_sorted(n, nullptr);
     vector<int> y_sorted(n);
     vector<double> weights_sorted(n);
-    Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted);
-    start_time = std::chrono::high_resolution_clock::now();
+    vector<double> pos_weights_prefix(n), neg_weights_prefix(n);
+    Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix);
+
     for (int f = 0; f < num_features; f++)
     {
-        // if (f % 1000 == 0)
-        // {
-        //     duration = end_time - start_time;
-        //     cout << "feature number " << f << endl;
-        //     std::cout << "single design stump time: " << duration.count() << " s\n";
-
-        //     start_time = chrono::high_resolution_clock::now();
-        //     int x = 0;
-        //     for (int i = 0; i < 1000; i++)
-        //     {
-        //         x++;
-        //     }
-        //     end_time = chrono::high_resolution_clock::now();
-        //     duration = end_time - start_time;
-        //     cout << "time for 1000 iterations : " << duration.count() << " s\n";
-        // }
 
         // num_features is around 160K , this part could be run on cuda and lunch too many threads here
-        // start_time = std::chrono::high_resolution_clock::now();
-        Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted);
-        // end_time = std::chrono::high_resolution_clock::now();
+        Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix);
         if (cur_stump->error < best_stump->error || (cur_stump->error == best_stump->error && cur_stump->margin > best_stump->margin))
         {
+            delete best_stump;
             best_stump = cur_stump;
             best_stump->feature_index = f;
         }
@@ -506,4 +530,63 @@ Learner *best_stump(vector<vector<double>> &X, const vector<int> &y, const vecto
         }
     }
     return best_stump;
+}
+
+std::vector<std::string> get_files(const std::string &path, int num )
+{
+    std::vector<std::string> files;
+    for (const auto &entry : fs::directory_iterator(path))
+    {
+        if (entry.path().extension() == ".png" || entry.path().extension() == ".jpg" || entry.path().extension() == ".jpeg")
+        {
+            files.push_back(entry.path().string());
+            if (num != -1 && files.size() >= num)
+            {
+                break;
+            }
+        }
+    }
+    return files;
+}
+
+void load_gray_images(const std::string &path, vector<vector<vector<double>>> &images, int num)
+{
+    ;
+    vector<string> files = get_files(path, num);
+
+    for (const auto &file : files)
+    {
+        int w, h, channels;
+        unsigned char *img = stbi_load(file.c_str(), &w, &h, &channels, 0);
+        if (img)
+        {
+            std::vector<double> grayscale_image(w * h);
+            if (channels > 1)
+                for (int i = 0; i < w * h; ++i)
+                {
+                    // Convert to grayscale assuming the image is in RGB format
+                    grayscale_image[i] = (0.0 + img[i * channels] + img[i * channels + 1] + img[i * channels + 2]) / channels;
+                }
+            else
+                for (int i = 0; i < w * h; ++i)
+                {
+                    grayscale_image[i] = img[i];
+                }
+
+            stbi_image_free(img);
+            // Allocate a 2D vector to store the grayscale image data
+            vector<vector<double>> imageVec(h, vector<double>(w));
+
+            // Convert to grayscale and copy data from 1D array to 2D vector
+            for (int i = 0; i < h; ++i)
+            {
+                for (int j = 0; j < w; ++j)
+                {
+                    int gray_index = (i * w + j) * channels;
+                    imageVec[i][j] = grayscale_image[gray_index];
+                }
+            }
+            images.push_back(imageVec);
+        }
+    }
 }

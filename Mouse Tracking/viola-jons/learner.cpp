@@ -18,5 +18,9 @@ Learner::Learner()
 }
 int Learner::predict(const vector<double> &X)
 {
-    return this->polarity * ((X[this->feature_index] - this->threshold) >= 0 ? 1 : -1);
+    return this->polarity * ((X[this->feature_index] >= this->threshold) ? 1 : -1);
 }
+// double Learner::predict(const vector<double> &X)
+// {
+//     return this->polarity * ((X[this->feature_index] - this->threshold));
+// }

@@ -17,10 +17,25 @@ AdaBoost::~AdaBoost()
 AdaBoost::AdaBoost(vector<vector<double>> X, vector<int> y) : X(X), y(y)
 {
     // intialize the weights
+    int n_pos = 0;
+    int n_neg = 0;
     for (size_t i = 0; i < X.size(); ++i)
     {
-        weights.push_back(1.0 / X.size());
+        if (y[i] == 1)
+            n_pos++;
+        else
+            n_neg++;
     }
+    for (size_t i = 0; i < X.size(); ++i)
+    {
+        if (y[i] == 1)
+            weights.push_back(0.5 / n_pos);
+        else
+            weights.push_back(0.5 / n_neg);
+    }
+}
+AdaBoost::AdaBoost()
+{
 }
 void AdaBoost::train(int T)
 {
@@ -30,8 +45,6 @@ void AdaBoost::train(int T)
 
         // find the best learner
         Learner *learner = best_stump(this->X, this->y, this->weights, this->X[0].size());
-        // Learner *learner = best_stump(this->X, this->y, this->weights, 100);
-
         // compute the error
         double error = learner->error;
         learners.push_back(learner);
@@ -78,7 +91,9 @@ int AdaBoost::predict(const std::vector<double> &X)
     for (size_t i = 0; i < this->learners.size(); ++i)
     {
         sum += this->alphas[i] * this->learners[i]->predict(X);
+        // cout << X[this->learners[i]->feature_index] << " " << this->learners[i]->threshold << " " << this->learners[i]->polarity << " " << this->learners[i]->predict(X) << endl;
     }
+    // cout << endl;
     return sum >= 0.0 ? 1 : -1;
 }
 
