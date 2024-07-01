@@ -225,8 +225,9 @@ export class PythonCodeGenerator extends CodeGenerator {
             // sort the parameters so that the one's without value come first
             m.parameters.sort((a, b) => a.value === undefined ? -1 : 1);
             const params = m.parameters.map(p => `${p.name}${p.value ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}` : ''}`).join(', ');
-            code += `\tdef ${m.name}(self, ${params}): \n`;
-            code += this.wrapInCodeBlock(m.body ?? ['\tpass\n']);
+            // code += "\n";
+            code += `\n\tdef ${m.name}(self, ${params}):\n\t`;
+            code += this.wrapInCodeBlock(m.body ?? ['pass\n']);
         });
 
         return code;

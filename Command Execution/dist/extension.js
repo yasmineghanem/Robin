@@ -39,7 +39,7 @@ const vscode = __importStar(__webpack_require__(1));
 const server_1 = __importDefault(__webpack_require__(2));
 const commands_1 = __importDefault(__webpack_require__(168));
 const path_1 = __importDefault(__webpack_require__(7));
-(__webpack_require__(177).config)({
+(__webpack_require__(184).config)({
     path: path_1.default.resolve(__dirname, '../.env')
 }); // Load environment variables from .env
 // This method is called when your extension is activated
@@ -26861,8 +26861,9 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             // sort the parameters so that the one's without value come first
             m.parameters.sort((a, b) => a.value === undefined ? -1 : 1);
             const params = m.parameters.map(p => `${p.name}${p.value ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}` : ''}`).join(', ');
-            code += `\tdef ${m.name}(self, ${params}): \n`;
-            code += this.wrapInCodeBlock(m.body ?? ['\tpass\n']);
+            // code += "\n";
+            code += `\n\tdef ${m.name}(self, ${params}):\n\t`;
+            code += this.wrapInCodeBlock(m.body ?? ['pass\n']);
         });
         return code;
     }
@@ -27280,14 +27281,21 @@ exports.EXTENSIONS = {
 
 
 /***/ }),
-/* 177 */
+/* 177 */,
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const fs = __webpack_require__(25)
 const path = __webpack_require__(7)
-const os = __webpack_require__(178)
+const os = __webpack_require__(185)
 const crypto = __webpack_require__(138)
-const packageJson = __webpack_require__(179)
+const packageJson = __webpack_require__(186)
 
 const version = packageJson.version
 
@@ -27647,14 +27655,14 @@ module.exports = DotenvModule
 
 
 /***/ }),
-/* 178 */
+/* 185 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("os");
 
 /***/ }),
-/* 179 */
+/* 186 */
 /***/ ((module) => {
 
 "use strict";
