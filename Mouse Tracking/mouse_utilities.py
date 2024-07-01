@@ -14,6 +14,7 @@ class CLICK(Enum):
 def move_mouse(direction,distance=5):
     if(direction == directions.STRAIGHT):
         return
+    old_x, old_y = pyautogui.position()
     current_x, current_y = pyautogui.position()
     if direction == directions.LEFT:
         current_x -= distance
@@ -25,7 +26,11 @@ def move_mouse(direction,distance=5):
         current_y += distance
     else:
         print('mouse is in the same position')
-    pyautogui.moveTo(int(current_x), int(current_y))
+    # pyautogui.moveTo(int(current_x), int(current_y))
+    dx=current_x-old_x
+    dy=current_y-old_y
+    pyautogui.moveRel(dx, dy)
+
 def mouse_click( click_type):
     if click_type == CLICK.LEFT_CLICK:
         pyautogui.click(button='left')

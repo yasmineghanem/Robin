@@ -17,7 +17,7 @@ class head_controller():
         self.counter = 0
         self.threshold = 10
     def distance_equ(self,distane):
-        return distane**1.5
+        return distane**1.7
     def detect_horizontal_movement(self,point1,point2,frame):
         x1=point1.x * frame.shape[1]
         x2=point2.x * frame.shape[1]
@@ -58,7 +58,7 @@ class head_controller():
         # A simple heuristic: if the mouth width is significantly larger than the lip height, it's likely a smile
         smile_ratio = mouth_width / lip_height
         is_smiling = smile_ratio > 4.0  # This threshold may need tuning
-        print(smile_ratio)
+        # print(smile_ratio)
         return is_smiling
     def process(self):
         eye = eye_controller(self.URL)
