@@ -63,7 +63,9 @@ import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
 import { showError, showMessage } from "../communication/utilities";
 import { EXTENSIONS } from "../constants/constants";
 
-// utilities
+// automatically pick platform
+const say = require('say');
+
 
 const getCurrentPosition = (editor: vscode.TextEditor): vscode.Position => {
     const position = editor.selection.active;
@@ -82,7 +84,40 @@ const handleFailure = (message: string): any => {
     };
 };
 
-const handleSuccess = (message: string): any => {
+const handleSuccess = async (message: string): Promise<any> => {
+    // change to female voice
+    // say.speaker = 'Alex';
+    say.speak(
+        message,
+        'Microsoft Zira Desktop',
+        // 'Good News',
+        1,
+        (err: any) => {
+            if (err) {
+                return console.error(err)
+            }
+            console.log('Text has been spoken.')
+        }
+
+    )
+
+    // say.getInstalledVoices((err: any, voices: any) => console.log("SAY VOICES", voices));
+
+    // More complex example (with an OS X voice) and slow speed
+    // await say.speak("What's up, dog?", 'Alex', 0.5)
+
+    // Fire a callback once the text has completed being spoken
+    // await say.speak("What's up, dog?", 'Good News', 1.0, (err: any) => {
+    //     if (err) {
+    //         return console.error(err)
+    //     }
+
+    //     console.log('Text has been spoken.')
+    // });
+
+
+    // await say.speak("I'm sorry, Dave.", 'Cellos' );
+
     showMessage(message);
     return {
         success: true,

@@ -4,6 +4,8 @@ import cors from "cors";
 import fileSystemRouter from "./fileSystemRouter";
 import IDERouter from "./IDERouter";
 import codeRouter from "./codeRouter";
+// automatically pick platform
+const say = require('say');
 
 const server = express();
 // middleware
@@ -16,7 +18,28 @@ server.use('/ide', IDERouter);
 server.use('/code', codeRouter);
 
 
+// middleware to modify responses before sending them
+// server.use((req, res: any, next) => {
+//   // speak the message 
+//   say.speak(
+//     res?.message,
+//     'Microsoft Zira Desktop',
+//     // 'Good News',
+//     1.5,
+//     (err: any) => {
+//       if (err) {
+//         return console.error(err)
+//       }
+//       console.log('Text has been spoken.')
+//     }
 
+//   )
+
+
+
+
+//   next();
+// });
 
 // endpoints
 server.post("/declare-func", (req, res) => {

@@ -39,7 +39,7 @@ const vscode = __importStar(__webpack_require__(1));
 const server_1 = __importDefault(__webpack_require__(2));
 const commands_1 = __importDefault(__webpack_require__(168));
 const path_1 = __importDefault(__webpack_require__(7));
-(__webpack_require__(177).config)({
+(__webpack_require__(184).config)({
     path: path_1.default.resolve(__dirname, '../.env')
 }); // Load environment variables from .env
 // This method is called when your extension is activated
@@ -110,6 +110,8 @@ const cors_1 = __importDefault(__webpack_require__(159));
 const fileSystemRouter_1 = __importDefault(__webpack_require__(161));
 const IDERouter_1 = __importDefault(__webpack_require__(163));
 const codeRouter_1 = __importDefault(__webpack_require__(165));
+// automatically pick platform
+const say = __webpack_require__(177);
 const server = (0, express_1.default)();
 // middleware
 server.use((0, cors_1.default)());
@@ -117,6 +119,23 @@ server.use(express_1.default.json());
 server.use('/file-system', fileSystemRouter_1.default);
 server.use('/ide', IDERouter_1.default);
 server.use('/code', codeRouter_1.default);
+// middleware to modify responses before sending them
+// server.use((req, res: any, next) => {
+//   // speak the message 
+//   say.speak(
+//     res?.message,
+//     'Microsoft Zira Desktop',
+//     // 'Good News',
+//     1.5,
+//     (err: any) => {
+//       if (err) {
+//         return console.error(err)
+//       }
+//       console.log('Text has been spoken.')
+//     }
+//   )
+//   next();
+// });
 // endpoints
 server.post("/declare-func", (req, res) => {
     const data = req.body;
@@ -25786,7 +25805,8 @@ const code_1 = __webpack_require__(166);
 const pythonCodeGenerator_1 = __webpack_require__(172);
 const utilities_1 = __webpack_require__(167);
 const constants_1 = __webpack_require__(176);
-// utilities
+// automatically pick platform
+const say = __webpack_require__(177);
 const getCurrentPosition = (editor) => {
     const position = editor.selection.active;
     return position;
@@ -25801,7 +25821,28 @@ const handleFailure = (message) => {
         message: message,
     };
 };
-const handleSuccess = (message) => {
+const handleSuccess = async (message) => {
+    // change to female voice
+    // say.speaker = 'Alex';
+    say.speak(message, 'Microsoft Zira Desktop', 
+    // 'Good News',
+    1, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+        console.log('Text has been spoken.');
+    });
+    // say.getInstalledVoices((err: any, voices: any) => console.log("SAY VOICES", voices));
+    // More complex example (with an OS X voice) and slow speed
+    // await say.speak("What's up, dog?", 'Alex', 0.5)
+    // Fire a callback once the text has completed being spoken
+    // await say.speak("What's up, dog?", 'Good News', 1.0, (err: any) => {
+    //     if (err) {
+    //         return console.error(err)
+    //     }
+    //     console.log('Text has been spoken.')
+    // });
+    // await say.speak("I'm sorry, Dave.", 'Cellos' );
     (0, utilities_1.showMessage)(message);
     return {
         success: true,
@@ -27283,11 +27324,515 @@ exports.EXTENSIONS = {
 /* 177 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+const SayLinux = __webpack_require__(178)
+const SayMacos = __webpack_require__(182)
+const SayWin32 = __webpack_require__(183)
+
+const MACOS = 'darwin'
+const LINUX = 'linux'
+const WIN32 = 'win32'
+
+class Say {
+  constructor (platform) {
+    if (!platform) {
+      platform = process.platform
+    }
+
+    if (platform === MACOS) {
+      return new SayMacos()
+    } else if (platform === LINUX) {
+      return new SayLinux()
+    } else if (platform === WIN32) {
+      return new SayWin32()
+    }
+
+    throw new Error(`new Say(): unsupported platorm! ${platform}`)
+  }
+}
+
+module.exports = new Say() // Create a singleton automatically for backwards compatability
+module.exports.Say = Say // Allow users to `say = new Say.Say(platform)`
+module.exports.platforms = {
+  WIN32: WIN32,
+  MACOS: MACOS,
+  LINUX: LINUX
+}
+
+
+/***/ }),
+/* 178 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const SayPlatformBase = __webpack_require__(179)
+
+const BASE_SPEED = 100
+const COMMAND = 'festival'
+
+class SayPlatformLinux extends SayPlatformBase {
+  constructor () {
+    super()
+    this.baseSpeed = BASE_SPEED
+  }
+
+  buildSpeakCommand ({ text, voice, speed }) {
+    let args = []
+    let pipedData = ''
+    let options = {}
+
+    args.push('--pipe')
+
+    if (speed) {
+      pipedData += `(Parameter.set 'Audio_Command "aplay -q -c 1 -t raw -f s16 -r $(($SR*${this.convertSpeed(speed)}/100)) $FILE") `
+    }
+
+    if (voice) {
+      pipedData += `(${voice}) `
+    }
+
+    pipedData += `(SayText "${text}")`
+
+    return { command: COMMAND, args, pipedData, options }
+  }
+
+  buildExportCommand ({ text, voice, speed, filename }) {
+    throw new Error(`say.export(): does not support platform ${this.platform}`)
+  }
+
+  runStopCommand () {
+    // TODO: Need to ensure the following is true for all users, not just me. Danger Zone!
+    // On my machine, original childD.pid process is completely gone. Instead there is now a
+    // childD.pid + 1 sh process. Kill it and nothing happens. There's also a childD.pid + 2
+    // aplay process. Kill that and the audio actually stops.
+    process.kill(this.child.pid + 2)
+  }
+
+  getVoices () {
+    throw new Error(`say.export(): does not support platform ${this.platform}`)
+  }
+}
+
+module.exports = SayPlatformLinux
+
+
+/***/ }),
+/* 179 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const childProcess = __webpack_require__(180)
+const once = __webpack_require__(181)
+
+class SayPlatformBase {
+  constructor () {
+    this.child = null
+    this.baseSpeed = 0
+  }
+
+  /**
+   * Uses system libraries to speak text via the speakers.
+   *
+   * @param {string} text Text to be spoken
+   * @param {string|null} voice Name of voice to be spoken with
+   * @param {number|null} speed Speed of text (e.g. 1.0 for normal, 0.5 half, 2.0 double)
+   * @param {Function|null} callback A callback of type function(err) to return.
+   */
+  speak (text, voice, speed, callback) {
+    if (typeof callback !== 'function') {
+      callback = () => {}
+    }
+
+    callback = once(callback)
+
+    if (!text) {
+      return setImmediate(() => {
+        callback(new TypeError('say.speak(): must provide text parameter'))
+      })
+    }
+
+    let { command, args, pipedData, options } = this.buildSpeakCommand({ text, voice, speed })
+
+    this.child = childProcess.spawn(command, args, options)
+
+    this.child.stdin.setEncoding('ascii')
+    this.child.stderr.setEncoding('ascii')
+
+    if (pipedData) {
+      this.child.stdin.end(pipedData)
+    }
+
+    this.child.stderr.once('data', (data) => {
+      // we can't stop execution from this function
+      callback(new Error(data))
+    })
+
+    this.child.addListener('exit', (code, signal) => {
+      if (code === null || signal !== null) {
+        return callback(new Error(`say.speak(): could not talk, had an error [code: ${code}] [signal: ${signal}]`))
+      }
+
+      this.child = null
+
+      callback(null)
+    })
+  }
+
+  /**
+   * Uses system libraries to speak text via the speakers.
+   *
+   * @param {string} text Text to be spoken
+   * @param {string|null} voice Name of voice to be spoken with
+   * @param {number|null} speed Speed of text (e.g. 1.0 for normal, 0.5 half, 2.0 double)
+   * @param {string} filename Path to file to write audio to, e.g. "greeting.wav"
+   * @param {Function|null} callback A callback of type function(err) to return.
+   */
+  export (text, voice, speed, filename, callback) {
+    if (typeof callback !== 'function') {
+      callback = () => {}
+    }
+
+    callback = once(callback)
+
+    if (!text) {
+      return setImmediate(() => {
+        callback(new TypeError('say.export(): must provide text parameter'))
+      })
+    }
+
+    if (!filename) {
+      return setImmediate(() => {
+        callback(new TypeError('say.export(): must provide filename parameter'))
+      })
+    }
+
+    try {
+      var { command, args, pipedData, options } = this.buildExportCommand({ text, voice, speed, filename })
+    } catch (error) {
+      return setImmediate(() => {
+        callback(error)
+      })
+    }
+
+    this.child = childProcess.spawn(command, args, options)
+
+    this.child.stdin.setEncoding('ascii')
+    this.child.stderr.setEncoding('ascii')
+
+    if (pipedData) {
+      this.child.stdin.end(pipedData)
+    }
+
+    this.child.stderr.once('data', (data) => {
+      // we can't stop execution from this function
+      callback(new Error(data))
+    })
+
+    this.child.addListener('exit', (code, signal) => {
+      if (code === null || signal !== null) {
+        return callback(new Error(`say.export(): could not talk, had an error [code: ${code}] [signal: ${signal}]`))
+      }
+
+      this.child = null
+
+      callback(null)
+    })
+  }
+
+  /**
+   * Stops currently playing audio. There will be unexpected results if multiple audios are being played at once
+   *
+   * TODO: If two messages are being spoken simultaneously, childD points to new instance, no way to kill previous
+   *
+   * @param {Function|null} callback A callback of type function(err) to return.
+   */
+  stop (callback) {
+    if (typeof callback !== 'function') {
+      callback = () => {}
+    }
+
+    callback = once(callback)
+
+    if (!this.child) {
+      return setImmediate(() => {
+        callback(new Error('say.stop(): no speech to kill'))
+      })
+    }
+
+    this.runStopCommand()
+
+    this.child = null
+
+    callback(null)
+  }
+
+  convertSpeed (speed) {
+    return Math.ceil(this.baseSpeed * speed)
+  }
+
+  /**
+   * Get Installed voices on system
+   * @param {Function} callback A callback of type function(err,voices) to return.
+   */
+  getInstalledVoices (callback) {
+    if (typeof callback !== 'function') {
+      callback = () => {}
+    }
+    callback = once(callback)
+
+    let { command, args } = this.getVoices()
+    var voices = []
+    this.child = childProcess.spawn(command, args)
+
+    this.child.stdin.setEncoding('ascii')
+    this.child.stderr.setEncoding('ascii')
+
+    this.child.stderr.once('data', (data) => {
+      // we can't stop execution from this function
+      callback(new Error(data))
+    })
+    this.child.stdout.on('data', function (data) {
+      voices += data
+    })
+
+    this.child.addListener('exit', (code, signal) => {
+      if (code === null || signal !== null) {
+        return callback(new Error(`say.getInstalledVoices(): could not get installed voices, had an error [code: ${code}] [signal: ${signal}]`))
+      }
+      if (voices.length > 0) {
+        voices = voices.split('\r\n')
+        voices = (voices[voices.length - 1] === '') ? voices.slice(0, voices.length - 1) : voices
+      }
+      this.child = null
+
+      callback(null, voices)
+    })
+
+    this.child.stdin.end()
+  }
+}
+
+module.exports = SayPlatformBase
+
+
+/***/ }),
+/* 180 */
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
+
+/***/ }),
+/* 181 */
+/***/ ((module) => {
+
+"use strict";
+
+
+/**
+ * Wrap callbacks to prevent double execution.
+ *
+ * @param {Function} fn Function that should only be called once.
+ * @returns {Function} A wrapped callback which prevents execution.
+ * @api public
+ */
+module.exports = function one(fn) {
+  var called = 0
+    , value;
+
+  /**
+   * The function that prevents double execution.
+   *
+   * @api private
+   */
+  function onetime() {
+    if (called) return value;
+
+    called = 1;
+    value = fn.apply(this, arguments);
+    fn = null;
+
+    return value;
+  }
+
+  //
+  // To make debugging more easy we want to use the name of the supplied
+  // function. So when you look at the functions that are assigned to event
+  // listeners you don't see a load of `onetime` functions but actually the
+  // names of the functions that this module will call.
+  //
+  onetime.displayName = fn.displayName || fn.name || onetime.displayName || onetime.name;
+  return onetime;
+};
+
+
+/***/ }),
+/* 182 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const SayPlatformBase = __webpack_require__(179)
+
+const BASE_SPEED = 175
+const COMMAND = 'say'
+
+class SayPlatformDarwin extends SayPlatformBase {
+  constructor () {
+    super()
+    this.baseSpeed = BASE_SPEED
+  }
+
+  buildSpeakCommand ({ text, voice, speed }) {
+    let args = []
+    let pipedData = ''
+    let options = {}
+
+    if (!voice) {
+      args.push(text)
+    } else {
+      args.push('-v', voice, text)
+    }
+
+    if (speed) {
+      args.push('-r', this.convertSpeed(speed))
+    }
+
+    return { command: COMMAND, args, pipedData, options }
+  }
+
+  buildExportCommand ({ text, voice, speed, filename }) {
+    let args = []
+    let pipedData = ''
+    let options = {}
+
+    if (!voice) {
+      args.push(text)
+    } else {
+      args.push('-v', voice, text)
+    }
+
+    if (speed) {
+      args.push('-r', this.convertSpeed(speed))
+    }
+
+    if (filename) {
+      args.push('-o', filename, '--data-format=LEF32@32000')
+    }
+
+    return { command: COMMAND, args, pipedData, options }
+  }
+
+  runStopCommand () {
+    this.child.stdin.pause()
+    this.child.kill()
+  }
+
+  getVoices () {
+    throw new Error(`say.export(): does not support platform ${this.platform}`)
+  }
+}
+
+module.exports = SayPlatformDarwin
+
+
+/***/ }),
+/* 183 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const childProcess = __webpack_require__(180)
+
+const SayPlatformBase = __webpack_require__(179)
+
+const BASE_SPEED = 0 // Unsupported
+const COMMAND = 'powershell'
+
+class SayPlatformWin32 extends SayPlatformBase {
+  constructor () {
+    super()
+    this.baseSpeed = BASE_SPEED
+  }
+
+  buildSpeakCommand ({ text, voice, speed }) {
+    let args = []
+    let pipedData = ''
+    let options = {}
+
+    let psCommand = `Add-Type -AssemblyName System.speech;$speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;`
+
+    if (voice) {
+      psCommand += `$speak.SelectVoice('${voice}');`
+    }
+
+    if (speed) {
+      let adjustedSpeed = this.convertSpeed(speed || 1)
+      psCommand += `$speak.Rate = ${adjustedSpeed};`
+    }
+
+    psCommand += `$speak.Speak([Console]::In.ReadToEnd())`
+
+    pipedData += text
+    args.push(psCommand)
+    options.shell = true
+
+    return { command: COMMAND, args, pipedData, options }
+  }
+
+  buildExportCommand ({ text, voice, speed, filename }) {
+    let args = []
+    let pipedData = ''
+    let options = {}
+
+    let psCommand = `Add-Type -AssemblyName System.speech;$speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;`
+
+    if (voice) {
+      psCommand += `$speak.SelectVoice('${voice}');`
+    }
+
+    if (speed) {
+      let adjustedSpeed = this.convertSpeed(speed || 1)
+      psCommand += `$speak.Rate = ${adjustedSpeed};`
+    }
+
+    if (!filename) throw new Error('Filename must be provided in export();')
+    else {
+      psCommand += `$speak.SetOutputToWaveFile('${filename}');`
+    }
+
+    psCommand += `$speak.Speak([Console]::In.ReadToEnd());$speak.Dispose()`
+
+    pipedData += text
+    args.push(psCommand)
+    options.shell = true
+
+    return { command: COMMAND, args, pipedData, options }
+  }
+
+  runStopCommand () {
+    this.child.stdin.pause()
+    childProcess.exec(`taskkill /pid ${this.child.pid} /T /F`)
+  }
+
+  convertSpeed (speed) {
+    // Overriden to map playback speed (as a ratio) to Window's values (-10 to 10, zero meaning x1.0)
+    return Math.max(-10, Math.min(Math.round((9.0686 * Math.log(speed)) - 0.1806), 10))
+  }
+
+  getVoices () {
+    let args = []
+    let psCommand = 'Add-Type -AssemblyName System.speech;$speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;$speak.GetInstalledVoices() | % {$_.VoiceInfo.Name}'
+    args.push(psCommand)
+    return { command: COMMAND, args }
+  }
+}
+
+module.exports = SayPlatformWin32
+
+
+/***/ }),
+/* 184 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 const fs = __webpack_require__(25)
 const path = __webpack_require__(7)
-const os = __webpack_require__(178)
+const os = __webpack_require__(185)
 const crypto = __webpack_require__(138)
-const packageJson = __webpack_require__(179)
+const packageJson = __webpack_require__(186)
 
 const version = packageJson.version
 
@@ -27647,14 +28192,14 @@ module.exports = DotenvModule
 
 
 /***/ }),
-/* 178 */
+/* 185 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("os");
 
 /***/ }),
-/* 179 */
+/* 186 */
 /***/ ((module) => {
 
 "use strict";
