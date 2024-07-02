@@ -21,12 +21,12 @@ void train(const char *file, int layers, int num)
     auto start_time = std::chrono::high_resolution_clock::now();
     std::string train_pos_path = "imgs/face_data_24_24/trainset/faces";
     std::string train_neg_path = "imgs/face_data_24_24/trainset/non-faces";
-    vector<vector<vector<double>>> pos_train, neg_train;
+    vector<vector<vector<int>>> pos_train, neg_train;
     load_gray_images(train_pos_path, pos_train, num);
     load_gray_images(train_neg_path, neg_train, num);
-    vector<vector<double>> X_train;
+    vector<vector<int>> X_train;
     vector<int> Y_train;
-    vector<vector<double>> II;
+    vector<vector<int>> II;
     for (const auto &img : pos_train)
     {
         integral_image(img, II);
@@ -110,12 +110,12 @@ void test(const char *file, int num)
     classifier.loadFromText(file);
     std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
     std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
-    vector<vector<vector<double>>> pos_test, neg_test;
+    vector<vector<vector<int>>> pos_test, neg_test;
     load_gray_images(test_pos_path, pos_test, num);
     load_gray_images(test_neg_path, neg_test, num);
-    vector<vector<double>> X_test;
+    vector<vector<int>> X_test;
     vector<int> Y_test;
-    vector<vector<double>> II;
+    vector<vector<int>> II;
     for (const auto &img : pos_test)
     {
         integral_image(img, II);
@@ -159,7 +159,7 @@ int main()
     // }
     if (current_mode == TRAIN)
     {
-        train("model2.txt", 5, -1);
+        train("model2.txt", 1, 1000);
         return 0;
     }
     else if (current_mode == TEST)

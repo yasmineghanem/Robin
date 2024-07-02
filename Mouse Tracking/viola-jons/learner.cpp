@@ -16,7 +16,7 @@ Learner::Learner()
     this->margin = 0;
     this->feature_index = 0;
 }
-int Learner::predict(const vector<double> &X)
+int Learner::predict(const vector<int> &X)
 {
     return this->polarity * ((X[this->feature_index] >= this->threshold) ? 1 : -1);
 }

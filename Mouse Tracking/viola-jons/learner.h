@@ -12,7 +12,7 @@ public:
     int feature_index = 0;
     Learner(double threshold, int polarity, double error, double margin, int feature_index);
     Learner();
-    int predict(const vector<double> &X);
+    int predict(const vector<int> &X);
 };
 
 #endif

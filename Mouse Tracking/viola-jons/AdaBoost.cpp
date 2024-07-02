@@ -14,7 +14,7 @@ AdaBoost::~AdaBoost()
         delete learners[i];
     }
 }
-AdaBoost::AdaBoost(vector<vector<double>> X, vector<int> y) : X(X), y(y)
+AdaBoost::AdaBoost(vector<vector<int>> X, vector<int> y) : X(X), y(y)
 {
     // intialize the weights
     int n_pos = 0;
@@ -85,7 +85,7 @@ void AdaBoost::train(int T)
     }
 }
 
-int AdaBoost::predict(const std::vector<double> &X)
+int AdaBoost::predict(const std::vector<int> &X)
 {
     double sum = 0;
     for (size_t i = 0; i < this->learners.size(); ++i)

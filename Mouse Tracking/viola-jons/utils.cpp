@@ -31,11 +31,11 @@ std::chrono::duration<double> duration6;
 std::chrono::duration<double> duration7;
 std::chrono::duration<double> duration8;
 
-void integral_image(const vector<vector<double>> &I, vector<vector<double>> &II)
+void integral_image(const vector<vector<int>> &I, vector<vector<int>> &II)
 {
     int N = I.size();
     int M = I[0].size();
-    II.resize(N, vector<double>(M));
+    II.resize(N, vector<int>(M));
 
     // Set II(1, 1) = I(1, 1)
     II[0][0] = I[0][0];
@@ -62,7 +62,7 @@ void integral_image(const vector<vector<double>> &I, vector<vector<double>> &II)
     }
 }
 
-int sum_region(const vector<vector<double>> &ii, int x1, int y1, int x2, int y2)
+int sum_region(const vector<vector<int>> &ii, int x1, int y1, int x2, int y2)
 {
     int A = (x1 > 0 && y1 > 0) ? ii[x1 - 1][y1 - 1] : 0;
     int B = (x1 > 0) ? ii[x1 - 1][y2] : 0;
@@ -71,11 +71,11 @@ int sum_region(const vector<vector<double>> &ii, int x1, int y1, int x2, int y2)
     return D - B - C + A;
 }
 
-vector<double> compute_haar_like_features(const vector<vector<double>> &img, const vector<vector<double>> &II)
+vector<int> compute_haar_like_features(const vector<vector<int>> &img, const vector<vector<int>> &II)
 {
     // assert(img.size() == 24 && img[0].size() == 24);
 
-    vector<double> features;
+    vector<int> features;
     int f = 0;
 
     // Feature type (a)
@@ -175,7 +175,7 @@ vector<double> compute_haar_like_features(const vector<vector<double>> &img, con
     return features;
 }
 
-double haar_feature_scaling(const vector<vector<double>> &image, const string &feature_type, int i, int j, int w, int h)
+int haar_feature_scaling(const vector<vector<int>> &image, const string &feature_type, int i, int j, int w, int h)
 {
     int e = image.size();
     // assert(e >= 24);
@@ -383,6 +383,7 @@ double haar_feature_scaling(const vector<vector<double>> &image, const string &f
         throw invalid_argument("Unknown feature type");
     }
 }
+
 void print_time()
 {
     static int x = 1;
@@ -407,7 +408,8 @@ void update_learner(double W_pos_below, double W_neg_below, double W_pos_above, 
         cur_stump->margin = curr_M;
     }
 }
-Learner *decision_stump(vector<vector<double>> &X, const vector<int> &y, const vector<double> &weights, int feature_index, vector<int> &sorted_indices, vector<vector<double> *> &X_sorted, vector<int> &y_sorted, vector<double> &weights_sorted, vector<double> &pos_weights_prefix, vector<double> &neg_weights_prefix)
+
+Learner *decision_stump(vector<vector<int>> &X, const vector<int> &y, const vector<double> &weights, int feature_index, vector<int> &sorted_indices, vector<vector<int> *> &X_sorted, vector<int> &y_sorted, vector<double> &weights_sorted, vector<double> &pos_weights_prefix, vector<double> &neg_weights_prefix)
 {
     Learner *cur_stump = new Learner(0, 1, 2, 0, feature_index);
     int n = y.size();
@@ -502,12 +504,12 @@ Learner *decision_stump(vector<vector<double>> &X, const vector<int> &y, const v
 }
 
 // O(num_features * n)
-Learner *best_stump(vector<vector<double>> &X, const vector<int> &y, const vector<double> &weights, int num_features)
+Learner *best_stump(vector<vector<int>> &X, const vector<int> &y, const vector<double> &weights, int num_features)
 {
 
     int n = X.size();
     vector<int> sorted_indices(n);
-    vector<vector<double> *> X_sorted(n, nullptr);
+    vector<vector<int> *> X_sorted(n, nullptr);
     vector<int> y_sorted(n);
     vector<double> weights_sorted(n);
     vector<double> pos_weights_prefix(n), neg_weights_prefix(n);
@@ -532,7 +534,7 @@ Learner *best_stump(vector<vector<double>> &X, const vector<int> &y, const vecto
     return best_stump;
 }
 
-std::vector<std::string> get_files(const std::string &path, int num )
+std::vector<std::string> get_files(const std::string &path, int num)
 {
     std::vector<std::string> files;
     for (const auto &entry : fs::directory_iterator(path))
@@ -549,7 +551,7 @@ std::vector<std::string> get_files(const std::string &path, int num )
     return files;
 }
 
-void load_gray_images(const std::string &path, vector<vector<vector<double>>> &images, int num)
+void load_gray_images(const std::string &path, vector<vector<vector<int>>> &images, int num)
 {
     ;
     vector<string> files = get_files(path, num);
@@ -560,7 +562,7 @@ void load_gray_images(const std::string &path, vector<vector<vector<double>>> &i
         unsigned char *img = stbi_load(file.c_str(), &w, &h, &channels, 0);
         if (img)
         {
-            std::vector<double> grayscale_image(w * h);
+            std::vector<int> grayscale_image(w * h);
             if (channels > 1)
                 for (int i = 0; i < w * h; ++i)
                 {
@@ -575,7 +577,7 @@ void load_gray_images(const std::string &path, vector<vector<vector<double>>> &i
 
             stbi_image_free(img);
             // Allocate a 2D vector to store the grayscale image data
-            vector<vector<double>> imageVec(h, vector<double>(w));
+            vector<vector<int>> imageVec(h, vector<int>(w));
 
             // Convert to grayscale and copy data from 1D array to 2D vector
             for (int i = 0; i < h; ++i)
