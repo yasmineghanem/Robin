@@ -16,5 +16,7 @@ Learner *decision_stump(vector<vector<int>> &X, const vector<int> &y, const vect
 Learner *best_stump(vector<vector<int>> &X, const vector<int> &y, const vector<double> &weights, int num_features);
 std::vector<std::string> get_files(const std::string &path, int num = -1);
 void load_gray_images(const std::string &path, vector<vector<vector<int>>> &images, int num);
+void load_haar_like_features(const string &path, vector<vector<int>> &X, vector<int> &Y, int num, int y_label);
+void load_features(const string &pos_path, const string &neg_path, vector<vector<int>> &X, vector<int> &Y, int pos_num, int neg_num);
 
 #endif

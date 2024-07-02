@@ -21,25 +21,10 @@ void train(const char *file, int layers, int num)
     auto start_time = std::chrono::high_resolution_clock::now();
     std::string train_pos_path = "imgs/face_data_24_24/trainset/faces";
     std::string train_neg_path = "imgs/face_data_24_24/trainset/non-faces";
-    vector<vector<vector<int>>> pos_train, neg_train;
-    load_gray_images(train_pos_path, pos_train, num);
-    load_gray_images(train_neg_path, neg_train, num);
     vector<vector<int>> X_train;
     vector<int> Y_train;
-    vector<vector<int>> II;
-    for (const auto &img : pos_train)
-    {
-        integral_image(img, II);
-        X_train.push_back(compute_haar_like_features(img, II));
-        Y_train.push_back(1);
-    }
 
-    for (const auto &img : neg_train)
-    {
-        integral_image(img, II);
-        X_train.push_back(compute_haar_like_features(img, II));
-        Y_train.push_back(-1);
-    }
+    load_features(train_pos_path, train_neg_path, X_train, Y_train, num, num);
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end_time - start_time;
     std::cout << "time for loading data is : " << duration.count() << " s\n";

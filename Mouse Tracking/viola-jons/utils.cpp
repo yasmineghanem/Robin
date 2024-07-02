@@ -35,7 +35,8 @@ void integral_image(const vector<vector<int>> &I, vector<vector<int>> &II)
 {
     int N = I.size();
     int M = I[0].size();
-    II.resize(N, vector<int>(M));
+    if (II.size() != N || II[0].size() != M)
+        II.resize(N, vector<int>(M));
 
     // Set II(1, 1) = I(1, 1)
     II[0][0] = I[0][0];
@@ -591,4 +592,59 @@ void load_gray_images(const std::string &path, vector<vector<vector<int>>> &imag
             images.push_back(imageVec);
         }
     }
+}
+
+// this function will be combination between load_gray_images and load_haar_like_features
+// to help us avoid allocate memory for images and integral images
+void load_haar_like_features(const string &path, vector<vector<int>> &X, vector<int> &Y, int num, int y_label)
+{
+
+    vector<string> files = get_files(path, num);
+
+    vector<vector<int>> imageVec(30, vector<int>(30));
+
+    vector<vector<int>> II(30, vector<int>(30));
+
+    for (const auto &file : files)
+    {
+
+        int w, h, channels;
+        unsigned char *img = stbi_load(file.c_str(), &w, &h, &channels, 0);
+        if (img)
+        {
+            std::vector<int> grayscale_image(w * h);
+            if (channels > 1)
+                for (int i = 0; i < w * h; ++i)
+                {
+                    // Convert to grayscale assuming the image is in RGB format
+                    grayscale_image[i] = (0.0 + img[i * channels] + img[i * channels + 1] + img[i * channels + 2]) / channels;
+                }
+            else
+                for (int i = 0; i < w * h; ++i)
+                {
+                    grayscale_image[i] = img[i];
+                }
+            stbi_image_free(img);
+            // Allocate a 2D vector to store the grayscale image data
+
+            // Convert to grayscale and copy data from 1D array to 2D vector
+            for (int i = 0; i < h; ++i)
+            {
+                for (int j = 0; j < w; ++j)
+                {
+                    int gray_index = (i * w + j) * channels;
+                    imageVec[i][j] = grayscale_image[gray_index];
+                }
+            }
+
+            integral_image(imageVec, II);
+            X.push_back(compute_haar_like_features(imageVec, II));
+            Y.push_back(y_label);
+        }
+    }
+}
+void load_features(const string &pos_path, const string &neg_path, vector<vector<int>> &X, vector<int> &Y, int pos_num, int neg_num)
+{
+    load_haar_like_features(pos_path, X, Y, pos_num, 1);
+    load_haar_like_features(neg_path, X, Y, neg_num, -1);
 }
