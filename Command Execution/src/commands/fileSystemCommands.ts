@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import fs from "fs";
-import { COPY_DIRECTORY, COPY_FILE, CREATE_DIRECTORY, CREATE_FILE, DELETE_FILE, RENAME, SAVE } from '../constants/fileSystem';
+import { COPY_DIRECTORY, COPY_FILE, CREATE_DIRECTORY, CREATE_FILE, DELETE_FILE, RENAME, SAVE,GET_FILES } from '../constants/fileSystem';
+import { get } from 'axios';
 
 
 
@@ -23,7 +24,16 @@ const fileExists = (path: string) => {
     return false;
 };
 
-
+// get list of all files in workspace directory
+const getFiles = () => {
+    vscode.commands.registerCommand(GET_FILES, () => {
+        const files = fs.readdirSync(vscode.workspace.rootPath?.toString() || '');
+        return {
+            files,
+            success: true
+        };
+    });
+};
 
 
 
@@ -329,6 +339,7 @@ const registerFileSystemCommands = () => {
         deleteFile,
         rename,
         saveFile,
+        getFiles,
         // copyFileClipboard,
     ];
 
