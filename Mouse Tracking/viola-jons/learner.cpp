@@ -1,5 +1,7 @@
 #include "learner.h"
-
+#include <iostream>
+using namespace std;
+#include "const.h"
 Learner::Learner(double threshold, int polarity, double error, double margin, int feature_index)
 {
     this->threshold = threshold;
@@ -16,7 +18,13 @@ Learner::Learner()
     this->margin = 0;
     this->feature_index = 0;
 }
-int Learner::predict(const vector<double> &X)
+int Learner::predict(const vector<int> &X)
 {
-    return this->polarity * ((X[this->feature_index] - this->threshold) >= 0 ? 1 : -1);
+    // if (debug)
+    //     cout << (X[this->feature_index] - this->threshold) << " ";
+    return this->polarity * ((X[this->feature_index] >= this->threshold) ? 1 : -1);
 }
+// double Learner::predict(const vector<double> &X)
+// {
+//     return this->polarity * ((X[this->feature_index] - this->threshold));
+// }

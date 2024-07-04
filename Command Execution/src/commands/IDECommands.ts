@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { COPY, CUT, FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, PASTE } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY } from '../constants/IDE';
 import fs from "fs";
 import { NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
 
@@ -146,6 +146,23 @@ const copy = () => vscode.commands.registerCommand(COPY,
     () => vscode.commands.executeCommand('editor.action.clipboardCopyAction')
 );
 
+//undo
+const undo = () => vscode.commands.registerCommand(UNDO, () => {
+    // const editor = vscode.window.activeTextEditor;
+    // if (editor) {
+    vscode.commands.executeCommand('undo');
+    // }
+});
+
+//redo
+const redo = () => vscode.commands.registerCommand(REDO, () => {
+    // const editor = vscode.window.activeTextEditor;
+    // if (editor) {
+    vscode.commands.executeCommand('redo');
+    // }
+});
+
+
 // register commands
 const registerIDECommands = () => {
     const commands = [
@@ -156,7 +173,9 @@ const registerIDECommands = () => {
         killTerminal,
         paste,
         cut,
-        copy
+        copy,
+        undo,
+        redo
     ];
 
     commands.forEach(command => command());

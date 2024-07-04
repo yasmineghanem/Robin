@@ -22,3 +22,8 @@ export const COPY = "robin.copy";
 
 // cut
 export const CUT = "robin.cut";
+// undo
+export const UNDO = "robin.undo";
+
+// redo
+export const REDO = "robin.redo";

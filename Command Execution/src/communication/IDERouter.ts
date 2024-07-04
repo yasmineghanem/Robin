@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { COPY, CUT, FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, PASTE } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, COPY } from '../constants/IDE';
 const router = require('express').Router();
 
 
@@ -106,7 +106,7 @@ router.get(
 router.get(
     "/copy",
     (req: any, res: any) => {
-        vscode.commands.executeCommand(COPY).then(
+        vscode.commands.executeCommand('copy').then(
             () => {
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ message: "Copied!" }));
@@ -140,6 +140,24 @@ router.get(
             () => {
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ message: "Cut!" }));
+            }
+            ,
+            (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            }
+        );
+    }
+);
+
+//UNDO
+router.get(
+    "/undo",
+    (req: any, res: any) => {
+        vscode.commands.executeCommand('undo').then(
+            () => {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Undo Done!" }));
             },
             (err) => {
                 res.writeHead(400, { "Content-Type": "application/json" });
@@ -149,6 +167,20 @@ router.get(
     }
 );
 
-
-
+//REDO
+router.get(
+    "/redo",
+    (req: any, res: any) => {
+        vscode.commands.executeCommand('redo').then(
+            () => {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Redo Done!" }));
+            },
+            (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            }
+        );
+    }
+);
 export default router;

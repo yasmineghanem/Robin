@@ -22,3 +22,5 @@ export const RENAME = "robin.rename";
 // save
 export const SAVE = "robin.save";
 
+//get files name
+export const GET_FILES = "robin.getFiles";

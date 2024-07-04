@@ -6,6 +6,14 @@
 #include "learner.h"
 #include <chrono>
 #include <string>
+#include <filesystem>
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#define STB_IMAGE_RESIZE_IMPLEMENTATION
+#include "stb_image.h"
+using namespace std;
+namespace fs = std::filesystem;
+
 using namespace std;
 // using namespace std::chrono;
 const int step_size = 4;
@@ -23,11 +31,12 @@ std::chrono::duration<double> duration6;
 std::chrono::duration<double> duration7;
 std::chrono::duration<double> duration8;
 
-void integral_image(const vector<vector<double>> &I, vector<vector<double>> &II)
+void integral_image(vector<vector<int>> &I, vector<vector<int>> &II)
 {
     int N = I.size();
     int M = I[0].size();
-    II.resize(N, vector<double>(M));
+    if (II.size() != N || II[0].size() != M)
+        II.resize(N, vector<int>(M));
 
     // Set II(1, 1) = I(1, 1)
     II[0][0] = I[0][0];
@@ -54,7 +63,7 @@ void integral_image(const vector<vector<double>> &I, vector<vector<double>> &II)
     }
 }
 
-int sum_region(const vector<vector<double>> &ii, int x1, int y1, int x2, int y2)
+int sum_region(const vector<vector<int>> &ii, int x1, int y1, int x2, int y2)
 {
     int A = (x1 > 0 && y1 > 0) ? ii[x1 - 1][y1 - 1] : 0;
     int B = (x1 > 0) ? ii[x1 - 1][y2] : 0;
@@ -63,11 +72,11 @@ int sum_region(const vector<vector<double>> &ii, int x1, int y1, int x2, int y2)
     return D - B - C + A;
 }
 
-vector<double> compute_haar_like_features(const vector<vector<double>> &img, const vector<vector<double>> &II)
+vector<int> compute_haar_like_features(const vector<vector<int>> &II)
 {
     // assert(img.size() == 24 && img[0].size() == 24);
 
-    vector<double> features;
+    vector<int> features;
     int f = 0;
 
     // Feature type (a)
@@ -167,7 +176,7 @@ vector<double> compute_haar_like_features(const vector<vector<double>> &img, con
     return features;
 }
 
-double haar_feature_scaling(const vector<vector<double>> &image, const string &feature_type, int i, int j, int w, int h)
+int haar_feature_scaling(const vector<vector<int>> &image, const string &feature_type, int i, int j, int w, int h)
 {
     int e = image.size();
     // assert(e >= 24);
@@ -375,6 +384,7 @@ double haar_feature_scaling(const vector<vector<double>> &image, const string &f
         throw invalid_argument("Unknown feature type");
     }
 }
+
 void print_time()
 {
     static int x = 1;
@@ -384,8 +394,25 @@ void print_time()
     x++;
     start_time = end_time;
 }
-Learner *decision_stump(vector<vector<double>> &X, const vector<int> &y, const vector<double> &weights, int feature_index, vector<int> &sorted_indices, vector<vector<double> *> &X_sorted, vector<int> &y_sorted, vector<double> &weights_sorted)
+
+void update_learner(double W_pos_below, double W_neg_below, double W_pos_above, double W_neg_above, double tot_wights, double tau, double curr_M, Learner *cur_stump)
 {
+    double error_pos = W_pos_below + W_neg_above;
+    double error_neg = W_neg_below + W_pos_above;
+    int toggle = (error_pos <= error_neg) ? 1 : -1;
+    double error = min(error_pos, error_neg) / tot_wights;
+    if (error < cur_stump->error || (error == cur_stump->error && curr_M > cur_stump->margin))
+    {
+        cur_stump->error = error;
+        cur_stump->threshold = tau;
+        cur_stump->polarity = toggle;
+        cur_stump->margin = curr_M;
+    }
+}
+
+Learner *decision_stump(vector<vector<int>> &X, const vector<int> &y, const vector<double> &weights, int feature_index, vector<int> &sorted_indices, vector<vector<int> *> &X_sorted, vector<int> &y_sorted, vector<double> &weights_sorted, vector<double> &pos_weights_prefix, vector<double> &neg_weights_prefix)
+{
+    Learner *cur_stump = new Learner(0, 1, 2, 0, feature_index);
     int n = y.size();
     for (int i = 0; i < n; i++)
     {
@@ -399,53 +426,54 @@ Learner *decision_stump(vector<vector<double>> &X, const vector<int> &y, const v
         y_sorted[i] = y[sorted_indices[i]];
         weights_sorted[i] = weights[sorted_indices[i]];
     }
-    double tau = (*X_sorted[0])[feature_index] - 1;
-    double W_pos_above = 0;
-    double W_neg_above = 0;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cout << (*X_sorted[i])[feature_index] << " ";
+    // }
+    // cout << endl;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cout << y_sorted[i] << " ";
+    // }
+    // cout << endl;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cout << weights_sorted[i] << " ";
+    // }
+    // cout << endl;
     for (int i = 0; i < n; i++)
     {
         if (y_sorted[i] == 1)
         {
-            W_pos_above += weights_sorted[i];
+            pos_weights_prefix[i] = weights_sorted[i];
+            neg_weights_prefix[i] = 0;
         }
         else
         {
-            W_neg_above += weights_sorted[i];
+            neg_weights_prefix[i] = weights_sorted[i];
+            pos_weights_prefix[i] = 0;
+        }
+        if (i)
+        {
+            pos_weights_prefix[i] += pos_weights_prefix[i - 1];
+            neg_weights_prefix[i] += neg_weights_prefix[i - 1];
         }
     }
+    double tot_wights = pos_weights_prefix[n - 1] + neg_weights_prefix[n - 1];
+    double tau = (*X_sorted[0])[feature_index] - 1;
+    double W_pos_above = pos_weights_prefix[n - 1];
+    double W_neg_above = neg_weights_prefix[n - 1];
     double W_pos_below = 0;
     double W_neg_below = 0;
-    int curr_M = 0;
+    int curr_M = 1;
     int toggle = 1;
 
-    Learner *cur_stump = new Learner(0, 1, 2, 0, 0);
     for (int j = 0; j < n; j++)
     {
-        double error_pos = W_neg_above + W_pos_below;
-        double error_neg = W_pos_above + W_neg_below;
-        toggle = (error_pos <= error_neg) ? 1 : -1;
-        double error = min(error_pos, error_neg);
-        if (error < cur_stump->error || (error == cur_stump->error && curr_M > cur_stump->margin))
-        {
-            cur_stump->error = error;
-            cur_stump->threshold = tau;
-            cur_stump->polarity = toggle;
-            cur_stump->margin = curr_M;
-        }
+        update_learner(W_pos_below, W_neg_below, W_pos_above, W_neg_above, tot_wights, tau, curr_M, cur_stump);
+        // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
         while (true)
         {
-            if (y_sorted[j] == -1)
-            {
-                W_neg_below += weights_sorted[j];
-                W_neg_above -= weights_sorted[j];
-            }
-
-            else
-            {
-                W_pos_below += weights_sorted[j];
-                W_pos_above -= weights_sorted[j];
-            }
-
             if (j + 1 < n && (*X_sorted[j])[feature_index] == (*X_sorted[j + 1])[feature_index])
                 j++;
             else
@@ -455,48 +483,48 @@ Learner *decision_stump(vector<vector<double>> &X, const vector<int> &y, const v
         {
             tau = ((*X_sorted[j])[feature_index] + (*X_sorted[j + 1])[feature_index]) / 2;
             curr_M = (*X_sorted[j + 1])[feature_index] - (*X_sorted[j])[feature_index];
+            W_pos_above = pos_weights_prefix[n - 1] - pos_weights_prefix[j];
+            W_neg_above = neg_weights_prefix[n - 1] - neg_weights_prefix[j];
+            W_pos_below = pos_weights_prefix[j];
+            W_neg_below = neg_weights_prefix[j];
+        }
+        else
+        {
+            tau = (*X_sorted[j])[feature_index] + 1;
+            curr_M = 1;
+            W_pos_above = 0;
+            W_neg_above = 0;
+            W_pos_below = pos_weights_prefix[n - 1];
+            W_neg_below = neg_weights_prefix[n - 1];
         }
     }
+    update_learner(W_pos_below, W_neg_below, W_pos_above, W_neg_above, tot_wights, tau, curr_M, cur_stump);
+    // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
 
     return cur_stump;
 }
 
 // O(num_features * n)
-Learner *best_stump(vector<vector<double>> &X, const vector<int> &y, const vector<double> &weights, int num_features)
+Learner *best_stump(vector<vector<int>> &X, const vector<int> &y, const vector<double> &weights, int num_features)
 {
 
     int n = X.size();
     vector<int> sorted_indices(n);
-    vector<vector<double> *> X_sorted(n, nullptr);
+    vector<vector<int> *> X_sorted(n, nullptr);
     vector<int> y_sorted(n);
     vector<double> weights_sorted(n);
-    Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted);
-    start_time = std::chrono::high_resolution_clock::now();
+    vector<double> pos_weights_prefix(n), neg_weights_prefix(n);
+    Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix);
+
     for (int f = 0; f < num_features; f++)
     {
-        // if (f % 1000 == 0)
-        // {
-        //     duration = end_time - start_time;
-        //     cout << "feature number " << f << endl;
-        //     std::cout << "single design stump time: " << duration.count() << " s\n";
-
-        //     start_time = chrono::high_resolution_clock::now();
-        //     int x = 0;
-        //     for (int i = 0; i < 1000; i++)
-        //     {
-        //         x++;
-        //     }
-        //     end_time = chrono::high_resolution_clock::now();
-        //     duration = end_time - start_time;
-        //     cout << "time for 1000 iterations : " << duration.count() << " s\n";
-        // }
 
         // num_features is around 160K , this part could be run on cuda and lunch too many threads here
-        // start_time = std::chrono::high_resolution_clock::now();
-        Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted);
-        // end_time = std::chrono::high_resolution_clock::now();
+        Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix);
         if (cur_stump->error < best_stump->error || (cur_stump->error == best_stump->error && cur_stump->margin > best_stump->margin))
+        // if (cur_stump->error < best_stump->error)
         {
+            delete best_stump;
             best_stump = cur_stump;
             best_stump->feature_index = f;
         }
@@ -506,4 +534,159 @@ Learner *best_stump(vector<vector<double>> &X, const vector<int> &y, const vecto
         }
     }
     return best_stump;
+}
+
+std::vector<std::string> get_files(const std::string &path, int num)
+{
+    std::vector<std::string> files;
+    for (const auto &entry : fs::directory_iterator(path))
+    {
+        if (entry.path().extension() == ".png" || entry.path().extension() == ".jpg" || entry.path().extension() == ".jpeg")
+        {
+            files.push_back(entry.path().string());
+            if (num != -1 && files.size() >= num)
+            {
+                break;
+            }
+        }
+    }
+    return files;
+}
+
+void load_gray_images(const std::string &path, vector<vector<vector<int>>> &images, int num)
+{
+    ;
+    vector<string> files = get_files(path, num);
+
+    for (const auto &file : files)
+    {
+        int w, h, channels;
+        unsigned char *img = stbi_load(file.c_str(), &w, &h, &channels, 0);
+        if (img)
+        {
+            std::vector<int> grayscale_image(w * h);
+            if (channels > 1)
+                for (int i = 0; i < w * h; ++i)
+                {
+                    // Convert to grayscale assuming the image is in RGB format
+                    grayscale_image[i] = (0.0 + img[i * channels] + img[i * channels + 1] + img[i * channels + 2]) / channels;
+                }
+            else
+                for (int i = 0; i < w * h; ++i)
+                {
+                    grayscale_image[i] = img[i];
+                }
+
+            stbi_image_free(img);
+            // Allocate a 2D vector to store the grayscale image data
+            vector<vector<int>> imageVec(h, vector<int>(w));
+
+            // Convert to grayscale and copy data from 1D array to 2D vector
+            for (int i = 0; i < h; ++i)
+            {
+                for (int j = 0; j < w; ++j)
+                {
+                    int gray_index = (i * w + j) * channels;
+                    imageVec[i][j] = grayscale_image[gray_index];
+                }
+            }
+            images.push_back(imageVec);
+        }
+    }
+}
+
+// this function will be combination between load_gray_images and load_haar_like_features
+// to help us avoid allocate memory for images and integral images
+void load_haar_like_features(const string &path, vector<vector<int>> &X, vector<int> &Y, int num, int y_label)
+{
+
+    vector<string> files = get_files(path, num);
+
+    vector<vector<int>> imageVec(30, vector<int>(30));
+
+    vector<vector<int>> II(30, vector<int>(30));
+
+    for (const auto &file : files)
+    {
+
+        int w, h, channels;
+        unsigned char *img = stbi_load(file.c_str(), &w, &h, &channels, 0);
+        if (img)
+        {
+            std::vector<int> grayscale_image(w * h);
+            if (channels > 1)
+                for (int i = 0; i < w * h; ++i)
+                {
+                    // Convert to grayscale assuming the image is in RGB format
+                    grayscale_image[i] = (0.0 + img[i * channels] + img[i * channels + 1] + img[i * channels + 2]) / channels;
+                }
+            else
+                for (int i = 0; i < w * h; ++i)
+                {
+                    grayscale_image[i] = img[i];
+                }
+            stbi_image_free(img);
+            // Allocate a 2D vector to store the grayscale image data
+
+            // Convert to grayscale and copy data from 1D array to 2D vector
+            for (int i = 0; i < h; ++i)
+            {
+                for (int j = 0; j < w; ++j)
+                {
+                    int gray_index = (i * w + j) * channels;
+                    imageVec[i][j] = grayscale_image[gray_index];
+                }
+            }
+
+            integral_image(imageVec, II);
+            X.push_back(compute_haar_like_features(II));
+            Y.push_back(y_label);
+        }
+    }
+}
+void load_features(const string &pos_path, const string &neg_path, vector<vector<int>> &X, vector<int> &Y, int pos_num, int neg_num)
+{
+    load_haar_like_features(pos_path, X, Y, pos_num, 1);
+    load_haar_like_features(neg_path, X, Y, neg_num, -1);
+}
+matrices calc_acuracy_metrices(vector<int> &Y_test, vector<int> &predeictions)
+{
+    // Initialize counters
+    int true_positive = 0, true_negative = 0;
+    int false_positive = 0, false_negative = 0;
+
+    // Calculate the counts for TP, TN, FP, and FN
+    for (size_t i = 0; i < Y_test.size(); ++i)
+    {
+        if (Y_test[i] == 1 && predeictions[i] == 1)
+        {
+            true_positive++;
+        }
+        else if (Y_test[i] == -1 && predeictions[i] == -1)
+        {
+            true_negative++;
+        }
+        else if (Y_test[i] == -1 && predeictions[i] == 1)
+        {
+            false_positive++;
+        }
+        else if (Y_test[i] == 1 && predeictions[i] == -1)
+        {
+            false_negative++;
+        }
+    }
+    // Calculate accuracy, error rate, false positive rate, and false negative rate
+    double accuracy = static_cast<double>(true_positive + true_negative) / Y_test.size();
+    double error_rate = static_cast<double>(false_positive + false_negative) / Y_test.size();
+    int total_positives = true_positive + false_negative;
+    int total_negatives = true_negative + false_positive;
+    double false_positive_rate = total_negatives > 0 ? static_cast<double>(false_positive) / total_negatives : 0;
+    double false_negative_rate = total_positives > 0 ? static_cast<double>(false_negative) / total_positives : 0;
+
+    matrices m;
+    m.accuracy = accuracy;
+    m.error_rate = error_rate;
+    m.false_positive_rate = false_positive_rate;
+    m.false_negative_rate = false_negative_rate;
+    return m;
 }
