@@ -95,7 +95,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     assignVariable(name: string, value: any, type: string): string {
         //Check before if RHS is same type as LHS
         ///////// we need function to check the type of the variable /////////
-        if(!Object.values(AssignmentOperators).includes(type as AssignmentOperators)){
+        if (!Object.values(AssignmentOperators).includes(type as AssignmentOperators)) {
             throw new Error(`Invalid assignment type: ${type}`);
         }
         switch (type) {
@@ -184,16 +184,54 @@ export class PythonCodeGenerator extends CodeGenerator {
 
     /**
      * Declare Class
+     * class Person:
+        def __init__(self, name, age):
+            self.name = name
+            self.age = age
+
+        def myfunc(self):
+            print("Hello my name is " + self.name)
+
     **/
-    declareClass(name: string, properties: { name: string, type: string }[], methods: string[]): string {
+    declareClass(name: string, properties: { name: string, type?: string }[], methods: { name: string, parameters: { name: string, value?: any }[], body?: string[], }[]): string {
         if (!this.isValidClassName(name)) {
             throw new Error(`Invalid class name: ${name} `);
         }
-        const props = properties.map(p => `self.${p.name} = None`).join('\n        ');
-        const initMethod = `def __init__(self): \n        ${props} `;
-        const methodCode = methods.join('\n\n    ');
 
-        return `class ${name}: \n    ${initMethod} \n\n    ${methodCode} `;
+        // check if valid properties names
+        if (properties.some(p => !this.isValidVariableName(p.name))) {
+            throw new Error(`Invalid property name`);
+        }
+
+        // check if valid method names
+        if (methods.some(m => !this.isValidFunctionName(m.name))) {
+            throw new Error(`Invalid method name`);
+        }
+
+        let code = "";
+        // add class name, capitalize first letter
+        code += `class ${name.charAt(0).toUpperCase() + name.slice(1)}: \n`;
+
+        // add constructor
+        code += `\tdef __init__(self, ${properties.map(p => p.name).join(', ')}): \n`;
+
+        // add properties
+        properties.forEach(p => {
+            code += `\t\tself.${p.name} = ${p.name}\n`;
+        });
+
+        // add methods
+        methods.forEach(m => {
+            // sort the parameters so that the one's without value come first
+            m.parameters.sort((a, b) => a.value === undefined ? -1 : 1);
+            const params = m.parameters.map(p => `${p.name}${p.value ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}` : ''}`).join(', ');
+            // code += "\n";
+            code += `\n\tdef ${m.name}(self, ${params}):\n\t`;
+            code += this.wrapInCodeBlock(m.body ?? ['pass\n']);
+        });
+
+        return code;
+
     }
 
     /**
@@ -337,10 +375,10 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Assertion
     **/
     generateAssertion(variable: string, value: any, type: string): string {
-        if(!Object.values(AssertionOperators).includes(type as AssertionOperators)){
+        if (!Object.values(AssertionOperators).includes(type as AssertionOperators)) {
             throw new Error(`Invalid assertion type: ${type}`);
         }
-       switch (type) {
+        switch (type) {
             case AssertionOperators.Equal:
                 return `assert ${variable} == ${value}\n`;
             case AssertionOperators.NotEqual:
@@ -351,7 +389,7 @@ export class PythonCodeGenerator extends CodeGenerator {
                 return `assert ${variable} <= ${value}\n`;
             default:
                 throw new Error(`Invalid assertion type: ${type}`);
-         }
+        }
 
     }
 
@@ -359,7 +397,7 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Generate Casting
     **/
     generateCasting(value: any, type: string): string {
-        if(!Object.values(CastingTypes).includes(type as CastingTypes)){
+        if (!Object.values(CastingTypes).includes(type as CastingTypes)) {
             throw new Error(`Invalid casting type: ${type}`);
         }
         switch (type) {
@@ -382,7 +420,7 @@ export class PythonCodeGenerator extends CodeGenerator {
             default:
                 throw new Error(`Invalid casting type: ${type}`);
         }
-    }   
+    }
 
     /**
      * Generate User Input
@@ -394,7 +432,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     /**
      * Generate Print
     **/
-    generatePrint(value: any, type:string): string {
+    generatePrint(value: any, type: string): string {
         switch (type) {
             case 'string':
                 return `print("${value}")\n`;
@@ -408,7 +446,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     /**
      * Read file
     **/
-      //TODO: add options to read line, read all file, read character
+    //TODO: add options to read line, read all file, read character
     generateReadFile(path: string, variable: any): string {
         return `${variable} = open("${path}", 'r').read()\n`;
     }

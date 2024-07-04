@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL } from '../constants/IDE';
+import { COPY, CUT, FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, PASTE } from '../constants/IDE';
 import fs from "fs";
+import { NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
 
 
 // go to line
@@ -70,6 +71,81 @@ const newTerminal = () => vscode.commands.registerCommand(NEW_TERMINAL, () => {
 const killTerminal = () => vscode.commands.registerCommand(KILL_TERMINAL, () => {
     vscode.commands.executeCommand('workbench.action.terminal.kill');
 });
+
+
+const paste = () => vscode.commands.registerCommand(PASTE,
+    async () => {
+        // implement the paste itself
+        // check if the cursor is selecting an area, replace it with the clipboard content
+        // if not, paste the clipboard content at the current cursor position
+
+        const editor = vscode.window.activeTextEditor;
+
+        if (editor) {
+            const selection = editor.selection;
+            const text = await vscode.env.clipboard.readText();
+
+            editor.edit(editBuilder => {
+                editBuilder.replace(selection, text);
+            });
+
+        }
+
+        else {
+            vscode.window.showErrorMessage('No active text editor.');
+            return {
+                success: false,
+                message: NO_ACTIVE_TEXT_EDITOR
+            };
+        }
+
+    }
+);
+
+// cut
+const cut = () => vscode.commands.registerCommand(CUT,
+    () => {
+        // implement the cut itself
+        // check if the cursor is selecting an area, copy it to clipboard and replace it with an empty string
+        // if not, copy the current line to clipboard
+
+        const editor = vscode.window.activeTextEditor;
+
+        if (editor) {
+            const selection = editor.selection;
+            const text = editor.document.getText(selection);
+            if (text) {
+                vscode.env.clipboard.writeText(text);
+                editor.edit(editBuilder => {
+                    editBuilder.replace(selection, '');
+                });
+            } else {
+                const line = editor.document.lineAt(selection.active.line);
+                vscode.env.clipboard.writeText(line.text);
+                editor.edit(editBuilder => {
+                    editBuilder.delete(line.range);
+                });
+            }
+
+
+        }
+
+        else {
+            vscode.window.showErrorMessage('No active text editor.');
+            return {
+                success: false,
+                message: NO_ACTIVE_TEXT_EDITOR
+            };
+        }
+    }
+
+);
+
+// copy
+const copy = () => vscode.commands.registerCommand(COPY,
+    () => vscode.commands.executeCommand('editor.action.clipboardCopyAction')
+);
+
 // register commands
 const registerIDECommands = () => {
     const commands = [
@@ -77,7 +153,10 @@ const registerIDECommands = () => {
         goToFile,
         focusTerminal,
         newTerminal,
-        killTerminal
+        killTerminal,
+        paste,
+        cut,
+        copy
     ];
 
     commands.forEach(command => command());

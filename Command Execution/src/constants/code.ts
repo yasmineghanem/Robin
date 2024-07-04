@@ -23,6 +23,7 @@ export const LINE_COMMENT = "robin.lineComment";
 export const BLOCK_COMMENT = "robin.blockComment";
 export const READ_FILE = "robin.readFile";
 export const WRITE_FILE = "robin.writeFile";
+export const DECLARE_CLASS = "robin.declareClass";
 
 /**
  * Variable declaration messages

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL } from '../constants/IDE';
+import { COPY, CUT, FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, PASTE } from '../constants/IDE';
 const router = require('express').Router();
 
 
@@ -101,5 +101,54 @@ router.get(
         );
     }
 );
+
+// copy
+router.get(
+    "/copy",
+    (req: any, res: any) => {
+        vscode.commands.executeCommand(COPY).then(
+            () => {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Copied!" }));
+            },
+            (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            }
+        );
+    }
+);
+router.get(
+    "/paste",
+    (req: any, res: any) => {
+        vscode.commands.executeCommand(PASTE).then(
+            () => {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Pasted!" }));
+            },
+            (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            }
+        );
+    }
+);
+router.get(
+    "/cut",
+    (req: any, res: any) => {
+        vscode.commands.executeCommand(CUT).then(
+            () => {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Cut!" }));
+            },
+            (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            }
+        );
+    }
+);
+
+
 
 export default router;

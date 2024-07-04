@@ -12,7 +12,7 @@ import {
     NO_ACTIVE_TEXT_EDITOR,
     OPERATION,
     IMPORT_LIBRARY,
-    IMPORT_MODULE, 
+    IMPORT_MODULE,
     FILE_EXT_FAILURE,
     LOOP_FAILURE,
     LOOP_SUCCESS,
@@ -55,7 +55,8 @@ import {
     READ_FILE_SUCCESS,
     WRITE_FILE,
     WRITE_FILE_FAILURE,
-    WRITE_FILE_SUCCESS
+    WRITE_FILE_SUCCESS,
+    DECLARE_CLASS
 
 } from "../constants/code";
 import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
@@ -574,7 +575,7 @@ const conditional = () => {
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
 
-}
+};
 
 //Import
 const importLibrary = () => {
@@ -620,7 +621,7 @@ const importLibrary = () => {
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
 
-}
+};
 
 //Import Module
 const importModule = () => {
@@ -715,7 +716,7 @@ const assertion = () => {
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
 
-}
+};
 
 // casting
 const typeCasting = () => {
@@ -762,7 +763,7 @@ const typeCasting = () => {
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
 
-}
+};
 
 // array operations (pack, unpack, zip, unzip)
 const arrayOperations = () => {
@@ -811,7 +812,7 @@ const arrayOperations = () => {
     });
 
 
-}
+};
 
 // user input
 const userInput = () => {
@@ -859,7 +860,7 @@ const userInput = () => {
     });
 
 
-}
+};
 
 // print
 const printConsole = () => {
@@ -905,7 +906,7 @@ const printConsole = () => {
         }
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
-}
+};
 
 
 // line comment
@@ -951,7 +952,7 @@ const lineComment = () => {
         }
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
-}
+};
 
 
 // block comment
@@ -997,7 +998,7 @@ const blockComment = () => {
         }
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
-}
+};
 
 // read from file
 const readFile = () => {
@@ -1043,7 +1044,7 @@ const readFile = () => {
         }
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
-}
+};
 // write to file
 const writeFile = () => {
     vscode.commands.registerCommand(WRITE_FILE, async (args) => {
@@ -1088,7 +1089,87 @@ const writeFile = () => {
         }
         return handleFailure(NO_ACTIVE_TEXT_EDITOR);
     });
-}
+};
+
+// {
+//     "name": "testClass",
+//     "methods": [
+//         {
+//             "name": "test_function",
+//             "parameters": [
+//                 {
+//                     "name": "x_variable",
+//                     "value": "test"
+//                 },
+//                 {
+//                     "name": "y"
+//                 }
+//             ]
+//         },
+//         {
+//             "name": "test_function",
+//             "parameters": [
+//                 {
+//                     "name": "x_variable",
+//                     "value": "test"
+//                 },
+//                 {
+//                     "name": "y"
+//                 }
+//             ]
+//         }
+//     ]
+// }
+
+// declare class 
+
+const declareClass = () => {
+    vscode.commands.registerCommand(DECLARE_CLASS,
+        async (args) => {
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                // check for extension
+                const ext = getFileExtension(editor);
+
+                let codeGenerator;
+
+                switch (ext) {
+                    case EXTENSIONS.PYTHON:
+                        codeGenerator = new PythonCodeGenerator();
+                        break;
+                    case EXTENSIONS.JUPYTER:
+                        codeGenerator = new PythonCodeGenerator();
+                        break;
+                    default:
+                        return handleFailure(FILE_EXT_FAILURE);
+                }
+
+                try {
+                    let s = await editor.edit((editBuilder) => {
+                        editBuilder.insert(
+                            getCurrentPosition(editor),
+                            codeGenerator.declareClass(
+                                args?.name,
+                                args?.properties,
+                                args?.methods
+                            )
+                        );
+                    });
+
+                    if (!s) {
+                        return handleFailure(FUNCTION_FAILURE);
+                    }
+                } catch (e) {
+                    return handleFailure(FUNCTION_FAILURE);
+                }
+
+                return handleSuccess(FUNCTION_SUCCESS);
+            }
+            return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+        });
+
+};
+
 // register commands
 const registerCodeCommands = () => {
     const commands = [declareVariable,
@@ -1112,7 +1193,8 @@ const registerCodeCommands = () => {
         lineComment,
         blockComment,
         readFile,
-        writeFile
+        writeFile,
+        declareClass
 
     ];
 

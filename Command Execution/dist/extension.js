@@ -39,7 +39,7 @@ const vscode = __importStar(__webpack_require__(1));
 const server_1 = __importDefault(__webpack_require__(2));
 const commands_1 = __importDefault(__webpack_require__(168));
 const path_1 = __importDefault(__webpack_require__(7));
-(__webpack_require__(177).config)({
+(__webpack_require__(184).config)({
     path: path_1.default.resolve(__dirname, '../.env')
 }); // Load environment variables from .env
 // This method is called when your extension is activated
@@ -24726,6 +24726,34 @@ router.get("/kill-terminal", (req, res) => {
         res.end(JSON.stringify(err));
     });
 });
+// copy
+router.get("/copy", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.COPY).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Copied!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+router.get("/paste", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.PASTE).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Pasted!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+router.get("/cut", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.CUT).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Cut!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
 exports["default"] = router;
 
 
@@ -24737,7 +24765,7 @@ exports["default"] = router;
 
 // commands
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
+exports.CUT = exports.COPY = exports.PASTE = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
 exports.GO_TO_LINE = "robin.goToLine";
 // go to file
 exports.GO_TO_FILE = "robin.goToFile";
@@ -24747,6 +24775,12 @@ exports.FOCUS_TERMINAL = "robin.focusTerminal";
 exports.NEW_TERMINAL = "robin.newTerminal";
 // kill terminal
 exports.KILL_TERMINAL = "robin.killTerminal";
+// paste
+exports.PASTE = "robin.paste";
+// copy
+exports.COPY = "robin.copy";
+// cut
+exports.CUT = "robin.cut";
 
 
 /***/ }),
@@ -24894,6 +24928,11 @@ router.post("/conditional", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.CONDITIONAL, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// class
+router.post("/declare-class", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.DECLARE_CLASS, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 // get AST
 router.get('/ast', (req, res) => {
     // const data = req.body;
@@ -24909,8 +24948,8 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.NO_ACTIVE_TEXT_EDITOR = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
-exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = void 0;
+exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = void 0;
 /**
  * Commands
  */
@@ -24936,6 +24975,7 @@ exports.LINE_COMMENT = "robin.lineComment";
 exports.BLOCK_COMMENT = "robin.blockComment";
 exports.READ_FILE = "robin.readFile";
 exports.WRITE_FILE = "robin.writeFile";
+exports.DECLARE_CLASS = "robin.declareClass";
 /**
  * Variable declaration messages
  */
@@ -25190,21 +25230,20 @@ const activateRobin = () => vscode.commands.registerCommand('robin.activate', ()
 //     vscode.window.showErrorMessage('No active text editor.');
 //   }
 // });
-const declareClass = () => vscode.commands.registerCommand('robin.declareClass', (args, body) => {
-    const editor = vscode.window.activeTextEditor;
-    let parameters = body.parameters;
-    let name = parameters[0];
-    let line = `\nclass ${name}:`;
-    // Check if an editor is open
-    if (editor) {
-        editor.edit(editBuilder => {
-            editBuilder.insert(get_currentpoint(editor), line);
-        });
-    }
-    else {
-        vscode.window.showErrorMessage('No active text editor.');
-    }
-});
+// const declareClass = () => vscode.commands.registerCommand('robin.declareClass', (args, body) => {
+//   const editor = vscode.window.activeTextEditor;
+//   let parameters = body.parameters;
+//   let name = parameters[0];
+//   let line = `\nclass ${name}:`;
+//   // Check if an editor is open
+//   if (editor) {
+//     editor.edit(editBuilder => {
+//       editBuilder.insert(get_currentpoint(editor), line);
+//     });
+//   } else {
+//     vscode.window.showErrorMessage('No active text editor.');
+//   }
+// });
 const goToLocation = () => vscode.commands.registerCommand('robin.goToLocation', (data) => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
@@ -25231,7 +25270,7 @@ const fileName = () => vscode.commands.registerCommand('robin.fileName', () => {
 const registerAllCommands = () => {
     const commands = [
         activateRobin,
-        declareClass,
+        // declareClass,
         goToLocation,
         fileName
     ];
@@ -25588,6 +25627,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const IDE_1 = __webpack_require__(164);
 const fs_1 = __importDefault(__webpack_require__(25));
+const code_1 = __webpack_require__(166);
 // go to line
 const goToLine = () => vscode.commands.registerCommand(IDE_1.GO_TO_LINE, (data) => {
     const editor = vscode.window.activeTextEditor;
@@ -25641,6 +25681,59 @@ const newTerminal = () => vscode.commands.registerCommand(IDE_1.NEW_TERMINAL, ()
 const killTerminal = () => vscode.commands.registerCommand(IDE_1.KILL_TERMINAL, () => {
     vscode.commands.executeCommand('workbench.action.terminal.kill');
 });
+const paste = () => vscode.commands.registerCommand(IDE_1.PASTE, async () => {
+    // implement the paste itself
+    // check if the cursor is selecting an area, replace it with the clipboard content
+    // if not, paste the clipboard content at the current cursor position
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const selection = editor.selection;
+        const text = await vscode.env.clipboard.readText();
+        editor.edit(editBuilder => {
+            editBuilder.replace(selection, text);
+        });
+    }
+    else {
+        vscode.window.showErrorMessage('No active text editor.');
+        return {
+            success: false,
+            message: code_1.NO_ACTIVE_TEXT_EDITOR
+        };
+    }
+});
+// cut
+const cut = () => vscode.commands.registerCommand(IDE_1.CUT, () => {
+    // implement the cut itself
+    // check if the cursor is selecting an area, copy it to clipboard and replace it with an empty string
+    // if not, copy the current line to clipboard
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const selection = editor.selection;
+        const text = editor.document.getText(selection);
+        if (text) {
+            vscode.env.clipboard.writeText(text);
+            editor.edit(editBuilder => {
+                editBuilder.replace(selection, '');
+            });
+        }
+        else {
+            const line = editor.document.lineAt(selection.active.line);
+            vscode.env.clipboard.writeText(line.text);
+            editor.edit(editBuilder => {
+                editBuilder.delete(line.range);
+            });
+        }
+    }
+    else {
+        vscode.window.showErrorMessage('No active text editor.');
+        return {
+            success: false,
+            message: code_1.NO_ACTIVE_TEXT_EDITOR
+        };
+    }
+});
+// copy
+const copy = () => vscode.commands.registerCommand(IDE_1.COPY, () => vscode.commands.executeCommand('editor.action.clipboardCopyAction'));
 // register commands
 const registerIDECommands = () => {
     const commands = [
@@ -25648,7 +25741,10 @@ const registerIDECommands = () => {
         goToFile,
         focusTerminal,
         newTerminal,
-        killTerminal
+        killTerminal,
+        paste,
+        cut,
+        copy
     ];
     commands.forEach(command => command());
 };
@@ -26470,6 +26566,69 @@ const writeFile = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
+// {
+//     "name": "testClass",
+//     "methods": [
+//         {
+//             "name": "test_function",
+//             "parameters": [
+//                 {
+//                     "name": "x_variable",
+//                     "value": "test"
+//                 },
+//                 {
+//                     "name": "y"
+//                 }
+//             ]
+//         },
+//         {
+//             "name": "test_function",
+//             "parameters": [
+//                 {
+//                     "name": "x_variable",
+//                     "value": "test"
+//                 },
+//                 {
+//                     "name": "y"
+//                 }
+//             ]
+//         }
+//     ]
+// }
+// declare class 
+const declareClass = () => {
+    vscode.commands.registerCommand(code_1.DECLARE_CLASS, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareClass(args?.name, args?.properties, args?.methods));
+                });
+                if (!s) {
+                    return handleFailure(code_1.FUNCTION_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.FUNCTION_FAILURE);
+            }
+            return handleSuccess(code_1.FUNCTION_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
 // register commands
 const registerCodeCommands = () => {
     const commands = [declareVariable,
@@ -26493,7 +26652,8 @@ const registerCodeCommands = () => {
         lineComment,
         blockComment,
         readFile,
-        writeFile
+        writeFile,
+        declareClass
     ];
     commands.forEach((command) => {
         command();
@@ -26666,15 +26826,46 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     /**
      * Declare Class
+     * class Person:
+        def __init__(self, name, age):
+            self.name = name
+            self.age = age
+
+        def myfunc(self):
+            print("Hello my name is " + self.name)
+
     **/
     declareClass(name, properties, methods) {
         if (!this.isValidClassName(name)) {
             throw new Error(`Invalid class name: ${name} `);
         }
-        const props = properties.map(p => `self.${p.name} = None`).join('\n        ');
-        const initMethod = `def __init__(self): \n        ${props} `;
-        const methodCode = methods.join('\n\n    ');
-        return `class ${name}: \n    ${initMethod} \n\n    ${methodCode} `;
+        // check if valid properties names
+        if (properties.some(p => !this.isValidVariableName(p.name))) {
+            throw new Error(`Invalid property name`);
+        }
+        // check if valid method names
+        if (methods.some(m => !this.isValidFunctionName(m.name))) {
+            throw new Error(`Invalid method name`);
+        }
+        let code = "";
+        // add class name, capitalize first letter
+        code += `class ${name.charAt(0).toUpperCase() + name.slice(1)}: \n`;
+        // add constructor
+        code += `\tdef __init__(self, ${properties.map(p => p.name).join(', ')}): \n`;
+        // add properties
+        properties.forEach(p => {
+            code += `\t\tself.${p.name} = ${p.name}\n`;
+        });
+        // add methods
+        methods.forEach(m => {
+            // sort the parameters so that the one's without value come first
+            m.parameters.sort((a, b) => a.value === undefined ? -1 : 1);
+            const params = m.parameters.map(p => `${p.name}${p.value ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}` : ''}`).join(', ');
+            // code += "\n";
+            code += `\n\tdef ${m.name}(self, ${params}):\n\t`;
+            code += this.wrapInCodeBlock(m.body ?? ['pass\n']);
+        });
+        return code;
     }
     /**
      * Import modules
@@ -27090,14 +27281,21 @@ exports.EXTENSIONS = {
 
 
 /***/ }),
-/* 177 */
+/* 177 */,
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const fs = __webpack_require__(25)
 const path = __webpack_require__(7)
-const os = __webpack_require__(178)
+const os = __webpack_require__(185)
 const crypto = __webpack_require__(138)
-const packageJson = __webpack_require__(179)
+const packageJson = __webpack_require__(186)
 
 const version = packageJson.version
 
@@ -27457,14 +27655,14 @@ module.exports = DotenvModule
 
 
 /***/ }),
-/* 178 */
+/* 185 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("os");
 
 /***/ }),
-/* 179 */
+/* 186 */
 /***/ ((module) => {
 
 "use strict";
