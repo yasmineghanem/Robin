@@ -13,3 +13,26 @@ export const NEW_TERMINAL = "robin.newTerminal";
 
 // kill terminal
 export const KILL_TERMINAL = "robin.killTerminal";
+
+// paste
+export const PASTE = "robin.paste";
+
+// copy
+export const COPY = "robin.copy";
+
+// cut
+export const CUT = "robin.cut";
+// undo
+export const UNDO = "robin.undo";
+
+// redo
+export const REDO = "robin.redo";
+
+// select kernel
+export const SELECT_KERNEL = "robin.selectKernel";
+
+// run notebook cell
+export const RUN_NOTEBOOK_CELL = "robin.runNotebookCell";
+
+// run all notebook cells
+export const RUN_NOTEBOOK = "robin.runNotebook";

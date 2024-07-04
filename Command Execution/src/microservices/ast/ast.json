@@ -1,0 +1,26 @@
+{
+    "type": "module",
+    "children": [
+        {
+            "type": "expression_statement",
+            "children": [
+                {
+                    "type": "assignment",
+                    "children": [
+                        {
+                            "type": "identifier",
+                            "name": "s"
+                        },
+                        {
+                            "type": "="
+                        },
+                        {
+                            "type": "string",
+                            "name": "\"yasmin\""
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

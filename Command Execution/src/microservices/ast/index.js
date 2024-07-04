@@ -5,6 +5,7 @@ const cors = require("cors");
 const express = require("express");
 const { FunctionDefinitionNode } = require("tree-sitter-python");
 // const { Request : expressReq, Response } = require('express');
+const fs = require("fs");
 
 require("dotenv").config({
   path: path.resolve(__dirname, "../../../.env"),
@@ -83,95 +84,146 @@ function traverseAndRemove(node, sourceCode, nodeToRemove) {
   }
 }
 
+// Function to recursively print the AST
+function buildASTString(node, indent = 0) {
+  let result =
+    "  ".repeat(indent) +
+    node.type +
+    " (" +
+    node.startPosition.row +
+    ", " +
+    node.startPosition.column +
+    ") (" +
+    node.endPosition.row +
+    ", " +
+    node.endPosition.column +
+    ")\n";
+  for (let i = 0; i < node.childCount; i++) {
+    result += buildASTString(node.child(i), indent + 1);
+  }
+  return result;
+}
+
+// Function to recursively build the AST as a JSON object
+function buildASTJson(node, code) {
+  let result = {
+    type: node.type,
+    startPosition: node.startPosition,
+    endPosition: node.endPosition,
+    children: [],
+  };
+
+  if (node.type === "identifier") {
+    result.name = code.slice(node.startIndex, node.endIndex);
+  }
+
+  for (let i = 0; i < node.childCount; i++) {
+    result.children.push(buildASTJson(node.child(i), code));
+  }
+
+  return result;
+}
+
+// Function to recursively build a human-readable AST
+function buildReadableAST(node, code) {
+  let result = "";
+  if (node.type === "function_declaration") {
+    result += "Function Declaration: ";
+    const identifierNode = node.childForFieldName("name");
+    if (identifierNode) {
+      result += `function ${code.slice(
+        identifierNode.startIndex,
+        identifierNode.endIndex
+      )}`;
+    }
+  } else if (node.type === "call_expression") {
+    result += "Function Call: ";
+    const identifierNode = node.childForFieldName("function");
+    if (identifierNode) {
+      result += `${code.slice(
+        identifierNode.startIndex,
+        identifierNode.endIndex
+      )}`;
+    }
+  } else if (node.type === "identifier") {
+    result += `Identifier: ${code.slice(node.startIndex, node.endIndex)}`;
+  } else if (node.type === "string") {
+    result += `String: ${code.slice(node.startIndex, node.endIndex)}`;
+  } else {
+    result += node.type;
+  }
+
+  if (node.childCount > 0) {
+    result +=
+      "\n" +
+      Array.from(node.children)
+        .map((child) => {
+          return "  " + buildReadableAST(child, code).replace(/\n/g, "\n  ");
+        })
+        .join("\n");
+  }
+
+  return result;
+}
+
+// Function to recursively build a human-readable AST in JSON format
+function buildReadableASTJSON(node, code) {
+  // check if any key has start or end
+  // if (!node.childCount) {
+  //   return;
+  // }
+
+  let result = {
+    type: node.type,
+    children: [],
+  };
+
+  // check if named, then add the name in the description
+  if (node.isNamed) {
+    if (node.type === "identifier" || node.type.includes("string")) {
+      result.name = code.slice(node.startIndex, node.endIndex);
+      // result.description = `${node.type}`;
+    }
+  }
+
+  for (let i = 0; i < node.childCount; i++) {
+    if (node.type !== "string") {
+      let c = buildReadableASTJSON(node.child(i), code);
+      if (c) {
+        result.children.push(c);
+      }
+    }
+  }
+
+  // if no children, remove the key
+  if (!result.children.length) {
+    delete result.children;
+  }
+  return result;
+}
+
 function parseCode(code) {
   const tree = parser.parse(code);
   const rootNode = tree.rootNode;
+  // console.log(rootNode.children);
+  // write children to file in relative path
+  fs.writeFileSync(
+    path.resolve(__dirname, "ast_bgd.json"),
+    JSON.stringify(buildASTJson(rootNode, code))
+  );
+  // fs.writeFileSync(
+  //   path.resolve(__dirname, "ast.txt"),
+  //   buildReadableAST(rootNode, code)
+  // );
 
-  // Find the function node
-  // const functionNode = findFunctionNode(rootNode, "test_func");
-  // console.log(functionNode.text);
+  fs.writeFileSync(
+    path.resolve(__dirname, "ast.json"),
+    JSON.stringify(buildReadableASTJSON(rootNode, code))
+  );
 
-  // add a new variable declaration
-  const newVariable = "v = 5";
-
-  const newVariableNode = parser.parse(newVariable);
-
-  console.log("-----------------------------------------");
-  console.log(newVariableNode.children);
-  console.log(rootNode.children);
-  console.log(rootNode.endPosition);
-
-  console.log("-----------------------------------------");
-
-  // add the new variable to the root node
-  // tree.edit({
-  //   startIndex: rootNode.endIndex,
-  //   oldEndIndex: rootNode.endIndex,
-  //   newEndIndex: rootNode.endIndex + newVariableNode.endIndex,
-  //   startPosition: {
-  //     row: rootNode.endPosition.row + 1,
-  //     column: rootNode.endPosition.column,
-  //   },
-  //   oldEndPosition: {
-  //     row: rootNode.endPosition.row,
-  //     column: rootNode.endPosition.column,
-  //   },
-  //   newEndPosition: {
-  //     row: rootNode.endPosition.row + newVariableNode.endIndex,
-  //     column: rootNode.endPosition.column + newVariableNode.endIndex,
-  //   },
-  // });
-
-  // tree.edit({
-  //   startIndex: 0,
-  //   oldEndIndex: tree.rootNode.endIndex,
-  //   newEndIndex: tree.rootNode.endIndex + newVariableNode.rootNode.endIndex,
-  //   startPosition: { row: 0, column: 0 },
-  //   oldEndPosition: tree.rootNode.endPosition,
-  //   newEndPosition: {
-  //     row:
-  //       tree.rootNode.endPosition.row +
-  //       newVariableNode.rootNode.endPosition.row,
-  //     column:
-  //       tree.rootNode.endPosition.column +
-  //       newVariableNode.rootNode.endPosition.column,
-  //   },
-  // });
-
-  // console.log(tree.rootNode.dot);
-
-  // split the source code on \n
-  // const codeLines = code.split("\n");
-
-  // const newTree = parser.parse((index, position) => {
-  //   let line = codeLines[position.row];
-  //   if (line) {
-  //     return line.slice(position.column);
-  //   }
-  // });
-
-  const nodeToRemove = rootNode.namedChildren[1];
-
-  // Reconstruct the source code without the node
-  const newSourceCode = new FunctionDefinitionNode({
-    
-  });
-  
-  
-
-  // Print the modified source code
-  console.log(newSourceCode);
-
-  // Reparse the modified source code
-  const newTree = parser.parse(newSourceCode);
-  const newRootNode = newTree.rootNode;
-
-  // // new tree that consists of the old tree and the new variable code node
-  // // const newTree = appendToTree(tree, newVariableNode);
-  // const newTree = editTree(tree, newVariableNode,0);
-  console.log(newTree.rootNode);
-
-  return {};
+  return {
+    ast: rootNode.children.toString(),
+  };
 }
 
 astServer.post("/ast", (req, res) => {

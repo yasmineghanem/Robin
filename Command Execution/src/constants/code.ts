@@ -23,6 +23,8 @@ export const LINE_COMMENT = "robin.lineComment";
 export const BLOCK_COMMENT = "robin.blockComment";
 export const READ_FILE = "robin.readFile";
 export const WRITE_FILE = "robin.writeFile";
+export const DECLARE_CLASS = "robin.declareClass";
+export const TRY_EXCEPT = "robin.tryExcept";
 
 /**
  * Variable declaration messages
@@ -100,6 +102,12 @@ export const READ_FILE_FAILURE = "Failed to read file";
 */
 export const WRITE_FILE_SUCCESS = "Write file successful";
 export const WRITE_FILE_FAILURE = "Failed to write file";
+
+/**
+ * Try Except
+*/
+export const TRY_EXCEPT_SUCCESS = "Try Except block successful";
+export const TRY_EXCEPT_FAILURE = "Failed to write try except block";
 
 export const NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
 

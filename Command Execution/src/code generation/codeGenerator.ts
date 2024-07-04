@@ -51,7 +51,7 @@ export abstract class CodeGenerator {
     abstract declareClass(
         name: string,
         properties: { name: string, type: string }[],
-        methods: string[]
+        methods: any[]
     ): string;
 
     /**
@@ -119,6 +119,15 @@ export abstract class CodeGenerator {
     abstract generateForLoop(variable: string, iterable: string, body: string[]): string;
     abstract generateWhileLoop(condition: any[], body?: string[]): string;
 
+    /**
+     * Generate try except block
+     * @param tryBody The body of the try block as an array of strings, each representing a line of code.
+     * @param exception The exception to catch.
+     * @param exceptionInstance The handler for the except block.
+     * @param exceptBody The body of the except block as an array of strings, each representing a line of code.
+     * @returns The code string for the try except block.
+     */
+    abstract generateTryExcept(tryBody: string[], exception: string, exceptionInstance: string, exceptBody: string[]): string;
 
     /**
      * Generates Identity Operator in the target programming language.
@@ -206,7 +215,7 @@ export abstract class CodeGenerator {
      * @param value The value to print.
      * @returns The code string for the print statement.
     */
-    abstract generatePrint(value: any, type:string): string;
+    abstract generatePrint(value: any, type: string): string;
 
     /**
      * Generate read file operation
@@ -215,7 +224,7 @@ export abstract class CodeGenerator {
      * @throws An error if the file path is invalid/not found.
      * @returns The code string for the read file operation.
     */
-    abstract generateReadFile(path: string, variable:any): string;
+    abstract generateReadFile(path: string, variable: any): string;
 
     /**
      * Generate write file operation

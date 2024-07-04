@@ -85,22 +85,22 @@ const activateRobin = () => vscode.commands.registerCommand('robin.activate', ()
 //   }
 // });
 
-const declareClass = () => vscode.commands.registerCommand('robin.declareClass', (args, body) => {
-  const editor = vscode.window.activeTextEditor;
+// const declareClass = () => vscode.commands.registerCommand('robin.declareClass', (args, body) => {
+//   const editor = vscode.window.activeTextEditor;
 
-  let parameters = body.parameters;
-  let name = parameters[0];
-  let line = `\nclass ${name}:`;
-  // Check if an editor is open
-  if (editor) {
-    editor.edit(editBuilder => {
-      editBuilder.insert(get_currentpoint(editor), line);
-    });
-  } else {
-    vscode.window.showErrorMessage('No active text editor.');
-  }
+//   let parameters = body.parameters;
+//   let name = parameters[0];
+//   let line = `\nclass ${name}:`;
+//   // Check if an editor is open
+//   if (editor) {
+//     editor.edit(editBuilder => {
+//       editBuilder.insert(get_currentpoint(editor), line);
+//     });
+//   } else {
+//     vscode.window.showErrorMessage('No active text editor.');
+//   }
 
-});
+// });
 
 const goToLocation = () => vscode.commands.registerCommand('robin.goToLocation', (data) => {
   const editor = vscode.window.activeTextEditor;
@@ -130,7 +130,7 @@ const fileName = () => vscode.commands.registerCommand('robin.fileName', () => {
 const registerAllCommands = () => {
   const commands = [
     activateRobin,
-    declareClass,
+    // declareClass,
     goToLocation,
     fileName
   ];
