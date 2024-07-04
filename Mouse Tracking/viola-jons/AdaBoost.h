@@ -15,12 +15,12 @@ public:
     vector<double> weights;
     vector<Learner *> learners;
     vector<double> alphas;
-    AdaBoost(vector<vector<int>> X, vector<int> y);
+    AdaBoost(vector<vector<int>> &X, vector<int> &y);
     AdaBoost();
     ~AdaBoost();
 
     void train(int T);
-    int predict(const std::vector<int> &X);
+    int predict(const std::vector<int> &X, double sl = 0);
     void save(const string file);
     void load(const string file);
     void saveAsText(const string &file);

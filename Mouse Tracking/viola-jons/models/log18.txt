@@ -1,0 +1,182 @@
+time for loading data is : 129.655 s
+Training classifier layer 1 
+erorr in layer : 0 is : 0.123651
+Classifier trained!
+Training time: 1122.7 s
+saving model to model2.txt
+Accuracy: 0.735
+Error rate: 0.265
+False positive rate: 0.0625
+False negative rate: 0.4675
+---------------------------------------------
+Training classifier layer 2 
+erorr in layer : 0 is : 0.192047
+Classifier trained!
+Training time: 1064.78 s
+saving model to model2.txt
+Accuracy: 0.735
+Error rate: 0.265
+False positive rate: 0.0625
+False negative rate: 0.4675
+---------------------------------------------
+Training classifier layer 3 
+erorr in layer : 0 is : 0.211036
+Classifier trained!
+Training time: 1069.86 s
+saving model to model2.txt
+Accuracy: 0.6525
+Error rate: 0.3475
+False positive rate: 0.0125
+False negative rate: 0.6825
+---------------------------------------------
+Training classifier layer 4 
+erorr in layer : 0 is : 0.235685
+Classifier trained!
+Training time: 1075.94 s
+saving model to model2.txt
+Accuracy: 0.65375
+Error rate: 0.34625
+False positive rate: 0.0125
+False negative rate: 0.68
+---------------------------------------------
+Training classifier layer 5 
+erorr in layer : 0 is : 0.236783
+Classifier trained!
+Training time: 1075.05 s
+saving model to model2.txt
+Accuracy: 0.595
+Error rate: 0.405
+False positive rate: 0.0075
+False negative rate: 0.8025
+---------------------------------------------
+Training classifier layer 6 
+erorr in layer : 0 is : 0.24464
+Classifier trained!
+Training time: 1077.7 s
+saving model to model2.txt
+Accuracy: 0.61125
+Error rate: 0.38875
+False positive rate: 0.0075
+False negative rate: 0.77
+---------------------------------------------
+Training classifier layer 7 
+erorr in layer : 0 is : 0.294711
+Classifier trained!
+Training time: 1080.54 s
+saving model to model2.txt
+Accuracy: 0.58875
+Error rate: 0.41125
+False positive rate: 0.005
+False negative rate: 0.8175
+---------------------------------------------
+Training classifier layer 8 
+erorr in layer : 0 is : 0.290516
+Classifier trained!
+Training time: 1084.34 s
+saving model to model2.txt
+Accuracy: 0.60625
+Error rate: 0.39375
+False positive rate: 0.0075
+False negative rate: 0.78
+---------------------------------------------
+Training classifier layer 9 
+erorr in layer : 0 is : 0.254174
+Classifier trained!
+Training time: 1082.56 s
+saving model to model2.txt
+Accuracy: 0.57125
+Error rate: 0.42875
+False positive rate: 0.0025
+False negative rate: 0.855
+---------------------------------------------
+Training classifier layer 10 
+erorr in layer : 0 is : 0.286692
+Classifier trained!
+Training time: 1080.08 s
+saving model to model2.txt
+Accuracy: 0.6025
+Error rate: 0.3975
+False positive rate: 0.005
+False negative rate: 0.79
+---------------------------------------------
+Training classifier layer 11 
+erorr in layer : 0 is : 0.29621
+Classifier trained!
+Training time: 1082 s
+saving model to model2.txt
+Accuracy: 0.57875
+Error rate: 0.42125
+False positive rate: 0.0025
+False negative rate: 0.84
+---------------------------------------------
+Training classifier layer 12 
+erorr in layer : 0 is : 0.302854
+Classifier trained!
+Training time: 1085.88 s
+saving model to model2.txt
+Accuracy: 0.58375
+Error rate: 0.41625
+False positive rate: 0.0025
+False negative rate: 0.83
+---------------------------------------------
+Training classifier layer 13 
+erorr in layer : 0 is : 0.30366
+Classifier trained!
+Training time: 1089.03 s
+saving model to model2.txt
+Accuracy: 0.58125
+Error rate: 0.41875
+False positive rate: 0.0025
+False negative rate: 0.835
+---------------------------------------------
+Training classifier layer 14 
+erorr in layer : 0 is : 0.294615
+Classifier trained!
+Training time: 1091.37 s
+saving model to model2.txt
+Accuracy: 0.58375
+Error rate: 0.41625
+False positive rate: 0.0025
+False negative rate: 0.83
+---------------------------------------------
+Training classifier layer 15 
+erorr in layer : 0 is : 0.296407
+Classifier trained!
+Training time: 1090.04 s
+saving model to model2.txt
+Accuracy: 0.565
+Error rate: 0.435
+False positive rate: 0.0025
+False negative rate: 0.8675
+---------------------------------------------
+Training classifier layer 16 
+erorr in layer : 0 is : 0.293873
+Classifier trained!
+Training time: 1097.11 s
+saving model to model2.txt
+Accuracy: 0.58
+Error rate: 0.42
+False positive rate: 0.0025
+False negative rate: 0.8375
+---------------------------------------------
+Training classifier layer 17 
+erorr in layer : 0 is : 0.309824
+Classifier trained!
+Training time: 1086.14 s
+saving model to model2.txt
+Accuracy: 0.585
+Error rate: 0.415
+False positive rate: 0.0025
+False negative rate: 0.8275
+---------------------------------------------
+Training classifier layer 18 
+erorr in layer : 0 is : 0.3083
+Classifier trained!
+Training time: 1069.95 s
+saving model to model2.txt
+Accuracy: 0.5725
+Error rate: 0.4275
+False positive rate: 0
+False negative rate: 0.855
+---------------------------------------------
+Training classifier layer 19 

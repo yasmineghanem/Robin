@@ -31,7 +31,7 @@ std::chrono::duration<double> duration6;
 std::chrono::duration<double> duration7;
 std::chrono::duration<double> duration8;
 
-void integral_image(const vector<vector<int>> &I, vector<vector<int>> &II)
+void integral_image(vector<vector<int>> &I, vector<vector<int>> &II)
 {
     int N = I.size();
     int M = I[0].size();
@@ -72,7 +72,7 @@ int sum_region(const vector<vector<int>> &ii, int x1, int y1, int x2, int y2)
     return D - B - C + A;
 }
 
-vector<int> compute_haar_like_features(const vector<vector<int>> &img, const vector<vector<int>> &II)
+vector<int> compute_haar_like_features(const vector<vector<int>> &II)
 {
     // assert(img.size() == 24 && img[0].size() == 24);
 
@@ -522,6 +522,7 @@ Learner *best_stump(vector<vector<int>> &X, const vector<int> &y, const vector<d
         // num_features is around 160K , this part could be run on cuda and lunch too many threads here
         Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix);
         if (cur_stump->error < best_stump->error || (cur_stump->error == best_stump->error && cur_stump->margin > best_stump->margin))
+        // if (cur_stump->error < best_stump->error)
         {
             delete best_stump;
             best_stump = cur_stump;
@@ -638,7 +639,7 @@ void load_haar_like_features(const string &path, vector<vector<int>> &X, vector<
             }
 
             integral_image(imageVec, II);
-            X.push_back(compute_haar_like_features(imageVec, II));
+            X.push_back(compute_haar_like_features(II));
             Y.push_back(y_label);
         }
     }
@@ -647,4 +648,45 @@ void load_features(const string &pos_path, const string &neg_path, vector<vector
 {
     load_haar_like_features(pos_path, X, Y, pos_num, 1);
     load_haar_like_features(neg_path, X, Y, neg_num, -1);
+}
+matrices calc_acuracy_metrices(vector<int> &Y_test, vector<int> &predeictions)
+{
+    // Initialize counters
+    int true_positive = 0, true_negative = 0;
+    int false_positive = 0, false_negative = 0;
+
+    // Calculate the counts for TP, TN, FP, and FN
+    for (size_t i = 0; i < Y_test.size(); ++i)
+    {
+        if (Y_test[i] == 1 && predeictions[i] == 1)
+        {
+            true_positive++;
+        }
+        else if (Y_test[i] == -1 && predeictions[i] == -1)
+        {
+            true_negative++;
+        }
+        else if (Y_test[i] == -1 && predeictions[i] == 1)
+        {
+            false_positive++;
+        }
+        else if (Y_test[i] == 1 && predeictions[i] == -1)
+        {
+            false_negative++;
+        }
+    }
+    // Calculate accuracy, error rate, false positive rate, and false negative rate
+    double accuracy = static_cast<double>(true_positive + true_negative) / Y_test.size();
+    double error_rate = static_cast<double>(false_positive + false_negative) / Y_test.size();
+    int total_positives = true_positive + false_negative;
+    int total_negatives = true_negative + false_positive;
+    double false_positive_rate = total_negatives > 0 ? static_cast<double>(false_positive) / total_negatives : 0;
+    double false_negative_rate = total_positives > 0 ? static_cast<double>(false_negative) / total_positives : 0;
+
+    matrices m;
+    m.accuracy = accuracy;
+    m.error_rate = error_rate;
+    m.false_positive_rate = false_positive_rate;
+    m.false_negative_rate = false_negative_rate;
+    return m;
 }

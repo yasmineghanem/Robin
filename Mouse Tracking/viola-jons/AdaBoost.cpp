@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-
+#include "const.h"
 using namespace std;
 const double err = 1e-6;
 AdaBoost::~AdaBoost()
@@ -14,7 +14,7 @@ AdaBoost::~AdaBoost()
         delete learners[i];
     }
 }
-AdaBoost::AdaBoost(vector<vector<int>> X, vector<int> y) : X(X), y(y)
+AdaBoost::AdaBoost(vector<vector<int>> &X, vector<int> &y) : X(X), y(y)
 {
     // intialize the weights
     int n_pos = 0;
@@ -85,13 +85,14 @@ void AdaBoost::train(int T)
     }
 }
 
-int AdaBoost::predict(const std::vector<int> &X)
+int AdaBoost::predict(const std::vector<int> &X, double sl)
 {
     double sum = 0;
     for (size_t i = 0; i < this->learners.size(); ++i)
     {
-        sum += this->alphas[i] * this->learners[i]->predict(X);
-        // cout << X[this->learners[i]->feature_index] << " " << this->learners[i]->threshold << " " << this->learners[i]->polarity << " " << this->learners[i]->predict(X) << endl;
+        sum += this->alphas[i] * (this->learners[i]->predict(X) + sl);
+        // if (debug)
+        //     cout << X[this->learners[i]->feature_index] << " " << this->learners[i]->threshold << " " << this->learners[i]->polarity << " " << this->learners[i]->predict(X) << endl;
     }
     // cout << endl;
     return sum >= 0.0 ? 1 : -1;

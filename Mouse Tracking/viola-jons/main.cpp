@@ -1,22 +1,31 @@
+#pragma GCC optimization("Ofast")
 #include <iostream>
 #include <vector>
 #include <string>
 #include <chrono>
 #include "AdaBoost.h"
 #include "utils.h"
+#include "FaceDetector.h"
 #include <map>
 #include <unordered_map>
+#include "const.h"
+#include <fstream>
 using namespace std;
-
+// TODO convert all data types to arrays instead of vectors
 enum mode
 {
-    TRAIN = 1,
-    TEST = 2
+    TRAIN_ADABOOST = 1,
+    TEST_ADABOOST = 2,
+    TRAIN_FACE_DETECTION = 3,
+    TEST_FACE_DETECTION = 4
 };
-void train(const char *file, int layers = 1, int num = -1);
-void test(const char *file, int num = -1);
 
-void train(const char *file, int layers, int num)
+void train_ADA_BOOST(const char *file, int layers = 1, int num = -1);
+void test_ADA_BOOST(const char *file, int num = -1);
+void train_face_detector(const char *folder, int num);
+void test_face_detector(const char *folder, int num);
+
+void train_ADA_BOOST(const char *file, int layers, int num)
 {
     auto start_time = std::chrono::high_resolution_clock::now();
     std::string train_pos_path = "imgs/face_data_24_24/trainset/faces";
@@ -42,53 +51,12 @@ void train(const char *file, int layers, int num)
         std::cout << "Training time: " << duration.count() << " s\n";
         std::cout << "saving model to " << save_file << endl;
         classifier.saveAsText(save_file);
-        test("model2.txt", 400);
+        test_ADA_BOOST("model2.txt", 500);
         cout << "---------------------------------------------\n";
     }
 }
 
-void calc_acuracy_metrices(vector<int> &Y_test, vector<int> &predeictions)
-{
-    // Initialize counters
-    int true_positive = 0, true_negative = 0;
-    int false_positive = 0, false_negative = 0;
-
-    // Calculate the counts for TP, TN, FP, and FN
-    for (size_t i = 0; i < Y_test.size(); ++i)
-    {
-        if (Y_test[i] == 1 && predeictions[i] == 1)
-        {
-            true_positive++;
-        }
-        else if (Y_test[i] == -1 && predeictions[i] == -1)
-        {
-            true_negative++;
-        }
-        else if (Y_test[i] == -1 && predeictions[i] == 1)
-        {
-            false_positive++;
-        }
-        else if (Y_test[i] == 1 && predeictions[i] == -1)
-        {
-            false_negative++;
-        }
-    }
-    // Calculate accuracy, error rate, false positive rate, and false negative rate
-    double accuracy = static_cast<double>(true_positive + true_negative) / Y_test.size();
-    double error_rate = static_cast<double>(false_positive + false_negative) / Y_test.size();
-    int total_positives = true_positive + false_negative;
-    int total_negatives = true_negative + false_positive;
-    double false_positive_rate = total_negatives > 0 ? static_cast<double>(false_positive) / total_negatives : 0;
-    double false_negative_rate = total_positives > 0 ? static_cast<double>(false_negative) / total_positives : 0;
-
-    // Print the results
-    cout << "Accuracy: " << accuracy << endl;
-    cout << "Error rate: " << error_rate << endl;
-    cout << "False positive rate: " << false_positive_rate << endl;
-    cout << "False negative rate: " << false_negative_rate << endl;
-}
-
-void test(const char *file, int num)
+void test_ADA_BOOST(const char *file, int num)
 {
 
     AdaBoost classifier;
@@ -101,17 +69,17 @@ void test(const char *file, int num)
     vector<vector<int>> X_test;
     vector<int> Y_test;
     vector<vector<int>> II;
-    for (const auto &img : pos_test)
+    for (auto &img : pos_test)
     {
         integral_image(img, II);
-        X_test.push_back(compute_haar_like_features(img, II));
+        X_test.push_back(compute_haar_like_features(II));
         Y_test.push_back(1);
     }
 
-    for (const auto &img : neg_test)
+    for (auto &img : neg_test)
     {
         integral_image(img, II);
-        X_test.push_back(compute_haar_like_features(img, II));
+        X_test.push_back(compute_haar_like_features(II));
         Y_test.push_back(-1);
     }
     // Example usage of the classifier
@@ -120,36 +88,101 @@ void test(const char *file, int num)
     {
         predeictions.push_back(classifier.predict(X));
     }
-    calc_acuracy_metrices(Y_test, predeictions);
+    auto mat = calc_acuracy_metrices(Y_test, predeictions);
+    // Print the results
+    cout << "Accuracy: " << mat.accuracy << endl;
+    cout << "Error rate: " << mat.error_rate << endl;
+    cout << "False positive rate: " << mat.false_positive_rate << endl;
+    cout << "False negative rate: " << mat.false_negative_rate << endl;
+}
+
+void train_face_detector(const char *folder, int num)
+{
+    auto start_time = std::chrono::high_resolution_clock::now();
+    std::string train_pos_path = "imgs/face_data_24_24/trainset/faces";
+    std::string train_neg_path = "imgs/face_data_24_24/trainset/non-faces";
+    vector<vector<int>> X_train;
+    vector<int> Y_train;
+    vector<vector<vector<int>>> X_val;
+    vector<int> Y_val;
+
+    load_features(train_pos_path, train_neg_path, X_train, Y_train, num, num);
+    // TODO load the validation data
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end_time - start_time;
+    std::cout << "time for loading data is : " << duration.count() << " s\n";
+    FaceDetector classifier(X_train, Y_train, X_val, Y_val);
+
+    std::string save_folder(folder);
+    std::cout << ".... Training Face Detector ....\n";
+    start_time = std::chrono::high_resolution_clock::now();
+    classifier.train(0.1, 0.2, 0.1);
+    end_time = std::chrono::high_resolution_clock::now();
+    std::cout << "Classifier trained!\n";
+    duration = end_time - start_time;
+    std::cout << "Training time: " << duration.count() << " s\n";
+    std::cout << "saving model to " << save_folder << endl;
+    classifier.save(save_folder);
+}
+
+void test_face_detector(const char *folder, int num)
+{
+
+    FaceDetector classifier;
+    classifier.load(folder);
+    std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
+    std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
+    vector<vector<vector<int>>> pos_test, neg_test;
+    vector<int> Y_test;
+    load_gray_images(test_pos_path, pos_test, num);
+    load_gray_images(test_neg_path, neg_test, num);
+
+    vector<vector<int>> II;
+    vector<int> predeictions;
+    for (auto &X : pos_test)
+    {
+        integral_image(X, II);
+        predeictions.push_back(classifier.predict(II));
+        Y_test.push_back(1);
+    }
+    for (auto &X : neg_test)
+    {
+        integral_image(X, II);
+        predeictions.push_back(classifier.predict(II));
+        Y_test.push_back(-1);
+    }
+    auto mat = calc_acuracy_metrices(Y_test, predeictions);
+    // Print the results
+    cout << "Accuracy: " << mat.accuracy << endl;
+    cout << "Error rate: " << mat.error_rate << endl;
+    cout << "False positive rate: " << mat.false_positive_rate << endl;
+    cout << "False negative rate: " << mat.false_negative_rate << endl;
 }
 
 int main()
 {
-    mode current_mode = TRAIN;
-    // int mode;
-    // cout << "Enter 1 for training and 2 for testing : ";
-    // cin >> mode;
-    // if (mode == 1)
-    // {
-    //     current_mode = TRAIN;
-    // }
-    // else if (mode == 2)
-    // {
-    //     current_mode = TEST;
-    // }
-    // else
-    // {
-    //     cout << "Invalid mode\n";
-    //     return 0;
-    // }
-    if (current_mode == TRAIN)
+    // freopen("log.txt", "w", stdout);
+    mode current_mode = TRAIN_FACE_DETECTION;
+    if (current_mode == TRAIN_ADABOOST)
     {
-        train("model2.txt", 1, 1000);
+        train_ADA_BOOST("model2.txt", 10, 1000);
         return 0;
     }
-    else if (current_mode == TEST)
+    else if (current_mode == TEST_ADABOOST)
     {
-        test("model2.txt", 400);
+        test_ADA_BOOST("model2.txt", 1000);
+        return 0;
+    }
+    else if (current_mode == TRAIN_FACE_DETECTION)
+    {
+        train_face_detector("face1", 1000);
+        // cout << "here" << endl;
+        test_face_detector("face1", 500);
+        return 0;
+    }
+    else if (current_mode == TEST_FACE_DETECTION)
+    {
+        test_face_detector("face1", 500);
         return 0;
     }
     return 0;
