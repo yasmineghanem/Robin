@@ -1,6 +1,6 @@
 #ifndef LEANER_H
 #define LEANER_H
-#include <vector>
+// #include <vector>
 using namespace std;
 class Learner
 {
@@ -12,7 +12,7 @@ public:
     int feature_index = 0;
     Learner(double threshold, int polarity, double error, double margin, int feature_index);
     Learner();
-    int predict(const vector<int> &X);
+    int predict(int *&X);
 };
 
 #endif

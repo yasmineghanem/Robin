@@ -1,6 +1,6 @@
 #include "utils.h"
 #include <iostream>
-#include <vector>
+// #include <vector>
 #include <cmath>
 #include <algorithm>
 #include "learner.h"
@@ -11,6 +11,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "stb_image.h"
+#include "const.h"
 using namespace std;
 namespace fs = std::filesystem;
 
@@ -23,22 +24,12 @@ const double err = 1e-6;
 auto start_time = std::chrono::high_resolution_clock::now();
 auto end_time = std::chrono::high_resolution_clock::now();
 std::chrono::duration<double> duration;
-std::chrono::duration<double> duration2;
-std::chrono::duration<double> duration3;
-std::chrono::duration<double> duration4;
-std::chrono::duration<double> duration5;
-std::chrono::duration<double> duration6;
-std::chrono::duration<double> duration7;
-std::chrono::duration<double> duration8;
 
-void integral_image(vector<vector<int>> &I, vector<vector<int>> &II)
+void integral_image(int **&I, int **&II, int h, int w)
 {
-    int N = I.size();
-    int M = I[0].size();
-    if (II.size() != N || II[0].size() != M)
-        II.resize(N, vector<int>(M));
+    int N = h;
+    int M = w;
 
-    // Set II(1, 1) = I(1, 1)
     II[0][0] = I[0][0];
 
     // Compute the first row
@@ -63,7 +54,7 @@ void integral_image(vector<vector<int>> &I, vector<vector<int>> &II)
     }
 }
 
-int sum_region(const vector<vector<int>> &ii, int x1, int y1, int x2, int y2)
+int sum_region(int **&ii, int x1, int y1, int x2, int y2)
 {
     int A = (x1 > 0 && y1 > 0) ? ii[x1 - 1][y1 - 1] : 0;
     int B = (x1 > 0) ? ii[x1 - 1][y2] : 0;
@@ -72,11 +63,11 @@ int sum_region(const vector<vector<int>> &ii, int x1, int y1, int x2, int y2)
     return D - B - C + A;
 }
 
-vector<int> compute_haar_like_features(const vector<vector<int>> &II)
+int compute_haar_like_features(int **&II, int *&features)
 {
     // assert(img.size() == 24 && img[0].size() == 24);
 
-    vector<int> features;
+    features = new int[FEATURE_NUM];
     int f = 0;
 
     // Feature type (a)
@@ -90,7 +81,7 @@ vector<int> compute_haar_like_features(const vector<vector<int>> &II)
                 {
                     int S1 = sum_region(II, i - 1, j - 1, i - 1 + h - 1, j - 1 + w - 1);
                     int S2 = sum_region(II, i - 1, j - 1 + w, i - 1 + h - 1, j - 1 + 2 * w - 1);
-                    features.push_back(S1 - S2);
+                    features[f] = (S1 - S2);
                     f++;
                 }
             }
@@ -109,7 +100,7 @@ vector<int> compute_haar_like_features(const vector<vector<int>> &II)
                     int S1 = sum_region(II, i - 1, j - 1, i - 1 + h - 1, j - 1 + w - 1);
                     int S2 = sum_region(II, i - 1, j - 1 + w, i - 1 + h - 1, j - 1 + 2 * w - 1);
                     int S3 = sum_region(II, i - 1, j - 1 + 2 * w, i - 1 + h - 1, j - 1 + 3 * w - 1);
-                    features.push_back(S1 - S2 + S3);
+                    features[f] = (S1 - S2 + S3);
                     f++;
                 }
             }
@@ -127,7 +118,7 @@ vector<int> compute_haar_like_features(const vector<vector<int>> &II)
                 {
                     int S1 = sum_region(II, i - 1, j - 1, i - 1 + h - 1, j - 1 + w - 1);
                     int S2 = sum_region(II, i - 1 + h, j - 1, i - 1 + 2 * h - 1, j - 1 + w - 1);
-                    features.push_back(S1 - S2);
+                    features[f] = (S1 - S2);
                     f++;
                 }
             }
@@ -146,7 +137,7 @@ vector<int> compute_haar_like_features(const vector<vector<int>> &II)
                     int S1 = sum_region(II, i - 1, j - 1, i - 1 + h - 1, j - 1 + w - 1);
                     int S2 = sum_region(II, i - 1 + h, j - 1, i - 1 + 2 * h - 1, j - 1 + w - 1);
                     int S3 = sum_region(II, i - 1 + 2 * h, j - 1, i - 1 + 3 * h - 1, j - 1 + w - 1);
-                    features.push_back(S1 - S2 + S3);
+                    features[f] = (S1 - S2 + S3);
                     f++;
                 }
             }
@@ -166,14 +157,14 @@ vector<int> compute_haar_like_features(const vector<vector<int>> &II)
                     int S2 = sum_region(II, i - 1 + h, j - 1, i - 1 + 2 * h - 1, j - 1 + w - 1);
                     int S3 = sum_region(II, i - 1, j - 1 + w, i - 1 + h - 1, j - 1 + 2 * w - 1);
                     int S4 = sum_region(II, i - 1 + h, j - 1 + w, i - 1 + 2 * h - 1, j - 1 + 2 * w - 1);
-                    features.push_back(S1 - S2 - S3 + S4);
+                    features[f] = (S1 - S2 - S3 + S4);
                     f++;
                 }
             }
         }
     }
 
-    return features;
+    return f;
 }
 
 int haar_feature_scaling(const vector<vector<int>> &image, const string &feature_type, int i, int j, int w, int h)
@@ -410,40 +401,26 @@ void update_learner(double W_pos_below, double W_neg_below, double W_pos_above, 
     }
 }
 
-Learner *decision_stump(vector<vector<int>> &X, const vector<int> &y, const vector<double> &weights, int feature_index, vector<int> &sorted_indices, vector<vector<int> *> &X_sorted, vector<int> &y_sorted, vector<double> &weights_sorted, vector<double> &pos_weights_prefix, vector<double> &neg_weights_prefix)
+Learner *decision_stump(int **&X, int *&y, double *&weights, int feature_index, int *sorted_indices, int *X_sorted, int *Y_sorted, double *weights_sorted, double *&pos_weights_prefix, double *&neg_weights_prefix, pair<int, int> &dim)
 {
     Learner *cur_stump = new Learner(0, 1, 2, 0, feature_index);
-    int n = y.size();
+    int n = dim.first;
     for (int i = 0; i < n; i++)
     {
         sorted_indices[i] = i;
     }
-    sort(sorted_indices.begin(), sorted_indices.end(), [&](int i, int j)
+    sort(sorted_indices, sorted_indices + n, [&](int i, int j)
          { return X[i][feature_index] < X[j][feature_index]; });
+
     for (int i = 0; i < n; i++)
     {
-        X_sorted[i] = &(X[sorted_indices[i]]);
-        y_sorted[i] = y[sorted_indices[i]];
+        X_sorted[i] = X[sorted_indices[i]][feature_index];
+        Y_sorted[i] = y[sorted_indices[i]];
         weights_sorted[i] = weights[sorted_indices[i]];
     }
-    // for (int i = 0; i < n; i++)
-    // {
-    //     cout << (*X_sorted[i])[feature_index] << " ";
-    // }
-    // cout << endl;
-    // for (int i = 0; i < n; i++)
-    // {
-    //     cout << y_sorted[i] << " ";
-    // }
-    // cout << endl;
-    // for (int i = 0; i < n; i++)
-    // {
-    //     cout << weights_sorted[i] << " ";
-    // }
-    // cout << endl;
     for (int i = 0; i < n; i++)
     {
-        if (y_sorted[i] == 1)
+        if (Y_sorted[i] == 1)
         {
             pos_weights_prefix[i] = weights_sorted[i];
             neg_weights_prefix[i] = 0;
@@ -460,7 +437,7 @@ Learner *decision_stump(vector<vector<int>> &X, const vector<int> &y, const vect
         }
     }
     double tot_wights = pos_weights_prefix[n - 1] + neg_weights_prefix[n - 1];
-    double tau = (*X_sorted[0])[feature_index] - 1;
+    double tau = X_sorted[0] - 1;
     double W_pos_above = pos_weights_prefix[n - 1];
     double W_neg_above = neg_weights_prefix[n - 1];
     double W_pos_below = 0;
@@ -474,15 +451,15 @@ Learner *decision_stump(vector<vector<int>> &X, const vector<int> &y, const vect
         // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
         while (true)
         {
-            if (j + 1 < n && (*X_sorted[j])[feature_index] == (*X_sorted[j + 1])[feature_index])
+            if (j + 1 < n && X_sorted[j] == X_sorted[j + 1])
                 j++;
             else
                 break;
         }
         if (j < n - 1)
         {
-            tau = ((*X_sorted[j])[feature_index] + (*X_sorted[j + 1])[feature_index]) / 2;
-            curr_M = (*X_sorted[j + 1])[feature_index] - (*X_sorted[j])[feature_index];
+            tau = (X_sorted[j] + X_sorted[j + 1]) / 2;
+            curr_M = X_sorted[j + 1] - X_sorted[j];
             W_pos_above = pos_weights_prefix[n - 1] - pos_weights_prefix[j];
             W_neg_above = neg_weights_prefix[n - 1] - neg_weights_prefix[j];
             W_pos_below = pos_weights_prefix[j];
@@ -490,7 +467,7 @@ Learner *decision_stump(vector<vector<int>> &X, const vector<int> &y, const vect
         }
         else
         {
-            tau = (*X_sorted[j])[feature_index] + 1;
+            tau = X_sorted[j] + 1;
             curr_M = 1;
             W_pos_above = 0;
             W_neg_above = 0;
@@ -505,22 +482,24 @@ Learner *decision_stump(vector<vector<int>> &X, const vector<int> &y, const vect
 }
 
 // O(num_features * n)
-Learner *best_stump(vector<vector<int>> &X, const vector<int> &y, const vector<double> &weights, int num_features)
+Learner *best_stump(int **&X, int *&y, double *&weights, pair<int, int> &dim)
 {
 
-    int n = X.size();
-    vector<int> sorted_indices(n);
-    vector<vector<int> *> X_sorted(n, nullptr);
-    vector<int> y_sorted(n);
-    vector<double> weights_sorted(n);
-    vector<double> pos_weights_prefix(n), neg_weights_prefix(n);
-    Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix);
+    int n = dim.first;
+    double *pos_weights_prefix = new double[n];
+    double *neg_weights_prefix = new double[n];
 
-    for (int f = 0; f < num_features; f++)
+    int *sorted_indices = new int[n];
+    int *X_sorted = new int[n];
+    int *y_sorted = new int[n];
+    double *weights_sorted = new double[n];
+    Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+
+    for (int f = 0; f < dim.second; f++)
     {
 
         // num_features is around 160K , this part could be run on cuda and lunch too many threads here
-        Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix);
+        Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
         if (cur_stump->error < best_stump->error || (cur_stump->error == best_stump->error && cur_stump->margin > best_stump->margin))
         // if (cur_stump->error < best_stump->error)
         {
@@ -533,33 +512,58 @@ Learner *best_stump(vector<vector<int>> &X, const vector<int> &y, const vector<d
             delete cur_stump;
         }
     }
+    delete[] pos_weights_prefix;
+    delete[] neg_weights_prefix;
+
+    delete[] sorted_indices;
+    delete[] X_sorted;
+    delete[] y_sorted;
+    delete[] weights_sorted;
+
     return best_stump;
 }
 
-std::vector<std::string> get_files(const std::string &path, int num)
+int get_files(const std::string &path, string *&files, int num)
 {
-    std::vector<std::string> files;
+    // std::vector<std::string> files;
+    int count = 0;
     for (const auto &entry : fs::directory_iterator(path))
     {
         if (entry.path().extension() == ".png" || entry.path().extension() == ".jpg" || entry.path().extension() == ".jpeg")
         {
-            files.push_back(entry.path().string());
-            if (num != -1 && files.size() >= num)
+            // files.push_back(entry.path().string());
+            count++;
+            if (num != -1 && count >= num)
             {
                 break;
             }
         }
     }
-    return files;
+    files = new string[count];
+    count = 0;
+    for (const auto &entry : fs::directory_iterator(path))
+    {
+        if (entry.path().extension() == ".png" || entry.path().extension() == ".jpg" || entry.path().extension() == ".jpeg")
+        {
+            files[count] = entry.path().string();
+            count++;
+            if (num != -1 && count >= num)
+            {
+                break;
+            }
+        }
+    }
+    return count;
 }
 
-void load_gray_images(const std::string &path, vector<vector<vector<int>>> &images, int num)
+int load_gray_images(const std::string &path, int ***&images, int num)
 {
-    ;
-    vector<string> files = get_files(path, num);
-
-    for (const auto &file : files)
+    string *files;
+    int count = get_files(path, files, num);
+    images = new int **[count];
+    for (int i = 0; i < count; i++)
     {
+        auto &file = files[i];
         int w, h, channels;
         unsigned char *img = stbi_load(file.c_str(), &w, &h, &channels, 0);
         if (img)
@@ -580,7 +584,6 @@ void load_gray_images(const std::string &path, vector<vector<vector<int>>> &imag
             stbi_image_free(img);
             // Allocate a 2D vector to store the grayscale image data
             vector<vector<int>> imageVec(h, vector<int>(w));
-
             // Convert to grayscale and copy data from 1D array to 2D vector
             for (int i = 0; i < h; ++i)
             {
@@ -590,35 +593,70 @@ void load_gray_images(const std::string &path, vector<vector<vector<int>>> &imag
                     imageVec[i][j] = grayscale_image[gray_index];
                 }
             }
-            images.push_back(imageVec);
+            images[i] = new int *[h];
+            for (int j = 0; j < h; j++)
+            {
+                images[i][j] = new int[w];
+                for (int k = 0; k < w; k++)
+                {
+                    images[i][j][k] = imageVec[j][k];
+                }
+            }
         }
     }
+    delete[] files;
+    return count;
 }
 
 // this function will be combination between load_gray_images and load_haar_like_features
 // to help us avoid allocate memory for images and integral images
-void load_haar_like_features(const string &path, vector<vector<int>> &X, vector<int> &Y, int num, int y_label)
+
+pair<int, int> load_features(const string &pos_path, const string &neg_path, int **&X, int *&Y, int pos_num, int neg_num)
 {
+    int count1 = 0, count2 = 0;
+    string *files1;
+    string *files2;
 
-    vector<string> files = get_files(path, num);
+    count1 = get_files(pos_path, files1, pos_num);
+    count2 = get_files(neg_path, files2, neg_num);
 
-    vector<vector<int>> imageVec(30, vector<int>(30));
+    int count = count1 + count2;
+    int features_num = FEATURE_NUM;
+    X = new int *[count];
+    Y = new int[count];
+    for (int i = 0; i < count1; i++)
+        Y[i] = 1;
+    for (int i = count1; i < count; i++)
+        Y[i] = -1;
 
-    vector<vector<int>> II(30, vector<int>(30));
+    int **imageVec = new int *[30];
+    int **II = new int *[30];
+    int *grayscale_image = new int[30 * 30];
 
-    for (const auto &file : files)
+    for (int i = 0; i < 30; i++)
     {
+        imageVec[i] = new int[30];
+    }
+    for (int i = 0; i < 30; i++)
+    {
+        II[i] = new int[30];
+    }
 
+    for (int i = 0; i < count; i++)
+    {
+        string *file;
+        if (i < count1)
+            file = &files1[i];
+        else
+            file = &files2[i - count1];
         int w, h, channels;
-        unsigned char *img = stbi_load(file.c_str(), &w, &h, &channels, 0);
+        unsigned char *img = stbi_load(file->c_str(), &w, &h, &channels, 0);
         if (img)
         {
-            std::vector<int> grayscale_image(w * h);
             if (channels > 1)
                 for (int i = 0; i < w * h; ++i)
                 {
-                    // Convert to grayscale assuming the image is in RGB format
-                    grayscale_image[i] = (0.0 + img[i * channels] + img[i * channels + 1] + img[i * channels + 2]) / channels;
+                    grayscale_image[i] = (img[i * channels] + img[i * channels + 1] + img[i * channels + 2]) / channels;
                 }
             else
                 for (int i = 0; i < w * h; ++i)
@@ -626,8 +664,6 @@ void load_haar_like_features(const string &path, vector<vector<int>> &X, vector<
                     grayscale_image[i] = img[i];
                 }
             stbi_image_free(img);
-            // Allocate a 2D vector to store the grayscale image data
-
             // Convert to grayscale and copy data from 1D array to 2D vector
             for (int i = 0; i < h; ++i)
             {
@@ -638,25 +674,33 @@ void load_haar_like_features(const string &path, vector<vector<int>> &X, vector<
                 }
             }
 
-            integral_image(imageVec, II);
-            X.push_back(compute_haar_like_features(II));
-            Y.push_back(y_label);
+            integral_image(imageVec, II, h, w);
+            int *features;
+            features_num = compute_haar_like_features(II, features);
+            X[i] = features;
         }
     }
+    delete[] files1;
+    delete[] files2;
+    delete[] grayscale_image;
+    for (int i = 0; i < 30; i++)
+    {
+        delete[] imageVec[i];
+        delete[] II[i];
+    }
+    delete[] imageVec;
+    delete[] II;
+    return make_pair(count, features_num);
 }
-void load_features(const string &pos_path, const string &neg_path, vector<vector<int>> &X, vector<int> &Y, int pos_num, int neg_num)
-{
-    load_haar_like_features(pos_path, X, Y, pos_num, 1);
-    load_haar_like_features(neg_path, X, Y, neg_num, -1);
-}
-matrices calc_acuracy_metrices(vector<int> &Y_test, vector<int> &predeictions)
+
+matrices calc_acuracy_metrices(int *Y_test, int *predeictions, int count)
 {
     // Initialize counters
     int true_positive = 0, true_negative = 0;
     int false_positive = 0, false_negative = 0;
 
     // Calculate the counts for TP, TN, FP, and FN
-    for (size_t i = 0; i < Y_test.size(); ++i)
+    for (size_t i = 0; i < count; ++i)
     {
         if (Y_test[i] == 1 && predeictions[i] == 1)
         {
@@ -676,8 +720,8 @@ matrices calc_acuracy_metrices(vector<int> &Y_test, vector<int> &predeictions)
         }
     }
     // Calculate accuracy, error rate, false positive rate, and false negative rate
-    double accuracy = static_cast<double>(true_positive + true_negative) / Y_test.size();
-    double error_rate = static_cast<double>(false_positive + false_negative) / Y_test.size();
+    double accuracy = static_cast<double>(true_positive + true_negative) / count;
+    double error_rate = static_cast<double>(false_positive + false_negative) / count;
     int total_positives = true_positive + false_negative;
     int total_negatives = true_negative + false_positive;
     double false_positive_rate = total_negatives > 0 ? static_cast<double>(false_positive) / total_negatives : 0;
