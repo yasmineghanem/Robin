@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { COPY_DIRECTORY, COPY_FILE, CREATE_DIRECTORY, CREATE_FILE, DELETE_FILE, RENAME, SAVE } from '../constants/fileSystem';
+import { COPY_DIRECTORY, COPY_FILE, CREATE_DIRECTORY, CREATE_FILE, DELETE_FILE, RENAME, SAVE, GET_FILES } from '../constants/fileSystem';
 const router = require('express').Router();
 
 
@@ -183,6 +183,30 @@ router.post(
         else {
           res.writeHead(404, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ message: "No active files found" }));
+        }
+      },
+      (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+      }
+    );
+  }
+);
+
+// get files in workspace
+router.post(
+  "/get-files",
+  (req: any, res: any) => {
+    // const data = req.body;
+    vscode.commands.executeCommand(GET_FILES).then(
+      (response: any) => {
+        if (response.success) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Retrieved all files successfully in the workspace!", files: response.files}));
+        }
+        else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "No files found" }));
         }
       },
       (err) => {

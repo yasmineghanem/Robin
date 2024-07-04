@@ -141,5 +141,4 @@ const registerAllCommands = () => {
   registerIDECommands();
   registerCodeCommands();
 };
-// ahmed 7abiby
 export default registerAllCommands;

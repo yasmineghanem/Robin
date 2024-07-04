@@ -24602,6 +24602,23 @@ router.post("/save", (req, res) => {
         res.end(JSON.stringify({ error: err }));
     });
 });
+// get files in workspace
+router.post("/get-files", (req, res) => {
+    // const data = req.body;
+    vscode.commands.executeCommand(fileSystem_1.GET_FILES).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Retrieved all files successfully in the workspace!", files: response.files }));
+        }
+        else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "No files found" }));
+        }
+    }, (err) => {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: err }));
+    });
+});
 exports["default"] = router;
 
 
@@ -24613,7 +24630,7 @@ exports["default"] = router;
 
 // commands
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SAVE = exports.RENAME = exports.DELETE_FILE = exports.COPY_DIRECTORY = exports.COPY_FILE = exports.CREATE_DIRECTORY = exports.CREATE_FILE = void 0;
+exports.GET_FILES = exports.SAVE = exports.RENAME = exports.DELETE_FILE = exports.COPY_DIRECTORY = exports.COPY_FILE = exports.CREATE_DIRECTORY = exports.CREATE_FILE = void 0;
 // create file
 exports.CREATE_FILE = "robin.createFile";
 // create directory
@@ -24628,6 +24645,8 @@ exports.DELETE_FILE = "robin.deleteFile";
 exports.RENAME = "robin.rename";
 // save
 exports.SAVE = "robin.save";
+//get files name
+exports.GET_FILES = "robin.getFiles";
 
 
 /***/ }),
@@ -25240,7 +25259,6 @@ const registerAllCommands = () => {
     (0, IDECommands_1.default)();
     (0, codeCommands_1.default)();
 };
-// ahmed 7abiby
 exports["default"] = registerAllCommands;
 
 
@@ -25296,6 +25314,16 @@ const fileExists = (path) => {
         return true;
     }
     return false;
+};
+// get list of all files in workspace directory
+const getFiles = () => {
+    vscode.commands.registerCommand(fileSystem_1.GET_FILES, () => {
+        const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || '');
+        return {
+            files,
+            success: true
+        };
+    });
 };
 // create new file
 // sample input => 
@@ -25545,6 +25573,7 @@ const registerFileSystemCommands = () => {
         deleteFile,
         rename,
         saveFile,
+        getFiles,
         // copyFileClipboard,
     ];
     commands.forEach(command => command());
