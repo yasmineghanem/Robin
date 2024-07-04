@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO } from '../constants/IDE';
 import fs from "fs";
 
 
@@ -70,6 +70,24 @@ const newTerminal = () => vscode.commands.registerCommand(NEW_TERMINAL, () => {
 const killTerminal = () => vscode.commands.registerCommand(KILL_TERMINAL, () => {
     vscode.commands.executeCommand('workbench.action.terminal.kill');
 });
+
+//undo
+const undo = () => vscode.commands.registerCommand(UNDO, () => {
+    // const editor = vscode.window.activeTextEditor;
+    // if (editor) {
+        vscode.commands.executeCommand('undo');
+    // }
+});
+
+//redo
+const redo = () => vscode.commands.registerCommand(REDO, () => {
+    // const editor = vscode.window.activeTextEditor;
+    // if (editor) {
+        vscode.commands.executeCommand('redo');
+    // }
+});
+
+
 // register commands
 const registerIDECommands = () => {
     const commands = [
@@ -77,7 +95,9 @@ const registerIDECommands = () => {
         goToFile,
         focusTerminal,
         newTerminal,
-        killTerminal
+        killTerminal,
+        undo,
+        redo
     ];
 
     commands.forEach(command => command());

@@ -13,3 +13,9 @@ export const NEW_TERMINAL = "robin.newTerminal";
 
 // kill terminal
 export const KILL_TERMINAL = "robin.killTerminal";
+
+// undo
+export const UNDO = "robin.undo";
+
+// redo
+export const REDO = "robin.redo";

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ADD_WHITESPACE, ASSIGN_VARIABLE, CONDITIONAL,ASSERTION, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FOR_LOOP, FUNCTION_CALL, GET_AST, IMPORT_LIBRARY, IMPORT_MODULE, NO_ACTIVE_TEXT_EDITOR, OPERATION, WHILE_LOOP, TYPE_CASTING, USER_INPUT, PRINT, LINE_COMMENT, BLOCK_COMMENT, READ_FILE, WRITE_FILE } from '../constants/code';
+import { ADD_WHITESPACE, ASSIGN_VARIABLE, CONDITIONAL,ASSERTION, DECLARE_CONSTANT, DECLARE_FUNCTION, DECLARE_VARIABLE, FOR_LOOP, FUNCTION_CALL, GET_AST, IMPORT_LIBRARY, IMPORT_MODULE, NO_ACTIVE_TEXT_EDITOR, OPERATION, WHILE_LOOP, TYPE_CASTING, USER_INPUT, PRINT, LINE_COMMENT, BLOCK_COMMENT, READ_FILE, WRITE_FILE,TRY_EXCEPT } from '../constants/code';
 import { errorHandler, executeCommand, showError, successHandler } from './utilities';
 import express, { Request, Response } from "express";
 
@@ -309,5 +309,17 @@ router.get('/ast',
     }
 );
 
-
+// Try Except
+router.post("/try-except",
+    (req: Request, res: Response) => {
+        const data = req.body;
+        executeCommand(
+            TRY_EXCEPT,
+            data,
+            successHandler,
+            errorHandler,
+            res
+        );
+    }
+);
 export default router;

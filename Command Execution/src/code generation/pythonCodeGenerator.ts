@@ -286,6 +286,14 @@ export class PythonCodeGenerator extends CodeGenerator {
     }
 
     /**
+     * Try Except
+     */
+    generateTryExcept(tryBody: string[], exception: string, exceptionInstance: string, exceptBody: string[]): string {
+        const tryCode = `try: \n${this.wrapInCodeBlock(tryBody ?? [''])} `;
+        const exceptCode = `except ${exception} as ${exceptionInstance}: \n${this.wrapInCodeBlock(exceptBody ?? [''])} `;
+        return `${tryCode} \n${exceptCode} `;
+    }
+    /**
      * Identity operators
      * is, is not
     **/

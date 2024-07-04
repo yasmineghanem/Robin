@@ -55,7 +55,10 @@ import {
     READ_FILE_SUCCESS,
     WRITE_FILE,
     WRITE_FILE_FAILURE,
-    WRITE_FILE_SUCCESS
+    WRITE_FILE_SUCCESS,
+    TRY_EXCEPT,
+    TRY_EXCEPT_FAILURE,
+    TRY_EXCEPT_SUCCESS
 
 } from "../constants/code";
 import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
@@ -531,6 +534,54 @@ const operation = () => {
 
 };
 
+//try except
+const tryExcept = () => {
+    vscode.commands.registerCommand(TRY_EXCEPT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+
+            let codeGenerator;
+
+            switch (ext) {
+                case EXTENSIONS.PYTHON:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                case EXTENSIONS.JUPYTER:
+                    codeGenerator = new PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(FILE_EXT_FAILURE);
+            }
+
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(
+                        getCurrentPosition(editor),
+                        codeGenerator.generateTryExcept(
+                            args.tryBody,
+                            args.exception,
+                            args.exceptionInstance,
+                            args.exceptBody
+                        )
+                    );
+                });
+
+                if (!s) {
+                    return handleFailure(TRY_EXCEPT_FAILURE);
+                }
+            } catch (e) {
+                return handleFailure(TRY_EXCEPT_FAILURE);
+            }
+
+            return handleSuccess(TRY_EXCEPT_SUCCESS);
+        }
+        return handleFailure(NO_ACTIVE_TEXT_EDITOR);
+    });
+
+};
 
 // conditional 
 const conditional = () => {
@@ -1112,7 +1163,8 @@ const registerCodeCommands = () => {
         lineComment,
         blockComment,
         readFile,
-        writeFile
+        writeFile,
+        tryExcept
 
     ];
 

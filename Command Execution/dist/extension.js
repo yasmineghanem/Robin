@@ -24745,6 +24745,26 @@ router.get("/kill-terminal", (req, res) => {
         res.end(JSON.stringify(err));
     });
 });
+//UNDO
+router.get("/undo", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.UNDO).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Undo Done!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+//REDO
+router.get("/redo", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.REDO).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Redo Done!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
 exports["default"] = router;
 
 
@@ -24756,7 +24776,7 @@ exports["default"] = router;
 
 // commands
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
+exports.REDO = exports.UNDO = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
 exports.GO_TO_LINE = "robin.goToLine";
 // go to file
 exports.GO_TO_FILE = "robin.goToFile";
@@ -24766,6 +24786,10 @@ exports.FOCUS_TERMINAL = "robin.focusTerminal";
 exports.NEW_TERMINAL = "robin.newTerminal";
 // kill terminal
 exports.KILL_TERMINAL = "robin.killTerminal";
+// undo
+exports.UNDO = "robin.undo";
+// redo
+exports.REDO = "robin.redo";
 
 
 /***/ }),
@@ -24918,6 +24942,11 @@ router.get('/ast', (req, res) => {
     // const data = req.body;
     (0, utilities_1.executeCommand)(code_1.GET_AST, {}, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// Try Except
+router.post("/try-except", (req, res) => {
+    const data = req.body;
+    (0, utilities_1.executeCommand)(code_1.TRY_EXCEPT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
 exports["default"] = router;
 
 
@@ -24928,8 +24957,8 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.NO_ACTIVE_TEXT_EDITOR = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
-exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = void 0;
+exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.TRY_EXCEPT = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = void 0;
 /**
  * Commands
  */
@@ -24955,6 +24984,7 @@ exports.LINE_COMMENT = "robin.lineComment";
 exports.BLOCK_COMMENT = "robin.blockComment";
 exports.READ_FILE = "robin.readFile";
 exports.WRITE_FILE = "robin.writeFile";
+exports.TRY_EXCEPT = "robin.tryExcept";
 /**
  * Variable declaration messages
  */
@@ -25018,6 +25048,11 @@ exports.READ_FILE_FAILURE = "Failed to read file";
 */
 exports.WRITE_FILE_SUCCESS = "Write file successful";
 exports.WRITE_FILE_FAILURE = "Failed to write file";
+/**
+ * Try Except
+*/
+exports.TRY_EXCEPT_SUCCESS = "Try Except block successful";
+exports.TRY_EXCEPT_FAILURE = "Failed to write try except block";
 exports.NO_ACTIVE_TEXT_EDITOR = "No active text editor!";
 exports.WHITE_SPACE_SUCCESS = "White space added successfully!";
 exports.WHITE_SPACE_FAILURE = "Failed to add white space!";
@@ -25670,6 +25705,20 @@ const newTerminal = () => vscode.commands.registerCommand(IDE_1.NEW_TERMINAL, ()
 const killTerminal = () => vscode.commands.registerCommand(IDE_1.KILL_TERMINAL, () => {
     vscode.commands.executeCommand('workbench.action.terminal.kill');
 });
+//undo
+const undo = () => vscode.commands.registerCommand(IDE_1.UNDO, () => {
+    // const editor = vscode.window.activeTextEditor;
+    // if (editor) {
+    vscode.commands.executeCommand('undo');
+    // }
+});
+//redo
+const redo = () => vscode.commands.registerCommand(IDE_1.REDO, () => {
+    // const editor = vscode.window.activeTextEditor;
+    // if (editor) {
+    vscode.commands.executeCommand('redo');
+    // }
+});
 // register commands
 const registerIDECommands = () => {
     const commands = [
@@ -25677,7 +25726,9 @@ const registerIDECommands = () => {
         goToFile,
         focusTerminal,
         newTerminal,
-        killTerminal
+        killTerminal,
+        undo,
+        redo
     ];
     commands.forEach(command => command());
 };
@@ -26075,6 +26126,41 @@ const operation = () => {
                 return handleFailure(code_1.OPERATION_FAILURE);
             }
             return handleSuccess(code_1.OPERATION_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
+//try except
+const tryExcept = () => {
+    vscode.commands.registerCommand(code_1.TRY_EXCEPT, async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            // try catch
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateTryExcept(args.tryBody, args.exception, args.exceptionInstance, args.exceptBody));
+                });
+                if (!s) {
+                    return handleFailure(code_1.TRY_EXCEPT_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.TRY_EXCEPT_FAILURE);
+            }
+            return handleSuccess(code_1.TRY_EXCEPT_SUCCESS);
         }
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
@@ -26522,7 +26608,8 @@ const registerCodeCommands = () => {
         lineComment,
         blockComment,
         readFile,
-        writeFile
+        writeFile,
+        tryExcept
     ];
     commands.forEach((command) => {
         command();
@@ -26771,6 +26858,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         const conditionCode = condition.map(c => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`).join(' ');
         const loopCode = `while ${conditionCode}: \n${this.wrapInCodeBlock(body ?? [''])} `;
         return loopCode;
+    }
+    /**
+     * Try Except
+     */
+    generateTryExcept(tryBody, exception, exceptionInstance, exceptBody) {
+        const tryCode = `try: \n${this.wrapInCodeBlock(tryBody ?? [''])} `;
+        const exceptCode = `except ${exception} as ${exceptionInstance}: \n${this.wrapInCodeBlock(exceptBody ?? [''])} `;
+        return `${tryCode} \n${exceptCode} `;
     }
     /**
      * Identity operators
