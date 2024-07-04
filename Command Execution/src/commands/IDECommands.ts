@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK } from '../constants/IDE';
 import fs from "fs";
 import { NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
 
@@ -162,6 +162,51 @@ const redo = () => vscode.commands.registerCommand(REDO, () => {
     // }
 });
 
+//select kernel for notebook
+const selectKernel = () => vscode.commands.registerCommand(SELECT_KERNEL, (data) => {
+    const path = `${vscode.workspace.rootPath}\\${data?.path}`;
+    const file = vscode.Uri.file(path);
+
+    // check if file exists
+    if (fs.existsSync(path)) {
+        vscode.workspace.openTextDocument(file).then(doc => {
+            vscode.window.showTextDocument(doc);
+            //select kernel with data.kernelInfo
+            vscode.commands.executeCommand('notebook.selectKernel', {
+                path: data?.path,
+                kernelInfo: data?.kernelInfo
+            });
+
+            return {
+                success: true
+            };
+        },
+            (err) => {
+                return {
+                    success: false,
+                    message: err
+                };
+            }
+        );
+
+    }
+
+    return {
+        success: false,
+        message: "Selected Kernel does not exist"
+    };
+});
+
+
+//run notebook cell
+const runNotebookCell = () => vscode.commands.registerCommand(RUN_NOTEBOOK_CELL, () => {
+    vscode.commands.executeCommand('notebook.runactivecell');
+});
+
+//run all notebook cells
+const runNotebook = () => vscode.commands.registerCommand(RUN_NOTEBOOK, () => {
+    vscode.commands.executeCommand('notebook.execute');
+});
 
 // register commands
 const registerIDECommands = () => {
@@ -175,7 +220,11 @@ const registerIDECommands = () => {
         cut,
         copy,
         undo,
-        redo
+        redo,
+        selectKernel,
+        runNotebookCell,
+        runNotebook
+
     ];
 
     commands.forEach(command => command());
