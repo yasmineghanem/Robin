@@ -121,7 +121,7 @@ router.get(
 router.get(
     "/paste",
     (req: any, res: any) => {
-        vscode.commands.executeCommand(PASTE).then(
+        vscode.commands.executeCommand('paste').then(
             () => {
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ message: "Pasted!" }));
@@ -136,7 +136,7 @@ router.get(
 router.get(
     "/cut",
     (req: any, res: any) => {
-        vscode.commands.executeCommand(CUT).then(
+        vscode.commands.executeCommand('cut').then(
             () => {
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ message: "Cut!" }));
