@@ -22,7 +22,7 @@ enum mode
 
 void train_ADA_BOOST(const char *file, int layers = 1, int num = -1);
 void test_ADA_BOOST(const char *file, int num = -1);
-void train_face_detector(const char *folder, int num);
+void train_face_detector(const char *folder, int num, double Yo = 0.0, double Yl = 0.0, double Bl = 0.0);
 void test_face_detector(const char *folder, int num);
 
 void train_ADA_BOOST(const char *file, int layers, int num)
@@ -96,7 +96,7 @@ void test_ADA_BOOST(const char *file, int num)
     cout << "False negative rate: " << mat.false_negative_rate << endl;
 }
 
-void train_face_detector(const char *folder, int num)
+void train_face_detector(const char *folder, int num, double Yo, double Yl, double Bl)
 {
     auto start_time = std::chrono::high_resolution_clock::now();
     std::string train_pos_path = "imgs/face_data_24_24/trainset/faces";
@@ -116,7 +116,7 @@ void train_face_detector(const char *folder, int num)
     std::string save_folder(folder);
     std::cout << ".... Training Face Detector ....\n";
     start_time = std::chrono::high_resolution_clock::now();
-    classifier.train(0.1, 0.2, 0.1);
+    classifier.train(Yo, Yl, Bl);
     end_time = std::chrono::high_resolution_clock::now();
     std::cout << "Classifier trained!\n";
     duration = end_time - start_time;
@@ -175,7 +175,7 @@ int main()
     }
     else if (current_mode == TRAIN_FACE_DETECTION)
     {
-        train_face_detector("face1", 1000);
+        train_face_detector("face1", 1000, 0.5, 0.5, 0.5);
         // cout << "here" << endl;
         test_face_detector("face1", 500);
         return 0;

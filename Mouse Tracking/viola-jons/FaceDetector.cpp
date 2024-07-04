@@ -66,7 +66,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
     int last = 0;
     while (cur_Y > Yo)
     {
-        double u = 1e-2;
+        double u = 1e-1;
         l += 1;
         int Nl = min(10 * l + 10, 200);
         double sl = 0;
@@ -79,6 +79,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
             bool train_again = false;
             auto mat = this->evaluate_single_layer(fl, predictions, sl);
             Y = mat.false_positive_rate, B = mat.false_negative_rate;
+            cout << "adaboost number :  " << l << " layer number : " << Tl << " shift: " << sl << " false positive rate : " << Y << " false negative rate : " << B << endl;
             if (Y <= Yl && B <= Bl)
             {
                 cur_Y = cur_Y * Y;
@@ -112,13 +113,17 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                     sl = -1;
                     auto mat = this->evaluate_single_layer(fl, predictions, sl);
                     double Y = mat.false_positive_rate, B = mat.false_negative_rate;
+                    cout << "adaboost number :  " << l << " layer number : " << Tl << " entered the dead loop" << endl;
                     while (B > Bl)
                     {
                         sl += 0.05;
                         mat = this->evaluate_single_layer(fl, predictions, sl);
                         B = mat.false_negative_rate;
                         Y = mat.false_positive_rate;
+                        cout << " shift: " << sl << " false positive rate : " << Y << " false negative rate : " << B << endl;
                     }
+                    cout << "adaboost number :  " << l << " layer number : " << Tl << " go out from the dead loop" << endl;
+
                     cur_Y = cur_Y * Y;
                     break;
                 }

@@ -48,7 +48,7 @@ void AdaBoost::train(int T)
         // compute the error
         double error = learner->error;
         learners.push_back(learner);
-        cout << "erorr in layer : " << t << " is : " << error << endl;
+        // cout << "erorr in layer : " << t << " is : " << error << endl;
         if (abs(error - 0) < err)
         {
             alphas.push_back(1);
