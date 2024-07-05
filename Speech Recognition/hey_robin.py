@@ -85,7 +85,7 @@ parser.add_argument(
     "--model_path",
     help="The path of a specific model to load",
     type=str,
-    default="./Hey_Robin.tflite",
+    default="./hey_robin_2.tflite",
     required=False
 )
 parser.add_argument(
