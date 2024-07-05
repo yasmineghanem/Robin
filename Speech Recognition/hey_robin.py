@@ -1,52 +1,3 @@
-# import pyaudio
-# import numpy as np
-# from openwakeword.model import Model
-
-# # Initialize your trained model
-# model = Model(wakeword_models=["./Hey_Robin.tflite"],  # can also leave this argument empty to load all of the included pre-trained models
-#               )
-
-# # Audio stream configuration
-# FORMAT = pyaudio.paInt16
-# CHANNELS = 1
-# RATE = 16000  # Ensure this matches your model's requirements
-# CHUNK = 1024
-
-# # Initialize PyAudio
-# audio = pyaudio.PyAudio()
-
-# # Open audio stream
-# stream = audio.open(format=FORMAT, channels=CHANNELS,
-#                     rate=RATE, input=True, frames_per_buffer=CHUNK)
-
-# print("Listening for wake word...")
-
-# try:
-#     while True:
-#         # Read a chunk of data from the audio stream
-#         data = stream.read(CHUNK)
-
-#         # Convert audio data to numpy array
-#         audio_data = np.frombuffer(data, dtype=np.int16)
-
-#         # Preprocess the audio data if needed (e.g., normalization, feature extraction)
-#         # preprocessed_audio_data = preprocess(audio_data)
-
-#         # Use your model to detect the wake word
-#         if model.predict(audio_data):  # Replace with the actual method to predict
-#             print("Wake word detected!")
-#             # Trigger your action here
-#             break  # Exit the loop or handle the wake word detection as needed
-
-# except KeyboardInterrupt:
-#     print("Interrupted by user")
-
-# finally:
-#     # Close the audio stream
-#     stream.stop_stream()
-#     stream.close()
-#     audio.terminate()
-
 # Copyright 2022 David Scripka. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -153,4 +104,3 @@ if __name__ == "__main__":
         print(output_string_header, "                             ", end='\r')
         if list(owwModel.prediction_buffer[mdl])[-1] > 0.7:
             break
-

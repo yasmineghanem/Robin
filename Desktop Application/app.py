@@ -1,29 +1,37 @@
 import customtkinter
 import tkinterDnD
 import hupper
+import pyaudio
+import numpy as np
+from openwakeword.model import Model
+import argparse
+import openwakeword
 
 
-def start_reloader():
-    reloader = hupper.start_reloader('app.main')
+# def start_reloader():
+#     reloader = hupper.start_reloader('app.gui')
+
+
+def switch_state_changed():
+    if switch.get() == 1:
+        print("Switch is ON")
+    else:
+        print("Switch is OFF")
 
 
 def main():
     customtkinter.set_ctk_parent_class(tkinterDnD.Tk)
 
-    # Modes: "System" (standard), "Dark", "Light"
     customtkinter.set_appearance_mode("dark")
-    # Themes: "blue" (standard), "green", "dark-blue"
+
     customtkinter.set_default_color_theme("theme/violet.json")
 
     app = customtkinter.CTk()
     app.geometry("400x200")
-    app.title("CustomTkinter simple_example.py")
+    app.title("Robin")
 
-    app.iconbitmap("./Assets/robin.ico")
+    # app.iconbitmap("./Assets/robin.png")
     print(type(app), isinstance(app, tkinterDnD.Tk))
-
-    def button_callback():
-        print("Button click", combobox_1.get())
 
     # def slider_callback(value):
     #     progressbar_1.set(value)
@@ -31,68 +39,92 @@ def main():
     frame_1 = customtkinter.CTkFrame(master=app)
     frame_1.pack(pady=0, padx=0, fill="both", expand=True)
 
-    label_1 = customtkinter.CTkLabel(
-        master=frame_1, justify=customtkinter.RIGHT)
-    label_1.pack(pady=10, padx=10)
-
-    # progressbar_1 = customtkinter.CTkProgressBar(master=frame_1)
-    # progressbar_1.pack(pady=10, padx=10)
-
-    button_1 = customtkinter.CTkButton(master=frame_1, command=button_callback)
-    button_1.pack(pady=10, padx=10)
-
-    # slider_1 = customtkinter.CTkSlider(
-    #     master=frame_1, command=slider_callback, from_=0, to=1)
-    # slider_1.pack(pady=10, padx=10)
-    # slider_1.set(0.5)
-
-    entry_1 = customtkinter.CTkEntry(
-        master=frame_1, placeholder_text="CTkEntry")
-    entry_1.pack(pady=10, padx=10)
-
-    optionmenu_1 = customtkinter.CTkOptionMenu(
-        frame_1, values=["Option 1", "Option 2", "Option 42 long long long..."])
-    optionmenu_1.pack(pady=10, padx=10)
-    optionmenu_1.set("CTkOptionMenu")
-
-    combobox_1 = customtkinter.CTkComboBox(
-        frame_1, values=["Option 1", "Option 2", "Option 42 long long long..."])
-    combobox_1.pack(pady=10, padx=10)
-    combobox_1.set("CTkComboBox")
-
-    checkbox_1 = customtkinter.CTkCheckBox(master=frame_1)
-    checkbox_1.pack(pady=10, padx=10)
-
-    radiobutton_var = customtkinter.IntVar(value=1)
-
-    radiobutton_1 = customtkinter.CTkRadioButton(
-        master=frame_1, variable=radiobutton_var, value=1)
-    radiobutton_1.pack(pady=10, padx=10)
-
-    radiobutton_2 = customtkinter.CTkRadioButton(
-        master=frame_1, variable=radiobutton_var, value=2)
-    radiobutton_2.pack(pady=10, padx=10)
-
-    switch_1 = customtkinter.CTkSwitch(master=frame_1)
+    switch_1 = customtkinter.CTkSwitch(master=frame_1,
+                                       text="Active",
+                                       command=switch_state_changed,
+                                       )
     switch_1.pack(pady=10, padx=10)
 
-    text_1 = customtkinter.CTkTextbox(master=frame_1, width=200, height=70)
-    text_1.pack(pady=10, padx=10)
-    text_1.insert("0.0", "CTkTextbox\n\n\n\n")
-
-    segmented_button_1 = customtkinter.CTkSegmentedButton(
-        master=frame_1, values=["CTkSegmentedButton", "Value 2"])
-    segmented_button_1.pack(pady=10, padx=10)
-
-    tabview_1 = customtkinter.CTkTabview(master=frame_1, width=300)
-    tabview_1.pack(pady=10, padx=10)
-    tabview_1.add("CTkTabview")
-    tabview_1.add("Tab 2")
     app.attributes('-topmost', True)
 
     app.mainloop()
 
 
+# Parse input arguments
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--chunk_size",
+    help="How much audio (in number of samples) to predict on at once",
+    type=int,
+    default=1280,
+    required=False
+)
+parser.add_argument(
+    "--model_path",
+    help="The path of a specific model to load",
+    type=str,
+    default="./hey_robin_2.onnx",
+    required=False
+)
+parser.add_argument(
+    "--inference_framework",
+    help="The inference framework to use (either 'onnx' or 'tflite'",
+    type=str,
+    default='tflite',
+    required=False
+)
+
+args = parser.parse_args()
+print(args)
+
+# Get microphone stream
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 16000
+CHUNK = args.chunk_size
+audio = pyaudio.PyAudio()
+mic_stream = audio.open(format=FORMAT, channels=CHANNELS,
+                        rate=RATE, input=True, frames_per_buffer=CHUNK)
+
+# Load pre-trained openwakeword models
+if args.model_path != "":
+    owwModel = Model(wakeword_models=[
+                     args.model_path], inference_framework=args.inference_framework)
+else:
+    owwModel = Model(inference_framework=args.inference_framework)
+
+n_models = len(owwModel.models.keys())
+
+
 if __name__ == "__main__":
-    start_reloader()
-    main()
+    # start_reloader()
+    gui()
+
+    while True:
+        # Get audio
+        audio = np.frombuffer(mic_stream.read(CHUNK), dtype=np.int16)
+
+        # Feed to openWakeWord model
+        prediction = owwModel.predict(audio)
+
+        # Column titles
+        n_spaces = 16
+        output_string_header = """
+            Model Name         | Score | Wakeword Status
+            --------------------------------------
+            """
+
+        for mdl in owwModel.prediction_buffer.keys():
+            # Add scores in formatted table
+            scores = list(owwModel.prediction_buffer[mdl])
+            curr_score = format(scores[-1], '.20f').replace("-", "")
+
+            output_string_header += f"""{mdl}{" "*(n_spaces - len(mdl))}   | {curr_score[0:5]} | {"--"+" "*20 if scores[-1] <= 0.5 else "Wakeword Detected!"}
+            """
+
+        # Print results table
+        print("\033[F"*(4*n_models+1))
+        print(output_string_header, "                             ", end='\r')
+        if list(owwModel.prediction_buffer[mdl])[-1] > 0.7:
+            print("Wakeword detected!")
+            #
