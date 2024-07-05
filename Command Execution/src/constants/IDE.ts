@@ -36,3 +36,6 @@ export const RUN_NOTEBOOK_CELL = "robin.runNotebookCell";
 
 // run all notebook cells
 export const RUN_NOTEBOOK = "robin.runNotebook";
+
+// run python code
+export const RUN_PYTHON = "robin.runPython"
