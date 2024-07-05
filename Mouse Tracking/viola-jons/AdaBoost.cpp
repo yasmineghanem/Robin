@@ -14,24 +14,25 @@ AdaBoost::~AdaBoost()
         delete learners[i];
     }
 }
-AdaBoost::AdaBoost(vector<vector<int>> &X, vector<int> &y) : X(X), y(y)
+AdaBoost::AdaBoost(int **&X, int *&y, pair<int, int> dim) : X(X), y(y), train_dim(dim)
 {
     // intialize the weights
     int n_pos = 0;
     int n_neg = 0;
-    for (size_t i = 0; i < X.size(); ++i)
+    for (size_t i = 0; i < this->train_dim.first; ++i)
     {
         if (y[i] == 1)
             n_pos++;
         else
             n_neg++;
     }
-    for (size_t i = 0; i < X.size(); ++i)
+    this->weights = new double[this->train_dim.first];
+    for (size_t i = 0; i < this->train_dim.first; ++i)
     {
         if (y[i] == 1)
-            weights.push_back(0.5 / n_pos);
+            weights[i] = (0.5 / n_pos);
         else
-            weights.push_back(0.5 / n_neg);
+            weights[i] = (0.5 / n_neg);
     }
 }
 AdaBoost::AdaBoost()
@@ -39,16 +40,15 @@ AdaBoost::AdaBoost()
 }
 void AdaBoost::train(int T)
 {
-    int n = this->X.size();
+    int n = this->train_dim.first;
     for (int t = 0; t < T; t++)
     {
 
         // find the best learner
-        Learner *learner = best_stump(this->X, this->y, this->weights, this->X[0].size());
+        Learner *learner = best_stump(this->X, this->y, this->weights, this->train_dim);
         // compute the error
         double error = learner->error;
         learners.push_back(learner);
-        // cout << "erorr in layer : " << t << " is : " << error << endl;
         if (abs(error - 0) < err)
         {
             alphas.push_back(1);
@@ -74,18 +74,18 @@ void AdaBoost::train(int T)
         }
         // normalize the weights
         double sum_weights = 0;
-        for (size_t i = 0; i < weights.size(); ++i)
+        for (size_t i = 0; i < n; ++i)
         {
             sum_weights += weights[i];
         }
-        for (size_t i = 0; i < weights.size(); ++i)
+        for (size_t i = 0; i < n; ++i)
         {
             weights[i] /= sum_weights;
         }
     }
 }
 
-int AdaBoost::predict(const std::vector<int> &X, double sl)
+int AdaBoost::predict(int *&X, double sl)
 {
     double sum = 0;
     for (size_t i = 0; i < this->learners.size(); ++i)

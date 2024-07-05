@@ -18,7 +18,7 @@ Learner::Learner()
     this->margin = 0;
     this->feature_index = 0;
 }
-int Learner::predict(const vector<int> &X)
+int Learner::predict(int *&X)
 {
     // if (debug)
     //     cout << (X[this->feature_index] - this->threshold) << " ";
