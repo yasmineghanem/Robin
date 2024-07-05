@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO,COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO,COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON } from '../constants/IDE';
 const router = require('express').Router();
 
 
@@ -241,7 +241,7 @@ router.post(
     "/run-python-file",
     (req: any, res: any) => {
         const data = req.body;
-        vscode.commands.executeCommand('python.runfile', data).then(
+        vscode.commands.executeCommand(RUN_PYTHON, data).then(
             () => {
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ message: "Python file run!" }));

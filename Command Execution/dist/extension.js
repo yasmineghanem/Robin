@@ -24827,7 +24827,7 @@ router.get("/run-notebook", (req, res) => {
 //run python file
 router.post("/run-python-file", (req, res) => {
     const data = req.body;
-    vscode.commands.executeCommand('python.runfile', data).then(() => {
+    vscode.commands.executeCommand(IDE_1.RUN_PYTHON, data).then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Python file run!" }));
     }, (err) => {
@@ -24846,7 +24846,7 @@ exports["default"] = router;
 
 // commands
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.RUN_NOTEBOOK = exports.RUN_NOTEBOOK_CELL = exports.SELECT_KERNEL = exports.REDO = exports.UNDO = exports.CUT = exports.COPY = exports.PASTE = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
+exports.RUN_PYTHON = exports.RUN_NOTEBOOK = exports.RUN_NOTEBOOK_CELL = exports.SELECT_KERNEL = exports.REDO = exports.UNDO = exports.CUT = exports.COPY = exports.PASTE = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
 exports.GO_TO_LINE = "robin.goToLine";
 // go to file
 exports.GO_TO_FILE = "robin.goToFile";
@@ -24872,6 +24872,8 @@ exports.SELECT_KERNEL = "robin.selectKernel";
 exports.RUN_NOTEBOOK_CELL = "robin.runNotebookCell";
 // run all notebook cells
 exports.RUN_NOTEBOOK = "robin.runNotebook";
+// run python code
+exports.RUN_PYTHON = "robin.runPython";
 
 
 /***/ }),
@@ -25870,7 +25872,6 @@ const selectKernel = () => vscode.commands.registerCommand(IDE_1.SELECT_KERNEL, 
             vscode.window.showTextDocument(doc);
             //select kernel with data.kernelInfo
             vscode.commands.executeCommand('notebook.selectKernel', {
-                path: data?.path,
                 kernelInfo: data?.kernelInfo
             });
             return {
@@ -25896,6 +25897,33 @@ const runNotebookCell = () => vscode.commands.registerCommand(IDE_1.RUN_NOTEBOOK
 const runNotebook = () => vscode.commands.registerCommand(IDE_1.RUN_NOTEBOOK, () => {
     vscode.commands.executeCommand('notebook.execute');
 });
+//run python code
+const runPython = () => vscode.commands.registerCommand(IDE_1.RUN_PYTHON, (data) => {
+    const path = `${vscode.workspace.rootPath}\\${data?.path}`;
+    const file = vscode.Uri.file(path);
+    // vscode.commands.executeCommand('python.execInInterminal');
+    // vscode.commands.executeCommand('python.run',file);    
+    // check if file exists
+    if (fs_1.default.existsSync(path)) {
+        vscode.workspace.openTextDocument(file).then(doc => {
+            vscode.window.showTextDocument(doc);
+            // vscode.commands.executeCommand('python.execInInterminal', file);
+            vscode.commands.executeCommand('python.run', file);
+            return {
+                success: true
+            };
+        }, (err) => {
+            return {
+                success: false,
+                message: err
+            };
+        });
+    }
+    return {
+        success: false,
+        message: "Can't run file"
+    };
+});
 // register commands
 const registerIDECommands = () => {
     const commands = [
@@ -25911,7 +25939,8 @@ const registerIDECommands = () => {
         redo,
         selectKernel,
         runNotebookCell,
-        runNotebook
+        runNotebook,
+        runPython
     ];
     commands.forEach(command => command());
 };

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON } from '../constants/IDE';
 import fs from "fs";
 import { NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
 
@@ -173,7 +173,6 @@ const selectKernel = () => vscode.commands.registerCommand(SELECT_KERNEL, (data)
             vscode.window.showTextDocument(doc);
             //select kernel with data.kernelInfo
             vscode.commands.executeCommand('notebook.selectKernel', {
-                path: data?.path,
                 kernelInfo: data?.kernelInfo
             });
 
@@ -208,6 +207,44 @@ const runNotebook = () => vscode.commands.registerCommand(RUN_NOTEBOOK, () => {
     vscode.commands.executeCommand('notebook.execute');
 });
 
+//run python code
+const runPython = () => vscode.commands.registerCommand(RUN_PYTHON, (data) => {
+    const path = `${vscode.workspace.rootPath}\\${data?.path}`;
+    const file = vscode.Uri.file(path);
+
+    // vscode.commands.executeCommand('python.execInInterminal');
+    // vscode.commands.executeCommand('python.run',file);    
+    
+
+
+    // check if file exists
+    if (fs.existsSync(path)) {
+        vscode.workspace.openTextDocument(file).then(doc => {
+            vscode.window.showTextDocument(doc);
+            // vscode.commands.executeCommand('python.execInInterminal', file);
+            vscode.commands.executeCommand('python.run',file);    
+
+
+            return {
+                success: true
+            };
+        },
+            (err) => {
+                return {
+                    success: false,
+                    message: err
+                };
+            }
+        );
+
+    }
+
+    return {
+        success: false,
+        message: "Can't run file"
+    };
+});
+
 // register commands
 const registerIDECommands = () => {
     const commands = [
@@ -223,7 +260,8 @@ const registerIDECommands = () => {
         redo,
         selectKernel,
         runNotebookCell,
-        runNotebook
+        runNotebook,
+        runPython
 
     ];
 
