@@ -11,6 +11,10 @@
 #include "const.h"
 #include <fstream>
 #include <tuple>
+#include <thread>
+#include <mutex>
+#include <future>
+
 using namespace std;
 enum mode
 {
@@ -23,6 +27,7 @@ enum mode
 // void train_ADA_BOOST(const char *file, int layers = 1, int num = -1);
 // void test_ADA_BOOST(const char *file, int num = -1);
 void train_face_detector(const char *folder, int num, double Yo = 0.0, double Yl = 0.0, double Bl = 0.0);
+
 void test_face_detector(const char *folder, int num);
 
 // void train_ADA_BOOST(const char *file, int layers, int num)
@@ -142,6 +147,7 @@ void test_face_detector(const char *folder, int num)
     }
     int *Y_test = new int[pos_count + neg_count];
     int *predeictions = new int[pos_count + neg_count];
+
     for (int i = 0; i < pos_count; i++)
     {
         integral_image(pos_test[i], II, 24, 24);
@@ -166,10 +172,110 @@ void test_face_detector(const char *folder, int num)
     delete[] predeictions;
 }
 
+void test_face_detector_threads(const char *folder, int num)
+{
+    FaceDetector classifier;
+    classifier.load(folder);
+    std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
+    std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
+    int ***pos_test;
+    int ***neg_test;
+    int pos_count = load_gray_images(test_pos_path, pos_test, num);
+    int neg_count = load_gray_images(test_neg_path, neg_test, num);
+    int *Y_test = new int[pos_count + neg_count];
+    int *predictions = new int[pos_count + neg_count];
+    // Function to process a single image
+    auto process_image = [&](int ***images, int *predictions, int *Y_test, int start, int end, int lable_start, int label)
+    {
+        int **local_II = new int *[24];
+        for (int i = 0; i < 24; i++)
+        {
+            local_II[i] = new int[24];
+        }
+        for (int i = start; i < end; ++i)
+        {
+            integral_image(images[i], local_II, 24, 24);
+            predictions[lable_start + i] = classifier.predict(local_II);
+            Y_test[lable_start + i] = label;
+        }
+        for (int i = 0; i < 24; i++)
+        {
+            delete[] local_II[i];
+        }
+        delete[] local_II;
+    };
+
+    // Split the work among available threads
+    size_t num_threads = std::thread::hardware_concurrency();
+    if (num_threads == 0)
+        num_threads = 2; // Fallback to 2 threads if hardware_concurrency returns 0
+
+    std::vector<std::future<void>> futures;
+
+    // Process positive images in parallel
+    int pos_chunk_size = (pos_count + num_threads - 1) / num_threads;
+    for (size_t i = 0; i < num_threads; ++i)
+    {
+        int start = i * pos_chunk_size;
+        int end = std::min(start + pos_chunk_size, pos_count);
+        if (start < end)
+        {
+            futures.push_back(std::async(std::launch::async, process_image, pos_test, predictions, Y_test, start, end, 0, 1));
+        }
+    }
+
+    // Process negative images in parallel
+    int neg_chunk_size = (neg_count + num_threads - 1) / num_threads;
+    for (size_t i = 0; i < num_threads; ++i)
+    {
+        int start = i * neg_chunk_size;
+        int end = std::min(start + neg_chunk_size, neg_count);
+        if (start < end)
+        {
+            futures.push_back(std::async(std::launch::async, process_image, neg_test, predictions, Y_test, start, end, pos_count, -1));
+        }
+    }
+    // Wait for all threads to complete
+    for (auto &f : futures)
+    {
+        f.get();
+    }
+
+    auto mat = calc_acuracy_metrices(Y_test, predictions, pos_count + neg_count);
+    // Print the results
+    std::cout << "Accuracy: " << mat.accuracy << std::endl;
+    std::cout << "Error rate: " << mat.error_rate << std::endl;
+    // std::cout << "False positive rate: " << mat.false_positive_rate << std::endl;
+    // std::cout << "False negative rate: " << mat.false_negative_rate << std::endl;
+
+    for (int i = 0; i < pos_count; ++i)
+    {
+        for (int j = 0; j < 24; ++j)
+        {
+            delete[] pos_test[i][j];
+        }
+        delete[] pos_test[i];
+    }
+    delete[] pos_test;
+
+    for (int i = 0; i < neg_count; ++i)
+    {
+        for (int j = 0; j < 24; ++j)
+        {
+            delete[] neg_test[i][j];
+        }
+        delete[] neg_test[i];
+    }
+    delete[] neg_test;
+
+    delete[] Y_test;
+    delete[] predictions;
+}
+
 int main()
 {
     // freopen("log.txt", "w", stdout);
-    mode current_mode = TEST_FACE_DETECTION;
+    mode current_mode = TRAIN_FACE_DETECTION;
     if (current_mode == TRAIN_ADABOOST)
     {
         // train_ADA_BOOST("model2.txt", 10, 1000);
@@ -182,13 +288,18 @@ int main()
     }
     else if (current_mode == TRAIN_FACE_DETECTION)
     {
-        train_face_detector("face1", -1, 0.5, 0.5, 0.5);
+        train_face_detector("face1", 1000, 0.5, 0.5, 0.5);
         return 0;
     }
     else if (current_mode == TEST_FACE_DETECTION)
     {
-        test_face_detector("face1", -1);
+        auto start = std::chrono::high_resolution_clock::now();
+        test_face_detector_threads("face1", -1);
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> duration = end - start;
+        std::cout << "Testing time: " << duration.count() << " s\n";
         return 0;
     }
+
     return 0;
 }
