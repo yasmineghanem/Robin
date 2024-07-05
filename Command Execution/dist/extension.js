@@ -25915,30 +25915,42 @@ const runNotebook = () => vscode.commands.registerCommand(IDE_1.RUN_NOTEBOOK, ()
 });
 //run python code
 const runPython = () => vscode.commands.registerCommand(IDE_1.RUN_PYTHON, (data) => {
-    const path = `${vscode.workspace.rootPath}\\${data?.path}`;
-    const file = vscode.Uri.file(path);
-    // vscode.commands.executeCommand('python.execInInterminal');
-    // vscode.commands.executeCommand('python.run',file);    
-    // check if file exists
-    if (fs_1.default.existsSync(path)) {
-        vscode.workspace.openTextDocument(file).then(doc => {
-            vscode.window.showTextDocument(doc);
-            // vscode.commands.executeCommand('python.execInInterminal', file);
-            vscode.commands.executeCommand('python.run', file);
-            return {
-                success: true
-            };
-        }, (err) => {
+    // run current active file from terminal
+    const terminal = vscode.window.activeTerminal ?? vscode.window.createTerminal();
+    terminal.show();
+    // get the current file path
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        vscode.window.showErrorMessage('No active text editor.');
+        return {
+            success: false,
+            message: code_1.NO_ACTIVE_TEXT_EDITOR
+        };
+    }
+    try { // relative path
+        const path = editor.document.fileName;
+        // get the file name that ends with .py
+        const fileName = path.split('\\').pop();
+        if (!fileName?.endsWith('.py')) {
+            vscode.window.showErrorMessage('File is not a python file.');
             return {
                 success: false,
-                message: err
+                message: 'File is not a python file.'
             };
-        });
+        }
+        terminal.sendText(`python ./${fileName}`);
+        return {
+            success: true,
+            message: 'Python file running.'
+        };
     }
-    return {
-        success: false,
-        message: "Can't run file"
-    };
+    catch (err) {
+        vscode.window.showErrorMessage('Error running python file.');
+        return {
+            success: false,
+            message: 'Error running python file.'
+        };
+    }
 });
 // push to git
 const gitPush = async () => vscode.commands.registerCommand("robin.gitPush", async (args) => {
