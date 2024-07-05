@@ -1,115 +1,227 @@
+// #include <iostream>
+// #include <vector>
+// #include <thread>
+// #include <queue>
+// #include <functional>
+// #include <mutex>
+// #include <condition_variable>
+// #include <future>
+
+// class ThreadPool
+// {
+// public:
+//     ThreadPool(size_t threads);
+//     ~ThreadPool();
+
+//     template <class F, class... Args>
+//     auto enqueue(F &&f, Args &&...args) -> std::future<typename std::result_of<F(Args...)>::type>;
+
+// private:
+//     std::vector<std::thread> workers;
+//     std::queue<std::function<void()>> tasks;
+
+//     std::mutex queue_mutex;
+//     std::condition_variable condition;
+//     bool stop;
+// };
+
+// // Constructor
+// ThreadPool::ThreadPool(size_t threads) : stop(false)
+// {
+//     for (size_t i = 0; i < threads; ++i)
+//         workers.emplace_back(
+//             [this]
+//             {
+//                 for (;;)
+//                 {
+//                     std::function<void()> task;
+//                     {
+//                         std::unique_lock<std::mutex> lock(this->queue_mutex);
+//                         this->condition.wait(lock, [this]
+//                                              { return this->stop || !this->tasks.empty(); });
+//                         if (this->stop && this->tasks.empty())
+//                             return;
+//                         task = std::move(this->tasks.front());
+//                         this->tasks.pop();
+//                     }
+//                     task();
+//                 }
+//             });
+// }
+
+// // Destructor
+// ThreadPool::~ThreadPool()
+// {
+//     {
+//         std::unique_lock<std::mutex> lock(queue_mutex);
+//         stop = true;
+//     }
+//     condition.notify_all();
+//     for (std::thread &worker : workers)
+//         worker.join();
+// }
+
+// // Add new work item to the pool
+// template <class F, class... Args>
+// auto ThreadPool::enqueue(F &&f, Args &&...args) -> std::future<typename std::result_of<F(Args...)>::type>
+// {
+//     using return_type = typename std::result_of<F(Args...)>::type;
+
+//     auto task = std::make_shared<std::packaged_task<return_type()>>(
+//         std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+
+//     std::future<return_type> res = task->get_future();
+//     {
+//         std::unique_lock<std::mutex> lock(queue_mutex);
+//         if (stop)
+//             throw std::runtime_error("enqueue on stopped ThreadPool");
+//         tasks.emplace([task]()
+//                       { (*task)(); });
+//     }
+//     condition.notify_one();
+//     return res;
+// }
+
+// int main()
+// {
+//     ThreadPool pool(4);
+
+//     auto result1 = pool.enqueue([]()
+//                                 {
+//         std::this_thread::sleep_for(std::chrono::seconds(1));
+//         std::cout << "Task 1 completed" << std::endl;
+//         return 1; });
+
+//     auto result2 = pool.enqueue([]()
+//                                 {
+//         std::this_thread::sleep_for(std::chrono::seconds(1));
+//         std::cout << "Task 2 completed" << std::endl;
+//         return 2; });
+
+//     std::cout << "Result 1: " << result1.get() << std::endl;
+//     std::cout << "Result 2: " << result2.get() << std::endl;
+
+//     return 0;
+// }
+
+// class ThreadPool
+// {
+// public:
+//     ThreadPool(size_t threads);
+//     ~ThreadPool();
+
+//     template <class F, class... Args>
+//     auto enqueue(F &&f, Args &&...args) -> std::future<typename std::result_of<F(Args...)>::type>;
+
+//     size_t size() const; // Function to get the size of the thread pool
+
+// private:
+//     std::vector<std::thread> workers;
+//     std::queue<std::function<void()>> tasks;
+
+//     std::mutex queue_mutex;
+//     std::condition_variable condition;
+//     bool stop;
+// };
+
+// // Constructor
+// ThreadPool::ThreadPool(size_t threads) : stop(false)
+// {
+//     for (size_t i = 0; i < threads; ++i)
+//         workers.emplace_back(
+//             [this]
+//             {
+//                 for (;;)
+//                 {
+//                     std::function<void()> task;
+//                     {
+//                         std::unique_lock<std::mutex> lock(this->queue_mutex);
+//                         this->condition.wait(lock, [this]
+//                                              { return this->stop || !this->tasks.empty(); });
+//                         if (this->stop && this->tasks.empty())
+//                             return;
+//                         task = std::move(this->tasks.front());
+//                         this->tasks.pop();
+//                     }
+//                     task();
+//                 }
+//             });
+// }
+
+// // Destructor
+// ThreadPool::~ThreadPool()
+// {
+//     {
+//         std::unique_lock<std::mutex> lock(queue_mutex);
+//         stop = true;
+//     }
+//     condition.notify_all();
+//     for (std::thread &worker : workers)
+//         worker.join();
+// }
+
+// // Add new work item to the pool
+// template <class F, class... Args>
+// auto ThreadPool::enqueue(F &&f, Args &&...args) -> std::future<typename std::result_of<F(Args...)>::type>
+// {
+//     using return_type = typename std::result_of<F(Args...)>::type;
+
+//     auto task = std::make_shared<std::packaged_task<return_type()>>(
+//         std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+
+//     std::future<return_type> res = task->get_future();
+//     {
+//         std::unique_lock<std::mutex> lock(queue_mutex);
+//         if (stop)
+//             throw std::runtime_error("enqueue on stopped ThreadPool");
+//         tasks.emplace([task]()
+//                       { (*task)(); });
+//     }
+//     condition.notify_one();
+//     return res;
+// }
+
+// // Function to get the size of the thread pool
+// size_t ThreadPool::size() const
+// {
+//     return workers.size();
+// }
+
+// int main()
+// {
+//     cout << thread::hardware_concurrency() << endl;
+//     // ThreadPool pool(4);
+
+//     // auto result1 = pool.enqueue([]()
+//     //                             {
+//     //     std::this_thread::sleep_for(std::chrono::seconds(1));
+//     //     std::cout << "Task 1 completed" << std::endl;
+//     //     return 1; });
+
+//     // auto result2 = pool.enqueue([]()
+//     //                             {
+//     //     std::this_thread::sleep_for(std::chrono::seconds(1));
+//     //     std::cout << "Task 2 completed" << std::endl;
+//     //     return 2; });
+
+//     // std::cout << "Thread pool size: " << pool.size() << std::endl;
+
+//     // std::cout << "Result 1: " << result1.get() << std::endl;
+//     // std::cout << "Result 2: " << result2.get() << std::endl;
+
+//     return 0;
+// }
+
 #include <iostream>
-#include <chrono>
-
+#include <vector>
+#include <thread>
+#include <queue>
+#include <functional>
+#include <mutex>
+#include <condition_variable>
+#include <future>
 using namespace std;
-using namespace std::chrono;
-int *compute_haar_like_features(int **&II)
-{
-    // assert(img.size() == 24 && img[0].size() == 24);
-
-    int *features = new int[163000];
-    int f = 0;
-
-    // Feature type (a)
-    for (int i = 1; i < 25; i++)
-    {
-        for (int j = 1; j < 25; j++)
-        {
-            for (int w = 1; w < (25 - j) / 2 + 1; w++)
-            {
-                for (int h = 1; h < 25 - i + 1; h++)
-                {
-                    // int S1 = sum_region(II, i - 1, j - 1, i - 1 + h - 1, j - 1 + w - 1);
-                    // int S2 = sum_region(II, i - 1, j - 1 + w, i - 1 + h - 1, j - 1 + 2 * w - 1);
-                    // features[f] = (S1 - S2);
-                    f++;
-                }
-            }
-        }
-    }
-
-    // Feature type (b)
-    for (int i = 1; i < 25; i++)
-    {
-        for (int j = 1; j < 25; j++)
-        {
-            for (int w = 1; w < (25 - j) / 3 + 1; w++)
-            {
-                for (int h = 1; h < 25 - i + 1; h++)
-                {
-                    // int S1 = sum_region(II, i - 1, j - 1, i - 1 + h - 1, j - 1 + w - 1);
-                    // int S2 = sum_region(II, i - 1, j - 1 + w, i - 1 + h - 1, j - 1 + 2 * w - 1);
-                    // int S3 = sum_region(II, i - 1, j - 1 + 2 * w, i - 1 + h - 1, j - 1 + 3 * w - 1);
-                    // features[f] = (S1 - S2 + S3);
-                    f++;
-                }
-            }
-        }
-    }
-
-    // Feature type (c)
-    for (int i = 1; i < 25; i++)
-    {
-        for (int j = 1; j < 25; j++)
-        {
-            for (int w = 1; w < 25 - j + 1; w++)
-            {
-                for (int h = 1; h < (25 - i) / 2 + 1; h++)
-                {
-                    // int S1 = sum_region(II, i - 1, j - 1, i - 1 + h - 1, j - 1 + w - 1);
-                    // int S2 = sum_region(II, i - 1 + h, j - 1, i - 1 + 2 * h - 1, j - 1 + w - 1);
-                    // features[f] = (S1 - S2);
-                    f++;
-                }
-            }
-        }
-    }
-
-    // Feature type (d)
-    for (int i = 1; i < 25; i++)
-    {
-        for (int j = 1; j < 25; j++)
-        {
-            for (int w = 1; w < 25 - j + 1; w++)
-            {
-                for (int h = 1; h < (25 - i) / 3 + 1; h++)
-                {
-                    // int S1 = sum_region(II, i - 1, j - 1, i - 1 + h - 1, j - 1 + w - 1);
-                    // int S2 = sum_region(II, i - 1 + h, j - 1, i - 1 + 2 * h - 1, j - 1 + w - 1);
-                    // int S3 = sum_region(II, i - 1 + 2 * h, j - 1, i - 1 + 3 * h - 1, j - 1 + w - 1);
-                    // features[f] = (S1 - S2 + S3);
-                    f++;
-                }
-            }
-        }
-    }
-
-    // Feature type (e)
-    for (int i = 1; i < 25; i++)
-    {
-        for (int j = 1; j < 25; j++)
-        {
-            for (int w = 1; w < (25 - j) / 2 + 1; w++)
-            {
-                for (int h = 1; h < (25 - i) / 2 + 1; h++)
-                {
-                    // int S1 = sum_region(II, i - 1, j - 1, i - 1 + h - 1, j - 1 + w - 1);
-                    // int S2 = sum_region(II, i - 1 + h, j - 1, i - 1 + 2 * h - 1, j - 1 + w - 1);
-                    // int S3 = sum_region(II, i - 1, j - 1 + w, i - 1 + h - 1, j - 1 + 2 * w - 1);
-                    // int S4 = sum_region(II, i - 1 + h, j - 1 + w, i - 1 + 2 * h - 1, j - 1 + 2 * w - 1);
-                    // features[f] = (S1 - S2 - S3 + S4);
-                    f++;
-                }
-            }
-        }
-    }
-    cout << f << endl;
-    return features;
-}
-
 int main()
 {
-    int **II = new int *[24];
-    compute_haar_like_features(II);
-    return 0;
+    cout << thread::hardware_concurrency() << endl;
 }

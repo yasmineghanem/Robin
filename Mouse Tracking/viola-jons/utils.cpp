@@ -1,6 +1,10 @@
 #include "utils.h"
 #include <iostream>
 // #include <vector>
+#include <thread>
+#include <mutex>
+#include <algorithm>
+#include <utility> // for std::pair
 #include <cmath>
 #include <algorithm>
 #include "learner.h"
@@ -12,6 +16,7 @@
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "stb_image.h"
 #include "const.h"
+
 using namespace std;
 namespace fs = std::filesystem;
 
@@ -482,46 +487,123 @@ Learner *decision_stump(int **&X, int *&y, double *&weights, int feature_index, 
 }
 
 // O(num_features * n)
-Learner *best_stump(int **&X, int *&y, double *&weights, pair<int, int> &dim)
+// Learner *best_stump(int **&X, int *&y, double *&weights, pair<int, int> &dim)
+// {
+
+//     int n = dim.first;
+//     double *pos_weights_prefix = new double[n];
+//     double *neg_weights_prefix = new double[n];
+
+//     int *sorted_indices = new int[n];
+//     int *X_sorted = new int[n];
+//     int *y_sorted = new int[n];
+//     double *weights_sorted = new double[n];
+//     Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+
+//     for (int f = 1; f < dim.second; f++)
+//     {
+
+//         // num_features is around 160K , this part could be run on cuda and lunch too many threads here
+//         Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+//         if (cur_stump->error < best_stump->error || (cur_stump->error == best_stump->error && cur_stump->margin > best_stump->margin))
+//         // if (cur_stump->error < best_stump->error)
+//         {
+//             delete best_stump;
+//             best_stump = cur_stump;
+//             best_stump->feature_index = f;
+//         }
+//         else
+//         {
+//             delete cur_stump;
+//         }
+//     }
+//     delete[] pos_weights_prefix;
+//     delete[] neg_weights_prefix;
+
+//     delete[] sorted_indices;
+//     delete[] X_sorted;
+//     delete[] y_sorted;
+//     delete[] weights_sorted;
+
+//     return best_stump;
+// }
+
+Learner *best_stump(int **&X, int *&y, double *&weights, std::pair<int, int> &dim)
 {
-
     int n = dim.first;
-    double *pos_weights_prefix = new double[n];
-    double *neg_weights_prefix = new double[n];
+    int num_features = dim.second;
 
-    int *sorted_indices = new int[n];
-    int *X_sorted = new int[n];
-    int *y_sorted = new int[n];
-    double *weights_sorted = new double[n];
-    Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+    // Initial best stump for comparison
+    Learner *best_stump = new Learner(0, 1, 2, 0, 0);
 
-    for (int f = 0; f < dim.second; f++)
+    std::mutex mtx; // Mutex for protecting shared best_stump
+
+    auto worker = [&](int thread_idx, int start, int end)
     {
+        double *pos_weights_prefix = new double[n];
+        double *neg_weights_prefix = new double[n];
+        int *sorted_indices = new int[n];
+        int *X_sorted = new int[n];
+        int *y_sorted = new int[n];
+        double *weights_sorted = new double[n];
+        Learner *my_best_stump = decision_stump(X, y, weights, start, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+        my_best_stump->feature_index = start;
 
-        // num_features is around 160K , this part could be run on cuda and lunch too many threads here
-        Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
-        if (cur_stump->error < best_stump->error || (cur_stump->error == best_stump->error && cur_stump->margin > best_stump->margin))
-        // if (cur_stump->error < best_stump->error)
+        for (int f = start + 1; f < end; f++)
+        {
+            Learner *my_cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+            // std::lock_guard<std::mutex> lock(mtx);
+            if (my_cur_stump->error < my_best_stump->error || (my_cur_stump->error == my_best_stump->error && my_cur_stump->margin > my_best_stump->margin))
+            {
+                delete my_best_stump;
+                my_best_stump = my_cur_stump;
+                my_best_stump->feature_index = f;
+            }
+            else
+            {
+                delete my_cur_stump;
+            }
+        }
+        std::lock_guard<std::mutex> lock(mtx);
+        if (my_best_stump->error < best_stump->error || (my_best_stump->error == best_stump->error && my_best_stump->margin > best_stump->margin))
         {
             delete best_stump;
-            best_stump = cur_stump;
-            best_stump->feature_index = f;
+            best_stump = my_best_stump;
         }
         else
         {
-            delete cur_stump;
+            delete my_best_stump;
         }
+        delete[] pos_weights_prefix;
+        delete[] neg_weights_prefix;
+        delete[] sorted_indices;
+        delete[] X_sorted;
+        delete[] y_sorted;
+        delete[] weights_sorted;
+    };
+
+    size_t num_threads = std::thread::hardware_concurrency();
+    // num_threads = 10;
+    cout << "availabel threads : " << num_threads << endl;
+    if (num_threads == 0)
+        num_threads = 2; // Fallback to 2 threads if hardware_concurrency returns 0
+    std::vector<std::thread> threads;
+    int features_per_thread = num_features / num_threads;
+    int remaining_features = num_features % num_threads;
+    int start = 0;
+    for (size_t i = 0; i < num_threads; ++i)
+    {
+        int end = start + features_per_thread + (i < remaining_features ? 1 : 0);
+        threads.emplace_back(worker, i, start, end);
+        start = end;
     }
-    delete[] pos_weights_prefix;
-    delete[] neg_weights_prefix;
-
-    delete[] sorted_indices;
-    delete[] X_sorted;
-    delete[] y_sorted;
-    delete[] weights_sorted;
-
+    for (auto &t : threads)
+    {
+        t.join();
+    }
     return best_stump;
 }
+
 
 int get_files(const std::string &path, string *&files, int num)
 {
