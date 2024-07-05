@@ -36,3 +36,4 @@ export const showMessage = (message: string) => {
 export const showError = (message: string) => {
     vscode.window.showErrorMessage(message);
 }
+

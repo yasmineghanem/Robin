@@ -153,3 +153,4 @@ if __name__ == "__main__":
         print(output_string_header, "                             ", end='\r')
         if list(owwModel.prediction_buffer[mdl])[-1] > 0.7:
             break
+

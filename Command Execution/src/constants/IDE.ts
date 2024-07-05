@@ -22,6 +22,7 @@ export const COPY = "robin.copy";
 
 // cut
 export const CUT = "robin.cut";
+
 // undo
 export const UNDO = "robin.undo";
 
@@ -38,4 +39,8 @@ export const RUN_NOTEBOOK_CELL = "robin.runNotebookCell";
 export const RUN_NOTEBOOK = "robin.runNotebook";
 
 // run python code
-export const RUN_PYTHON = "robin.runPython"
+export const RUN_PYTHON = "robin.runPython";
+
+/**
+ * MESSAGES
+ */
