@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO,COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON } from '../constants/IDE';
 const router = require('express').Router();
 
 
@@ -245,6 +245,32 @@ router.post(
             () => {
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ message: "Python file run!" }));
+            },
+            (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            }
+        );
+    }
+);
+
+// git push
+router.get(
+    "/git-push",
+    (req: any, res: any) => {
+
+        vscode.commands.executeCommand('robin.gitPush', req.query).then(
+            (response: any) => {
+                if (
+                    response.success
+                ) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git push done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
             },
             (err) => {
                 res.writeHead(400, { "Content-Type": "application/json" });

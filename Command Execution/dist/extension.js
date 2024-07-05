@@ -24835,6 +24835,22 @@ router.post("/run-python-file", (req, res) => {
         res.end(JSON.stringify(err));
     });
 });
+// git push
+router.get("/git-push", (req, res) => {
+    vscode.commands.executeCommand('robin.gitPush', req.query).then((response) => {
+        if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Git push done!" }));
+        }
+        else {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: response.message }));
+        }
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
 exports["default"] = router;
 
 
@@ -25924,6 +25940,53 @@ const runPython = () => vscode.commands.registerCommand(IDE_1.RUN_PYTHON, (data)
         message: "Can't run file"
     };
 });
+// push to git
+const gitPush = async () => vscode.commands.registerCommand("robin.gitPush", async (args) => {
+    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    if (gitExtension) {
+        try {
+            let m = args?.message;
+            const api = gitExtension.getAPI(1);
+            const repo = api.repositories[0];
+            //Get all changes for first repository in list
+            const changes = await repo.diffWithHEAD();
+            // if no changes
+            if (changes.length === 0) {
+                vscode.window.showInformationMessage('No changes to push.');
+                return {
+                    success: true,
+                    message: 'No changes to push.'
+                };
+            }
+            // stage changes
+            await repo.add([]);
+            // Commit changes
+            await repo.commit(args?.message ?? 'Robin commit');
+            // Push changes
+            await repo.push();
+            vscode.window.showInformationMessage('Changes pushed successfully.');
+            return {
+                success: true,
+                message: 'Changes pushed successfully.'
+            };
+        }
+        catch (err) {
+            vscode.window.showErrorMessage('Error pushing changes.');
+            console.log("ROBIN GIT", err);
+            return {
+                success: false,
+                message: 'Error pushing changes.'
+            };
+        }
+    }
+    else {
+        vscode.window.showErrorMessage('Git extension not found.');
+        return {
+            success: false,
+            message: 'Git extension not found.'
+        };
+    }
+});
 // register commands
 const registerIDECommands = () => {
     const commands = [
@@ -25940,7 +26003,8 @@ const registerIDECommands = () => {
         selectKernel,
         runNotebookCell,
         runNotebook,
-        runPython
+        runPython,
+        gitPush
     ];
     commands.forEach(command => command());
 };
