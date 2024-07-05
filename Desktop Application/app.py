@@ -25,26 +25,26 @@ def main():
     def button_callback():
         print("Button click", combobox_1.get())
 
-    def slider_callback(value):
-        progressbar_1.set(value)
+    # def slider_callback(value):
+    #     progressbar_1.set(value)
 
     frame_1 = customtkinter.CTkFrame(master=app)
     frame_1.pack(pady=0, padx=0, fill="both", expand=True)
 
     label_1 = customtkinter.CTkLabel(
-        master=frame_1, justify=customtkinter.LEFT)
+        master=frame_1, justify=customtkinter.RIGHT)
     label_1.pack(pady=10, padx=10)
 
-    progressbar_1 = customtkinter.CTkProgressBar(master=frame_1)
-    progressbar_1.pack(pady=10, padx=10)
+    # progressbar_1 = customtkinter.CTkProgressBar(master=frame_1)
+    # progressbar_1.pack(pady=10, padx=10)
 
     button_1 = customtkinter.CTkButton(master=frame_1, command=button_callback)
     button_1.pack(pady=10, padx=10)
 
-    slider_1 = customtkinter.CTkSlider(
-        master=frame_1, command=slider_callback, from_=0, to=1)
-    slider_1.pack(pady=10, padx=10)
-    slider_1.set(0.5)
+    # slider_1 = customtkinter.CTkSlider(
+    #     master=frame_1, command=slider_callback, from_=0, to=1)
+    # slider_1.pack(pady=10, padx=10)
+    # slider_1.set(0.5)
 
     entry_1 = customtkinter.CTkEntry(
         master=frame_1, placeholder_text="CTkEntry")
