@@ -19,7 +19,7 @@ def main():
     app.geometry("400x200")
     app.title("CustomTkinter simple_example.py")
 
-    # app.iconbitmap("./Assets/robin.png")
+    app.iconbitmap("./Assets/robin.ico")
     print(type(app), isinstance(app, tkinterDnD.Tk))
 
     def button_callback():
