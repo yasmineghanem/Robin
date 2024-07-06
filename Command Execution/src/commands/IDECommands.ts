@@ -273,7 +273,8 @@ const registerIDECommands = () => {
 
     ];
 
-    commands.forEach(command => command());
+    commands.
+    forEach(command => command());
 };
 
 export default registerIDECommands;

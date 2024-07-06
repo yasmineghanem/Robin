@@ -24,3 +24,584 @@ adaboost number :  1, layer number : 3, shift: 0.15 false positive rate : 0.0989
 adaboost number :  1, layer number : 3, shift: 0.16 false positive rate : 0.0989705, false negative rate : 0.694915
 adaboost number :  1, layer number : 3, shift: 0.17 false positive rate : 0.19373, false negative rate : 0.440678
 availabel threads : 12
+adaboost number :  1, layer number : 4, shift: 0.17 false positive rate : 0.16226, false negative rate : 0.644068
+availabel threads : 12
+adaboost number :  1, layer number : 5, shift: 0.17 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  1, layer number : 5, shift: 0.18 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  1, layer number : 5, shift: 0.19 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  1, layer number : 5, shift: 0.2 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  1, layer number : 5, shift: 0.21 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  1, layer number : 5, shift: 0.22 false positive rate : 0.150912, false negative rate : 0.591102
+availabel threads : 12
+adaboost number :  1, layer number : 6, shift: 0.22 false positive rate : 0.120145, false negative rate : 0.646186
+adaboost number :  1, layer number : 6, shift: 0.23 false positive rate : 0.120145, false negative rate : 0.646186
+adaboost number :  1, layer number : 6, shift: 0.24 false positive rate : 0.147988, false negative rate : 0.572034
+adaboost number :  1, layer number : 6, shift: 0.25 false positive rate : 0.160622, false negative rate : 0.536017
+availabel threads : 12
+adaboost number :  1, layer number : 7, shift: 0.25 false positive rate : 0.113945, false negative rate : 0.686441
+adaboost number :  1, layer number : 7, shift: 0.26 false positive rate : 0.135938, false negative rate : 0.622881
+adaboost number :  1, layer number : 7, shift: 0.27 false positive rate : 0.136991, false negative rate : 0.622881
+adaboost number :  1, layer number : 7, shift: 0.28 false positive rate : 0.143893, false negative rate : 0.612288
+adaboost number :  1, layer number : 7, shift: 0.29 false positive rate : 0.147988, false negative rate : 0.605932
+adaboost number :  1, layer number : 7, shift: 0.3 false positive rate : 0.14869, false negative rate : 0.605932
+adaboost number :  1, layer number : 7, shift: 0.31 false positive rate : 0.172438, false negative rate : 0.550847
+availabel threads : 12
+adaboost number :  1, layer number : 8, shift: 0.31 false positive rate : 0.166706, false negative rate : 0.512712
+availabel threads : 12
+adaboost number :  1, layer number : 9, shift: 0.31 false positive rate : 0.14635, false negative rate : 0.561441
+adaboost number :  1, layer number : 9, shift: 0.32 false positive rate : 0.147637, false negative rate : 0.559322
+adaboost number :  1, layer number : 9, shift: 0.33 false positive rate : 0.151263, false negative rate : 0.533898
+availabel threads : 12
+adaboost number :  1, layer number : 10, shift: 0.33 false positive rate : 0.196654, false negative rate : 0.491525
+availabel threads : 12
+adaboost number :  1, layer number : 11, shift: 0.33 false positive rate : 0.172087, false negative rate : 0.519068
+availabel threads : 12
+adaboost number :  1, layer number : 12, shift: 0.33 false positive rate : 0.183903, false negative rate : 0.485169
+availabel threads : 12
+adaboost number :  1, layer number : 13, shift: 0.33 false positive rate : 0.197356, false negative rate : 0.53178
+availabel threads : 12
+adaboost number :  1, layer number : 14, shift: 0.33 false positive rate : 0.183201, false negative rate : 0.542373
+availabel threads : 12
+adaboost number :  1, layer number : 15, shift: 0.33 false positive rate : 0.181446, false negative rate : 0.561441
+availabel threads : 12
+adaboost number :  1, layer number : 16, shift: 0.33 false positive rate : 0.200398, false negative rate : 0.514831
+availabel threads : 12
+adaboost number :  1, layer number : 17, shift: 0.33 false positive rate : 0.192326, false negative rate : 0.506356
+availabel threads : 12
+adaboost number :  1, layer number : 18, shift: 0.33 false positive rate : 0.16963, false negative rate : 0.536017
+availabel threads : 12
+adaboost number :  1, layer number : 19, shift: 0.33 false positive rate : 0.21081, false negative rate : 0.478814
+availabel threads : 12
+adaboost number :  1, layer number : 20, shift: 0.33 false positive rate : 0.183552, false negative rate : 0.512712
+adaboost number :  1 layer number : 20 entered the dead loop
+ shift: -0.99 false positive rate : 0 false negative rate : 1
+ shift: -0.98 false positive rate : 0 false negative rate : 1
+ shift: -0.97 false positive rate : 0 false negative rate : 1
+ shift: -0.96 false positive rate : 0 false negative rate : 1
+ shift: -0.95 false positive rate : 0 false negative rate : 1
+ shift: -0.94 false positive rate : 0 false negative rate : 1
+ shift: -0.93 false positive rate : 0 false negative rate : 1
+ shift: -0.92 false positive rate : 0 false negative rate : 1
+ shift: -0.91 false positive rate : 0 false negative rate : 1
+ shift: -0.9 false positive rate : 0 false negative rate : 1
+ shift: -0.89 false positive rate : 0 false negative rate : 1
+ shift: -0.88 false positive rate : 0 false negative rate : 1
+ shift: -0.87 false positive rate : 0 false negative rate : 1
+ shift: -0.86 false positive rate : 0 false negative rate : 1
+ shift: -0.85 false positive rate : 0 false negative rate : 1
+ shift: -0.84 false positive rate : 0 false negative rate : 1
+ shift: -0.83 false positive rate : 0 false negative rate : 1
+ shift: -0.82 false positive rate : 0 false negative rate : 1
+ shift: -0.81 false positive rate : 0 false negative rate : 1
+ shift: -0.8 false positive rate : 0 false negative rate : 1
+ shift: -0.79 false positive rate : 0 false negative rate : 1
+ shift: -0.78 false positive rate : 0 false negative rate : 1
+ shift: -0.77 false positive rate : 0 false negative rate : 1
+ shift: -0.76 false positive rate : 0 false negative rate : 1
+ shift: -0.75 false positive rate : 0 false negative rate : 1
+ shift: -0.74 false positive rate : 0 false negative rate : 1
+ shift: -0.73 false positive rate : 0 false negative rate : 1
+ shift: -0.72 false positive rate : 0 false negative rate : 1
+ shift: -0.71 false positive rate : 0 false negative rate : 1
+ shift: -0.7 false positive rate : 0 false negative rate : 1
+ shift: -0.69 false positive rate : 0 false negative rate : 1
+ shift: -0.68 false positive rate : 0 false negative rate : 1
+ shift: -0.67 false positive rate : 0 false negative rate : 1
+ shift: -0.66 false positive rate : 0 false negative rate : 1
+ shift: -0.65 false positive rate : 0 false negative rate : 1
+ shift: -0.64 false positive rate : 0 false negative rate : 1
+ shift: -0.63 false positive rate : 0 false negative rate : 1
+ shift: -0.62 false positive rate : 0 false negative rate : 1
+ shift: -0.61 false positive rate : 0 false negative rate : 1
+ shift: -0.6 false positive rate : 0 false negative rate : 1
+ shift: -0.59 false positive rate : 0 false negative rate : 1
+ shift: -0.58 false positive rate : 0 false negative rate : 1
+ shift: -0.57 false positive rate : 0 false negative rate : 1
+ shift: -0.56 false positive rate : 0 false negative rate : 1
+ shift: -0.55 false positive rate : 0 false negative rate : 1
+ shift: -0.54 false positive rate : 0 false negative rate : 1
+ shift: -0.53 false positive rate : 0 false negative rate : 1
+ shift: -0.52 false positive rate : 0 false negative rate : 1
+ shift: -0.51 false positive rate : 0 false negative rate : 1
+ shift: -0.5 false positive rate : 0 false negative rate : 1
+ shift: -0.49 false positive rate : 0 false negative rate : 1
+ shift: -0.48 false positive rate : 0 false negative rate : 1
+ shift: -0.47 false positive rate : 0 false negative rate : 1
+ shift: -0.46 false positive rate : 0 false negative rate : 1
+ shift: -0.45 false positive rate : 0 false negative rate : 1
+ shift: -0.44 false positive rate : 0 false negative rate : 1
+ shift: -0.43 false positive rate : 0 false negative rate : 1
+ shift: -0.42 false positive rate : 0 false negative rate : 1
+ shift: -0.41 false positive rate : 0 false negative rate : 1
+ shift: -0.4 false positive rate : 0 false negative rate : 1
+ shift: -0.39 false positive rate : 0 false negative rate : 1
+ shift: -0.38 false positive rate : 0 false negative rate : 1
+ shift: -0.37 false positive rate : 0 false negative rate : 1
+ shift: -0.36 false positive rate : 0 false negative rate : 1
+ shift: -0.35 false positive rate : 0 false negative rate : 0.997881
+ shift: -0.34 false positive rate : 0 false negative rate : 0.997881
+ shift: -0.33 false positive rate : 0 false negative rate : 0.995763
+ shift: -0.32 false positive rate : 0 false negative rate : 0.995763
+ shift: -0.31 false positive rate : 0 false negative rate : 0.993644
+ shift: -0.3 false positive rate : 0 false negative rate : 0.993644
+ shift: -0.29 false positive rate : 0 false negative rate : 0.993644
+ shift: -0.28 false positive rate : 0 false negative rate : 0.993644
+ shift: -0.27 false positive rate : 0.000102187 false negative rate : 0.993644
+ shift: -0.26 false positive rate : 0.000102187 false negative rate : 0.993644
+ shift: -0.25 false positive rate : 0.000116986 false negative rate : 0.993644
+ shift: -0.24 false positive rate : 0.000116986 false negative rate : 0.993644
+ shift: -0.23 false positive rate : 0.000233973 false negative rate : 0.991525
+ shift: -0.22 false positive rate : 0.000233973 false negative rate : 0.991525
+ shift: -0.21 false positive rate : 0.000350959 false negative rate : 0.991525
+ shift: -0.2 false positive rate : 0.000467946 false negative rate : 0.989407
+ shift: -0.19 false positive rate : 0.000584932 false negative rate : 0.983051
+ shift: -0.18 false positive rate : 0.000701919 false negative rate : 0.983051
+ shift: -0.17 false positive rate : 0.000935891 false negative rate : 0.980932
+ shift: -0.16 false positive rate : 0.00128685 false negative rate : 0.976695
+ shift: -0.15 false positive rate : 0.00152082 false negative rate : 0.966102
+ shift: -0.14 false positive rate : 0.00152082 false negative rate : 0.961864
+ shift: -0.13 false positive rate : 0.0017548 false negative rate : 0.961864
+ shift: -0.12 false positive rate : 0.00198877 false negative rate : 0.959746
+ shift: -0.11 false positive rate : 0.00222274 false negative rate : 0.955508
+ shift: -0.1 false positive rate : 0.0025737 false negative rate : 0.951271
+ shift: -0.09 false positive rate : 0.00350959 false negative rate : 0.951271
+ shift: -0.08 false positive rate : 0.0043285 false negative rate : 0.951271
+ shift: -0.07 false positive rate : 0.00561535 false negative rate : 0.940678
+ shift: -0.06 false positive rate : 0.00678521 false negative rate : 0.938559
+ shift: -0.05 false positive rate : 0.00830604 false negative rate : 0.938559
+ shift: -0.04 false positive rate : 0.00924193 false negative rate : 0.930085
+ shift: -0.03 false positive rate : 0.0106458 false negative rate : 0.92161
+ shift: -0.02 false positive rate : 0.0115817 false negative rate : 0.917373
+ shift: -0.01 false positive rate : 0.0125175 false negative rate : 0.913136
+ shift: 7.5287e-16 false positive rate : 0.0142723 false negative rate : 0.908898
+ shift: 0.01 false positive rate : 0.0164951 false negative rate : 0.90678
+ shift: 0.02 false positive rate : 0.0183669 false negative rate : 0.896186
+ shift: 0.03 false positive rate : 0.0208236 false negative rate : 0.891949
+ shift: 0.04 false positive rate : 0.0225784 false negative rate : 0.877119
+ shift: 0.05 false positive rate : 0.0253861 false negative rate : 0.860169
+ shift: 0.06 false positive rate : 0.0283107 false negative rate : 0.853814
+ shift: 0.07 false positive rate : 0.0304165 false negative rate : 0.847458
+ shift: 0.08 false positive rate : 0.0325222 false negative rate : 0.838983
+ shift: 0.09 false positive rate : 0.03416 false negative rate : 0.834746
+ shift: 0.1 false positive rate : 0.0370847 false negative rate : 0.826271
+ shift: 0.11 false positive rate : 0.0415302 false negative rate : 0.822034
+ shift: 0.12 false positive rate : 0.0449228 false negative rate : 0.813559
+ shift: 0.13 false positive rate : 0.0489003 false negative rate : 0.792373
+ shift: 0.14 false positive rate : 0.0546327 false negative rate : 0.786017
+ shift: 0.15 false positive rate : 0.0583762 false negative rate : 0.779661
+ shift: 0.16 false positive rate : 0.0642255 false negative rate : 0.754237
+ shift: 0.17 false positive rate : 0.0682031 false negative rate : 0.75
+ shift: 0.18 false positive rate : 0.0728825 false negative rate : 0.735169
+ shift: 0.19 false positive rate : 0.0780299 false negative rate : 0.711864
+ shift: 0.2 false positive rate : 0.0824754 false negative rate : 0.70339
+ shift: 0.21 false positive rate : 0.0878568 false negative rate : 0.692797
+ shift: 0.22 false positive rate : 0.0942911 false negative rate : 0.677966
+ shift: 0.23 false positive rate : 0.100725 false negative rate : 0.67161
+ shift: 0.24 false positive rate : 0.107511 false negative rate : 0.661017
+ shift: 0.25 false positive rate : 0.117103 false negative rate : 0.637712
+ shift: 0.26 false positive rate : 0.124006 false negative rate : 0.622881
+ shift: 0.27 false positive rate : 0.133131 false negative rate : 0.595339
+ shift: 0.28 false positive rate : 0.141788 false negative rate : 0.580508
+ shift: 0.29 false positive rate : 0.14869 false negative rate : 0.565678
+ shift: 0.3 false positive rate : 0.156294 false negative rate : 0.538136
+ shift: 0.31 false positive rate : 0.165068 false negative rate : 0.536017
+ shift: 0.32 false positive rate : 0.171736 false negative rate : 0.527542
+ shift: 0.33 false positive rate : 0.183552 false negative rate : 0.512712
+ shift: 0.34 false positive rate : 0.197473 false negative rate : 0.506356
+ shift: 0.35 false positive rate : 0.208938 false negative rate : 0.495763
+ shift: 0.36 false positive rate : 0.222742 false negative rate : 0.470339
+ shift: 0.37 false positive rate : 0.231282 false negative rate : 0.463983
+ shift: 0.38 false positive rate : 0.243683 false negative rate : 0.442797
+ shift: 0.39 false positive rate : 0.259476 false negative rate : 0.423729
+ shift: 0.4 false positive rate : 0.265676 false negative rate : 0.42161
+ shift: 0.41 false positive rate : 0.278545 false negative rate : 0.391949
+ shift: 0.42 false positive rate : 0.291998 false negative rate : 0.389831
+ shift: 0.43 false positive rate : 0.303931 false negative rate : 0.383475
+ shift: 0.44 false positive rate : 0.326275 false negative rate : 0.381356
+ shift: 0.45 false positive rate : 0.343472 false negative rate : 0.370763
+ shift: 0.46 false positive rate : 0.357745 false negative rate : 0.353814
+ shift: 0.47 false positive rate : 0.385938 false negative rate : 0.32839
+ shift: 0.48 false positive rate : 0.396584 false negative rate : 0.305085
+ shift: 0.49 false positive rate : 0.410505 false negative rate : 0.292373
+ shift: 0.5 false positive rate : 0.433084 false negative rate : 0.290254
+ shift: 0.51 false positive rate : 0.442794 false negative rate : 0.288136
+ shift: 0.52 false positive rate : 0.454843 false negative rate : 0.273305
+ shift: 0.53 false positive rate : 0.473327 false negative rate : 0.260593
+ shift: 0.54 false positive rate : 0.490056 false negative rate : 0.256356
+ shift: 0.55 false positive rate : 0.517197 false negative rate : 0.235169
+ shift: 0.56 false positive rate : 0.537904 false negative rate : 0.197034
+ shift: 0.57 false positive rate : 0.549017 false negative rate : 0.177966
+ shift: 0.58 false positive rate : 0.586804 false negative rate : 0.141949
+ shift: 0.59 false positive rate : 0.604586 false negative rate : 0.137712
+ shift: 0.6 false positive rate : 0.608914 false negative rate : 0.137712
+ shift: 0.61 false positive rate : 0.61839 false negative rate : 0.129237
+ shift: 0.62 false positive rate : 0.627281 false negative rate : 0.122881
+ shift: 0.63 false positive rate : 0.64132 false negative rate : 0.114407
+ shift: 0.64 false positive rate : 0.668109 false negative rate : 0.108051
+ shift: 0.65 false positive rate : 0.678521 false negative rate : 0.105932
+ shift: 0.66 false positive rate : 0.711161 false negative rate : 0.0741525
+adaboost number :  1 layer number : 20 go out from the dead loop
+ training size before removing: 10977
+ validation size before removing: 20044
+ training size after removing: 10977
+ validation size after removing: 20044
+layer 1 is trained
+false positive rate: 0.183552
+false negative rate: 0.512712
+availabel threads : 12
+adaboost number :  2, layer number : 1, shift: 0 false positive rate : 0.164483, false negative rate : 0.45339
+availabel threads : 12
+adaboost number :  2, layer number : 2, shift: 0 false positive rate : 0.164483, false negative rate : 0.45339
+availabel threads : 12
+adaboost number :  2, layer number : 3, shift: 0 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.01 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.02 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.03 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.04 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.05 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.06 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.07 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.08 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.09 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.1 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.11 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.12 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.13 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.14 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.15 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.16 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  2, layer number : 3, shift: 0.17 false positive rate : 0.19373, false negative rate : 0.440678
+availabel threads : 12
+adaboost number :  2, layer number : 4, shift: 0.17 false positive rate : 0.16226, false negative rate : 0.644068
+availabel threads : 12
+adaboost number :  2, layer number : 5, shift: 0.17 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  2, layer number : 5, shift: 0.18 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  2, layer number : 5, shift: 0.19 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  2, layer number : 5, shift: 0.2 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  2, layer number : 5, shift: 0.21 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  2, layer number : 5, shift: 0.22 false positive rate : 0.150912, false negative rate : 0.591102
+availabel threads : 12
+adaboost number :  2, layer number : 6, shift: 0.22 false positive rate : 0.120145, false negative rate : 0.646186
+adaboost number :  2, layer number : 6, shift: 0.23 false positive rate : 0.120145, false negative rate : 0.646186
+adaboost number :  2, layer number : 6, shift: 0.24 false positive rate : 0.147988, false negative rate : 0.572034
+adaboost number :  2, layer number : 6, shift: 0.25 false positive rate : 0.160622, false negative rate : 0.536017
+availabel threads : 12
+adaboost number :  2, layer number : 7, shift: 0.25 false positive rate : 0.113945, false negative rate : 0.686441
+adaboost number :  2, layer number : 7, shift: 0.26 false positive rate : 0.135938, false negative rate : 0.622881
+adaboost number :  2, layer number : 7, shift: 0.27 false positive rate : 0.136991, false negative rate : 0.622881
+adaboost number :  2, layer number : 7, shift: 0.28 false positive rate : 0.143893, false negative rate : 0.612288
+adaboost number :  2, layer number : 7, shift: 0.29 false positive rate : 0.147988, false negative rate : 0.605932
+adaboost number :  2, layer number : 7, shift: 0.3 false positive rate : 0.14869, false negative rate : 0.605932
+adaboost number :  2, layer number : 7, shift: 0.31 false positive rate : 0.172438, false negative rate : 0.550847
+availabel threads : 12
+adaboost number :  2, layer number : 8, shift: 0.31 false positive rate : 0.166706, false negative rate : 0.512712
+availabel threads : 12
+adaboost number :  2, layer number : 9, shift: 0.31 false positive rate : 0.14635, false negative rate : 0.561441
+adaboost number :  2, layer number : 9, shift: 0.32 false positive rate : 0.147637, false negative rate : 0.559322
+adaboost number :  2, layer number : 9, shift: 0.33 false positive rate : 0.151263, false negative rate : 0.533898
+availabel threads : 12
+adaboost number :  2, layer number : 10, shift: 0.33 false positive rate : 0.196654, false negative rate : 0.491525
+availabel threads : 12
+adaboost number :  2, layer number : 11, shift: 0.33 false positive rate : 0.172087, false negative rate : 0.519068
+availabel threads : 12
+adaboost number :  2, layer number : 12, shift: 0.33 false positive rate : 0.183903, false negative rate : 0.485169
+availabel threads : 12
+adaboost number :  2, layer number : 13, shift: 0.33 false positive rate : 0.197356, false negative rate : 0.53178
+availabel threads : 12
+adaboost number :  2, layer number : 14, shift: 0.33 false positive rate : 0.183201, false negative rate : 0.542373
+availabel threads : 12
+adaboost number :  2, layer number : 15, shift: 0.33 false positive rate : 0.181446, false negative rate : 0.561441
+availabel threads : 12
+adaboost number :  2, layer number : 16, shift: 0.33 false positive rate : 0.200398, false negative rate : 0.514831
+availabel threads : 12
+adaboost number :  2, layer number : 17, shift: 0.33 false positive rate : 0.192326, false negative rate : 0.506356
+availabel threads : 12
+adaboost number :  2, layer number : 18, shift: 0.33 false positive rate : 0.16963, false negative rate : 0.536017
+availabel threads : 12
+adaboost number :  2, layer number : 19, shift: 0.33 false positive rate : 0.21081, false negative rate : 0.478814
+availabel threads : 12
+adaboost number :  2, layer number : 20, shift: 0.33 false positive rate : 0.183552, false negative rate : 0.512712
+availabel threads : 12
+adaboost number :  2, layer number : 21, shift: 0.33 false positive rate : 0.190688, false negative rate : 0.483051
+availabel threads : 12
+adaboost number :  2, layer number : 22, shift: 0.33 false positive rate : 0.195952, false negative rate : 0.487288
+availabel threads : 12
+adaboost number :  2, layer number : 23, shift: 0.33 false positive rate : 0.18168, false negative rate : 0.510593
+availabel threads : 12
+adaboost number :  2, layer number : 24, shift: 0.33 false positive rate : 0.199228, false negative rate : 0.46822
+availabel threads : 12
+adaboost number :  2, layer number : 25, shift: 0.33 false positive rate : 0.189518, false negative rate : 0.480932
+availabel threads : 12
+adaboost number :  2, layer number : 26, shift: 0.33 false positive rate : 0.203205, false negative rate : 0.447034
+availabel threads : 12
+adaboost number :  2, layer number : 27, shift: 0.33 false positive rate : 0.187529, false negative rate : 0.478814
+availabel threads : 12
+adaboost number :  2, layer number : 28, shift: 0.33 false positive rate : 0.192326, false negative rate : 0.46822
+availabel threads : 12
+adaboost number :  2, layer number : 29, shift: 0.33 false positive rate : 0.20262, false negative rate : 0.432203
+availabel threads : 12
+adaboost number :  2, layer number : 30, shift: 0.33 false positive rate : 0.199696, false negative rate : 0.444915
+adaboost number :  2 layer number : 30 entered the dead loop
+ shift: -0.99 false positive rate : 0 false negative rate : 1
+ shift: -0.98 false positive rate : 0 false negative rate : 1
+ shift: -0.97 false positive rate : 0 false negative rate : 1
+ shift: -0.96 false positive rate : 0 false negative rate : 1
+ shift: -0.95 false positive rate : 0 false negative rate : 1
+ shift: -0.94 false positive rate : 0 false negative rate : 1
+ shift: -0.93 false positive rate : 0 false negative rate : 1
+ shift: -0.92 false positive rate : 0 false negative rate : 1
+ shift: -0.91 false positive rate : 0 false negative rate : 1
+ shift: -0.9 false positive rate : 0 false negative rate : 1
+ shift: -0.89 false positive rate : 0 false negative rate : 1
+ shift: -0.88 false positive rate : 0 false negative rate : 1
+ shift: -0.87 false positive rate : 0 false negative rate : 1
+ shift: -0.86 false positive rate : 0 false negative rate : 1
+ shift: -0.85 false positive rate : 0 false negative rate : 1
+ shift: -0.84 false positive rate : 0 false negative rate : 1
+ shift: -0.83 false positive rate : 0 false negative rate : 1
+ shift: -0.82 false positive rate : 0 false negative rate : 1
+ shift: -0.81 false positive rate : 0 false negative rate : 1
+ shift: -0.8 false positive rate : 0 false negative rate : 1
+ shift: -0.79 false positive rate : 0 false negative rate : 1
+ shift: -0.78 false positive rate : 0 false negative rate : 1
+ shift: -0.77 false positive rate : 0 false negative rate : 1
+ shift: -0.76 false positive rate : 0 false negative rate : 1
+ shift: -0.75 false positive rate : 0 false negative rate : 1
+ shift: -0.74 false positive rate : 0 false negative rate : 1
+ shift: -0.73 false positive rate : 0 false negative rate : 1
+ shift: -0.72 false positive rate : 0 false negative rate : 1
+ shift: -0.71 false positive rate : 0 false negative rate : 1
+ shift: -0.7 false positive rate : 0 false negative rate : 1
+ shift: -0.69 false positive rate : 0 false negative rate : 1
+ shift: -0.68 false positive rate : 0 false negative rate : 1
+ shift: -0.67 false positive rate : 0 false negative rate : 1
+ shift: -0.66 false positive rate : 0 false negative rate : 1
+ shift: -0.65 false positive rate : 0 false negative rate : 1
+ shift: -0.64 false positive rate : 0 false negative rate : 1
+ shift: -0.63 false positive rate : 0 false negative rate : 1
+ shift: -0.62 false positive rate : 0 false negative rate : 1
+ shift: -0.61 false positive rate : 0 false negative rate : 1
+ shift: -0.6 false positive rate : 0 false negative rate : 1
+ shift: -0.59 false positive rate : 0 false negative rate : 1
+ shift: -0.58 false positive rate : 0 false negative rate : 1
+ shift: -0.57 false positive rate : 0 false negative rate : 1
+ shift: -0.56 false positive rate : 0 false negative rate : 1
+ shift: -0.55 false positive rate : 0 false negative rate : 1
+ shift: -0.54 false positive rate : 0 false negative rate : 1
+ shift: -0.53 false positive rate : 0 false negative rate : 1
+ shift: -0.52 false positive rate : 0 false negative rate : 1
+ shift: -0.51 false positive rate : 0 false negative rate : 1
+ shift: -0.5 false positive rate : 0 false negative rate : 1
+ shift: -0.49 false positive rate : 0 false negative rate : 1
+ shift: -0.48 false positive rate : 0 false negative rate : 1
+ shift: -0.47 false positive rate : 0 false negative rate : 1
+ shift: -0.46 false positive rate : 0 false negative rate : 1
+ shift: -0.45 false positive rate : 0 false negative rate : 1
+ shift: -0.44 false positive rate : 0 false negative rate : 1
+ shift: -0.43 false positive rate : 0 false negative rate : 1
+ shift: -0.42 false positive rate : 0 false negative rate : 1
+ shift: -0.41 false positive rate : 0 false negative rate : 1
+ shift: -0.4 false positive rate : 0 false negative rate : 1
+ shift: -0.39 false positive rate : 0 false negative rate : 1
+ shift: -0.38 false positive rate : 0 false negative rate : 1
+ shift: -0.37 false positive rate : 0 false negative rate : 1
+ shift: -0.36 false positive rate : 0 false negative rate : 1
+ shift: -0.35 false positive rate : 0 false negative rate : 1
+ shift: -0.34 false positive rate : 0 false negative rate : 1
+ shift: -0.33 false positive rate : 0 false negative rate : 1
+ shift: -0.32 false positive rate : 0 false negative rate : 1
+ shift: -0.31 false positive rate : 0 false negative rate : 1
+ shift: -0.3 false positive rate : 0 false negative rate : 0.997881
+ shift: -0.29 false positive rate : 0 false negative rate : 0.997881
+ shift: -0.28 false positive rate : 0 false negative rate : 0.997881
+ shift: -0.27 false positive rate : 0 false negative rate : 0.997881
+ shift: -0.26 false positive rate : 5.10934e-05 false negative rate : 0.997881
+ shift: -0.25 false positive rate : 5.10934e-05 false negative rate : 0.997881
+ shift: -0.24 false positive rate : 5.10934e-05 false negative rate : 0.997881
+ shift: -0.23 false positive rate : 5.10934e-05 false negative rate : 0.997881
+ shift: -0.22 false positive rate : 5.10934e-05 false negative rate : 0.997881
+ shift: -0.21 false positive rate : 5.10934e-05 false negative rate : 0.997881
+ shift: -0.2 false positive rate : 0.00015328 false negative rate : 0.995763
+ shift: -0.19 false positive rate : 0.000204374 false negative rate : 0.995763
+ shift: -0.18 false positive rate : 0.000204374 false negative rate : 0.987288
+ shift: -0.17 false positive rate : 0.000255467 false negative rate : 0.980932
+ shift: -0.16 false positive rate : 0.000255467 false negative rate : 0.980932
+ shift: -0.15 false positive rate : 0.000255467 false negative rate : 0.976695
+ shift: -0.14 false positive rate : 0.00030656 false negative rate : 0.976695
+ shift: -0.13 false positive rate : 0.000357654 false negative rate : 0.976695
+ shift: -0.12 false positive rate : 0.000467946 false negative rate : 0.974576
+ shift: -0.11 false positive rate : 0.000584932 false negative rate : 0.972458
+ shift: -0.1 false positive rate : 0.000701919 false negative rate : 0.96822
+ shift: -0.09 false positive rate : 0.000818905 false negative rate : 0.966102
+ shift: -0.08 false positive rate : 0.000818905 false negative rate : 0.959746
+ shift: -0.07 false positive rate : 0.00140384 false negative rate : 0.957627
+ shift: -0.06 false positive rate : 0.00222274 false negative rate : 0.944915
+ shift: -0.05 false positive rate : 0.00280767 false negative rate : 0.940678
+ shift: -0.04 false positive rate : 0.00362658 false negative rate : 0.930085
+ shift: -0.03 false positive rate : 0.00397754 false negative rate : 0.923729
+ shift: -0.02 false positive rate : 0.00491343 false negative rate : 0.90678
+ shift: -0.01 false positive rate : 0.00631727 false negative rate : 0.90678
+ shift: 7.5287e-16 false positive rate : 0.00783809 false negative rate : 0.898305
+ shift: 0.01 false positive rate : 0.00935891 false negative rate : 0.891949
+ shift: 0.02 false positive rate : 0.0111137 false negative rate : 0.881356
+ shift: 0.03 false positive rate : 0.0132195 false negative rate : 0.875
+ shift: 0.04 false positive rate : 0.0150912 false negative rate : 0.868644
+ shift: 0.05 false positive rate : 0.01708 false negative rate : 0.866525
+ shift: 0.06 false positive rate : 0.0201217 false negative rate : 0.851695
+ shift: 0.07 false positive rate : 0.0232803 false negative rate : 0.845339
+ shift: 0.08 false positive rate : 0.0263219 false negative rate : 0.832627
+ shift: 0.09 false positive rate : 0.0305335 false negative rate : 0.822034
+ shift: 0.1 false positive rate : 0.034394 false negative rate : 0.809322
+ shift: 0.11 false positive rate : 0.0369677 false negative rate : 0.800847
+ shift: 0.12 false positive rate : 0.0408283 false negative rate : 0.786017
+ shift: 0.13 false positive rate : 0.0445718 false negative rate : 0.758475
+ shift: 0.14 false positive rate : 0.0485494 false negative rate : 0.726695
+ shift: 0.15 false positive rate : 0.0526439 false negative rate : 0.71822
+ shift: 0.16 false positive rate : 0.0572064 false negative rate : 0.705508
+ shift: 0.17 false positive rate : 0.0615349 false negative rate : 0.694915
+ shift: 0.18 false positive rate : 0.0670332 false negative rate : 0.682203
+ shift: 0.19 false positive rate : 0.0727656 false negative rate : 0.673729
+ shift: 0.2 false positive rate : 0.077211 false negative rate : 0.661017
+ shift: 0.21 false positive rate : 0.0836453 false negative rate : 0.646186
+ shift: 0.22 false positive rate : 0.0921853 false negative rate : 0.639831
+ shift: 0.23 false positive rate : 0.0999064 false negative rate : 0.625
+ shift: 0.24 false positive rate : 0.107628 false negative rate : 0.618644
+ shift: 0.25 false positive rate : 0.116285 false negative rate : 0.586864
+ shift: 0.26 false positive rate : 0.125409 false negative rate : 0.555085
+ shift: 0.27 false positive rate : 0.133365 false negative rate : 0.538136
+ shift: 0.28 false positive rate : 0.143074 false negative rate : 0.519068
+ shift: 0.29 false positive rate : 0.153018 false negative rate : 0.504237
+ shift: 0.3 false positive rate : 0.164483 false negative rate : 0.491525
+ shift: 0.31 false positive rate : 0.175714 false negative rate : 0.472458
+ shift: 0.32 false positive rate : 0.187997 false negative rate : 0.457627
+ shift: 0.33 false positive rate : 0.199696 false negative rate : 0.444915
+ shift: 0.34 false positive rate : 0.21081 false negative rate : 0.425847
+ shift: 0.35 false positive rate : 0.22438 false negative rate : 0.408898
+ shift: 0.36 false positive rate : 0.239471 false negative rate : 0.391949
+ shift: 0.37 false positive rate : 0.251638 false negative rate : 0.379237
+ shift: 0.38 false positive rate : 0.26474 false negative rate : 0.364407
+ shift: 0.39 false positive rate : 0.280299 false negative rate : 0.345339
+ shift: 0.4 false positive rate : 0.293402 false negative rate : 0.324153
+ shift: 0.41 false positive rate : 0.306738 false negative rate : 0.307203
+ shift: 0.42 false positive rate : 0.322181 false negative rate : 0.300847
+ shift: 0.43 false positive rate : 0.340197 false negative rate : 0.290254
+ shift: 0.44 false positive rate : 0.355288 false negative rate : 0.271186
+ shift: 0.45 false positive rate : 0.3719 false negative rate : 0.254237
+ shift: 0.46 false positive rate : 0.389331 false negative rate : 0.230932
+ shift: 0.47 false positive rate : 0.408868 false negative rate : 0.220339
+ shift: 0.48 false positive rate : 0.427819 false negative rate : 0.209746
+ shift: 0.49 false positive rate : 0.446186 false negative rate : 0.199153
+ shift: 0.5 false positive rate : 0.465372 false negative rate : 0.186441
+ shift: 0.51 false positive rate : 0.481867 false negative rate : 0.167373
+ shift: 0.52 false positive rate : 0.5 false negative rate : 0.15678
+ shift: 0.53 false positive rate : 0.520122 false negative rate : 0.129237
+ shift: 0.54 false positive rate : 0.540009 false negative rate : 0.118644
+ shift: 0.55 false positive rate : 0.557206 false negative rate : 0.110169
+ shift: 0.56 false positive rate : 0.574403 false negative rate : 0.105932
+ shift: 0.57 false positive rate : 0.591717 false negative rate : 0.0974576
+adaboost number :  2 layer number : 30 go out from the dead loop
+ training size before removing: 10977
+ validation size before removing: 20044
+ training size after removing: 10977
+ validation size after removing: 20044
+layer 2 is trained
+false positive rate: 0.199696
+false negative rate: 0.444915
+availabel threads : 12
+adaboost number :  3, layer number : 1, shift: 0 false positive rate : 0.164483, false negative rate : 0.45339
+availabel threads : 12
+adaboost number :  3, layer number : 2, shift: 0 false positive rate : 0.164483, false negative rate : 0.45339
+availabel threads : 12
+adaboost number :  3, layer number : 3, shift: 0 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.01 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.02 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.03 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.04 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.05 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.06 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.07 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.08 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.09 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.1 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.11 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.12 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.13 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.14 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.15 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.16 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  3, layer number : 3, shift: 0.17 false positive rate : 0.19373, false negative rate : 0.440678
+availabel threads : 12
+adaboost number :  3, layer number : 4, shift: 0.17 false positive rate : 0.16226, false negative rate : 0.644068
+availabel threads : 12
+adaboost number :  3, layer number : 5, shift: 0.17 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  3, layer number : 5, shift: 0.18 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  3, layer number : 5, shift: 0.19 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  3, layer number : 5, shift: 0.2 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  3, layer number : 5, shift: 0.21 false positive rate : 0.133949, false negative rate : 0.597458
+adaboost number :  3, layer number : 5, shift: 0.22 false positive rate : 0.150912, false negative rate : 0.591102
+availabel threads : 12
+adaboost number :  3, layer number : 6, shift: 0.22 false positive rate : 0.120145, false negative rate : 0.646186
+adaboost number :  3, layer number : 6, shift: 0.23 false positive rate : 0.120145, false negative rate : 0.646186
+adaboost number :  3, layer number : 6, shift: 0.24 false positive rate : 0.147988, false negative rate : 0.572034
+adaboost number :  3, layer number : 6, shift: 0.25 false positive rate : 0.160622, false negative rate : 0.536017
+availabel threads : 12
+adaboost number :  3, layer number : 7, shift: 0.25 false positive rate : 0.113945, false negative rate : 0.686441
+adaboost number :  3, layer number : 7, shift: 0.26 false positive rate : 0.135938, false negative rate : 0.622881
+adaboost number :  3, layer number : 7, shift: 0.27 false positive rate : 0.136991, false negative rate : 0.622881
+adaboost number :  3, layer number : 7, shift: 0.28 false positive rate : 0.143893, false negative rate : 0.612288
+adaboost number :  3, layer number : 7, shift: 0.29 false positive rate : 0.147988, false negative rate : 0.605932
+adaboost number :  3, layer number : 7, shift: 0.3 false positive rate : 0.14869, false negative rate : 0.605932
+adaboost number :  3, layer number : 7, shift: 0.31 false positive rate : 0.172438, false negative rate : 0.550847
+availabel threads : 12
+adaboost number :  3, layer number : 8, shift: 0.31 false positive rate : 0.166706, false negative rate : 0.512712
+availabel threads : 12
+adaboost number :  3, layer number : 9, shift: 0.31 false positive rate : 0.14635, false negative rate : 0.561441
+adaboost number :  3, layer number : 9, shift: 0.32 false positive rate : 0.147637, false negative rate : 0.559322
+adaboost number :  3, layer number : 9, shift: 0.33 false positive rate : 0.151263, false negative rate : 0.533898
+availabel threads : 12
+adaboost number :  3, layer number : 10, shift: 0.33 false positive rate : 0.196654, false negative rate : 0.491525
+availabel threads : 12
+adaboost number :  3, layer number : 11, shift: 0.33 false positive rate : 0.172087, false negative rate : 0.519068
+availabel threads : 12
+adaboost number :  3, layer number : 12, shift: 0.33 false positive rate : 0.183903, false negative rate : 0.485169
+availabel threads : 12
+adaboost number :  3, layer number : 13, shift: 0.33 false positive rate : 0.197356, false negative rate : 0.53178
+availabel threads : 12
+adaboost number :  3, layer number : 14, shift: 0.33 false positive rate : 0.183201, false negative rate : 0.542373
+availabel threads : 12
+adaboost number :  3, layer number : 15, shift: 0.33 false positive rate : 0.181446, false negative rate : 0.561441
+availabel threads : 12
+adaboost number :  3, layer number : 16, shift: 0.33 false positive rate : 0.200398, false negative rate : 0.514831
+availabel threads : 12
+adaboost number :  3, layer number : 17, shift: 0.33 false positive rate : 0.192326, false negative rate : 0.506356
+availabel threads : 12
+adaboost number :  3, layer number : 18, shift: 0.33 false positive rate : 0.16963, false negative rate : 0.536017
+availabel threads : 12
+adaboost number :  3, layer number : 19, shift: 0.33 false positive rate : 0.21081, false negative rate : 0.478814
+availabel threads : 12
+adaboost number :  3, layer number : 20, shift: 0.33 false positive rate : 0.183552, false negative rate : 0.512712
+availabel threads : 12
+adaboost number :  3, layer number : 21, shift: 0.33 false positive rate : 0.190688, false negative rate : 0.483051
+availabel threads : 12
+adaboost number :  3, layer number : 22, shift: 0.33 false positive rate : 0.195952, false negative rate : 0.487288
+availabel threads : 12
+adaboost number :  3, layer number : 23, shift: 0.33 false positive rate : 0.18168, false negative rate : 0.510593
+availabel threads : 12
+adaboost number :  3, layer number : 24, shift: 0.33 false positive rate : 0.199228, false negative rate : 0.46822
+availabel threads : 12
+adaboost number :  3, layer number : 25, shift: 0.33 false positive rate : 0.189518, false negative rate : 0.480932
+availabel threads : 12
+adaboost number :  3, layer number : 26, shift: 0.33 false positive rate : 0.203205, false negative rate : 0.447034
+availabel threads : 12
+adaboost number :  3, layer number : 27, shift: 0.33 false positive rate : 0.187529, false negative rate : 0.478814
+availabel threads : 12
+adaboost number :  3, layer number : 28, shift: 0.33 false positive rate : 0.192326, false negative rate : 0.46822
+availabel threads : 12
+adaboost number :  3, layer number : 29, shift: 0.33 false positive rate : 0.20262, false negative rate : 0.432203
+availabel threads : 12
+adaboost number :  3, layer number : 30, shift: 0.33 false positive rate : 0.199696, false negative rate : 0.444915
+availabel threads : 12
+adaboost number :  3, layer number : 31, shift: 0.33 false positive rate : 0.215372, false negative rate : 0.408898
+availabel threads : 12
+adaboost number :  3, layer number : 32, shift: 0.33 false positive rate : 0.206832, false negative rate : 0.423729
+availabel threads : 12
