@@ -21,7 +21,8 @@ enum mode
     TRAIN_ADABOOST = 1,
     TEST_ADABOOST = 2,
     TRAIN_FACE_DETECTION = 3,
-    TEST_FACE_DETECTION = 4
+    TEST_FACE_DETECTION = 4,
+    PROCESS_LOCAL_FRAME = 5
 };
 
 feature *features_info = nullptr;
@@ -294,17 +295,45 @@ void test_face_detector_threads(const char *folder, int num)
     delete[] predictions;
 }
 
+void process_local_frame(const char *file)
+{
+    FaceDetector classifier;
+    classifier.load("face1_test");
+    int **II = new int *[24];
+    for (int i = 0; i < 24; i++)
+    {
+        II[i] = new int[24];
+    }
+    int ***color_img;
+    int **img;
+    int M, N;
+    load_image(file, color_img, img, M, N);
+    auto start = std::chrono::high_resolution_clock::now();
+    classifier.process(img, color_img, M, N);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    cout << "Processing time: " << duration.count() << " s\n";
+    saveImageAsPNG("output/output.png", color_img, img, M, N, true);
+    for (int i = 0; i < M; i++)
+    {
+        delete[] img[i];
+    }
+    delete[] img;
+    for (int i = 0; i < M; i++)
+    {
+        for (int j = 0; j < N; j++)
+        {
+            delete[] color_img[i][j];
+        }
+        delete[] color_img[i];
+    }
+    delete[] color_img;
+}
 int main()
 {
-    freopen("log.txt", "w", stdout);
-
+    // freopen("log.txt", "w", stdout);
     fill_features_info();
-    // cout << (int)features_info[0].i << endl;
-    // cout << (int)features_info[123000].j << endl;
-    // cout << (int)features_info[100500].w << endl;
-    // cout << (int)features_info[150500].h << endl;
-    // return 0;
-    mode current_mode = TRAIN_FACE_DETECTION;
+    mode current_mode = PROCESS_LOCAL_FRAME;
     if (current_mode == TRAIN_ADABOOST)
     {
         // train_ADA_BOOST("model2.txt", 10, 1000);
@@ -317,6 +346,8 @@ int main()
     }
     else if (current_mode == TRAIN_FACE_DETECTION)
     {
+        // The targeted false positive and false negative rate for each layer
+        // were set to 0.5 and 0.995
         train_face_detector("face1", -1, 0.1, 0.15, 0.1);
         test_face_detector_threads("face1", -1);
         return 0;
@@ -324,10 +355,15 @@ int main()
     else if (current_mode == TEST_FACE_DETECTION)
     {
         auto start = std::chrono::high_resolution_clock::now();
-        test_face_detector_threads("face1", 500);
+        test_face_detector_threads("face1_test", -1);
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> duration = end - start;
         std::cout << "Testing time: " << duration.count() << " s\n";
+        return 0;
+    }
+    else if (current_mode == PROCESS_LOCAL_FRAME)
+    {
+        process_local_frame("imgs/img1.jpg");
         return 0;
     }
 

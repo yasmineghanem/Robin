@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <fstream>
 #include <algorithm>
+using namespace std;
 FaceDetector::FaceDetector(int **&X_train, int *&y_train, int ***&X_val, int *&y_val, pair<int, int> train_dim, tuple<int, int, int> val_dim, string folder)
 {
     this->X_train = X_train;
@@ -147,13 +148,13 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
             else
             {
 
-                if (Tl >= Nl)
+                if (Tl > Nl)
                 {
 
                     // the shift sl is set to the smallest value that satisfies the false negative requirement.
-                    sl = -1;
+                    sl = -1.2;
                     auto mat = this->evaluate_single_layer(fl, predictions, sl);
-                    double Y = mat.false_positive_rate, B = mat.false_negative_rate;
+                    Y = mat.false_positive_rate, B = mat.false_negative_rate;
                     cout << "adaboost number :  " << l << " layer number : " << Tl << " entered the dead loop" << endl;
                     while (B > Bl)
                     {
@@ -195,6 +196,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
         this->save(folder);
     }
 }
+
 int FaceDetector::predict(int **&img, int size)
 {
 
@@ -272,6 +274,102 @@ void FaceDetector::load(const string folder)
         cascade[i]->loadFromText(folder + "/model" + to_string(i) + ".txt");
     }
 }
+
+void FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c)
+{
+    int L = this->cascade.size();
+    vector<window *> P;
+    int **II = new int *[M];
+    long long **IIsq = new long long *[M];
+
+    for (int i = 0; i < M; ++i)
+    {
+        II[i] = new int[N];
+        IIsq[i] = new long long[N];
+        for (int j = 0; j < N; ++j)
+        {
+            IIsq[i][j] = img[i][j] * img[i][j];
+        }
+    }
+
+    integral_image(img, II, M, N);
+    integral_image(IIsq, IIsq, M, N);
+    // Set initial windows
+    long long tot = 0;
+    for (int e = static_cast<int>(24 * c); e <= std::min(M, N); e = static_cast<int>(e * c))
+    {
+        for (int i = 0; i + e < M; ++i)
+        {
+            for (int j = 0; j + e < N; ++j)
+            {
+                window *w = new window;
+                w->x = i;
+                w->y = j;
+                w->w = e;
+                w->h = e;
+                P.push_back(w);
+                tot += (long long)e * e;
+            }
+        }
+    }
+    std::cout << "P size before filtter: " << P.size() << endl;
+    std::cout << "total pizels of windows : " << tot << endl;
+    // // Cascade layers
+    for (int k = 0; k < P.size(); k++)
+    {
+        int i = P[k]->x;
+        int j = P[k]->y;
+        int e = P[k]->w;
+    }
+
+    std::vector<window *> newP;
+    for (const auto &win : P)
+    {
+        int i = win->x;
+        int j = win->y;
+        int e = win->w;
+        long long sum = 0, sq_sum = 0;
+        sum = sum_region(II, i, j, i + e, j + e);
+        sq_sum = sum_region(IIsq, i, j, i + e, j + e);
+
+        double mean = (double)sum / (e * e);
+        double variance = ((long double)sq_sum / (e * e)) - (mean * mean);
+        double stddev = std::sqrt(variance);
+
+        if (stddev > 1)
+        {
+            
+            int **windowImg = new int *[e];
+            for (int x = 0; x < e; ++x)
+            {
+                windowImg[x] = &img[i + x][j];
+            }
+            int prediction = this->predict(windowImg, e);
+            if (prediction == 1)
+                newP.push_back(win);
+
+            delete[] windowImg;
+        }
+    }
+    P = newP;
+    tot = 0;
+    for (int i = 0; i < P.size(); i++)
+    {
+        tot += P[i]->w * P[i]->h;
+    }
+    cout << "P size after filtter: " << P.size() << endl;
+    cout << "total pizels of windows after filtter: " << tot << endl;
+
+    drawGreenRectangles(color_img, M, N, P);
+    for (int i = 0; i < M; ++i)
+    {
+        delete[] II[i];
+        delete[] IIsq[i];
+    }
+    delete[] II;
+    delete[] IIsq;
+}
+
 FaceDetector::~FaceDetector()
 {
     for (auto &fl : cascade)
