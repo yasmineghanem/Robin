@@ -1,11 +1,13 @@
 
 import argparse
 import threading
+import openwakeword
 from gui import *
 from wake_word import *
 
 
 if __name__ == "__main__":
+    openwakeword.utils.download_models()
     # start_reloader()
     parser = argparse.ArgumentParser()
     parser.add_argument("--chunk_size", help="How much audio (in number of samples) to predict on at once",

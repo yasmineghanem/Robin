@@ -47,8 +47,8 @@ class SpeechRecognition:
 
     # destructor
 
-    def __del__(self):
-        self.stream.stop_stream()
-        self.stream.close()
-        self.mic.terminate()
-        print('SpeechRecognition object deleted')
+    # def __del__(self):
+    #     self.stream.stop_stream()
+    #     self.stream.close()
+    #     self.mic.terminate()
+    #     print('SpeechRecognition object deleted')
