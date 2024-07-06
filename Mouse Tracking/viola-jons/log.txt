@@ -1,5 +1,26 @@
-Accuracy: 0.761317
-Error rate: 0.238683
-False positive rate: 0.012
-False negative rate: 0.478814
-Testing time: 0.218 s
+time for loading data is : 181.212 s
+.... Training Face Detector ....
+availabel threads : 12
+adaboost number :  1, layer number : 1, shift: 0 false positive rate : 0.164483, false negative rate : 0.45339
+availabel threads : 12
+adaboost number :  1, layer number : 2, shift: 0 false positive rate : 0.164483, false negative rate : 0.45339
+availabel threads : 12
+adaboost number :  1, layer number : 3, shift: 0 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.01 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.02 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.03 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.04 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.05 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.06 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.07 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.08 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.09 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.1 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.11 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.12 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.13 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.14 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.15 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.16 false positive rate : 0.0989705, false negative rate : 0.694915
+adaboost number :  1, layer number : 3, shift: 0.17 false positive rate : 0.19373, false negative rate : 0.440678
+availabel threads : 12
