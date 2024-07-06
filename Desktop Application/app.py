@@ -1,26 +1,53 @@
-# Copyright 2022 David Scripka. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# Imports
+import customtkinter
+import tkinterDnD
+import hupper
 import pyaudio
 import numpy as np
 from openwakeword.model import Model
 import argparse
 import openwakeword
 
-# One-time download of all pre-trained models (or only select models)
-# openwakeword.utils.download_models()
+
+# def start_reloader():
+#     reloader = hupper.start_reloader('app.gui')
+
+
+def switch_state_changed():
+    if switch.get() == 1:
+        print("Switch is ON")
+    else:
+        print("Switch is OFF")
+
+
+def main():
+    customtkinter.set_ctk_parent_class(tkinterDnD.Tk)
+
+    customtkinter.set_appearance_mode("dark")
+
+    customtkinter.set_default_color_theme("theme/violet.json")
+
+    app = customtkinter.CTk()
+    app.geometry("400x200")
+    app.title("Robin")
+
+    # app.iconbitmap("./Assets/robin.png")
+    print(type(app), isinstance(app, tkinterDnD.Tk))
+
+    # def slider_callback(value):
+    #     progressbar_1.set(value)
+
+    frame_1 = customtkinter.CTkFrame(master=app)
+    frame_1.pack(pady=0, padx=0, fill="both", expand=True)
+
+    switch_1 = customtkinter.CTkSwitch(master=frame_1,
+                                       text="Active",
+                                       command=switch_state_changed,
+                                       )
+    switch_1.pack(pady=10, padx=10)
+
+    app.attributes('-topmost', True)
+
+    app.mainloop()
 
 
 # Parse input arguments
@@ -36,7 +63,7 @@ parser.add_argument(
     "--model_path",
     help="The path of a specific model to load",
     type=str,
-    default="./hey_robin_2.tflite",
+    default="./hey_robin_2.onnx",
     required=False
 )
 parser.add_argument(
@@ -68,14 +95,10 @@ else:
 
 n_models = len(owwModel.models.keys())
 
-# Run capture loop continuosly, checking for wakewords
+
 if __name__ == "__main__":
-    # Generate output string header
-    print("\n\n")
-    print("#"*100)
-    print("Listening for wakewords...")
-    print("#"*100)
-    print("\n"*(n_models*3))
+    # start_reloader()
+    gui()
 
     while True:
         # Get audio
@@ -103,4 +126,5 @@ if __name__ == "__main__":
         print("\033[F"*(4*n_models+1))
         print(output_string_header, "                             ", end='\r')
         if list(owwModel.prediction_buffer[mdl])[-1] > 0.7:
-            break
+            print("Wakeword detected!")
+            #
