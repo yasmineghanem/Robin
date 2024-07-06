@@ -25253,6 +25253,28 @@ router.post("/run-python-file", (req, res) => {
         res.end(JSON.stringify(err));
     });
 });
+//select
+router.get("/select", (req, res) => {
+    const data = req.body;
+    // vscode.commands.executeCommand('editor.action.smartSelect.expand', data).then(
+    vscode.commands.executeCommand(IDE_1.SELECT, data).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Selected!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
+//find
+router.get("/find", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.FIND).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Find!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
 exports["default"] = router;
 
 
@@ -25264,7 +25286,7 @@ exports["default"] = router;
 
 // commands
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.RUN_PYTHON = exports.RUN_NOTEBOOK = exports.RUN_NOTEBOOK_CELL = exports.SELECT_KERNEL = exports.REDO = exports.UNDO = exports.CUT = exports.COPY = exports.PASTE = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
+exports.FIND = exports.SELECT = exports.RUN_PYTHON = exports.RUN_NOTEBOOK = exports.RUN_NOTEBOOK_CELL = exports.SELECT_KERNEL = exports.REDO = exports.UNDO = exports.CUT = exports.COPY = exports.PASTE = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
 exports.GO_TO_LINE = "robin.goToLine";
 // go to file
 exports.GO_TO_FILE = "robin.goToFile";
@@ -25292,6 +25314,10 @@ exports.RUN_NOTEBOOK_CELL = "robin.runNotebookCell";
 exports.RUN_NOTEBOOK = "robin.runNotebook";
 // run python code
 exports.RUN_PYTHON = "robin.runPython";
+//select
+exports.SELECT = "robin.select";
+//find
+exports.FIND = "robin.find";
 /**
  * MESSAGES
  */
@@ -25758,6 +25784,32 @@ const newTerminal = () => vscode.commands.registerCommand(IDE_1.NEW_TERMINAL, ()
 const killTerminal = () => vscode.commands.registerCommand(IDE_1.KILL_TERMINAL, () => {
     vscode.commands.executeCommand('workbench.action.terminal.kill');
 });
+//select
+const select = () => vscode.commands.registerCommand(IDE_1.SELECT, (data) => {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        // const start = new vscode.Position(data.start.line, data.start.character);
+        // const end = new vscode.Position(data.end.line, data.end.character);
+        // editor.selection = new vscode.Selection(start, end);
+        // editor.revealRange(new vscode.Range(start, end));
+        vscode.commands.executeCommand(IDE_1.GO_TO_LINE, (data));
+        vscode.commands.executeCommand('expandLineSelection');
+        return {
+            success: true
+        };
+    }
+    else {
+        return {
+            success: false,
+            message: "No active text editor"
+        };
+    }
+});
+// Find
+const find = () => vscode.commands.registerCommand(IDE_1.FIND, () => {
+    vscode.commands.executeCommand('editor.action.showfind');
+});
+//paste
 const paste = () => vscode.commands.registerCommand(IDE_1.PASTE, async () => {
     // implement the paste itself
     // check if the cursor is selecting an area, replace it with the clipboard content
@@ -25915,7 +25967,9 @@ const registerIDECommands = () => {
         selectKernel,
         runNotebookCell,
         runNotebook,
-        runPython
+        runPython,
+        select,
+        find
     ];
     commands.
         forEach(command => command());

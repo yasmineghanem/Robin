@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON, SELECT, FIND } from '../constants/IDE';
 const router = require('express').Router();
 
 
@@ -245,6 +245,42 @@ router.post(
             () => {
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ message: "Python file run!" }));
+            },
+            (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            }
+        );
+    }
+);
+
+//select
+router.get(
+    "/select",
+    (req: any, res: any) => {
+        const data = req.body;
+        // vscode.commands.executeCommand('editor.action.smartSelect.expand', data).then(
+            vscode.commands.executeCommand(SELECT, data).then(
+            () => {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Selected!" }));
+            },
+            (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            }
+        );
+    }
+);
+
+//find
+router.get(
+    "/find",
+    (req: any, res: any) => {
+        vscode.commands.executeCommand(FIND).then(
+            () => {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Find!" }));
             },
             (err) => {
                 res.writeHead(400, { "Content-Type": "application/json" });
