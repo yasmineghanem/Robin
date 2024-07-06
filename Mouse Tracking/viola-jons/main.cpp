@@ -296,6 +296,7 @@ void test_face_detector_threads(const char *folder, int num)
 
 int main()
 {
+    freopen("log.txt", "w", stdout);
 
     fill_features_info();
     // cout << (int)features_info[0].i << endl;
@@ -303,7 +304,6 @@ int main()
     // cout << (int)features_info[100500].w << endl;
     // cout << (int)features_info[150500].h << endl;
     // return 0;
-    // freopen("log.txt", "w", stdout);
     mode current_mode = TRAIN_FACE_DETECTION;
     if (current_mode == TRAIN_ADABOOST)
     {
@@ -317,14 +317,14 @@ int main()
     }
     else if (current_mode == TRAIN_FACE_DETECTION)
     {
-        train_face_detector("face1", 100, 0.2, 0.5, 0.2);
+        train_face_detector("face1", -1, 0.1, 0.15, 0.1);
         test_face_detector_threads("face1", -1);
         return 0;
     }
     else if (current_mode == TEST_FACE_DETECTION)
     {
         auto start = std::chrono::high_resolution_clock::now();
-        test_face_detector_threads("face1", -1);
+        test_face_detector_threads("face1", 500);
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> duration = end - start;
         std::cout << "Testing time: " << duration.count() << " s\n";

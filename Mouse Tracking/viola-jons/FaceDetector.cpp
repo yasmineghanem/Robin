@@ -75,7 +75,6 @@ void FaceDetector::remove_negative_val_data()
     int l = this->cascade.size() - 1;
     int new_count = 0;
     int index = -1;
-
     for (int i = 0; i < get<0>(this->val_dim); i++)
     {
         if (this->cascade[l]->predict(this->X_val[i], get<1>(this->val_dim), this->shif[l]) == 1)
@@ -185,8 +184,8 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
         shif.push_back(sl);
         cout << " training size before removing: " << this->train_dim.first << endl;
         cout << " validation size before removing: " << get<0>(this->val_dim) << endl;
-        this->remove_negative_train_data();
-        this->remove_negative_val_data();
+        // this->remove_negative_train_data();
+        // this->remove_negative_val_data();
         cout << " training size after removing: " << this->train_dim.first << endl;
         cout << " validation size after removing: " << get<0>(this->val_dim) << endl;
 

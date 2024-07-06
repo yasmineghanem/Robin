@@ -92,3 +92,20 @@ Classifier trained!
 Training time: 132.839 s
 saving model to face1
 Accuracy: 0.897675
+
+# definisions
+
+- Yo : desired overall false positive rate
+
+- Yl : desired targeted layer false positive
+
+- Bl : desired targeted layer false negative , 1-Bl detection rate
+
+# with validation
+
+200 point
+Yo=0.2 Yl=0.5 Bl=0.2
+Training time: 155.917 s
+Accuracy: 0.867142
+False positive rate: 0.12104
+False negative rate: 0.622881

@@ -1,39 +1,5 @@
-time for loading data is : 32.6573 s
-.... Training Face Detector ....
-erorr in layer : 0 is : 0.194
-erorr in layer : 0 is : 0.218001
-erorr in layer : 0 is : 0.246216
-layer 1 is trained
-false positive rate: 0.15
-false negative rate: 0.084
-erorr in layer : 0 is : 0.216594
-erorr in layer : 0 is : 0.232018
-erorr in layer : 0 is : 0.241921
-erorr in layer : 0 is : 0.220186
-erorr in layer : 0 is : 0.247117
-erorr in layer : 0 is : 0.249239
-erorr in layer : 0 is : 0.246028
-erorr in layer : 0 is : 0.25094
-erorr in layer : 0 is : 0.233759
-erorr in layer : 0 is : 0.255135
-erorr in layer : 0 is : 0.23015
-erorr in layer : 0 is : 0.234237
-erorr in layer : 0 is : 0.247807
-erorr in layer : 0 is : 0.230578
-erorr in layer : 0 is : 0.263852
-erorr in layer : 0 is : 0.250454
-erorr in layer : 0 is : 0.261855
-erorr in layer : 0 is : 0.258965
-erorr in layer : 0 is : 0.253334
-erorr in layer : 0 is : 0.22343
-erorr in layer : 0 is : 0.231267
-erorr in layer : 0 is : 0.258426
-erorr in layer : 0 is : 0.244198
-erorr in layer : 0 is : 0.23698
-erorr in layer : 0 is : 0.251523
-erorr in layer : 0 is : 0.232428
-erorr in layer : 0 is : 0.260235
-erorr in layer : 0 is : 0.263493
-erorr in layer : 0 is : 0.255339
-erorr in layer : 0 is : 0.253457
-erorr in layer : 0 is : 0.272466
+Accuracy: 0.761317
+Error rate: 0.238683
+False positive rate: 0.012
+False negative rate: 0.478814
+Testing time: 0.218 s
