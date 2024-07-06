@@ -5,6 +5,8 @@
 #include <string>
 #include <fstream>
 #include "const.h"
+#include <vector>
+
 using namespace std;
 const double err = 1e-6;
 AdaBoost::~AdaBoost()

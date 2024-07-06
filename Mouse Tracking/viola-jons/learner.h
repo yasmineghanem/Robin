@@ -1,6 +1,6 @@
 #ifndef LEANER_H
 #define LEANER_H
-// #include <vector>
+#include <vector>
 using namespace std;
 class Learner
 {

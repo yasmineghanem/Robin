@@ -1,6 +1,6 @@
 #pragma GCC optimization("Ofast")
 #include <iostream>
-// #include <vector>
+#include <vector>
 #include <string>
 #include <chrono>
 #include "AdaBoost.h"

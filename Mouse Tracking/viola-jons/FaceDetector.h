@@ -1,6 +1,6 @@
 #ifndef FACE_DETECTOR_H
 #define FACE_DETECTOR_H
-// #include <vector>
+#include <vector>
 #include <cmath>
 #include <iostream>
 #include "utils.h"

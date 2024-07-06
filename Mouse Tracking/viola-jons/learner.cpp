@@ -3,6 +3,8 @@
 using namespace std;
 #include "const.h"
 #include "utils.h"
+#include <vector>
+
 Learner::Learner(double threshold, int polarity, double error, double margin, int feature_index)
 {
     this->threshold = threshold;
