@@ -16,6 +16,7 @@
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "stb_image.h"
 #include "const.h"
+#include "stb_image_write.h" // For saving the final image
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -29,44 +30,6 @@ const double err = 1e-6;
 auto start_time = std::chrono::high_resolution_clock::now();
 auto end_time = std::chrono::high_resolution_clock::now();
 std::chrono::duration<double> duration;
-
-void integral_image(int **&I, int **&II, int h, int w)
-{
-    int N = h;
-    int M = w;
-
-    II[0][0] = I[0][0];
-
-    // Compute the first row
-    for (int j = 1; j < M; j++)
-    {
-        II[0][j] = I[0][j] + II[0][j - 1];
-    }
-
-    // Compute the first column
-    for (int i = 1; i < N; i++)
-    {
-        II[i][0] = I[i][0] + II[i - 1][0];
-    }
-
-    // Compute the rest of the integral image
-    for (int i = 1; i < N; i++)
-    {
-        for (int j = 1; j < M; j++)
-        {
-            II[i][j] = I[i][j] + II[i][j - 1] + II[i - 1][j] - II[i - 1][j - 1];
-        }
-    }
-}
-
-int sum_region(int **&ii, int x1, int y1, int x2, int y2)
-{
-    int A = (x1 > 0 && y1 > 0) ? ii[x1 - 1][y1 - 1] : 0;
-    int B = (x1 > 0) ? ii[x1 - 1][y2] : 0;
-    int C = (y1 > 0) ? ii[x2][y1 - 1] : 0;
-    int D = ii[x2][y2];
-    return D - B - C + A;
-}
 
 void fill_features_info()
 {
@@ -280,6 +243,7 @@ int compute_haar_like_features(int **&II, int *&features)
 
     return f;
 }
+
 void validate(int &start_i, int &start_j, int &end_i, int &end_j, int size)
 {
     if (start_i < 0)
@@ -302,6 +266,7 @@ void validate(int &start_i, int &start_j, int &end_i, int &end_j, int size)
     if (end_j >= size)
         end_j = size - 1;
 }
+
 int haar_feature_scaling(int **&image, int size, const char &feature_type, int i, int j, int w, int h)
 {
     int e = size;
@@ -928,4 +893,121 @@ matrices calc_acuracy_metrices(int *Y_test, int *predeictions, int count)
     m.false_positive_rate = false_positive_rate;
     m.false_negative_rate = false_negative_rate;
     return m;
+}
+
+void saveImageAsPNG(const char *filename, int ***&color_img, int **&img, int M, int N, bool colored)
+{
+
+    if (colored)
+    {
+        unsigned char *data = new unsigned char[M * N * 3];
+        for (int i = 0; i < M; ++i)
+        {
+            for (int j = 0; j < N; ++j)
+            {
+                data[(i * N + j) * 3 + 0] = static_cast<unsigned char>(color_img[i][j][0]);
+                data[(i * N + j) * 3 + 1] = static_cast<unsigned char>(color_img[i][j][1]);
+                data[(i * N + j) * 3 + 2] = static_cast<unsigned char>(color_img[i][j][2]);
+            }
+        }
+        stbi_write_png(filename, N, M, 3, data, N * 3);
+        delete[] data;
+    }
+    else
+    {
+        unsigned char *data = new unsigned char[M * N];
+        for (int i = 0; i < M; ++i)
+        {
+            for (int j = 0; j < N; ++j)
+            {
+                data[i * N + j] = static_cast<unsigned char>(img[i][j]);
+            }
+        }
+        stbi_write_png(filename, N, M, 1, data, N);
+        delete[] data;
+    }
+}
+
+void load_image(const std::string &path, int ***&color_img, int **&img, int &M, int &N)
+{
+    int channels;
+    unsigned char *data = stbi_load(path.c_str(), &N, &M, &channels, 3);
+    if (!data)
+    {
+        std::cerr << "Failed to load image" << std::endl;
+        return;
+    }
+
+    color_img = new int **[M];
+    img = new int *[M];
+    for (int i = 0; i < M; ++i)
+    {
+        color_img[i] = new int *[N];
+        img[i] = new int[N];
+        for (int j = 0; j < N; ++j)
+        {
+            color_img[i][j] = new int[3];
+            int index = (i * N + j) * 3;
+            color_img[i][j][0] = data[index];
+            color_img[i][j][1] = data[index + 1];
+            color_img[i][j][2] = data[index + 2];
+            img[i][j] = static_cast<int>(0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2]);
+            // img[i][j] = static_cast<int>(data[index] / 3.0 + data[index + 1] / 3.0 + data[index + 2] / 3.0);
+        }
+    }
+    stbi_image_free(data);
+}
+
+void drawGreenRectangles(int ***&color_img, int M, int N, std::vector<window *> &P, int thickness)
+{
+    for (const auto &win : P)
+    {
+        int i = win->x;
+        int j = win->y;
+        int e = win->w;
+
+        // Draw top and bottom borders
+        for (int t = 0; t < thickness; ++t)
+        {
+            for (int x = j; x < j + e; ++x)
+            {
+                if (i + t < M && x < N)
+                {
+                    // top border
+                    color_img[i + t][x][0] = 0;   // R
+                    color_img[i + t][x][1] = 255; // G
+                    color_img[i + t][x][2] = 0;   // B
+                }
+                if (i + e - 1 - t < M && x < N)
+                {
+                    // bottom border
+                    color_img[i + e - 1 - t][x][0] = 0;
+                    color_img[i + e - 1 - t][x][1] = 255;
+                    color_img[i + e - 1 - t][x][2] = 0;
+                }
+            }
+        }
+
+        // Draw left and right borders
+        for (int t = 0; t < thickness; ++t)
+        {
+            for (int y = i; y < i + e; ++y)
+            {
+                if (y < M && j + t < N)
+                {
+                    // left border
+                    color_img[y][j + t][0] = 0;
+                    color_img[y][j + t][1] = 255;
+                    color_img[y][j + t][2] = 0;
+                }
+                if (y < M && j + e - 1 - t < N)
+                {
+                    // right border
+                    color_img[y][j + e - 1 - t][0] = 0;
+                    color_img[y][j + e - 1 - t][1] = 255;
+                    color_img[y][j + e - 1 - t][2] = 0;
+                }
+            }
+        }
+    }
 }

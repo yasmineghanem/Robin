@@ -12,4 +12,12 @@ typedef struct feature
 
 } feature;
 extern feature *features_info;
+
+typedef struct window
+{
+    int x;
+    int y;
+    int w;
+    int h;
+} window;
 #endif

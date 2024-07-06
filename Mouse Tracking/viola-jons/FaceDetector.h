@@ -7,6 +7,7 @@
 #include "AdaBoost.h"
 #include "learner.h"
 #include <tuple>
+#include "const.h"
 using namespace std;
 
 class FaceDetector
@@ -37,6 +38,9 @@ public:
     int predict(int **&img, int size);
     void save(const string folder);
     void load(const string folder);
+    // M is the number of rows "height"
+    // N is the number of columns "width"
+    void process(int **&img, int ***&color_img, int M, int N, double c = 1.5);
 };
 
 #endif
