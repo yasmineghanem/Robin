@@ -68,6 +68,115 @@ int sum_region(int **&ii, int x1, int y1, int x2, int y2)
     return D - B - C + A;
 }
 
+void fill_features_info()
+{
+    int f = 0;
+    // Feature type (a)
+    for (int i = 1; i < 25; i++)
+        for (int j = 1; j < 25; j++)
+            for (int w = 1; w < (25 - j) / 2 + 1; w++)
+                for (int h = 1; h < 25 - i + 1; h++)
+                    f++;
+
+    // Feature type (b)
+    for (int i = 1; i < 25; i++)
+        for (int j = 1; j < 25; j++)
+            for (int w = 1; w < (25 - j) / 3 + 1; w++)
+                for (int h = 1; h < 25 - i + 1; h++)
+                    f++;
+
+    // Feature type (c)
+    for (int i = 1; i < 25; i++)
+        for (int j = 1; j < 25; j++)
+            for (int w = 1; w < 25 - j + 1; w++)
+                for (int h = 1; h < (25 - i) / 2 + 1; h++)
+                    f++;
+
+    // Feature type (d)
+    for (int i = 1; i < 25; i++)
+        for (int j = 1; j < 25; j++)
+            for (int w = 1; w < 25 - j + 1; w++)
+                for (int h = 1; h < (25 - i) / 3 + 1; h++)
+                    f++;
+
+    // Feature type (e)
+    for (int i = 1; i < 25; i++)
+        for (int j = 1; j < 25; j++)
+            for (int w = 1; w < (25 - j) / 2 + 1; w++)
+                for (int h = 1; h < (25 - i) / 2 + 1; h++)
+                    f++;
+    features_info = new feature[f];
+    f = 0;
+    // Feature type (a)
+    for (int i = 1; i < 25; i++)
+        for (int j = 1; j < 25; j++)
+            for (int w = 1; w < (25 - j) / 2 + 1; w++)
+                for (int h = 1; h < 25 - i + 1; h++)
+                {
+                    features_info[f].feature_type = 'a';
+                    features_info[f].i = i;
+                    features_info[f].j = j;
+                    features_info[f].w = w;
+                    features_info[f].h = h;
+                    f++;
+                }
+
+    // Feature type (b)
+    for (int i = 1; i < 25; i++)
+        for (int j = 1; j < 25; j++)
+            for (int w = 1; w < (25 - j) / 3 + 1; w++)
+                for (int h = 1; h < 25 - i + 1; h++)
+                {
+                    features_info[f].feature_type = 'b';
+                    features_info[f].i = i;
+                    features_info[f].j = j;
+                    features_info[f].w = w;
+                    features_info[f].h = h;
+                    f++;
+                }
+
+    // Feature type (c)
+    for (int i = 1; i < 25; i++)
+        for (int j = 1; j < 25; j++)
+            for (int w = 1; w < 25 - j + 1; w++)
+                for (int h = 1; h < (25 - i) / 2 + 1; h++)
+                {
+                    features_info[f].feature_type = 'c';
+                    features_info[f].i = i;
+                    features_info[f].j = j;
+                    features_info[f].w = w;
+                    features_info[f].h = h;
+                    f++;
+                }
+
+    // Feature type (d)
+    for (int i = 1; i < 25; i++)
+        for (int j = 1; j < 25; j++)
+            for (int w = 1; w < 25 - j + 1; w++)
+                for (int h = 1; h < (25 - i) / 3 + 1; h++)
+                {
+                    features_info[f].feature_type = 'd';
+                    features_info[f].i = i;
+                    features_info[f].j = j;
+                    features_info[f].w = w;
+                    features_info[f].h = h;
+                    f++;
+                }
+    // Feature type (e)
+    for (int i = 1; i < 25; i++)
+        for (int j = 1; j < 25; j++)
+            for (int w = 1; w < (25 - j) / 2 + 1; w++)
+                for (int h = 1; h < (25 - i) / 2 + 1; h++)
+                {
+                    features_info[f].feature_type = 'e';
+                    features_info[f].i = i;
+                    features_info[f].j = j;
+                    features_info[f].w = w;
+                    features_info[f].h = h;
+                    f++;
+                }
+}
+
 int compute_haar_like_features(int **&II, int *&features)
 {
     // assert(img.size() == 24 && img[0].size() == 24);
@@ -171,10 +280,31 @@ int compute_haar_like_features(int **&II, int *&features)
 
     return f;
 }
-
-int haar_feature_scaling(const vector<vector<int>> &image, const string &feature_type, int i, int j, int w, int h)
+void validate(int &start_i, int &start_j, int &end_i, int &end_j, int size)
 {
-    int e = image.size();
+    if (start_i < 0)
+        start_i = 0;
+    if (start_i >= size)
+        start_i = size - 1;
+
+    if (start_j < 0)
+        start_j = 0;
+    if (start_j >= size)
+        start_j = size - 1;
+
+    if (end_i < 0)
+        end_i = 0;
+    if (end_i >= size)
+        end_i = size - 1;
+
+    if (end_j < 0)
+        end_j = 0;
+    if (end_j >= size)
+        end_j = size - 1;
+}
+int haar_feature_scaling(int **&image, int size, const char &feature_type, int i, int j, int w, int h)
+{
+    int e = size;
     // assert(e >= 24);
 
     auto round_nearest_integer = [](double z)
@@ -182,198 +312,182 @@ int haar_feature_scaling(const vector<vector<int>> &image, const string &feature
         return int(round(z));
     };
 
-    if (feature_type == "a")
+    if (feature_type == 'a')
     {
         double a = 2 * w * h;
         i = round_nearest_integer(i * e / 24);
         j = round_nearest_integer(j * e / 24);
         h = round_nearest_integer(h * e / 24);
-        w = 0;
+        int temp_w = 0;
         for (int k = 1; k < round_nearest_integer(1 + 2 * w * e / 24) / 2 + 1; k++)
         {
             if (2 * k <= e - j + 1)
             {
-                w = k;
+                temp_w = k;
             }
         }
-        double S1 = 0;
-        double S2 = 0;
-        for (int x = i; x < i + h; x++)
-        {
-            for (int y = j; y < j + w; y++)
-            {
-                S1 += image[x][y];
-            }
-            for (int y = j + w; y < j + 2 * w; y++)
-            {
-                S2 += image[x][y];
-            }
-        }
+        w = temp_w;
+        if (i >= e || j >= e)
+            return 0;
+        int start_i = i - 1, start_j = j - 1;
+        int end_i = i - 1 + h - 1;
+        int end_j = j - 1 + w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S1 = sum_region(image, start_i, start_j, end_i, end_j);
+
+        start_i = i - 1, start_j = j - 1 + w;
+        end_i = i - 1 + h - 1, end_j = j - 1 + 2 * w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S2 = sum_region(image, start_i, start_j, end_i, end_j);
+
         return (S1 - S2) * a / (2 * w * h);
     }
-    else if (feature_type == "b")
+    else if (feature_type == 'b')
     {
         double a = 3 * w * h;
         i = round_nearest_integer(i * e / 24);
         j = round_nearest_integer(j * e / 24);
         h = round_nearest_integer(h * e / 24);
-        w = 0;
+        int temp_w = 0;
         for (int k = 1; k < round_nearest_integer(1 + 3 * w * e / 24) / 3 + 1; k++)
         {
             if (3 * k <= e - j + 1)
             {
-                w = k;
+                temp_w = k;
             }
         }
-        double S1 = 0;
-        double S2 = 0;
-        double S3 = 0;
-        for (int x = i; x < i + h; x++)
-        {
-            for (int y = j; y < j + w; y++)
-            {
-                S1 += image[x][y];
-            }
-            for (int y = j + w; y < j + 2 * w; y++)
-            {
-                S2 += image[x][y];
-            }
-            for (int y = j + 2 * w; y < j + 3 * w; y++)
-            {
-                S3 += image[x][y];
-            }
-        }
+        if (i >= e || j >= e)
+            return 0;
+        w = temp_w;
+        int start_i = i - 1, start_j = j - 1;
+        int end_i = i - 1 + h - 1, end_j = j - 1 + w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S1 = sum_region(image, start_i, start_j, end_i, end_j);
+
+        start_i = i - 1 + h, start_j = j - 1 + w;
+        end_i = i - 1 + h - 1, end_j = j - 1 + 2 * w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S2 = sum_region(image, start_i, start_j, end_i, end_j);
+
+        start_i = i - 1, start_j = j - 1 + 2 * w;
+        end_i = i - 1 + h - 1, end_j = j - 1 + 3 * w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S3 = sum_region(image, start_i, start_j, end_i, end_j);
+
         return (S1 - S2 + S3) * a / (3 * w * h);
     }
-    else if (feature_type == "c")
+    else if (feature_type == 'c')
     {
         double a = 2 * w * h;
         i = round_nearest_integer(i * e / 24);
         j = round_nearest_integer(j * e / 24);
         w = round_nearest_integer(w * e / 24);
-        h = 0;
+        int temp_h = 0;
         for (int k = 1; k < round_nearest_integer(1 + 2 * h * e / 24) / 2 + 1; k++)
         {
             if (2 * k <= e - i + 1)
             {
-                h = k;
+                temp_h = k;
             }
         }
-        double S1 = 0;
-        double S2 = 0;
-        for (int x = i; x < i + h; x++)
-        {
-            for (int y = j; y < j + w; y++)
-            {
-                S1 += image[x][y];
-            }
-        }
-        for (int x = i + h; x < i + 2 * h; x++)
-        {
-            for (int y = j; y < j + w; y++)
-            {
-                S2 += image[x][y];
-            }
-        }
+        if (i >= e || j >= e)
+            return 0;
+
+        h = temp_h;
+        int start_i = i - 1, start_j = j - 1;
+        int end_i = i - 1 + h - 1, end_j = j - 1 + w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S1 = sum_region(image, start_i, start_j, end_i, end_j);
+
+        start_i = i - 1 + h, start_j = j - 1;
+        end_i = i - 1 + 2 * h - 1, end_j = j - 1 + w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S2 = sum_region(image, start_i, start_j, end_i, end_j);
+
         return (S1 - S2) * a / (2 * w * h);
     }
-    else if (feature_type == "d")
+    else if (feature_type == 'd')
     {
         double a = 3 * w * h;
         i = round_nearest_integer(i * e / 24);
         j = round_nearest_integer(j * e / 24);
         w = round_nearest_integer(w * e / 24);
         // h = max(k for k in range(1, round_nearest_integer(1 + 3 * h * e / 24) // 3 + 1) if 3 * k <= e - i + 1)
-        h = 0;
+        int temp_h = 0;
         for (int k = 1; k < round_nearest_integer(1 + 3 * h * e / 24) / 3 + 1; k++)
         {
             if (3 * k <= e - i + 1)
             {
-                h = k;
+                temp_h = k;
             }
         }
-        double S1 = 0;
-        double S2 = 0;
-        double S3 = 0;
-        for (int x = i; x < i + h; x++)
-        {
-            for (int y = j; y < j + w; y++)
-            {
-                S1 += image[x][y];
-            }
-        }
-        for (int x = i + h; x < i + 2 * h; x++)
-        {
-            for (int y = j; y < j + w; y++)
-            {
-                S2 += image[x][y];
-            }
-        }
-        for (int x = i + 2 * h; x < i + 3 * h; x++)
-        {
-            for (int y = j; y < j + w; y++)
-            {
-                S3 += image[x][y];
-            }
-        }
+        if (i >= e || j >= e)
+            return 0;
+
+        h = temp_h;
+        int start_i = i - 1, start_j = j - 1;
+        int end_i = i - 1 + h - 1, end_j = j - 1 + w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S1 = sum_region(image, start_i, start_j, end_i, end_j);
+
+        start_i = i - 1 + h, start_j = j - 1;
+        end_i = i - 1 + 2 * h - 1, end_j = j - 1 + w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S2 = sum_region(image, start_i, start_j, end_i, end_j);
+
+        start_i = i - 1 + 2 * h, start_j = j - 1;
+        end_i = i - 1 + 3 * h - 1, end_j = j - 1 + w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S3 = sum_region(image, start_i, start_j, end_i, end_j);
         return (S1 - S2 + S3) * a / (3 * w * h);
     }
-    else if (feature_type == "e")
+    else if (feature_type == 'e')
     {
         double a = 4 * w * h;
         i = round_nearest_integer(i * e / 24);
         j = round_nearest_integer(j * e / 24);
-        w = 0; // max(k for k in range(1, round_nearest_integer(1 + 2 * w * e / 24) // 2 + 1) if 2 * k <= e - j + 1)
-        h = 0; // max(k for k in range(1, round_nearest_integer(1 + 2 * h * e / 24) // 2 + 1) if 2 * k <= e - i + 1)
+        int temp_w = 0; // max(k for k in range(1, round_nearest_integer(1 + 2 * w * e / 24) // 2 + 1) if 2 * k <= e - j + 1)
+        int temp_h = 0; // max(k for k in range(1, round_nearest_integer(1 + 2 * h * e / 24) // 2 + 1) if 2 * k <= e - i + 1)
         for (int k = 1; k < round_nearest_integer(1 + 2 * w * e / 24) / 2 + 1; k++)
         {
             if (2 * k <= e - j + 1)
             {
-                w = k;
+                temp_w = k;
             }
         }
         for (int k = 1; k < round_nearest_integer(1 + 2 * h * e / 24) / 2 + 1; k++)
         {
             if (2 * k <= e - i + 1)
             {
-                h = k;
+                temp_h = k;
             }
         }
-        double S1 = 0;
-        double S2 = 0;
-        double S3 = 0;
-        double S4 = 0;
-        for (int x = i; x < i + h; x++)
-        {
-            for (int y = j; y < j + w; y++)
-            {
-                S1 += image[x][y];
-            }
-        }
-        for (int x = i + h; x < i + 2 * h; x++)
-        {
-            for (int y = j; y < j + w; y++)
-            {
-                S2 += image[x][y];
-            }
-        }
-        for (int x = i; x < i + h; x++)
-        {
-            for (int y = j + w; y < j + 2 * w; y++)
-            {
-                S3 += image[x][y];
-            }
-        }
-        for (int x = i + h; x < i + 2 * h; x++)
-        {
-            for (int y = j + w; y < j + 2 * w; y++)
-            {
-                S4 += image[x][y];
-            }
-        }
+        if (i >= e || j >= e)
+            return 0;
+
+        w = temp_w;
+        h = temp_h;
+        int start_i = i - 1, start_j = j - 1;
+        int end_i = i - 1 + h - 1, end_j = j - 1 + w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S1 = sum_region(image, start_i, start_j, end_i, end_j);
+
+        start_i = i - 1 + h, start_j = j - 1;
+        end_i = i - 1 + 2 * h - 1, end_j = j - 1 + w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S2 = sum_region(image, start_i, start_j, end_i, end_j);
+
+        start_i = i - 1, start_j = j - 1 + w;
+        end_i = i - 1 + h - 1, end_j = j - 1 + 2 * w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S3 = sum_region(image, start_i, start_j, end_i, end_j);
+
+        start_i = i - 1 + h, start_j = j - 1 + w;
+        end_i = i - 1 + 2 * h - 1, end_j = j - 1 + 2 * w - 1;
+        validate(start_i, start_j, end_i, end_j, e);
+        int S4 = sum_region(image, start_i, start_j, end_i, end_j);
         return (S1 - S2 - S3 + S4) * a / (4 * w * h);
     }
-    // Implement other feature types here
 
     else
     {
@@ -487,48 +601,48 @@ Learner *decision_stump(int **&X, int *&y, double *&weights, int feature_index, 
 }
 
 // O(num_features * n)
-// Learner *best_stump(int **&X, int *&y, double *&weights, pair<int, int> &dim)
-// {
+Learner *best_stump(int **&X, int *&y, double *&weights, pair<int, int> &dim)
+{
 
-//     int n = dim.first;
-//     double *pos_weights_prefix = new double[n];
-//     double *neg_weights_prefix = new double[n];
+    int n = dim.first;
+    double *pos_weights_prefix = new double[n];
+    double *neg_weights_prefix = new double[n];
 
-//     int *sorted_indices = new int[n];
-//     int *X_sorted = new int[n];
-//     int *y_sorted = new int[n];
-//     double *weights_sorted = new double[n];
-//     Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+    int *sorted_indices = new int[n];
+    int *X_sorted = new int[n];
+    int *y_sorted = new int[n];
+    double *weights_sorted = new double[n];
+    Learner *best_stump = decision_stump(X, y, weights, 0, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
 
-//     for (int f = 1; f < dim.second; f++)
-//     {
+    for (int f = 1; f < dim.second; f++)
+    {
 
-//         // num_features is around 160K , this part could be run on cuda and lunch too many threads here
-//         Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
-//         if (cur_stump->error < best_stump->error || (cur_stump->error == best_stump->error && cur_stump->margin > best_stump->margin))
-//         // if (cur_stump->error < best_stump->error)
-//         {
-//             delete best_stump;
-//             best_stump = cur_stump;
-//             best_stump->feature_index = f;
-//         }
-//         else
-//         {
-//             delete cur_stump;
-//         }
-//     }
-//     delete[] pos_weights_prefix;
-//     delete[] neg_weights_prefix;
+        // num_features is around 160K , this part could be run on cuda and lunch too many threads here
+        Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+        if (cur_stump->error < best_stump->error || (cur_stump->error == best_stump->error && cur_stump->margin > best_stump->margin))
+        // if (cur_stump->error < best_stump->error)
+        {
+            delete best_stump;
+            best_stump = cur_stump;
+            best_stump->feature_index = f;
+        }
+        else
+        {
+            delete cur_stump;
+        }
+    }
+    delete[] pos_weights_prefix;
+    delete[] neg_weights_prefix;
 
-//     delete[] sorted_indices;
-//     delete[] X_sorted;
-//     delete[] y_sorted;
-//     delete[] weights_sorted;
+    delete[] sorted_indices;
+    delete[] X_sorted;
+    delete[] y_sorted;
+    delete[] weights_sorted;
 
-//     return best_stump;
-// }
+    return best_stump;
+}
 
-Learner *best_stump(int **&X, int *&y, double *&weights, std::pair<int, int> &dim)
+Learner *best_stump_threads(int **&X, int *&y, double *&weights, std::pair<int, int> &dim)
 {
     int n = dim.first;
     int num_features = dim.second;
@@ -603,7 +717,6 @@ Learner *best_stump(int **&X, int *&y, double *&weights, std::pair<int, int> &di
     }
     return best_stump;
 }
-
 
 int get_files(const std::string &path, string *&files, int num)
 {

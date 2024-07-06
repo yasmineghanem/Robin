@@ -19,9 +19,11 @@ typedef struct matrices
 void integral_image(int **&I, int **&II, int h, int w);
 int sum_region(int **&ii, int x1, int y1, int x2, int y2);
 int compute_haar_like_features(int **&II, int *&features);
-int haar_feature_scaling(const vector<vector<int>> &image, const string &feature_type, int i, int j, int w, int h);
+void fill_features_info();
+int haar_feature_scaling(int **&image, int size, const char &feature_type, int i, int j, int w, int h);
 Learner *decision_stump(int **&X, int *&y, double *&weights, int feature_index, int *sorted_indices, int *X_sorted, int *Y_sorted, double *weights_sorted, double *&pos_weights_prefix, double *&neg_weights_prefix, pair<int, int> &dim);
 Learner *best_stump(int **&X, int *&y, double *&weights, pair<int, int> &dim);
+Learner *best_stump_threads(int **&X, int *&y, double *&weights, std::pair<int, int> &dim);
 int get_files(const std::string &path, string *&files, int num);
 int load_gray_images(const std::string &path, int ***&images, int num);
 void load_haar_like_features(const string &path, int **&X, int *&Y, int num, int y_label);

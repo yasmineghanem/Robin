@@ -12,7 +12,7 @@ using namespace std;
 class FaceDetector
 {
 private:
-    vector<AdaBoost> cascade;
+    vector<AdaBoost *> cascade;
     vector<double> shif;
 
     int **X_train;
@@ -21,18 +21,20 @@ private:
     int ***X_val;
     int *y_val;
     tuple<int, int, int> val_dim;
+    string folder;
 
 public:
-    FaceDetector(int **&X_train, int *&y_train, int ***&X_val, int *&y_val, pair<int, int> train_dim, tuple<int, int, int> val_dim);
+    FaceDetector(int **&X_train, int *&y_train, int ***&X_val, int *&y_val, pair<int, int> train_dim, tuple<int, int, int> val_dim, string save_folder);
     FaceDetector();
+    ~FaceDetector();
     // yo : desired overall false positive rate
     // yl : desired targeted layer false positive
     // Bl : desired targeted layer false negative , 1-Bl detection rate
     void train(double Yo, double Yl, double Bl);
-    matrices evaluate_single_layer(AdaBoost &fl, int *&predictions, double sl);
+    matrices evaluate_single_layer(AdaBoost *fl, int *&predictions, double sl);
     void remove_negative_train_data();
     void remove_negative_val_data();
-    int predict(int **&img);
+    int predict(int **&img, int size);
     void save(const string folder);
     void load(const string folder);
 };

@@ -38,6 +38,7 @@ AdaBoost::AdaBoost(int **&X, int *&y, pair<int, int> dim) : X(X), y(y), train_di
 AdaBoost::AdaBoost()
 {
 }
+
 void AdaBoost::train(int T)
 {
     int n = this->train_dim.first;
@@ -45,7 +46,7 @@ void AdaBoost::train(int T)
     {
 
         // find the best learner
-        Learner *learner = best_stump(this->X, this->y, this->weights, this->train_dim);
+        Learner *learner = best_stump_threads(this->X, this->y, this->weights, this->train_dim);
         // compute the error
         double error = learner->error;
         learners.push_back(learner);
@@ -85,6 +86,7 @@ void AdaBoost::train(int T)
     }
 }
 
+// predict using the array of all 162336 features,used in the traing phase,to find the best feature
 int AdaBoost::predict(int *&X, double sl)
 {
     double sum = 0;
@@ -95,6 +97,17 @@ int AdaBoost::predict(int *&X, double sl)
         //     cout << X[this->learners[i]->feature_index] << " " << this->learners[i]->threshold << " " << this->learners[i]->polarity << " " << this->learners[i]->predict(X) << endl;
     }
     // cout << endl;
+    return sum >= 0.0 ? 1 : -1;
+}
+
+// predict using the 2D image,used in the testing phase
+int AdaBoost::predict(int **&X, int size, double sl)
+{
+    double sum = 0;
+    for (size_t i = 0; i < this->learners.size(); ++i)
+    {
+        sum += this->alphas[i] * (this->learners[i]->predict(X, size) + sl);
+    }
     return sum >= 0.0 ? 1 : -1;
 }
 

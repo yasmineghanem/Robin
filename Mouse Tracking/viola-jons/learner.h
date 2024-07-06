@@ -10,9 +10,11 @@ public:
     double error;
     double margin;
     int feature_index = 0;
+
     Learner(double threshold, int polarity, double error, double margin, int feature_index);
     Learner();
     int predict(int *&X);
+    int predict(int **&X, int size);
 };
 
 #endif

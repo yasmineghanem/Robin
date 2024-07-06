@@ -8,7 +8,8 @@
 #include "utils.h"
 #include <filesystem>
 #include <fstream>
-FaceDetector::FaceDetector(int **&X_train, int *&y_train, int ***&X_val, int *&y_val, pair<int, int> train_dim, tuple<int, int, int> val_dim)
+#include <algorithm>
+FaceDetector::FaceDetector(int **&X_train, int *&y_train, int ***&X_val, int *&y_val, pair<int, int> train_dim, tuple<int, int, int> val_dim, string folder)
 {
     this->X_train = X_train;
     this->y_train = y_train;
@@ -16,21 +17,28 @@ FaceDetector::FaceDetector(int **&X_train, int *&y_train, int ***&X_val, int *&y
     this->y_val = y_val;
     this->train_dim = train_dim;
     this->val_dim = val_dim;
+    this->folder = folder;
 }
 FaceDetector::FaceDetector()
 {
 }
-matrices FaceDetector::evaluate_single_layer(AdaBoost &fl, int *&predictions, double sl)
+matrices FaceDetector::evaluate_single_layer(AdaBoost *fl, int *&predictions, double sl)
 {
     // set the value of the shifted value sl
     matrices mat;
     for (int i = 0; i < this->train_dim.first; i++)
     {
-        predictions[i] = fl.predict(X_train[i], sl);
+        predictions[i] = fl->predict(X_train[i], sl);
     }
     mat = calc_acuracy_metrices(y_train, predictions, this->train_dim.first);
-    // TODO get the metrices for the validation set without pre calculate all the haar like features
-    // maximize with the result from the validation
+    for (int i = 0; i < get<0>(this->val_dim); i++)
+    {
+        predictions[i] = fl->predict(X_val[i], get<1>(this->val_dim), sl);
+    }
+    matrices val_mat = calc_acuracy_metrices(y_val, predictions, get<0>(this->val_dim));
+    mat.false_positive_rate = max(val_mat.false_positive_rate, mat.false_positive_rate);
+    mat.false_negative_rate = max(val_mat.false_negative_rate, mat.false_negative_rate);
+
     return mat;
 }
 void FaceDetector::remove_negative_train_data()
@@ -42,7 +50,7 @@ void FaceDetector::remove_negative_train_data()
 
     for (int i = 0; i < this->train_dim.first; i++)
     {
-        if (this->cascade[l].predict(this->X_train[i], this->shif[l]) == 1)
+        if (this->cascade[l]->predict(this->X_train[i], this->shif[l]) == 1)
         {
             new_count++;
             if (index != -1)
@@ -61,7 +69,29 @@ void FaceDetector::remove_negative_train_data()
 }
 void FaceDetector::remove_negative_val_data()
 {
-    // TODO
+    // remove the false negatives and true negatives detected by the current cascade
+    int l = this->cascade.size() - 1;
+    int new_count = 0;
+    int index = -1;
+
+    for (int i = 0; i < get<0>(this->val_dim); i++)
+    {
+        if (this->cascade[l]->predict(this->X_val[i], this->shif[l]) == 1)
+        {
+            new_count++;
+            if (index != -1)
+            {
+                swap(this->X_val[i], this->X_val[index]);
+                swap(this->y_val[i], this->y_val[index]);
+                index++;
+            }
+        }
+        else if (index == -1)
+        {
+            index = i;
+        }
+    }
+    get<0>(this->val_dim) = new_count;
 }
 void FaceDetector::train(double Yo, double Yl, double Bl)
 {
@@ -71,27 +101,29 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
     int last = 0;
     while (cur_Y > Yo)
     {
-        double u = 1e-1;
+        double u = 1e-2;
         l += 1;
         int Nl = min(10 * l + 10, 200);
         double sl = 0;
         int Tl = 1;
-        AdaBoost fl(this->X_train, this->y_train, this->train_dim);
-        fl.train(1);
+        AdaBoost *fl = new AdaBoost(this->X_train, this->y_train, this->train_dim);
+        fl->train(1);
         double B, Y;
         while (true)
         {
             bool train_again = false;
             auto mat = this->evaluate_single_layer(fl, predictions, sl);
             Y = mat.false_positive_rate, B = mat.false_negative_rate;
-            cout << "adaboost number :  " << l << " layer number : " << Tl << " shift: " << sl << " false positive rate : " << Y << " false negative rate : " << B << endl;
+            cout << "adaboost number :  " << l << ", layer number : " << Tl << ", shift: " << sl << " false positive rate : " << Y << ", false negative rate : " << B << endl;
             if (Y <= Yl && B <= Bl)
             {
+
                 cur_Y = cur_Y * Y;
                 break;
             }
             else if (Y <= Yl && B > Bl && u > 1e-5)
             {
+
                 sl += u;
                 if (last == -1)
                 {
@@ -102,6 +134,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
             }
             else if (Y > Yl && B <= Bl && u > 1e-5)
             {
+
                 sl -= u;
                 if (last == 1)
                 {
@@ -112,8 +145,10 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
             }
             else
             {
-                if (Tl > Nl)
+
+                if (Tl >= Nl)
                 {
+
                     // the shift sl is set to the smallest value that satisfies the false negative requirement.
                     sl = -1;
                     auto mat = this->evaluate_single_layer(fl, predictions, sl);
@@ -121,7 +156,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                     cout << "adaboost number :  " << l << " layer number : " << Tl << " entered the dead loop" << endl;
                     while (B > Bl)
                     {
-                        sl += 0.05;
+                        sl += 0.01;
                         mat = this->evaluate_single_layer(fl, predictions, sl);
                         B = mat.false_negative_rate;
                         Y = mat.false_positive_rate;
@@ -134,34 +169,34 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                 }
                 else
                 {
+
                     Tl += 1;
                     train_again = true;
                 }
             }
             if (train_again)
-                fl.train(1);
+                fl->train(1);
         }
+
         //  Remove the false negatives and true negatives detected by the current casca
         cascade.push_back(fl);
         shif.push_back(sl);
         this->remove_negative_train_data();
         this->remove_negative_val_data();
+
         cout << "layer " << l << " is trained" << endl;
         cout << "false positive rate: " << Y << endl;
         cout << "false negative rate: " << B << endl;
-        this->save("face1");
+        this->save(folder);
     }
 }
-int FaceDetector::predict(int **&img)
+int FaceDetector::predict(int **&img, int size)
 {
 
     for (int i = 0; i < this->cascade.size(); i++)
     {
-        // TODO implement method to predict using the needed features only not calc all the features
         // if cascade fined it is negative then return
-        int *features;
-        int count = compute_haar_like_features(img, features);
-        if (this->cascade[i].predict(features, this->shif[i]) == -1)
+        if (this->cascade[i]->predict(img, size, this->shif[i]) == -1)
         {
             return -1;
         }
@@ -195,7 +230,7 @@ void FaceDetector::save(const string folder)
     // Save each layer of the cascade
     for (size_t i = 0; i < cascade.size(); ++i)
     {
-        cascade[i].saveAsText(folder + "/model" + to_string(i) + ".txt");
+        cascade[i]->saveAsText(folder + "/model" + to_string(i) + ".txt");
     }
 }
 
@@ -228,6 +263,14 @@ void FaceDetector::load(const string folder)
     cascade.resize(cascadeSize);
     for (size_t i = 0; i < cascadeSize; ++i)
     {
-        cascade[i].loadFromText(folder + "/model" + to_string(i) + ".txt");
+        cascade[i] = new AdaBoost();
+        cascade[i]->loadFromText(folder + "/model" + to_string(i) + ".txt");
+    }
+}
+FaceDetector::~FaceDetector()
+{
+    for (auto &fl : cascade)
+    {
+        delete fl;
     }
 }

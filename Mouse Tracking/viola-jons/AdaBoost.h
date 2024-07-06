@@ -22,6 +22,7 @@ public:
 
     void train(int T);
     int predict(int *&X, double sl = 0);
+    int predict(int **&X, int size, double sl = 0);
     void save(const string file);
     void load(const string file);
     void saveAsText(const string &file);
