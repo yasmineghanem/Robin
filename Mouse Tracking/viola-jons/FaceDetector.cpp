@@ -31,6 +31,7 @@ matrices FaceDetector::evaluate_single_layer(AdaBoost *fl, int *&predictions, do
         predictions[i] = fl->predict(X_train[i], sl);
     }
     mat = calc_acuracy_metrices(y_train, predictions, this->train_dim.first);
+    int p = 0, neg = 0;
     for (int i = 0; i < get<0>(this->val_dim); i++)
     {
         predictions[i] = fl->predict(X_val[i], get<1>(this->val_dim), sl);
@@ -67,6 +68,7 @@ void FaceDetector::remove_negative_train_data()
     }
     this->train_dim.first = new_count;
 }
+
 void FaceDetector::remove_negative_val_data()
 {
     // remove the false negatives and true negatives detected by the current cascade
@@ -76,7 +78,7 @@ void FaceDetector::remove_negative_val_data()
 
     for (int i = 0; i < get<0>(this->val_dim); i++)
     {
-        if (this->cascade[l]->predict(this->X_val[i], this->shif[l]) == 1)
+        if (this->cascade[l]->predict(this->X_val[i], get<1>(this->val_dim), this->shif[l]) == 1)
         {
             new_count++;
             if (index != -1)
@@ -181,8 +183,12 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
         //  Remove the false negatives and true negatives detected by the current casca
         cascade.push_back(fl);
         shif.push_back(sl);
+        cout << " training size before removing: " << this->train_dim.first << endl;
+        cout << " validation size before removing: " << get<0>(this->val_dim) << endl;
         this->remove_negative_train_data();
         this->remove_negative_val_data();
+        cout << " training size after removing: " << this->train_dim.first << endl;
+        cout << " validation size after removing: " << get<0>(this->val_dim) << endl;
 
         cout << "layer " << l << " is trained" << endl;
         cout << "false positive rate: " << Y << endl;

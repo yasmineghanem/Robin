@@ -116,8 +116,8 @@ void train_face_detector(const char *folder, int num, double Yo, double Yl, doub
     int ***neg_test;
 
     pair<int, int> trian_dim = load_features(train_pos_path, train_neg_path, X_train, Y_train, num, num);
-    int pos_count = load_gray_images(test_pos_path, pos_test, num);
-    int neg_count = load_gray_images(test_neg_path, neg_test, num);
+    int pos_count = load_gray_images(test_pos_path, pos_test, -1);
+    int neg_count = load_gray_images(test_neg_path, neg_test, -1);
     X_val = new int **[pos_count + neg_count];
     Y_val = new int[pos_count + neg_count];
     for (int i = 0; i < pos_count; i++)
@@ -293,6 +293,7 @@ void test_face_detector_threads(const char *folder, int num)
     delete[] Y_test;
     delete[] predictions;
 }
+
 int main()
 {
 
