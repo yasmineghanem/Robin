@@ -41,6 +41,12 @@ export const RUN_NOTEBOOK = "robin.runNotebook";
 // run python code
 export const RUN_PYTHON = "robin.runPython";
 
+//select
+export const SELECT = "robin.select";
+
+//find
+export const FIND = "robin.find";
+
 /**
  * MESSAGES
  */

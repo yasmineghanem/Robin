@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON, SELECT, FIND } from '../constants/IDE';
 import fs from "fs";
 import { NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
 
@@ -72,7 +72,35 @@ const killTerminal = () => vscode.commands.registerCommand(KILL_TERMINAL, () => 
     vscode.commands.executeCommand('workbench.action.terminal.kill');
 });
 
+//select
+const select = () => vscode.commands.registerCommand(SELECT, (data) => {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        // const start = new vscode.Position(data.start.line, data.start.character);
+        // const end = new vscode.Position(data.end.line, data.end.character);
+        // editor.selection = new vscode.Selection(start, end);
+        // editor.revealRange(new vscode.Range(start, end));
+        vscode.commands.executeCommand(GO_TO_LINE, (data));
+        vscode.commands.executeCommand('expandLineSelection');
+        return {
+            success: true
+        };
+    } else {
+        return {
+            success: false,
+            message: "No active text editor"
+        };
 
+    }
+}
+);
+
+// Find
+const find = () => vscode.commands.registerCommand(FIND, () => {
+    vscode.commands.executeCommand('editor.action.showfind');
+}); 
+
+//paste
 const paste = () => vscode.commands.registerCommand(PASTE,
     async () => {
         // implement the paste itself
@@ -269,11 +297,14 @@ const registerIDECommands = () => {
         selectKernel,
         runNotebookCell,
         runNotebook,
-        runPython
+        runPython,
+        select,
+        find
 
     ];
 
-    commands.forEach(command => command());
+    commands.
+    forEach(command => command());
 };
 
 export default registerIDECommands;

@@ -2,3 +2,5 @@ node_modules
 /.*/node_modules
 /Command Execution/node_modules
 .vscode
+voice_recognition_models
+Desktop Application/Assets/vosk_2.zip

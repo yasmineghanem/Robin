@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON, SELECT, FIND } from '../constants/IDE';
 const router = require('express').Router();
 
 
@@ -254,23 +254,16 @@ router.post(
     }
 );
 
-// git commit and push
+//select
 router.get(
-    "/git-push",
+    "/select",
     (req: any, res: any) => {
-
-        vscode.commands.executeCommand('robin.gitPush', req.query).then(
-            (response: any) => {
-                if (
-                    response.success
-                ) {
-                    res.writeHead(200, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: "Git push done!" }));
-                }
-                else {
-                    res.writeHead(400, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: response.message }));
-                }
+        const data = req.body;
+        // vscode.commands.executeCommand('editor.action.smartSelect.expand', data).then(
+            vscode.commands.executeCommand(SELECT, data).then(
+            () => {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Selected!" }));
             },
             (err) => {
                 res.writeHead(400, { "Content-Type": "application/json" });
@@ -280,98 +273,14 @@ router.get(
     }
 );
 
-// git fetch & pull 
+//find
 router.get(
-    "/git-pull",
+    "/find",
     (req: any, res: any) => {
-        vscode.commands.executeCommand('robin.gitPull', req.query).then(
-            (response: any) => {
-                if (
-                    response.success
-                ) {
-                    res.writeHead(200, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: "Git pull done!" }));
-                }
-                else {
-                    res.writeHead(400, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: response.message }));
-                }
-            },
-            (err) => {
-                res.writeHead(400, { "Content-Type": "application/json" });
-                res.end(JSON.stringify(err));
-            }
-        );
-    }
-);
-
-// git discard
-router.get(
-    "/git-discard",
-    (req: any, res: any) => {
-        vscode.commands.executeCommand('robin.gitDiscard', req.query).then(
-            (response: any) => {
-                if (
-                    response.success
-                ) {
-                    res.writeHead(200, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: "Git discard done!" }));
-                }
-                else {
-                    res.writeHead(400, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: response.message }));
-                }
-            },
-            (err) => {
-                res.writeHead(400, { "Content-Type": "application/json" });
-                res.end(JSON.stringify(err));
-            }
-        );
-    }
-);
-
-// git stage
-router.get(
-    "/git-stage",
-    (req: any, res: any) => {
-        vscode.commands.executeCommand('robin.gitStage', req.query).then(
-            (response: any) => {
-                if (
-                    response.success
-                ) {
-                    res.writeHead(200, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: "Git stage done!" }));
-                }
-                else {
-                    res.writeHead(400, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: response.message }));
-                }
-            },
-            (err) => {
-                res.writeHead(400, { "Content-Type": "application/json" });
-                res.end(JSON.stringify(err));
-            }
-        );
-    }
-);
-
-
-// git stash
-router.get(
-    "/git-stash",
-    (req: any, res: any) => {
-        vscode.commands.executeCommand('robin.gitStash', req.query).then(
-            (response: any) => {
-                if (
-                    response.success
-                ) {
-                    res.writeHead(200, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: "Git stash done!" }));
-                }
-                else {
-                    res.writeHead(400, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: response.message }));
-                }
+        vscode.commands.executeCommand(FIND).then(
+            () => {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Find!" }));
             },
             (err) => {
                 res.writeHead(400, { "Content-Type": "application/json" });
