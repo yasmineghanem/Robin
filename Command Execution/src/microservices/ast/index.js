@@ -7,6 +7,8 @@ const { FunctionDefinitionNode } = require("tree-sitter-python");
 // const { Request : expressReq, Response } = require('express');
 const fs = require("fs");
 
+
+
 require("dotenv").config({
   path: path.resolve(__dirname, "../../../.env"),
 }); // Load environment variables from .env
@@ -180,7 +182,7 @@ function buildReadableASTJSON(node, code) {
 
   // check if named, then add the name in the description
   if (node.isNamed) {
-    if (node.type === "identifier" || node.type.includes("string")) {
+    if (node.type === "identifier" || node.type.includes("string") ) {
       result.name = code.slice(node.startIndex, node.endIndex);
       // result.description = `${node.type}`;
     }
@@ -226,16 +228,25 @@ function parseCode(code) {
   };
 }
 
+/**
+ * Given a code file, if any function, or parameter has some functional documentation
+ * we need to extract that functional documentation
+ */
+
 astServer.post("/ast", (req, res) => {
   // console.log(req);
   const code = req.body.code;
+  // console.log(code)
 
   if (!code) {
     return res.status(400).json({ error: "Code is required" });
   }
 
   try {
-    const ast = parseCode(code);
+    const ast = buildReadableASTJSON(parser.parse(code).rootNode, code);
+
+    parseCode(code);
+
     // return res.status(200).json({ ast: ast.rootNode.toString() });
     return res.status(200).json({ ast });
   } catch (error) {

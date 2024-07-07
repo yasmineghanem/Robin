@@ -1,4 +1,3 @@
-
 import pyaudio
 import numpy as np
 from openwakeword.model import Model
@@ -9,7 +8,6 @@ from robin_responses import responses
 
 last_detection_time = 0  # Time of the last detection
 DEBOUNCE_TIME = 2  # Debounce time in seconds
-
 
 def wake_word_detection(args, gui):
     FORMAT = pyaudio.paInt16
@@ -54,7 +52,7 @@ def wake_word_detection(args, gui):
                     # random response
                     engine.say(responses[np.random.randint(0, len(responses))])
                     engine.runAndWait()
-                # else: 
+                # else:
                 #     gui.stop_voice_recognition()
                 #     print('deactivate')
                     # gui.
