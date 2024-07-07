@@ -544,7 +544,6 @@ Learner *decision_stump(int **&X, int *&y, double *&weights, int feature_index, 
     for (int j = 0; j < n; j++)
     {
         update_learner(W_pos_below, W_neg_below, W_pos_above, W_neg_above, tot_wights, tau, curr_M, cur_stump);
-        // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
         while (true)
         {
             if (j + 1 < n && X_sorted[j] == X_sorted[j + 1])
@@ -572,12 +571,11 @@ Learner *decision_stump(int **&X, int *&y, double *&weights, int feature_index, 
         }
     }
     update_learner(W_pos_below, W_neg_below, W_pos_above, W_neg_above, tot_wights, tau, curr_M, cur_stump);
-    // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
 
     return cur_stump;
 }
 
-__device__ Learner *decision_stump_kernal(int *&X, int *&y, double *&weights, int feature_index, int *sorted_indices, int *X_sorted, int *Y_sorted, double *weights_sorted, double *&pos_weights_prefix, double *&neg_weights_prefix, pair<int, int> &dim)
+__device__ Learner *decision_stump_kernal(int *&X, int *&y, float *&weights, int feature_index, int *sorted_indices, int *X_sorted, int *Y_sorted, float *weights_sorted, float *&pos_weights_prefix, float *&neg_weights_prefix, pair<int, int> &dim)
 {
     Learner *cur_stump = new Learner(0, 1, 2, 0, feature_index);
     int n = dim.first;
@@ -587,7 +585,6 @@ __device__ Learner *decision_stump_kernal(int *&X, int *&y, double *&weights, in
     }
     thrust::sort(sorted_indices, sorted_indices + n, [=] __device__(int i, int j)
                  { return X[i * dim.second + feature_index] < X[j * dim.second + feature_index]; });
-
     for (int i = 0; i < n; i++)
     {
         X_sorted[i] = X[sorted_indices[i] * dim.second + feature_index];
@@ -624,7 +621,6 @@ __device__ Learner *decision_stump_kernal(int *&X, int *&y, double *&weights, in
     for (int j = 0; j < n; j++)
     {
         update_learner(W_pos_below, W_neg_below, W_pos_above, W_neg_above, tot_wights, tau, curr_M, cur_stump);
-        // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
         while (true)
         {
             if (j + 1 < n && X_sorted[j] == X_sorted[j + 1])
@@ -652,75 +648,133 @@ __device__ Learner *decision_stump_kernal(int *&X, int *&y, double *&weights, in
         }
     }
     update_learner(W_pos_below, W_neg_below, W_pos_above, W_neg_above, tot_wights, tau, curr_M, cur_stump);
-    // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
-
     return cur_stump;
 }
 
-__global__ void decision_stump_GPU(int *X, int *y, double *weights, pair<int, int> dim, Learner *d_stumps)
+__global__ void decision_stump_GPU(int *X, int *_y_, float *_weights_, pair<int, int> dim, Learner *d_stumps, float *_pos_weights_prefix_, float *_neg_weights_prefix_, int *_sorted_indices_, int *_X_sorted_, int *_Y_sorted_, float *_weights_sorted_)
 {
-    // print the same host data    cout << X[0][5] << " " << X[5][20] << " " << X[10][10] << " " << X[15][15] << " " << X[20][20] << endl;
-    // cout << X[0 * dim.second + 5] << " " << X[5 * dim.second + 20] << " " << X[10 * dim.second + 10] << " " << X[15 * dim.second + 15] << " " << X[20 * dim.second + 20] << endl;
-    // using printf instead of cout
-    // printf("%d %d %d %d %d\n", X[0 * dim.second + 5], X[5 * dim.second + 20], X[10 * dim.second + 10], X[15 * dim.second + 15], X[20 * dim.second + 20]);
-    printf("%d %d \n", dim.first, dim.second);
-    printf("%d %d %d\n", y[5], y[1000], y[1500]);
-    printf("%f %f %f\n", weights[5], weights[1000], weights[1500]);
     int total_threads = blockDim.x * gridDim.x;
+    int threadId = threadIdx.x + blockIdx.x * blockDim.x;
+    // printf("1threadId %d\n", threadId);
+    extern __shared__ int shared[];               // Use dynamic shared memory
+    int *y = (int *)&shared[0];                   // Place shared_y at the beginning of shared memory
+    float *weights = (float *)&shared[dim.first]; // Place shared_weights after shared_y
+
+    // Ensure all threads load their respective data into shared memory
+    for (int idx = threadIdx.x; idx < dim.first; idx += blockDim.x)
+    {
+        y[idx] = _y_[idx];
+        weights[idx] = _weights_[idx];
+    }
+
+    // Synchronize to ensure all threads have loaded their data
+    __syncthreads();
+
+    d_stumps[threadId].error = 2;
+    d_stumps[threadId].feature_index = 0;
+    d_stumps[threadId].margin = 0;
+    d_stumps[threadId].polarity = 1;
+    d_stumps[threadId].threshold = 0;
+    // printf("2threadId %d\n", threadId);
+
     int n = dim.first;
     int feature_size = dim.second;
-    double *pos_weights_prefix = new double[n];
-    double *neg_weights_prefix = new double[n];
 
-    int *sorted_indices = new int[n];
-    int *X_sorted = new int[n];
-    int *y_sorted = new int[n];
-    double *weights_sorted = new double[n];
+    float *pos_weights_prefix = _pos_weights_prefix_ + threadId * n;
+    float *neg_weights_prefix = _neg_weights_prefix_ + threadId * n;
+    int *sorted_indices = _sorted_indices_ + threadId * n;
+    int *X_sorted = _X_sorted_ + threadId * n;
+    int *y_sorted = _Y_sorted_ + threadId * n;
+    float *weights_sorted = _weights_sorted_ + threadId * n;
 
+    Learner my_stump(0, 1, 2, 0, 0);
     for (int idx = threadIdx.x + blockIdx.x * blockDim.x; idx < feature_size; idx += total_threads)
     {
-        d_stumps[idx] = *decision_stump_kernal(X, y, weights, idx, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+        auto cur = decision_stump_kernal(X, y, weights, idx, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+        // printf("idx %d \n", idx);
+        if (cur->error < my_stump.error || (cur->error == my_stump.error && cur->margin > my_stump.margin))
+        {
+            my_stump.error = cur->error;
+            my_stump.feature_index = cur->feature_index;
+            my_stump.margin = cur->margin;
+            my_stump.polarity = cur->polarity;
+            my_stump.threshold = cur->threshold;
+            delete cur;
+        }
     }
-    delete[] pos_weights_prefix;
-    delete[] neg_weights_prefix;
+    // printf("2threadId %d\n", threadId);
+    // printf("error after the loop %f\n", my_stump.error);
+    d_stumps[threadId].error = my_stump.error;
+    d_stumps[threadId].feature_index = my_stump.feature_index;
+    d_stumps[threadId].margin = my_stump.margin;
+    d_stumps[threadId].polarity = my_stump.polarity;
+    d_stumps[threadId].threshold = my_stump.threshold;
 
-    delete[] sorted_indices;
-    delete[] X_sorted;
-    delete[] y_sorted;
-    delete[] weights_sorted;
+    // printf("error in  threadID %d and feature index%d is %f\n", threadId, d_stumps[threadId].feature_index, d_stumps[threadId].error);
+
+    // delete[] pos_weights_prefix;
+    // delete[] neg_weights_prefix;
+
+    // delete[] sorted_indices;
+    // delete[] X_sorted;
+    // delete[] y_sorted;
+    // delete[] weights_sorted;
 }
 
-Learner *best_stump_GPU(int **&X, int *&y, double *&weights, pair<int, int> &dim)
+__global__ void print_errors(Learner *d_stumps, int total_threads)
 {
-    const int block_size = 1;
-    const int num_blocks = 1;
+    printf("start the print errors\n ");
+    for (int i = 0; i < total_threads; i++)
+    {
+        if (d_stumps[i].error <= 0.05)
+            printf("error in thread %d is %f\n", i, d_stumps[i].error);
+    }
+    printf("end the print errors\n ");
+}
+Learner *best_stump_GPU(int **&X, int *&y, float *&weights, pair<int, int> &dim)
+{
+    const int block_size = 512;
+    const int num_blocks = 10;
     const int total_threads = min(block_size * num_blocks, dim.second);
     int n = dim.first;
     int m = dim.second;
     int *d_X;
     int *d_y;
-    double *d_weights;
+    float *d_weights;
     Learner *d_stumps;
     cudaMalloc(&d_X, n * m * sizeof(int *));
-
     cudaMalloc(&d_y, n * sizeof(int));
-    cudaMalloc(&d_weights, n * sizeof(double));
+    cudaMalloc(&d_weights, n * sizeof(float));
     cudaMalloc(&d_stumps, total_threads * sizeof(Learner));
+
     for (int i = 0; i < n; i++)
     {
         cudaMemcpy((d_X + i * m), X[i], m * sizeof(int), cudaMemcpyHostToDevice);
     }
-    cudaMemcpy(d_y, y, n * sizeof(int), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_weights, weights, n * sizeof(double), cudaMemcpyHostToDevice);
-    // cout << "before calling the global function\n";
-    // cout << X[0][5] << " " << X[5][20] << " " << X[10][10] << " " << X[15][15] << " " << X[20][20] << endl;
-    printf("%d %d \n", dim.first, dim.second);
-    printf("%d %d %d\n", y[5], y[1000], y[1500]);
-    printf("%f %f %f\n", weights[5], weights[1000], weights[1500]);
 
-    decision_stump_GPU<<<num_blocks, block_size>>>(d_X, d_y, d_weights, dim, d_stumps);
-    // cout << "after calling the global function\n";
+    cudaMemcpy(d_y, y, n * sizeof(int), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_weights, weights, n * sizeof(float), cudaMemcpyHostToDevice);
+
+    float *d_pos_weights_prefix;
+    float *d_neg_weights_prefix;
+    int *d_sorted_indices;
+    int *d_X_sorted;
+    int *d_y_sorted;
+    float *d_weights_sorted;
+
+    cudaMalloc(&d_pos_weights_prefix, total_threads * n * sizeof(float));
+    cudaMalloc(&d_neg_weights_prefix, total_threads * n * sizeof(float));
+    cudaMalloc(&d_sorted_indices, total_threads * n * sizeof(int));
+    cudaMalloc(&d_X_sorted, total_threads * n * sizeof(int));
+    cudaMalloc(&d_y_sorted, total_threads * n * sizeof(int));
+    cudaMalloc(&d_weights_sorted, total_threads * n * sizeof(float));
+
+    size_t sharedMemorySize = n * sizeof(int) + n * sizeof(float);
+
+    decision_stump_GPU<<<num_blocks, block_size, sharedMemorySize>>>(d_X, d_y, d_weights, dim, d_stumps, d_pos_weights_prefix, d_neg_weights_prefix, d_sorted_indices, d_X_sorted, d_y_sorted, d_weights_sorted);
     cudaDeviceSynchronize();
+    // print_errors<<<1, 1>>>(d_stumps, total_threads);
+
     Learner *best_stump = new Learner(0, 1, 2, 0, 0);
     Learner *h_stumps = new Learner[total_threads];
     cudaMemcpy(h_stumps, d_stumps, total_threads * sizeof(Learner), cudaMemcpyDeviceToHost);
@@ -729,11 +783,22 @@ Learner *best_stump_GPU(int **&X, int *&y, double *&weights, pair<int, int> &dim
 
         if (h_stumps[i].error < best_stump->error || (h_stumps[i].error == best_stump->error && h_stumps[i].margin > best_stump->margin))
         {
-            cout << "best stump error : " << h_stumps[i].error << " best stump margin : " << h_stumps[i].margin << endl;
             delete best_stump;
             best_stump = new Learner(h_stumps[i]);
         }
     }
+    cudaFree(d_X);
+    cudaFree(d_y);
+    cudaFree(d_weights);
+    cudaFree(d_stumps);
+    cudaFree(d_pos_weights_prefix);
+    cudaFree(d_neg_weights_prefix);
+    cudaFree(d_sorted_indices);
+    cudaFree(d_X_sorted);
+    cudaFree(d_y_sorted);
+    cudaFree(d_weights_sorted);
+
+    delete[] h_stumps;
 
     return best_stump;
 }

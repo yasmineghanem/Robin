@@ -28,7 +28,7 @@ AdaBoost::AdaBoost(int **&X, int *&y, pair<int, int> dim) : X(X), y(y), train_di
         else
             n_neg++;
     }
-    this->weights = new double[this->train_dim.first];
+    this->weights = new float[this->train_dim.first];
     for (size_t i = 0; i < this->train_dim.first; ++i)
     {
         if (y[i] == 1)
