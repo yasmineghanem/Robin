@@ -16,10 +16,10 @@
 #include <future>
 
 using namespace std;
-std::string train_pos_path = "imgs/face_data_24_24_old/trainset/faces";
-std::string train_neg_path = "imgs/face_data_24_24_old/trainset/non-faces";
-std::string test_pos_path = "imgs/face_data_24_24_old/testset/faces";
-std::string test_neg_path = "imgs/face_data_24_24_old/testset/non-faces";
+std::string train_pos_path = "imgs/face_data_24_24/trainset/faces";
+std::string train_neg_path = "imgs/face_data_24_24/trainset/non-faces";
+std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
+std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
 
 enum mode
 {
