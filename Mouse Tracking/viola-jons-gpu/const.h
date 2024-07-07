@@ -2,6 +2,7 @@
 #define CONST_H
 #define debug 1
 #define FEATURE_NUM 162500
+#include <cuda_runtime.h>
 typedef struct feature
 {
     char feature_type;
@@ -12,6 +13,7 @@ typedef struct feature
 
 } feature;
 extern feature *features_info;
+__device__ feature *d_features_info; // Device pointer
 
 typedef struct window
 {

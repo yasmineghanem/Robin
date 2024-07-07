@@ -21,6 +21,8 @@
 #include <cuda_runtime.h>
 #include "device_launch_parameters.h"
 #include <cuda.h>
+#include <thrust/sort.h>
+#include <thrust/device_vector.h>
 
 #include <stdio.h>
 
@@ -146,6 +148,8 @@ void fill_features_info()
                     features_info[f].h = h;
                     f++;
                 }
+    cudaMalloc(&d_features_info, f * sizeof(feature));
+    cudaMemcpy(d_features_info, features_info, f * sizeof(feature), cudaMemcpyHostToDevice);
 }
 
 int compute_haar_like_features(int **&II, int *&features)
@@ -478,7 +482,7 @@ void print_time()
     start_time = end_time;
 }
 
-void update_learner(double W_pos_below, double W_neg_below, double W_pos_above, double W_neg_above, double tot_wights, double tau, double curr_M, Learner *cur_stump)
+__host__ __device__ void update_learner(double W_pos_below, double W_neg_below, double W_pos_above, double W_neg_above, double tot_wights, double tau, double curr_M, Learner *cur_stump)
 {
     double error_pos = W_pos_below + W_neg_above;
     double error_neg = W_neg_below + W_pos_above;
@@ -581,8 +585,10 @@ __device__ Learner *decision_stump_kernal(int **&X, int *&y, double *&weights, i
     {
         sorted_indices[i] = i;
     }
-    sort(sorted_indices, sorted_indices + n, [&](int i, int j)
-         { return X[i][feature_index] < X[j][feature_index]; });
+    // sort(sorted_indices, sorted_indices + n, [&](int i, int j)
+    //      { return X[i][feature_index] < X[j][feature_index]; });
+    thrust::sort(sorted_indices, sorted_indices + n, [=] __device__(int i, int j)
+                 { return X[i][feature_index] < X[j][feature_index]; });
 
     for (int i = 0; i < n; i++)
     {
@@ -668,7 +674,7 @@ __global__ void decision_stump_GPU(int **X, int *y, double *weights, pair<int, i
 
     for (int idx = threadIdx.x + blockIdx.x * blockDim.x; idx < feature_size; idx += total_threads)
     {
-        d_stumps[idx] = *decision_stump(X, y, weights, idx, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+        d_stumps[idx] = *decision_stump_kernal(X, y, weights, idx, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
     }
     delete[] pos_weights_prefix;
     delete[] neg_weights_prefix;
@@ -708,7 +714,7 @@ Learner *best_stump_GPU(int **&X, int *&y, double *&weights, pair<int, int> &dim
     dim3 gridDim(3);
     dim3 blockDim(5);
 
-    decision_stump_GPU<<<gridDim, blockDim >>>(d_X, d_y, d_weights, dim, d_stumps);
+    decision_stump_GPU<<<gridDim, blockDim>>>(d_X, d_y, d_weights, dim, d_stumps);
 
     cudaDeviceSynchronize();
     Learner *best_stump = new Learner(0, 1, 2, 0, 0);

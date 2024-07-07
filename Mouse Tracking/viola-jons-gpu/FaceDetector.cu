@@ -32,7 +32,6 @@ matrices FaceDetector::evaluate_single_layer(AdaBoost *fl, int *&predictions, do
         predictions[i] = fl->predict(X_train[i], sl);
     }
     mat = calc_acuracy_metrices(y_train, predictions, this->train_dim.first);
-    int p = 0, neg = 0;
     for (int i = 0; i < get<0>(this->val_dim); i++)
     {
         predictions[i] = fl->predict(X_val[i], get<1>(this->val_dim), sl);
