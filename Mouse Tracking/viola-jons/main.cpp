@@ -345,7 +345,7 @@ int main()
     {
         // The targeted false positive and false negative rate for each layer
         // were set to 0.5 and 0.995
-        train_face_detector("face1", -1, 0.9, 0.9, 0.9);
+        train_face_detector("face1", -1, 0.7, 0.7, 0.5);
         test_face_detector_threads("face1", -1);
         return 0;
     }
