@@ -5,22 +5,22 @@ import json
 1- imports (numpy)
 
     We have [libraries] imported
-    
+
 
 2- constants (name, value)
 
     The constants declared are
-    
+
 
 3- classes (parameters, methods)
 
     We have [classes] defined
-    
+
 
 4- functions (name, params)
 
     We have [functions] defined
-    
+
 
 5- assignments
 
@@ -34,53 +34,10 @@ import json
 '''
 
 
-def narrate_ast(ast, indent=0):
-
-    indentation = '    ' * indent
-
-    if isinstance(ast, dict):
-
-        if 'type' in ast:
-
-            if 'name' in ast:
-
-                return f'{indentation}{ast["type"]} named "{ast["name"]}".'
-
-            elif 'value' in ast:
-
-                return f'{indentation}{ast["type"]} with value "{ast["value"]}".'
-
-            else:
-
-                narration = f'{indentation}{ast["type"]} containing:\n'
-
-                for key, value in ast.items():
-
-                    if key != 'type':
-
-                        narration += narrate_ast(value, indent + 1) + '\n'
-
-                return narration.strip()
-
-        else:
-
-            return '\n'.join(narrate_ast(value, indent) for key, value in ast.items())
-
-    elif isinstance(ast, list):
-
-        return '\n'.join(narrate_ast(item, indent) for item in ast)
-
-    else:
-
-        return f'{indentation}{str(ast)}'
-
-
 def extract_import_nodes(ast):
 
     import_nodes = []
-
     constant_nodes = []
-
     code_nodes = []
 
     for node in ast['children']:
@@ -125,7 +82,6 @@ def extract_import_nodes(ast):
 
 
 '''
-
 Recursively, extract the name of the imported library or module.
 '''
 
@@ -166,35 +122,153 @@ def get_node_name(node):
 
 
 '''
-
-Extract imported libraries and modules names, 
-
+Extract imported libraries and modules names,
 and summarize them in a list.
 '''
 
 
 def summarize_imports(import_nodes):
-
     return [
-
         get_node_name(node)
         for node in import_nodes
-
     ]
 
 
 def summarize_constants(constant_nodes):
 
     return [
-
         get_node_name(node)
         for node in constant_nodes
-
     ]
 
 
+def process_class_node(node, indent=0, class_info={
+    "class_name": "",
+    "class_parameters": [],
+    "class_methods": []
+}
+):
+    if node['type'] == 'class_definition':
+        for child in node['children']:
+            process_class_node(child, indent, class_info)
+    elif node['type'] == 'class':
+        pass  # Class keyword, no action needed
+    elif node['type'] == 'identifier' and 'name' in node:
+        class_info["class_name"] = node['name']
+    elif node['type'] == 'function_definition':
+        class_info["class_methods"].append(process_function_node(node))
+    elif node['type'] == 'block':
+        for child in node['children']:
+            process_class_node(child, indent, class_info)
+
+    return class_info
+
+
+def process_function_node(node):
+    method_info = {
+        "method_name": "",
+        "parameters": []
+    }
+    for child in node['children']:
+        if child['type'] == 'def':
+            pass  # Def keyword, no action needed
+
+        elif child['type'] == 'identifier' and 'name' in child:
+            method_info["method_name"] = child['name']
+
+        elif child['type'] == 'parameters':
+            for param in child['children']:
+                if param['type'] == 'identifier':
+                    if param['name'] != 'self':
+                        method_info["parameters"].append(param['name'])
+                elif param['type'] == 'default_parameter':
+                    method_info["parameters"].append(
+                        param['children'][0]['name'])
+
+        elif child['type'] == 'block':
+            for grandchild in child['children']:
+                if grandchild['type'] == 'expression_statement':
+                    process_class_node(grandchild)
+                elif grandchild['type'] == 'assignment':
+                    process_class_node(grandchild)
+    return method_info
+
+
+def process_expression_statement(node):
+    for child in node['children']:
+        if child['type'] == 'assignment':
+            return process_assignment(child)
+        elif child['type'] == 'augmented_assignment':
+            return process_augmented_assignment(child)
+
+
+def process_assignment(node):
+    left_side = node['children'][0]
+    right_side = node['children'][2]
+
+    left_value = process_identifier(left_side)
+    right_value = process_expression(right_side)
+
+    return {
+        "left_side": left_value,
+        "right_side": right_value
+    }
+
+
+def process_augmented_assignment(node):
+    left_side = node['children'][0]
+    operation = node['children'][1]['type']
+    right_side = node['children'][2]
+
+    left_value = process_identifier(left_side)
+    right_value = process_expression(right_side)
+
+    return {
+        "left_side": left_value,
+        "operation": operation,
+        "right_side": right_value
+    }
+
+
+def process_expression(node):
+    if node['type'] == 'identifier':
+        return node['name']
+    elif node['type'] == 'integer':
+        return "integer value"
+    elif node['type'] == 'string':
+        return node['name']
+    elif node['type'] == 'binary_operator':
+        left_side = node['children'][0]
+        operator = node['children'][1]['type']
+        right_side = node['children'][2]
+
+        left_value = process_expression(left_side)
+        right_value = process_expression(right_side)
+
+        return {
+            "left_side": left_value,
+            "operator": operator,
+            "right_side": right_value
+        }
+    elif node['type'] == 'call':
+        function_name = node['children'][0]['name']
+        arguments = [process_expression(
+            arg) for arg in node['children'][1]['children'] if arg['type'] != '(' and arg['type'] != ')']
+        arguments_str = ", ".join(arguments)
+
+        return {
+            "function_name": function_name,
+            "arguments": arguments_str
+
+        }
+
+
+def process_identifier(node):
+    return node['name']
+
+
 # Load the AST from the JSON file
-with open('./ast.json', 'r') as file:
+with open('./ast_3.json', 'r') as file:
 
     ast = json.load(file)
 
@@ -238,11 +312,20 @@ with open('code_nodes.json', 'w') as file:
     json.dump(code_nodes, file, indent=4)
 
 
-# Summarize imports
+summary = []
+for node in code_nodes:
+    if node['type'] == "class_definition":
+        class_info = process_class_node(node)
 
-imports = summarize_imports(import_nodes)
-print(imports)
+        summary.append(dict(class_info))  # for deepcopy
+    elif node['type'] == "function_definition":
+        method_info = process_function_node(node)
+        # print(method_info)
+        summary.append(dict(method_info))
 
-constants = summarize_constants(constant_nodes)
-print(constants)
+    elif node['type'] == "expression_statement":
+        assignment_info = process_expression_statement(node)
+        summary.append(dict(assignment_info))
 
+
+print(summary)
