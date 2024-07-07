@@ -577,7 +577,7 @@ Learner *decision_stump(int **&X, int *&y, double *&weights, int feature_index, 
     return cur_stump;
 }
 
-__device__ Learner *decision_stump_kernal(int **&X, int *&y, double *&weights, int feature_index, int *sorted_indices, int *X_sorted, int *Y_sorted, double *weights_sorted, double *&pos_weights_prefix, double *&neg_weights_prefix, pair<int, int> &dim)
+__device__ Learner *decision_stump_kernal(int *&X, int *&y, double *&weights, int feature_index, int *sorted_indices, int *X_sorted, int *Y_sorted, double *weights_sorted, double *&pos_weights_prefix, double *&neg_weights_prefix, pair<int, int> &dim)
 {
     Learner *cur_stump = new Learner(0, 1, 2, 0, feature_index);
     int n = dim.first;
@@ -585,14 +585,12 @@ __device__ Learner *decision_stump_kernal(int **&X, int *&y, double *&weights, i
     {
         sorted_indices[i] = i;
     }
-    // sort(sorted_indices, sorted_indices + n, [&](int i, int j)
-    //      { return X[i][feature_index] < X[j][feature_index]; });
     thrust::sort(sorted_indices, sorted_indices + n, [=] __device__(int i, int j)
-                 { return X[i][feature_index] < X[j][feature_index]; });
+                 { return X[i * dim.second + feature_index] < X[j * dim.second + feature_index]; });
 
     for (int i = 0; i < n; i++)
     {
-        X_sorted[i] = X[sorted_indices[i]][feature_index];
+        X_sorted[i] = X[sorted_indices[i] * dim.second + feature_index];
         Y_sorted[i] = y[sorted_indices[i]];
         weights_sorted[i] = weights[sorted_indices[i]];
     }
@@ -659,8 +657,15 @@ __device__ Learner *decision_stump_kernal(int **&X, int *&y, double *&weights, i
     return cur_stump;
 }
 
-__global__ void decision_stump_GPU(int **X, int *y, double *weights, pair<int, int> dim, Learner *d_stumps)
+__global__ void decision_stump_GPU(int *X, int *y, double *weights, pair<int, int> dim, Learner *d_stumps)
 {
+    // print the same host data    cout << X[0][5] << " " << X[5][20] << " " << X[10][10] << " " << X[15][15] << " " << X[20][20] << endl;
+    // cout << X[0 * dim.second + 5] << " " << X[5 * dim.second + 20] << " " << X[10 * dim.second + 10] << " " << X[15 * dim.second + 15] << " " << X[20 * dim.second + 20] << endl;
+    // using printf instead of cout
+    // printf("%d %d %d %d %d\n", X[0 * dim.second + 5], X[5 * dim.second + 20], X[10 * dim.second + 10], X[15 * dim.second + 15], X[20 * dim.second + 20]);
+    printf("%d %d \n", dim.first, dim.second);
+    printf("%d %d %d\n", y[5], y[1000], y[1500]);
+    printf("%f %f %f\n", weights[5], weights[1000], weights[1500]);
     int total_threads = blockDim.x * gridDim.x;
     int n = dim.first;
     int feature_size = dim.second;
@@ -684,74 +689,51 @@ __global__ void decision_stump_GPU(int **X, int *y, double *weights, pair<int, i
     delete[] y_sorted;
     delete[] weights_sorted;
 }
+
 Learner *best_stump_GPU(int **&X, int *&y, double *&weights, pair<int, int> &dim)
 {
-    const long long block_size = 1024;
-    const long long num_blocks = 10;
-    const long long total_threads = block_size * num_blocks;
+    const int block_size = 1;
+    const int num_blocks = 1;
+    const int total_threads = min(block_size * num_blocks, dim.second);
     int n = dim.first;
-    int **d_X;
+    int m = dim.second;
+    int *d_X;
     int *d_y;
     double *d_weights;
     Learner *d_stumps;
-    cudaMalloc(&d_X, n * sizeof(int *));
-    for (int i = 0; i < n; i++)
-    {
-        cudaMalloc(&d_X[i], n * sizeof(int));
-    }
+    cudaMalloc(&d_X, n * m * sizeof(int *));
 
     cudaMalloc(&d_y, n * sizeof(int));
     cudaMalloc(&d_weights, n * sizeof(double));
     cudaMalloc(&d_stumps, total_threads * sizeof(Learner));
-
     for (int i = 0; i < n; i++)
     {
-        cudaMemcpy(d_X[i], X[i], n * sizeof(int), cudaMemcpyHostToDevice);
+        cudaMemcpy((d_X + i * m), X[i], m * sizeof(int), cudaMemcpyHostToDevice);
     }
     cudaMemcpy(d_y, y, n * sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(d_weights, weights, n * sizeof(double), cudaMemcpyHostToDevice);
+    // cout << "before calling the global function\n";
+    // cout << X[0][5] << " " << X[5][20] << " " << X[10][10] << " " << X[15][15] << " " << X[20][20] << endl;
+    printf("%d %d \n", dim.first, dim.second);
+    printf("%d %d %d\n", y[5], y[1000], y[1500]);
+    printf("%f %f %f\n", weights[5], weights[1000], weights[1500]);
 
-    dim3 gridDim(3);
-    dim3 blockDim(5);
-
-    decision_stump_GPU<<<gridDim, blockDim>>>(d_X, d_y, d_weights, dim, d_stumps);
-
+    decision_stump_GPU<<<num_blocks, block_size>>>(d_X, d_y, d_weights, dim, d_stumps);
+    // cout << "after calling the global function\n";
     cudaDeviceSynchronize();
     Learner *best_stump = new Learner(0, 1, 2, 0, 0);
     Learner *h_stumps = new Learner[total_threads];
     cudaMemcpy(h_stumps, d_stumps, total_threads * sizeof(Learner), cudaMemcpyDeviceToHost);
     for (int i = 0; i < total_threads; i++)
     {
+
         if (h_stumps[i].error < best_stump->error || (h_stumps[i].error == best_stump->error && h_stumps[i].margin > best_stump->margin))
         {
+            cout << "best stump error : " << h_stumps[i].error << " best stump margin : " << h_stumps[i].margin << endl;
             delete best_stump;
             best_stump = new Learner(h_stumps[i]);
         }
     }
-    // for (int f = 1; f < dim.second; f++)
-    // {
-
-    //     // num_features is around 160K , this part could be run on cuda and lunch too many threads here
-    //     Learner *cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
-    //     if (cur_stump->error < best_stump->error || (cur_stump->error == best_stump->error && cur_stump->margin > best_stump->margin))
-    //     // if (cur_stump->error < best_stump->error)
-    //     {
-    //         delete best_stump;
-    //         best_stump = cur_stump;
-    //         best_stump->feature_index = f;
-    //     }
-    //     else
-    //     {
-    //         delete cur_stump;
-    //     }
-    // }
-    // delete[] pos_weights_prefix;
-    // delete[] neg_weights_prefix;
-
-    // delete[] sorted_indices;
-    // delete[] X_sorted;
-    // delete[] y_sorted;
-    // delete[] weights_sorted;
 
     return best_stump;
 }
