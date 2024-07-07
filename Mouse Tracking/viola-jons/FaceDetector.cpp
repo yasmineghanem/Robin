@@ -105,6 +105,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
     {
         double u = 1e-2;
         l += 1;
+
         int Nl = min(10 * l + 10, 200);
         double sl = 0;
         int Tl = 1;
@@ -117,9 +118,9 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
             auto mat = this->evaluate_single_layer(fl, predictions, sl);
             Y = mat.false_positive_rate, B = mat.false_negative_rate;
             cout << "adaboost number :  " << l << ", layer number : " << Tl << ", shift: " << sl << " false positive rate : " << Y << ", false negative rate : " << B << endl;
+            break; // TODO remove
             if (Y <= Yl && B <= Bl)
             {
-
                 cur_Y = cur_Y * Y;
                 break;
             }
@@ -177,7 +178,9 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                 }
             }
             if (train_again)
+            {
                 fl->train(1);
+            }
         }
 
         //  Remove the false negatives and true negatives detected by the current casca
@@ -185,8 +188,8 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
         shif.push_back(sl);
         cout << " training size before removing: " << this->train_dim.first << endl;
         cout << " validation size before removing: " << get<0>(this->val_dim) << endl;
-        // this->remove_negative_train_data();
-        // this->remove_negative_val_data();
+        this->remove_negative_train_data();
+        this->remove_negative_val_data();
         cout << " training size after removing: " << this->train_dim.first << endl;
         cout << " validation size after removing: " << get<0>(this->val_dim) << endl;
 
@@ -194,6 +197,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
         cout << "false positive rate: " << Y << endl;
         cout << "false negative rate: " << B << endl;
         this->save(folder);
+        break; // TODO remove
     }
 }
 
@@ -321,7 +325,7 @@ void FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c
         int j = P[k]->y;
         int e = P[k]->w;
     }
-    
+
     // long long sum = II[M - 1][N - 1];
     // long long sq_sum = IIsq[M - 1][N - 1];
     // double mean = (double)sum / (M * N);
