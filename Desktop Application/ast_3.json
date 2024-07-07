@@ -337,7 +337,8 @@
                     "type": "="
                   },
                   {
-                    "type": "integer"
+                    "type": "integer",
+                    "name": "5"
                   }
                 ]
               },
@@ -498,7 +499,8 @@
                 "type": "="
               },
               {
-                "type": "integer"
+                "type": "integer",
+                "name": "10"
               }
             ]
           }
@@ -518,7 +520,8 @@
                 "type": "="
               },
               {
-                "type": "integer"
+                "type": "integer",
+                "name": "20"
               }
             ]
           }
@@ -598,7 +601,8 @@
                 "type": "/="
               },
               {
-                "type": "integer"
+                "type": "integer",
+                "name": "5"
               }
             ]
           }
@@ -618,7 +622,8 @@
                 "type": "+="
               },
               {
-                "type": "integer"
+                "type": "integer",
+                "name": "5"
               }
             ]
           }
@@ -641,7 +646,8 @@
                 "type": "binary_operator",
                 "children": [
                   {
-                    "type": "integer"
+                    "type": "integer",
+                    "name": "5"
                   },
                   {
                     "type": "+"

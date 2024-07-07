@@ -142,12 +142,8 @@ def summarize_constants(constant_nodes):
     ]
 
 
-def process_class_node(node, indent=0, class_info={
-    "class_name": "",
-    "class_parameters": [],
-    "class_methods": []
-}
-):
+def process_class_node(node, indent=0, class_info=None
+                       ):
     if node['type'] == 'class_definition':
         for child in node['children']:
             process_class_node(child, indent, class_info)
@@ -156,7 +152,9 @@ def process_class_node(node, indent=0, class_info={
     elif node['type'] == 'identifier' and 'name' in node:
         class_info["class_name"] = node['name']
     elif node['type'] == 'function_definition':
-        class_info["class_methods"].append(process_function_node(node))
+        # class_info["class_methods"].append(process_function_node(node))
+        class_info.setdefault("class_methods", []).append(
+            process_function_node(node))
     elif node['type'] == 'block':
         for child in node['children']:
             process_class_node(child, indent, class_info)
@@ -231,13 +229,9 @@ def process_augmented_assignment(node):
 
 
 def process_expression(node):
-    if node['type'] == 'identifier':
+    if node['type'] in ['identifier', 'integer', 'string']:
         return node['name']
-    elif node['type'] == 'integer':
-        return "integer value"
-    elif node['type'] == 'string':
-        return node['name']
-    elif node['type'] == 'binary_operator':
+    if node['type'] == 'binary_operator':
         left_side = node['children'][0]
         operator = node['children'][1]['type']
         right_side = node['children'][2]
@@ -250,7 +244,7 @@ def process_expression(node):
             "operator": operator,
             "right_side": right_value
         }
-    elif node['type'] == 'call':
+    if node['type'] == 'call':
         function_name = node['children'][0]['name']
         arguments = [process_expression(
             arg) for arg in node['children'][1]['children'] if arg['type'] != '(' and arg['type'] != ')']
@@ -315,16 +309,18 @@ with open('code_nodes.json', 'w') as file:
 summary = []
 for node in code_nodes:
     if node['type'] == "class_definition":
-        class_info = process_class_node(node)
+        info = process_class_node(node, class_info={})
+        info['type'] = 'class_definition'
+        summary.append(dict(info))  # for deepcopy
 
-        summary.append(dict(class_info))  # for deepcopy
     elif node['type'] == "function_definition":
         method_info = process_function_node(node)
-        # print(method_info)
+        method_info['type'] = 'function_definition'
         summary.append(dict(method_info))
 
     elif node['type'] == "expression_statement":
         assignment_info = process_expression_statement(node)
+        assignment_info['type'] = 'expression_statement'
         summary.append(dict(assignment_info))
 
 

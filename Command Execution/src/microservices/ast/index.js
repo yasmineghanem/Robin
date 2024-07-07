@@ -7,8 +7,6 @@ const { FunctionDefinitionNode } = require("tree-sitter-python");
 // const { Request : expressReq, Response } = require('express');
 const fs = require("fs");
 
-
-
 require("dotenv").config({
   path: path.resolve(__dirname, "../../../.env"),
 }); // Load environment variables from .env
@@ -182,8 +180,14 @@ function buildReadableASTJSON(node, code) {
 
   // check if named, then add the name in the description
   if (node.isNamed) {
-    if (node.type === "identifier" || node.type.includes("string") ) {
+    console.log(node);
+    if (
+      ["identifier", "integer", "float"].includes(node.type) ||
+      node.type.includes("string")
+    ) {
+      console.log("aahi");
       result.name = code.slice(node.startIndex, node.endIndex);
+
       // result.description = `${node.type}`;
     }
   }

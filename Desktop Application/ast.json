@@ -1,39 +1,47 @@
 {
-  "aaa": [
+  "a": [
     {
-      "class_name": "Robin",
-      "class_parameters": [],
+      "class_name": "Person",
       "class_methods": [
         { "method_name": "__init__", "parameters": ["name"] },
         { "method_name": "say_hello", "parameters": [] },
-        { "method_name": "say_hello", "parameters": [] }
-      ]
+        { "method_name": "deepCopy", "parameters": [] }
+      ],
+      "type": "class_definition"
     },
     {
       "class_name": "Robin",
-      "class_parameters": [],
-      "class_methods": [
-        { "method_name": "__init__", "parameters": ["name"] },
-        { "method_name": "say_hello", "parameters": [] },
-        { "method_name": "say_hello", "parameters": [] }
-      ]
+      "class_methods": [{ "method_name": "say_hello", "parameters": [] }],
+      "type": "class_definition"
     },
-    { "method_name": "swap_variables", "parameters": ["x", "y"] },
+    {
+      "method_name": "swap_variables",
+      "parameters": ["x", "y"],
+      "type": "function_definition"
+    },
     {
       "left_side": "robin",
-      "right_side": { "function_name": "Robin", "arguments": "'Robin'" }
+      "right_side": { "function_name": "Robin", "arguments": "'Robin'" },
+      "type": "expression_statement"
     },
-    { "left_side": "x", "right_side": "integer value" },
-    { "left_side": "y", "right_side": "integer value" },
-    { "left_side": "x", "operation": "/=", "right_side": "integer value" },
-    { "left_side": "x", "operation": "+=", "right_side": "integer value" },
+    { "left_side": "x", "right_side": "10", "type": "expression_statement" },
+    { "left_side": "y", "right_side": "20", "type": "expression_statement" },
+    {
+      "left_side": "x",
+      "operation": "/=",
+      "right_side": "5",
+      "type": "expression_statement"
+    },
+    {
+      "left_side": "x",
+      "operation": "+=",
+      "right_side": "5",
+      "type": "expression_statement"
+    },
     {
       "left_side": "y",
-      "right_side": {
-        "left_side": "integer value",
-        "operator": "+",
-        "right_side": "x"
-      }
+      "right_side": { "left_side": "5", "operator": "+", "right_side": "x" },
+      "type": "expression_statement"
     }
   ]
 }
