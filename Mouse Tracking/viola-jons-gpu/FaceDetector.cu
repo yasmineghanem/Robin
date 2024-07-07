@@ -116,7 +116,6 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
             auto mat = this->evaluate_single_layer(fl, predictions, sl);
             Y = mat.false_positive_rate, B = mat.false_negative_rate;
             cout << "adaboost number :  " << l << ", layer number : " << Tl << ", shift: " << sl << " false positive rate : " << Y << ", false negative rate : " << B << endl;
-            break; // TODO remove
             if (Y <= Yl && B <= Bl)
             {
 
@@ -196,7 +195,6 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
         cout << "false positive rate: " << Y << endl;
         cout << "false negative rate: " << B << endl;
         this->save(folder);
-        break; // TODO remove
     }
 }
 

@@ -12,7 +12,7 @@ class AdaBoost
 public:
     int **X;
     int *y;
-    double *weights;
+    float *weights;
     pair<int, int> train_dim;
     vector<Learner *> learners;
     vector<double> alphas;

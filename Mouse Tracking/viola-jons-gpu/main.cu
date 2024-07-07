@@ -328,6 +328,8 @@ void process_local_frame(const char *file)
 }
 int main()
 {
+    cudaError_t err = cudaDeviceSetLimit(cudaLimitMallocHeapSize, 1048576ULL * 1024 * 3);
+
     // freopen("log.txt", "w", stdout);
     fill_features_info();
     mode current_mode = TRAIN_FACE_DETECTION;
@@ -345,7 +347,7 @@ int main()
     {
         // The targeted false positive and false negative rate for each layer
         // were set to 0.5 and 0.995
-        train_face_detector("face1", -1, 0.7, 0.7, 0.8);
+        train_face_detector("face1", -1, 0.2, 0.5, 0.2);
         test_face_detector_threads("face1", -1);
         return 0;
     }

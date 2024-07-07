@@ -561,6 +561,15 @@ Learner *decision_stump(int **&X, int *&y, double *&weights, int feature_index, 
     }
     update_learner(W_pos_below, W_neg_below, W_pos_above, W_neg_above, tot_wights, tau, curr_M, cur_stump);
     // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
+    // printf("error %f\n", cur_stump->error);
+    // printf("W_pos_below %f\n", W_pos_below);
+    // printf("W_neg_below %f\n", W_neg_below);
+    // printf("W_pos_above %f\n", W_pos_above);
+    // printf("W_neg_above %f\n", W_neg_above);
+    // printf("tau %f\n", tau);
+    // printf("curr_M %d\n", curr_M);
+    // printf("feature_index %d\n", feature_index);
+    // printf("tot_wights %f\n", tot_wights);
 
     return cur_stump;
 }
@@ -631,6 +640,8 @@ Learner *best_stump_threads(int **&X, int *&y, double *&weights, std::pair<int, 
         for (int f = start + 1; f < end; f++)
         {
             Learner *my_cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
+            // return my_best_stump; // TODO remove
+
             // std::lock_guard<std::mutex> lock(mtx);
             if (my_cur_stump->error < my_best_stump->error || (my_cur_stump->error == my_best_stump->error && my_cur_stump->margin > my_best_stump->margin))
             {
