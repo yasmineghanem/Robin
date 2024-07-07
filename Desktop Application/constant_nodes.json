@@ -1,0 +1,22 @@
+[
+    {
+        "type": "expression_statement",
+        "children": [
+            {
+                "type": "assignment",
+                "children": [
+                    {
+                        "type": "identifier",
+                        "name": "DEBOUNCE_TIME"
+                    },
+                    {
+                        "type": "="
+                    },
+                    {
+                        "type": "integer"
+                    }
+                ]
+            }
+        ]
+    }
+]

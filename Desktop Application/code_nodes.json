@@ -1,0 +1,1566 @@
+[
+    {
+        "type": "expression_statement",
+        "children": [
+            {
+                "type": "assignment",
+                "children": [
+                    {
+                        "type": "identifier",
+                        "name": "last_detection_time"
+                    },
+                    {
+                        "type": "="
+                    },
+                    {
+                        "type": "integer"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "type": "comment"
+    },
+    {
+        "type": "comment"
+    },
+    {
+        "type": "function_definition",
+        "children": [
+            {
+                "type": "def"
+            },
+            {
+                "type": "identifier",
+                "name": "wake_word_detection"
+            },
+            {
+                "type": "parameters",
+                "children": [
+                    {
+                        "type": "("
+                    },
+                    {
+                        "type": "identifier",
+                        "name": "args"
+                    },
+                    {
+                        "type": ","
+                    },
+                    {
+                        "type": "identifier",
+                        "name": "gui"
+                    },
+                    {
+                        "type": ")"
+                    }
+                ]
+            },
+            {
+                "type": ":"
+            },
+            {
+                "type": "block",
+                "children": [
+                    {
+                        "type": "expression_statement",
+                        "children": [
+                            {
+                                "type": "assignment",
+                                "children": [
+                                    {
+                                        "type": "identifier",
+                                        "name": "FORMAT"
+                                    },
+                                    {
+                                        "type": "="
+                                    },
+                                    {
+                                        "type": "attribute",
+                                        "children": [
+                                            {
+                                                "type": "identifier",
+                                                "name": "pyaudio"
+                                            },
+                                            {
+                                                "type": "."
+                                            },
+                                            {
+                                                "type": "identifier",
+                                                "name": "paInt16"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "expression_statement",
+                        "children": [
+                            {
+                                "type": "assignment",
+                                "children": [
+                                    {
+                                        "type": "identifier",
+                                        "name": "CHANNELS"
+                                    },
+                                    {
+                                        "type": "="
+                                    },
+                                    {
+                                        "type": "integer"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "expression_statement",
+                        "children": [
+                            {
+                                "type": "assignment",
+                                "children": [
+                                    {
+                                        "type": "identifier",
+                                        "name": "RATE"
+                                    },
+                                    {
+                                        "type": "="
+                                    },
+                                    {
+                                        "type": "integer"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "expression_statement",
+                        "children": [
+                            {
+                                "type": "assignment",
+                                "children": [
+                                    {
+                                        "type": "identifier",
+                                        "name": "CHUNK"
+                                    },
+                                    {
+                                        "type": "="
+                                    },
+                                    {
+                                        "type": "attribute",
+                                        "children": [
+                                            {
+                                                "type": "identifier",
+                                                "name": "args"
+                                            },
+                                            {
+                                                "type": "."
+                                            },
+                                            {
+                                                "type": "identifier",
+                                                "name": "chunk_size"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "expression_statement",
+                        "children": [
+                            {
+                                "type": "assignment",
+                                "children": [
+                                    {
+                                        "type": "identifier",
+                                        "name": "audio"
+                                    },
+                                    {
+                                        "type": "="
+                                    },
+                                    {
+                                        "type": "call",
+                                        "children": [
+                                            {
+                                                "type": "attribute",
+                                                "children": [
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "pyaudio"
+                                                    },
+                                                    {
+                                                        "type": "."
+                                                    },
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "PyAudio"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "argument_list",
+                                                "children": [
+                                                    {
+                                                        "type": "("
+                                                    },
+                                                    {
+                                                        "type": ")"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "expression_statement",
+                        "children": [
+                            {
+                                "type": "assignment",
+                                "children": [
+                                    {
+                                        "type": "identifier",
+                                        "name": "mic_stream"
+                                    },
+                                    {
+                                        "type": "="
+                                    },
+                                    {
+                                        "type": "call",
+                                        "children": [
+                                            {
+                                                "type": "attribute",
+                                                "children": [
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "audio"
+                                                    },
+                                                    {
+                                                        "type": "."
+                                                    },
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "open"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "argument_list",
+                                                "children": [
+                                                    {
+                                                        "type": "("
+                                                    },
+                                                    {
+                                                        "type": "keyword_argument",
+                                                        "children": [
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "format"
+                                                            },
+                                                            {
+                                                                "type": "="
+                                                            },
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "FORMAT"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": ","
+                                                    },
+                                                    {
+                                                        "type": "keyword_argument",
+                                                        "children": [
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "channels"
+                                                            },
+                                                            {
+                                                                "type": "="
+                                                            },
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "CHANNELS"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": ","
+                                                    },
+                                                    {
+                                                        "type": "keyword_argument",
+                                                        "children": [
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "rate"
+                                                            },
+                                                            {
+                                                                "type": "="
+                                                            },
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "RATE"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": ","
+                                                    },
+                                                    {
+                                                        "type": "keyword_argument",
+                                                        "children": [
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "input"
+                                                            },
+                                                            {
+                                                                "type": "="
+                                                            },
+                                                            {
+                                                                "type": "true"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": ","
+                                                    },
+                                                    {
+                                                        "type": "keyword_argument",
+                                                        "children": [
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "frames_per_buffer"
+                                                            },
+                                                            {
+                                                                "type": "="
+                                                            },
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "CHUNK"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": ")"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "if_statement",
+                        "children": [
+                            {
+                                "type": "if"
+                            },
+                            {
+                                "type": "comparison_operator",
+                                "children": [
+                                    {
+                                        "type": "attribute",
+                                        "children": [
+                                            {
+                                                "type": "identifier",
+                                                "name": "args"
+                                            },
+                                            {
+                                                "type": "."
+                                            },
+                                            {
+                                                "type": "identifier",
+                                                "name": "model_path"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "!="
+                                    },
+                                    {
+                                        "type": "string",
+                                        "name": "\"\""
+                                    }
+                                ]
+                            },
+                            {
+                                "type": ":"
+                            },
+                            {
+                                "type": "block",
+                                "children": [
+                                    {
+                                        "type": "expression_statement",
+                                        "children": [
+                                            {
+                                                "type": "assignment",
+                                                "children": [
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "owwModel"
+                                                    },
+                                                    {
+                                                        "type": "="
+                                                    },
+                                                    {
+                                                        "type": "call",
+                                                        "children": [
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "Model"
+                                                            },
+                                                            {
+                                                                "type": "argument_list",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "("
+                                                                    },
+                                                                    {
+                                                                        "type": "keyword_argument",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "identifier",
+                                                                                "name": "wakeword_models"
+                                                                            },
+                                                                            {
+                                                                                "type": "="
+                                                                            },
+                                                                            {
+                                                                                "type": "list",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "["
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "attribute",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "type": "identifier",
+                                                                                                "name": "args"
+                                                                                            },
+                                                                                            {
+                                                                                                "type": "."
+                                                                                            },
+                                                                                            {
+                                                                                                "type": "identifier",
+                                                                                                "name": "model_path"
+                                                                                            }
+                                                                                        ]
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "]"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "type": ","
+                                                                    },
+                                                                    {
+                                                                        "type": "keyword_argument",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "identifier",
+                                                                                "name": "inference_framework"
+                                                                            },
+                                                                            {
+                                                                                "type": "="
+                                                                            },
+                                                                            {
+                                                                                "type": "attribute",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "identifier",
+                                                                                        "name": "args"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "."
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "identifier",
+                                                                                        "name": "inference_framework"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "type": ")"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "else_clause",
+                                "children": [
+                                    {
+                                        "type": "else"
+                                    },
+                                    {
+                                        "type": ":"
+                                    },
+                                    {
+                                        "type": "block",
+                                        "children": [
+                                            {
+                                                "type": "expression_statement",
+                                                "children": [
+                                                    {
+                                                        "type": "assignment",
+                                                        "children": [
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "owwModel"
+                                                            },
+                                                            {
+                                                                "type": "="
+                                                            },
+                                                            {
+                                                                "type": "call",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "Model"
+                                                                    },
+                                                                    {
+                                                                        "type": "argument_list",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "("
+                                                                            },
+                                                                            {
+                                                                                "type": "keyword_argument",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "identifier",
+                                                                                        "name": "inference_framework"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "="
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "attribute",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "type": "identifier",
+                                                                                                "name": "args"
+                                                                                            },
+                                                                                            {
+                                                                                                "type": "."
+                                                                                            },
+                                                                                            {
+                                                                                                "type": "identifier",
+                                                                                                "name": "inference_framework"
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            {
+                                                                                "type": ")"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "expression_statement",
+                        "children": [
+                            {
+                                "type": "assignment",
+                                "children": [
+                                    {
+                                        "type": "identifier",
+                                        "name": "n_models"
+                                    },
+                                    {
+                                        "type": "="
+                                    },
+                                    {
+                                        "type": "call",
+                                        "children": [
+                                            {
+                                                "type": "identifier",
+                                                "name": "len"
+                                            },
+                                            {
+                                                "type": "argument_list",
+                                                "children": [
+                                                    {
+                                                        "type": "("
+                                                    },
+                                                    {
+                                                        "type": "call",
+                                                        "children": [
+                                                            {
+                                                                "type": "attribute",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "attribute",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "identifier",
+                                                                                "name": "owwModel"
+                                                                            },
+                                                                            {
+                                                                                "type": "."
+                                                                            },
+                                                                            {
+                                                                                "type": "identifier",
+                                                                                "name": "models"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "type": "."
+                                                                    },
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "keys"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": "argument_list",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "("
+                                                                    },
+                                                                    {
+                                                                        "type": ")"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": ")"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "while_statement",
+                        "children": [
+                            {
+                                "type": "while"
+                            },
+                            {
+                                "type": "true"
+                            },
+                            {
+                                "type": ":"
+                            },
+                            {
+                                "type": "block",
+                                "children": [
+                                    {
+                                        "type": "global_statement",
+                                        "children": [
+                                            {
+                                                "type": "global"
+                                            },
+                                            {
+                                                "type": "identifier",
+                                                "name": "last_detection_time"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "expression_statement",
+                                        "children": [
+                                            {
+                                                "type": "assignment",
+                                                "children": [
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "audio_data"
+                                                    },
+                                                    {
+                                                        "type": "="
+                                                    },
+                                                    {
+                                                        "type": "call",
+                                                        "children": [
+                                                            {
+                                                                "type": "attribute",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "np"
+                                                                    },
+                                                                    {
+                                                                        "type": "."
+                                                                    },
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "frombuffer"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": "argument_list",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "("
+                                                                    },
+                                                                    {
+                                                                        "type": "call",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "attribute",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "identifier",
+                                                                                        "name": "mic_stream"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "."
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "identifier",
+                                                                                        "name": "read"
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            {
+                                                                                "type": "argument_list",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "("
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "identifier",
+                                                                                        "name": "CHUNK"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": ")"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "type": ","
+                                                                    },
+                                                                    {
+                                                                        "type": "keyword_argument",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "identifier",
+                                                                                "name": "dtype"
+                                                                            },
+                                                                            {
+                                                                                "type": "="
+                                                                            },
+                                                                            {
+                                                                                "type": "attribute",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "identifier",
+                                                                                        "name": "np"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "."
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "identifier",
+                                                                                        "name": "int16"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "type": ")"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "expression_statement",
+                                        "children": [
+                                            {
+                                                "type": "assignment",
+                                                "children": [
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "prediction"
+                                                    },
+                                                    {
+                                                        "type": "="
+                                                    },
+                                                    {
+                                                        "type": "call",
+                                                        "children": [
+                                                            {
+                                                                "type": "attribute",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "owwModel"
+                                                                    },
+                                                                    {
+                                                                        "type": "."
+                                                                    },
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "predict"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": "argument_list",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "("
+                                                                    },
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "audio_data"
+                                                                    },
+                                                                    {
+                                                                        "type": ")"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "expression_statement",
+                                        "children": [
+                                            {
+                                                "type": "assignment",
+                                                "children": [
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "current_time"
+                                                    },
+                                                    {
+                                                        "type": "="
+                                                    },
+                                                    {
+                                                        "type": "call",
+                                                        "children": [
+                                                            {
+                                                                "type": "attribute",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "time"
+                                                                    },
+                                                                    {
+                                                                        "type": "."
+                                                                    },
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "time"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": "argument_list",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "("
+                                                                    },
+                                                                    {
+                                                                        "type": ")"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "if_statement",
+                                        "children": [
+                                            {
+                                                "type": "if"
+                                            },
+                                            {
+                                                "type": "boolean_operator",
+                                                "children": [
+                                                    {
+                                                        "type": "comparison_operator",
+                                                        "children": [
+                                                            {
+                                                                "type": "subscript",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "prediction"
+                                                                    },
+                                                                    {
+                                                                        "type": "["
+                                                                    },
+                                                                    {
+                                                                        "type": "string",
+                                                                        "name": "'hey_robin_2'"
+                                                                    },
+                                                                    {
+                                                                        "type": "]"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": ">"
+                                                            },
+                                                            {
+                                                                "type": "float"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "and"
+                                                    },
+                                                    {
+                                                        "type": "comparison_operator",
+                                                        "children": [
+                                                            {
+                                                                "type": "parenthesized_expression",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "("
+                                                                    },
+                                                                    {
+                                                                        "type": "binary_operator",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "identifier",
+                                                                                "name": "current_time"
+                                                                            },
+                                                                            {
+                                                                                "type": "-"
+                                                                            },
+                                                                            {
+                                                                                "type": "identifier",
+                                                                                "name": "last_detection_time"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "type": ")"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": ">"
+                                                            },
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "DEBOUNCE_TIME"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": ":"
+                                            },
+                                            {
+                                                "type": "block",
+                                                "children": [
+                                                    {
+                                                        "type": "expression_statement",
+                                                        "children": [
+                                                            {
+                                                                "type": "call",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "print"
+                                                                    },
+                                                                    {
+                                                                        "type": "argument_list",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "("
+                                                                            },
+                                                                            {
+                                                                                "type": "string",
+                                                                                "name": "\"Wake word detected!\""
+                                                                            },
+                                                                            {
+                                                                                "type": ")"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "expression_statement",
+                                                        "children": [
+                                                            {
+                                                                "type": "assignment",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "last_detection_time"
+                                                                    },
+                                                                    {
+                                                                        "type": "="
+                                                                    },
+                                                                    {
+                                                                        "type": "identifier",
+                                                                        "name": "current_time"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "try_statement",
+                                                        "children": [
+                                                            {
+                                                                "type": "try"
+                                                            },
+                                                            {
+                                                                "type": ":"
+                                                            },
+                                                            {
+                                                                "type": "comment"
+                                                            },
+                                                            {
+                                                                "type": "block",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "if_statement",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "if"
+                                                                            },
+                                                                            {
+                                                                                "type": "call",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "attribute",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "type": "identifier",
+                                                                                                "name": "gui"
+                                                                                            },
+                                                                                            {
+                                                                                                "type": "."
+                                                                                            },
+                                                                                            {
+                                                                                                "type": "identifier",
+                                                                                                "name": "activate_robin"
+                                                                                            }
+                                                                                        ]
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "argument_list",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "type": "("
+                                                                                            },
+                                                                                            {
+                                                                                                "type": ")"
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            {
+                                                                                "type": ":"
+                                                                            },
+                                                                            {
+                                                                                "type": "comment"
+                                                                            },
+                                                                            {
+                                                                                "type": "block",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "expression_statement",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "type": "assignment",
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "type": "identifier",
+                                                                                                        "name": "engine"
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "="
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "call",
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "type": "attribute",
+                                                                                                                "children": [
+                                                                                                                    {
+                                                                                                                        "type": "identifier",
+                                                                                                                        "name": "pyttsx3"
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": "."
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": "identifier",
+                                                                                                                        "name": "init"
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "argument_list",
+                                                                                                                "children": [
+                                                                                                                    {
+                                                                                                                        "type": "("
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": ")"
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "comment"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "expression_statement",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "type": "assignment",
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "type": "identifier",
+                                                                                                        "name": "voices"
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "="
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "call",
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "type": "attribute",
+                                                                                                                "children": [
+                                                                                                                    {
+                                                                                                                        "type": "identifier",
+                                                                                                                        "name": "engine"
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": "."
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": "identifier",
+                                                                                                                        "name": "getProperty"
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "argument_list",
+                                                                                                                "children": [
+                                                                                                                    {
+                                                                                                                        "type": "("
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": "string",
+                                                                                                                        "name": "\"voices\""
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": ")"
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "expression_statement",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "type": "call",
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "type": "attribute",
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "type": "identifier",
+                                                                                                                "name": "engine"
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "."
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "identifier",
+                                                                                                                "name": "setProperty"
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "argument_list",
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "type": "("
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "string",
+                                                                                                                "name": "\"voice\""
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": ","
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "attribute",
+                                                                                                                "children": [
+                                                                                                                    {
+                                                                                                                        "type": "subscript",
+                                                                                                                        "children": [
+                                                                                                                            {
+                                                                                                                                "type": "identifier",
+                                                                                                                                "name": "voices"
+                                                                                                                            },
+                                                                                                                            {
+                                                                                                                                "type": "["
+                                                                                                                            },
+                                                                                                                            {
+                                                                                                                                "type": "integer"
+                                                                                                                            },
+                                                                                                                            {
+                                                                                                                                "type": "]"
+                                                                                                                            }
+                                                                                                                        ]
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": "."
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": "identifier",
+                                                                                                                        "name": "id"
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": ")"
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "comment"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "comment"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "expression_statement",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "type": "call",
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "type": "attribute",
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "type": "identifier",
+                                                                                                                "name": "engine"
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "."
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "identifier",
+                                                                                                                "name": "say"
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "argument_list",
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "type": "("
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "subscript",
+                                                                                                                "children": [
+                                                                                                                    {
+                                                                                                                        "type": "identifier",
+                                                                                                                        "name": "responses"
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": "["
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": "call",
+                                                                                                                        "children": [
+                                                                                                                            {
+                                                                                                                                "type": "attribute",
+                                                                                                                                "children": [
+                                                                                                                                    {
+                                                                                                                                        "type": "attribute",
+                                                                                                                                        "children": [
+                                                                                                                                            {
+                                                                                                                                                "type": "identifier",
+                                                                                                                                                "name": "np"
+                                                                                                                                            },
+                                                                                                                                            {
+                                                                                                                                                "type": "."
+                                                                                                                                            },
+                                                                                                                                            {
+                                                                                                                                                "type": "identifier",
+                                                                                                                                                "name": "random"
+                                                                                                                                            }
+                                                                                                                                        ]
+                                                                                                                                    },
+                                                                                                                                    {
+                                                                                                                                        "type": "."
+                                                                                                                                    },
+                                                                                                                                    {
+                                                                                                                                        "type": "identifier",
+                                                                                                                                        "name": "randint"
+                                                                                                                                    }
+                                                                                                                                ]
+                                                                                                                            },
+                                                                                                                            {
+                                                                                                                                "type": "argument_list",
+                                                                                                                                "children": [
+                                                                                                                                    {
+                                                                                                                                        "type": "("
+                                                                                                                                    },
+                                                                                                                                    {
+                                                                                                                                        "type": "integer"
+                                                                                                                                    },
+                                                                                                                                    {
+                                                                                                                                        "type": ","
+                                                                                                                                    },
+                                                                                                                                    {
+                                                                                                                                        "type": "call",
+                                                                                                                                        "children": [
+                                                                                                                                            {
+                                                                                                                                                "type": "identifier",
+                                                                                                                                                "name": "len"
+                                                                                                                                            },
+                                                                                                                                            {
+                                                                                                                                                "type": "argument_list",
+                                                                                                                                                "children": [
+                                                                                                                                                    {
+                                                                                                                                                        "type": "("
+                                                                                                                                                    },
+                                                                                                                                                    {
+                                                                                                                                                        "type": "identifier",
+                                                                                                                                                        "name": "responses"
+                                                                                                                                                    },
+                                                                                                                                                    {
+                                                                                                                                                        "type": ")"
+                                                                                                                                                    }
+                                                                                                                                                ]
+                                                                                                                                            }
+                                                                                                                                        ]
+                                                                                                                                    },
+                                                                                                                                    {
+                                                                                                                                        "type": ")"
+                                                                                                                                    }
+                                                                                                                                ]
+                                                                                                                            }
+                                                                                                                        ]
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "type": "]"
+                                                                                                                    }
+                                                                                                                ]
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": ")"
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "expression_statement",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "type": "call",
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "type": "attribute",
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "type": "identifier",
+                                                                                                                "name": "engine"
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "."
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": "identifier",
+                                                                                                                "name": "runAndWait"
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "argument_list",
+                                                                                                        "children": [
+                                                                                                            {
+                                                                                                                "type": "("
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type": ")"
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "type": "comment"
+                                                                    },
+                                                                    {
+                                                                        "type": "comment"
+                                                                    },
+                                                                    {
+                                                                        "type": "comment"
+                                                                    },
+                                                                    {
+                                                                        "type": "comment"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": "except_clause",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "except"
+                                                                    },
+                                                                    {
+                                                                        "type": "as_pattern",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "identifier",
+                                                                                "name": "Exception"
+                                                                            },
+                                                                            {
+                                                                                "type": "as"
+                                                                            },
+                                                                            {
+                                                                                "type": "as_pattern_target",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "identifier",
+                                                                                        "name": "e"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "type": ":"
+                                                                    },
+                                                                    {
+                                                                        "type": "block",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "expression_statement",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "call",
+                                                                                        "children": [
+                                                                                            {
+                                                                                                "type": "identifier",
+                                                                                                "name": "print"
+                                                                                            },
+                                                                                            {
+                                                                                                "type": "argument_list",
+                                                                                                "children": [
+                                                                                                    {
+                                                                                                        "type": "("
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "string",
+                                                                                                        "name": "f\"Error in app.after: {e}\""
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": ")"
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
