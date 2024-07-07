@@ -35,7 +35,7 @@ public:
     matrices evaluate_single_layer(AdaBoost *fl, int *&predictions, double sl);
     void remove_negative_train_data();
     void remove_negative_val_data();
-    int predict(int **&img, int size);
+    int predict(int **&img, int size, double devide = 1.0);
     void save(const string folder);
     void load(const string folder);
     // M is the number of rows "height"

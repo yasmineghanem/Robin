@@ -197,13 +197,13 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
     }
 }
 
-int FaceDetector::predict(int **&img, int size)
+int FaceDetector::predict(int **&img, int size, double devide)
 {
 
     for (int i = 0; i < this->cascade.size(); i++)
     {
         // if cascade fined it is negative then return
-        if (this->cascade[i]->predict(img, size, this->shif[i]) == -1)
+        if (this->cascade[i]->predict(img, size, this->shif[i], devide) == -1)
         {
             return -1;
         }
@@ -313,7 +313,7 @@ void FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c
         }
     }
     std::cout << "P size before filtter: " << P.size() << endl;
-    std::cout << "total pizels of windows : " << tot << endl;
+    std::cout << "total pixels of windows : " << tot << endl;
     // // Cascade layers
     for (int k = 0; k < P.size(); k++)
     {
@@ -321,6 +321,19 @@ void FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c
         int j = P[k]->y;
         int e = P[k]->w;
     }
+    
+    // long long sum = II[M - 1][N - 1];
+    // long long sq_sum = IIsq[M - 1][N - 1];
+    // double mean = (double)sum / (M * N);
+    // double variance = ((long double)sq_sum / (M * N)) - (mean * mean);
+    // double stddev = std::sqrt(variance);
+    // for (int x = 0; x < M; ++x)
+    // {
+    //     for (int y = 0; y < N; ++y)
+    //     {
+    //         img[x][y] = (img[x][y] - mean) / stddev;
+    //     }
+    // }
 
     std::vector<window *> newP;
     for (const auto &win : P)
@@ -338,7 +351,6 @@ void FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c
 
         if (stddev > 1)
         {
-            
             int **windowImg = new int *[e];
             for (int x = 0; x < e; ++x)
             {
@@ -347,6 +359,8 @@ void FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c
             int prediction = this->predict(windowImg, e);
             if (prediction == 1)
                 newP.push_back(win);
+            else
+                delete win;
 
             delete[] windowImg;
         }
@@ -358,7 +372,7 @@ void FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c
         tot += P[i]->w * P[i]->h;
     }
     cout << "P size after filtter: " << P.size() << endl;
-    cout << "total pizels of windows after filtter: " << tot << endl;
+    cout << "total pixels of windows after filtter: " << tot << endl;
 
     drawGreenRectangles(color_img, M, N, P);
     for (int i = 0; i < M; ++i)

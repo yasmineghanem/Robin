@@ -951,8 +951,8 @@ void load_image(const std::string &path, int ***&color_img, int **&img, int &M, 
             color_img[i][j][0] = data[index];
             color_img[i][j][1] = data[index + 1];
             color_img[i][j][2] = data[index + 2];
-            img[i][j] = static_cast<int>(0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2]);
-            // img[i][j] = static_cast<int>(data[index] / 3.0 + data[index + 1] / 3.0 + data[index + 2] / 3.0);
+            // img[i][j] = static_cast<int>(0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2]);
+            img[i][j] = static_cast<int>(data[index] / 3.0 + data[index + 1] / 3.0 + data[index + 2] / 3.0);
         }
     }
     stbi_image_free(data);

@@ -103,12 +103,12 @@ int AdaBoost::predict(int *&X, double sl)
 }
 
 // predict using the 2D image,used in the testing phase
-int AdaBoost::predict(int **&X, int size, double sl)
+int AdaBoost::predict(int **&X, int size, double sl, double devide)
 {
     double sum = 0;
     for (size_t i = 0; i < this->learners.size(); ++i)
     {
-        sum += this->alphas[i] * (this->learners[i]->predict(X, size) + sl);
+        sum += this->alphas[i] * (this->learners[i]->predict(X, size, devide) + sl);
     }
     return sum >= 0.0 ? 1 : -1;
 }

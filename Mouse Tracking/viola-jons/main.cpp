@@ -16,6 +16,11 @@
 #include <future>
 
 using namespace std;
+std::string train_pos_path = "imgs/face_data_24_24_old/trainset/faces";
+std::string train_neg_path = "imgs/face_data_24_24_old/trainset/non-faces";
+std::string test_pos_path = "imgs/face_data_24_24_old/testset/faces";
+std::string test_neg_path = "imgs/face_data_24_24_old/testset/non-faces";
+
 enum mode
 {
     TRAIN_ADABOOST = 1,
@@ -104,15 +109,11 @@ void test_face_detector(const char *folder, int num);
 void train_face_detector(const char *folder, int num, double Yo, double Yl, double Bl)
 {
     auto start_time = std::chrono::high_resolution_clock::now();
-    std::string train_pos_path = "imgs/face_data_24_24/trainset/faces";
-    std::string train_neg_path = "imgs/face_data_24_24/trainset/non-faces";
+
     int **X_train;
     int *Y_train;
     int ***X_val;
     int *Y_val;
-
-    std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
-    std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
     int ***pos_test;
     int ***neg_test;
 
@@ -156,8 +157,6 @@ void test_face_detector(const char *folder, int num)
 
     FaceDetector classifier;
     classifier.load(folder);
-    std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
-    std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
     int ***pos_test;
     int ***neg_test;
     int pos_count = load_gray_images(test_pos_path, pos_test, num);
@@ -199,8 +198,6 @@ void test_face_detector_threads(const char *folder, int num)
 {
     FaceDetector classifier;
     classifier.load(folder);
-    std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
-    std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
     int ***pos_test;
     int ***neg_test;
     int pos_count = load_gray_images(test_pos_path, pos_test, num);
@@ -333,7 +330,7 @@ int main()
 {
     // freopen("log.txt", "w", stdout);
     fill_features_info();
-    mode current_mode = PROCESS_LOCAL_FRAME;
+    mode current_mode = TRAIN_FACE_DETECTION;
     if (current_mode == TRAIN_ADABOOST)
     {
         // train_ADA_BOOST("model2.txt", 10, 1000);
@@ -348,14 +345,14 @@ int main()
     {
         // The targeted false positive and false negative rate for each layer
         // were set to 0.5 and 0.995
-        train_face_detector("face1", -1, 0.1, 0.15, 0.1);
+        train_face_detector("face1", -1, 0.9, 0.9, 0.9);
         test_face_detector_threads("face1", -1);
         return 0;
     }
     else if (current_mode == TEST_FACE_DETECTION)
     {
         auto start = std::chrono::high_resolution_clock::now();
-        test_face_detector_threads("face1_test", -1);
+        test_face_detector_threads("face1", -1);
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> duration = end - start;
         std::cout << "Testing time: " << duration.count() << " s\n";

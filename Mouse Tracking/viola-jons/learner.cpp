@@ -25,9 +25,9 @@ int Learner::predict(int *&X)
 {
     return this->polarity * ((X[this->feature_index] >= this->threshold) ? 1 : -1);
 }
-int Learner::predict(int **&X, int size)
+int Learner::predict(int **&X, int size, double devide)
 {
     int index = this->feature_index;
-    return this->polarity * (haar_feature_scaling(X, size, features_info[index].feature_type, features_info[index].i, features_info[index].j, features_info[index].w, features_info[index].h) >= this->threshold ? 1 : -1);
+    return this->polarity * ((haar_feature_scaling(X, size, features_info[index].feature_type, features_info[index].i, features_info[index].j, features_info[index].w, features_info[index].h) / devide) >= this->threshold ? 1 : -1);
     return 0;
 }

@@ -14,7 +14,7 @@ public:
     Learner(double threshold, int polarity, double error, double margin, int feature_index);
     Learner();
     int predict(int *&X);
-    int predict(int **&X, int size);
+    int predict(int **&X, int size, double devide = 1.0);
 };
 
 #endif
