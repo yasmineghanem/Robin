@@ -8,6 +8,7 @@
 #include "learner.h"
 #include <tuple>
 #include "const.h"
+#include <cmath>
 using namespace std;
 
 class FaceDetector
@@ -41,6 +42,12 @@ public:
     // M is the number of rows "height"
     // N is the number of columns "width"
     void process(int **&img, int ***&color_img, int M, int N, double c = 1.5);
+    // test on the variance of the window, test on the prediction of the model on the window
+    bool window_test1(window *win, int **II, long long **IIsq);
+
+    // test on the connected components of the window,and overlaped windows
+    // the min number of connected windws in the connected componnet to pretect there is face in this commponent
+    void window_test2(vector<window *> &windows, int **&img, int M, int N, int min_confidence = 3);
 };
 
 #endif

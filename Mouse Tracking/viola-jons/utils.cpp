@@ -270,16 +270,17 @@ void validate(int &start_i, int &start_j, int &end_i, int &end_j, int size)
 int haar_feature_scaling(int **&image, int size, const char &feature_type, int i, int j, int w, int h)
 {
     int e = size;
-    // assert(e >= 24);
 
     auto round_nearest_integer = [](double z)
     {
         return int(round(z));
     };
 
-    if (feature_type == 'a')
+    switch (feature_type)
     {
-        double a = 2 * w * h;
+    case 'a':
+    {
+        int a = 2 * w * h;
         i = round_nearest_integer(i * e / 24);
         j = round_nearest_integer(j * e / 24);
         h = round_nearest_integer(h * e / 24);
@@ -306,10 +307,11 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
         int S2 = sum_region(image, start_i, start_j, end_i, end_j);
 
         return (S1 - S2) * a / (2 * w * h);
+        break;
     }
-    else if (feature_type == 'b')
+    case 'b':
     {
-        double a = 3 * w * h;
+        int a = 3 * w * h;
         i = round_nearest_integer(i * e / 24);
         j = round_nearest_integer(j * e / 24);
         h = round_nearest_integer(h * e / 24);
@@ -340,10 +342,11 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
         int S3 = sum_region(image, start_i, start_j, end_i, end_j);
 
         return (S1 - S2 + S3) * a / (3 * w * h);
+        break;
     }
-    else if (feature_type == 'c')
+    case 'c':
     {
-        double a = 2 * w * h;
+        int a = 2 * w * h;
         i = round_nearest_integer(i * e / 24);
         j = round_nearest_integer(j * e / 24);
         w = round_nearest_integer(w * e / 24);
@@ -370,10 +373,11 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
         int S2 = sum_region(image, start_i, start_j, end_i, end_j);
 
         return (S1 - S2) * a / (2 * w * h);
+        break;
     }
-    else if (feature_type == 'd')
+    case 'd':
     {
-        double a = 3 * w * h;
+        int a = 3 * w * h;
         i = round_nearest_integer(i * e / 24);
         j = round_nearest_integer(j * e / 24);
         w = round_nearest_integer(w * e / 24);
@@ -405,10 +409,11 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
         validate(start_i, start_j, end_i, end_j, e);
         int S3 = sum_region(image, start_i, start_j, end_i, end_j);
         return (S1 - S2 + S3) * a / (3 * w * h);
+        break;
     }
-    else if (feature_type == 'e')
+    case 'e':
     {
-        double a = 4 * w * h;
+        int a = 4 * w * h;
         i = round_nearest_integer(i * e / 24);
         j = round_nearest_integer(j * e / 24);
         int temp_w = 0; // max(k for k in range(1, round_nearest_integer(1 + 2 * w * e / 24) // 2 + 1) if 2 * k <= e - j + 1)
@@ -452,11 +457,12 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
         validate(start_i, start_j, end_i, end_j, e);
         int S4 = sum_region(image, start_i, start_j, end_i, end_j);
         return (S1 - S2 - S3 + S4) * a / (4 * w * h);
+        break;
     }
-
-    else
-    {
-        throw invalid_argument("Unknown feature type");
+    
+    default:
+        return 0;
+        break;
     }
 }
 
@@ -640,7 +646,6 @@ Learner *best_stump_threads(int **&X, int *&y, double *&weights, std::pair<int, 
         for (int f = start + 1; f < end; f++)
         {
             Learner *my_cur_stump = decision_stump(X, y, weights, f, sorted_indices, X_sorted, y_sorted, weights_sorted, pos_weights_prefix, neg_weights_prefix, dim);
-            // return my_best_stump; // TODO remove
 
             // std::lock_guard<std::mutex> lock(mtx);
             if (my_cur_stump->error < my_best_stump->error || (my_cur_stump->error == my_best_stump->error && my_cur_stump->margin > my_best_stump->margin))
@@ -897,12 +902,15 @@ matrices calc_acuracy_metrices(int *Y_test, int *predeictions, int count)
     int total_negatives = true_negative + false_positive;
     double false_positive_rate = total_negatives > 0 ? static_cast<double>(false_positive) / total_negatives : 0;
     double false_negative_rate = total_positives > 0 ? static_cast<double>(false_negative) / total_positives : 0;
-
+    double precision = true_positive > 0 ? static_cast<double>(true_positive) / (true_positive + false_positive) : 0;
+    double recall = true_positive > 0 ? static_cast<double>(true_positive) / (true_positive + false_negative) : 0;
     matrices m;
     m.accuracy = accuracy;
     m.error_rate = error_rate;
     m.false_positive_rate = false_positive_rate;
     m.false_negative_rate = false_negative_rate;
+    m.precision = precision;
+    m.recall = recall;
     return m;
 }
 

@@ -15,6 +15,8 @@ typedef struct matrices
     double error_rate;
     double false_positive_rate;
     double false_negative_rate;
+    double precision;
+    double recall;
 } matrices;
 
 template <typename T>

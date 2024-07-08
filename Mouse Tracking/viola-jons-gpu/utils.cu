@@ -465,11 +465,7 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
         int S4 = sum_region(image, start_i, start_j, end_i, end_j);
         return (S1 - S2 - S3 + S4) * a / (4 * w * h);
     }
-
-    else
-    {
-        throw invalid_argument("Unknown feature type");
-    }
+    return 0;
 }
 
 void print_time()

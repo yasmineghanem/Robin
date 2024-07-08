@@ -16,10 +16,10 @@
 #include <future>
 
 using namespace std;
-std::string train_pos_path = "imgs/face_data_24_24/trainset/faces";
-std::string train_neg_path = "imgs/face_data_24_24/trainset/non-faces";
-std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
-std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
+std::string train_pos_path = "imgs/face_data_24_24_old/trainset/faces";
+std::string train_neg_path = "imgs/face_data_24_24_old/trainset/non-faces";
+std::string test_pos_path = "imgs/face_data_24_24_old/testset/faces";
+std::string test_neg_path = "imgs/face_data_24_24_old/testset/non-faces";
 
 enum mode
 {
@@ -267,7 +267,8 @@ void test_face_detector_threads(const char *folder, int num)
     std::cout << "Error rate: " << mat.error_rate << std::endl;
     std::cout << "False positive rate: " << mat.false_positive_rate << std::endl;
     std::cout << "False negative rate: " << mat.false_negative_rate << std::endl;
-
+    std::cout << "Percetion: " << mat.precision << std::endl;
+    std::cout << "Recall: " << mat.recall << std::endl;
     for (int i = 0; i < pos_count; ++i)
     {
         for (int j = 0; j < 24; ++j)
@@ -295,7 +296,7 @@ void test_face_detector_threads(const char *folder, int num)
 void process_local_frame(const char *file)
 {
     FaceDetector classifier;
-    classifier.load("face1_test");
+    classifier.load("face1");
     int **II = new int *[24];
     for (int i = 0; i < 24; i++)
     {
@@ -330,7 +331,7 @@ int main()
 {
     // freopen("log.txt", "w", stdout);
     fill_features_info();
-    mode current_mode = TRAIN_FACE_DETECTION;
+    mode current_mode = TEST_FACE_DETECTION;
     if (current_mode == TRAIN_ADABOOST)
     {
         // train_ADA_BOOST("model2.txt", 10, 1000);
@@ -361,6 +362,8 @@ int main()
     else if (current_mode == PROCESS_LOCAL_FRAME)
     {
         process_local_frame("imgs/img1.jpg");
+        // process_local_frame("test.png");
+
         return 0;
     }
 
