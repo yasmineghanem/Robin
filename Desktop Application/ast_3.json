@@ -3,6 +3,699 @@
     "type": "module",
     "children": [
       {
+        "type": "class_definition",
+        "children": [
+          {
+            "type": "class"
+          },
+          {
+            "type": "identifier",
+            "name": "Person"
+          },
+          {
+            "type": ":"
+          },
+          {
+            "type": "block",
+            "children": [
+              {
+                "type": "function_definition",
+                "children": [
+                  {
+                    "type": "def"
+                  },
+                  {
+                    "type": "identifier",
+                    "name": "__init__"
+                  },
+                  {
+                    "type": "parameters",
+                    "children": [
+                      {
+                        "type": "(",
+                        "name": "("
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "self"
+                      },
+                      {
+                        "type": ","
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "name"
+                      },
+                      {
+                        "type": ")",
+                        "name": ")"
+                      }
+                    ]
+                  },
+                  {
+                    "type": ":"
+                  },
+                  {
+                    "type": "block",
+                    "children": [
+                      {
+                        "type": "expression_statement",
+                        "children": [
+                          {
+                            "type": "assignment",
+                            "children": [
+                              {
+                                "type": "attribute",
+                                "children": [
+                                  {
+                                    "type": "identifier",
+                                    "name": "self"
+                                  },
+                                  {
+                                    "type": "."
+                                  },
+                                  {
+                                    "type": "identifier",
+                                    "name": "name"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "=",
+                                "name": "="
+                              },
+                              {
+                                "type": "identifier",
+                                "name": "name"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "function_definition",
+                "children": [
+                  {
+                    "type": "def"
+                  },
+                  {
+                    "type": "identifier",
+                    "name": "say_hello"
+                  },
+                  {
+                    "type": "parameters",
+                    "children": [
+                      {
+                        "type": "(",
+                        "name": "("
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "self"
+                      },
+                      {
+                        "type": ")",
+                        "name": ")"
+                      }
+                    ]
+                  },
+                  {
+                    "type": ":"
+                  },
+                  {
+                    "type": "block",
+                    "children": [
+                      {
+                        "type": "expression_statement",
+                        "children": [
+                          {
+                            "type": "call",
+                            "children": [
+                              {
+                                "type": "identifier",
+                                "name": "print"
+                              },
+                              {
+                                "type": "argument_list",
+                                "children": [
+                                  {
+                                    "type": "(",
+                                    "name": "("
+                                  },
+                                  {
+                                    "type": "string",
+                                    "name": "f'Hello, my name is {self.name}'"
+                                  },
+                                  {
+                                    "type": ")",
+                                    "name": ")"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "function_definition",
+                "children": [
+                  {
+                    "type": "def"
+                  },
+                  {
+                    "type": "identifier",
+                    "name": "deepCopy"
+                  },
+                  {
+                    "type": "parameters",
+                    "children": [
+                      {
+                        "type": "(",
+                        "name": "("
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "self"
+                      },
+                      {
+                        "type": ")",
+                        "name": ")"
+                      }
+                    ]
+                  },
+                  {
+                    "type": ":"
+                  },
+                  {
+                    "type": "block",
+                    "children": [
+                      {
+                        "type": "pass_statement",
+                        "children": [
+                          {
+                            "type": "pass"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "class_definition",
+        "children": [
+          {
+            "type": "class"
+          },
+          {
+            "type": "identifier",
+            "name": "Robin"
+          },
+          {
+            "type": "argument_list",
+            "children": [
+              {
+                "type": "(",
+                "name": "("
+              },
+              {
+                "type": "identifier",
+                "name": "Person"
+              },
+              {
+                "type": ")",
+                "name": ")"
+              }
+            ]
+          },
+          {
+            "type": ":"
+          },
+          {
+            "type": "block",
+            "children": [
+              {
+                "type": "function_definition",
+                "children": [
+                  {
+                    "type": "def"
+                  },
+                  {
+                    "type": "identifier",
+                    "name": "say_hello"
+                  },
+                  {
+                    "type": "parameters",
+                    "children": [
+                      {
+                        "type": "(",
+                        "name": "("
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "self"
+                      },
+                      {
+                        "type": ")",
+                        "name": ")"
+                      }
+                    ]
+                  },
+                  {
+                    "type": ":"
+                  },
+                  {
+                    "type": "block",
+                    "children": [
+                      {
+                        "type": "expression_statement",
+                        "children": [
+                          {
+                            "type": "call",
+                            "children": [
+                              {
+                                "type": "identifier",
+                                "name": "print"
+                              },
+                              {
+                                "type": "argument_list",
+                                "children": [
+                                  {
+                                    "type": "(",
+                                    "name": "("
+                                  },
+                                  {
+                                    "type": "string",
+                                    "name": "f'Hello, my name is {self.name} and I am a Robin'"
+                                  },
+                                  {
+                                    "type": ")",
+                                    "name": ")"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "function_definition",
+        "children": [
+          {
+            "type": "def"
+          },
+          {
+            "type": "identifier",
+            "name": "swap_variables"
+          },
+          {
+            "type": "parameters",
+            "children": [
+              {
+                "type": "(",
+                "name": "("
+              },
+              {
+                "type": "identifier",
+                "name": "x"
+              },
+              {
+                "type": ","
+              },
+              {
+                "type": "default_parameter",
+                "children": [
+                  {
+                    "type": "identifier",
+                    "name": "y"
+                  },
+                  {
+                    "type": "=",
+                    "name": "="
+                  },
+                  {
+                    "type": "integer",
+                    "name": "5"
+                  }
+                ]
+              },
+              {
+                "type": ")",
+                "name": ")"
+              }
+            ]
+          },
+          {
+            "type": ":"
+          },
+          {
+            "type": "block",
+            "children": [
+              {
+                "type": "expression_statement",
+                "children": [
+                  {
+                    "type": "assignment",
+                    "children": [
+                      {
+                        "type": "identifier",
+                        "name": "temp"
+                      },
+                      {
+                        "type": "=",
+                        "name": "="
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "x"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "expression_statement",
+                "children": [
+                  {
+                    "type": "assignment",
+                    "children": [
+                      {
+                        "type": "identifier",
+                        "name": "x"
+                      },
+                      {
+                        "type": "=",
+                        "name": "="
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "y"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "expression_statement",
+                "children": [
+                  {
+                    "type": "assignment",
+                    "children": [
+                      {
+                        "type": "identifier",
+                        "name": "y"
+                      },
+                      {
+                        "type": "=",
+                        "name": "="
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "temp"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "return_statement",
+                "children": [
+                  {
+                    "type": "return"
+                  },
+                  {
+                    "type": "expression_list",
+                    "children": [
+                      {
+                        "type": "identifier",
+                        "name": "x"
+                      },
+                      {
+                        "type": ","
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "y"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "expression_statement",
+        "children": [
+          {
+            "type": "assignment",
+            "children": [
+              {
+                "type": "identifier",
+                "name": "robin"
+              },
+              {
+                "type": "=",
+                "name": "="
+              },
+              {
+                "type": "call",
+                "children": [
+                  {
+                    "type": "identifier",
+                    "name": "Robin"
+                  },
+                  {
+                    "type": "argument_list",
+                    "children": [
+                      {
+                        "type": "(",
+                        "name": "("
+                      },
+                      {
+                        "type": "string",
+                        "name": "'Robin'"
+                      },
+                      {
+                        "type": ")",
+                        "name": ")"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "expression_statement",
+        "children": [
+          {
+            "type": "assignment",
+            "children": [
+              {
+                "type": "identifier",
+                "name": "x"
+              },
+              {
+                "type": "=",
+                "name": "="
+              },
+              {
+                "type": "integer",
+                "name": "10"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "expression_statement",
+        "children": [
+          {
+            "type": "assignment",
+            "children": [
+              {
+                "type": "identifier",
+                "name": "y"
+              },
+              {
+                "type": "=",
+                "name": "="
+              },
+              {
+                "type": "integer",
+                "name": "20"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "expression_statement",
+        "children": [
+          {
+            "type": "assignment",
+            "children": [
+              {
+                "type": "pattern_list",
+                "children": [
+                  {
+                    "type": "identifier",
+                    "name": "x"
+                  },
+                  {
+                    "type": ","
+                  },
+                  {
+                    "type": "identifier",
+                    "name": "y"
+                  }
+                ]
+              },
+              {
+                "type": "=",
+                "name": "="
+              },
+              {
+                "type": "call",
+                "children": [
+                  {
+                    "type": "identifier",
+                    "name": "swap_variables"
+                  },
+                  {
+                    "type": "argument_list",
+                    "children": [
+                      {
+                        "type": "(",
+                        "name": "("
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "x"
+                      },
+                      {
+                        "type": ","
+                      },
+                      {
+                        "type": "identifier",
+                        "name": "y"
+                      },
+                      {
+                        "type": ")",
+                        "name": ")"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "expression_statement",
+        "children": [
+          {
+            "type": "augmented_assignment",
+            "children": [
+              {
+                "type": "identifier",
+                "name": "x"
+              },
+              {
+                "type": "/=",
+                "name": "/="
+              },
+              {
+                "type": "integer",
+                "name": "5"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "expression_statement",
+        "children": [
+          {
+            "type": "augmented_assignment",
+            "children": [
+              {
+                "type": "identifier",
+                "name": "x"
+              },
+              {
+                "type": "+=",
+                "name": "+="
+              },
+              {
+                "type": "integer",
+                "name": "5"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "expression_statement",
+        "children": [
+          {
+            "type": "assignment",
+            "children": [
+              {
+                "type": "identifier",
+                "name": "y"
+              },
+              {
+                "type": "=",
+                "name": "="
+              },
+              {
+                "type": "binary_operator",
+                "children": [
+                  {
+                    "type": "integer",
+                    "name": "5"
+                  },
+                  {
+                    "type": "+",
+                    "name": "+"
+                  },
+                  {
+                    "type": "identifier",
+                    "name": "x"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
         "type": "for_statement",
         "children": [
           {
