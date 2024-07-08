@@ -304,7 +304,12 @@ class ASTProcessor:
                 elif child['type'] == 'block':
                     loop_info["body"] = process_block(child)
                 elif child['type'] == 'pattern_list':
-                    loop_info["iterator"] = process_argument_list(child)
+                    loop_info["iterator"] = process_argument_list(child, pattern=True)
+                
+                elif child['type'] == 'argument_list':
+                    loop_info["iterator"] = process_argument_list(child, pattern=True)
+                
+                
             return loop_info
 
         def process_while_loop(node):
@@ -330,7 +335,7 @@ class ASTProcessor:
                     call_info.append(process_argument_list(child))
             return ' '.join(call_info)
 
-        def process_argument_list(node):
+        def process_argument_list(node, pattern=False):
             arguments = []
             for child in node['children']:
                 if 'name' in child and child['name']:
@@ -338,7 +343,9 @@ class ASTProcessor:
 
             print("arguments")
             print(arguments)
-            return f"{', '.join(arguments)}"
+            if pattern:
+                return f"({', '.join(arguments)})"
+            return f"{' '.join(arguments)}"
 
         def process_comparison_operator(node):
             comparison = []

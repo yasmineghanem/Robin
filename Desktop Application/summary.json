@@ -15,10 +15,10 @@
     {
         "type": "loop",
         "keyword": "for",
-        "iterator": "index, element",
-        "iterable": "enumerate (, x, )",
+        "iterator": "(index, element)",
+        "iterable": "enumerate ( x )",
         "body": [
-            "print(, index, element, )"
+            "print( index element )"
         ]
     }
 ]
