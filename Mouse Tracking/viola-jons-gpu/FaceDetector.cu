@@ -118,13 +118,11 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
             cout << "adaboost number :  " << l << ", layer number : " << Tl << ", shift: " << sl << " false positive rate : " << Y << ", false negative rate : " << B << endl;
             if (Y <= Yl && B <= Bl)
             {
-
                 cur_Y = cur_Y * Y;
                 break;
             }
             else if (Y <= Yl && B > Bl && u > 1e-5)
             {
-
                 sl += u;
                 if (last == -1)
                 {
@@ -135,7 +133,6 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
             }
             else if (Y > Yl && B <= Bl && u > 1e-5)
             {
-
                 sl -= u;
                 if (last == 1)
                 {
@@ -146,12 +143,10 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
             }
             else
             {
-
                 if (Tl > Nl)
                 {
-
                     // the shift sl is set to the smallest value that satisfies the false negative requirement.
-                    sl = -1.2;
+                    sl = -1.0;
                     auto mat = this->evaluate_single_layer(fl, predictions, sl);
                     Y = mat.false_positive_rate, B = mat.false_negative_rate;
                     cout << "adaboost number :  " << l << " layer number : " << Tl << " entered the dead loop" << endl;
@@ -164,13 +159,11 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                         cout << " shift: " << sl << " false positive rate : " << Y << " false negative rate : " << B << endl;
                     }
                     cout << "adaboost number :  " << l << " layer number : " << Tl << " go out from the dead loop" << endl;
-
                     cur_Y = cur_Y * Y;
                     break;
                 }
                 else
                 {
-
                     Tl += 1;
                     train_again = true;
                 }
@@ -180,7 +173,6 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                 fl->train(1);
             }
         }
-
         //  Remove the false negatives and true negatives detected by the current casca
         cascade.push_back(fl);
         shif.push_back(sl);

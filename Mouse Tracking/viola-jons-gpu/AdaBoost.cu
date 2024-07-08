@@ -87,18 +87,18 @@ void AdaBoost::train(int T)
         }
     }
 }
-
+inline int sign(double x)
+{
+    return x >= 0 ? 1 : -1;
+}
 // predict using the array of all 162336 features,used in the traing phase,to find the best feature
 int AdaBoost::predict(int *&X, double sl)
 {
     double sum = 0;
     for (size_t i = 0; i < this->learners.size(); ++i)
     {
-        sum += this->alphas[i] * (this->learners[i]->predict(X) + sl);
-        // if (debug)
-        //     cout << X[this->learners[i]->feature_index] << " " << this->learners[i]->threshold << " " << this->learners[i]->polarity << " " << this->learners[i]->predict(X) << endl;
+        sum += this->alphas[i] * (this->learners[i]->predict(X) + sl * sign(this->alphas[i]));
     }
-    // cout << endl;
     return sum >= 0.0 ? 1 : -1;
 }
 
@@ -108,7 +108,7 @@ int AdaBoost::predict(int **&X, int size, double sl, double devide)
     double sum = 0;
     for (size_t i = 0; i < this->learners.size(); ++i)
     {
-        sum += this->alphas[i] * (this->learners[i]->predict(X, size, devide) + sl);
+        sum += this->alphas[i] * (this->learners[i]->predict(X, size, devide) + sl * sign(this->alphas[i]));
     }
     return sum >= 0.0 ? 1 : -1;
 }
