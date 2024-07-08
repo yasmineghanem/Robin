@@ -45,37 +45,26 @@ def extract_import_nodes(ast):
         # if the type contains the word import
 
         if 'type' in node:
-
             node_type = node['type']
 
             if 'import' in node_type:
-
                 import_nodes.append(node)
 
             elif "expression_statement" in node_type:
-
                 # check for constants
-
                 inner_node = node['children'][0]
 
                 if 'type' in inner_node and 'assignment' in inner_node['type']:
-
                     for c in inner_node['children']:
-
                         if 'type' in c and "identifier" in c['type']:
-
                             # check if the name is all uppercase
-
                             if c['name'].isupper():
-
                                 constant_nodes.append(node)
 
                             else:
-
                                 code_nodes.append(node)
 
             else:
-
                 code_nodes.append(node)
 
     return import_nodes, constant_nodes, code_nodes
@@ -207,10 +196,14 @@ def process_assignment(node):
     left_value = process_identifier(left_side)
     right_value = process_expression(right_side)
 
-    return {
-        "left_side": left_value,
-        "right_side": right_value
-    }
+    result = {}
+    if left_value:
+        result["left_side"] = left_value
+
+    if right_value:
+        result["right_side"] = right_value
+
+    return result
 
 
 def process_augmented_assignment(node):
@@ -256,9 +249,123 @@ def process_expression(node):
 
         }
 
+    if node['type'] == 'list':
+        return [child['name'] for child in node['children']if 'name' in child]
+
 
 def process_identifier(node):
     return node['name']
+
+
+def process_loops(ast_node):
+    loops_info = []
+
+    def process_node(node):
+        if node['type'] == 'for_statement':
+            loop_info = process_for_loop(node)
+            loops_info.append(loop_info)
+        elif node['type'] == 'while_statement':
+            loop_info = process_while_loop(node)
+            loops_info.append(loop_info)
+        elif 'children' in node:
+            for child in node['children']:
+                process_node(child)
+
+    def process_for_loop(node):
+        loop_info = {
+            "type": "loop",
+            "keyword": "for",
+            "iterator": "",
+            "iterable": "",
+            "body": []
+        }
+        for child in node['children']:
+            if child['type'] == 'identifier' and 'name' in child:
+                loop_info["iterator"] = child['name']
+            elif child['type'] == 'call':
+                loop_info["iterable"] = process_call_node(child)
+            elif child['type'] == 'block':
+                loop_info["body"] = process_block(child)
+
+        return loop_info
+
+    def process_while_loop(node):
+        loop_info = {
+            "type": "loop",
+            "keyword": "while",
+            "condition": "",
+            "body": []
+        }
+        for child in node['children']:
+            if child['type'] == 'comparison_operator':
+                loop_info["condition"] = process_comparison_operator(child)
+            elif child['type'] == 'block':
+                loop_info["body"] = process_block(child)
+        return loop_info
+
+    def process_call_node(node):
+        call_info = ""
+        for child in node['children']:
+            if child['type'] == 'identifier' and 'name' in child:
+                call_info += child['name']
+            elif child['type'] == 'argument_list':
+                call_info += process_argument_list(child)
+        
+        # print('CALL INFO', call_info)
+        return call_info
+
+    def process_argument_list(node):
+        arguments = []
+        for child in node['children']:
+            if 'name' in child:
+                arguments.append(child['name'])
+                
+        print(arguments)
+        return f"({', '.join(arguments)})"
+
+    def process_comparison_operator(node):
+        comparison = []
+        for child in node['children']:
+            if 'name' in child:
+                comparison.append(child['name'])
+        return ' '.join(comparison)
+
+    def process_block(node):
+        statements = []
+        for child in node['children']:
+            if child['type'] == 'expression_statement':
+                statements.append(process_loop_expression_statement(child))
+            elif child['type'] == 'call':
+                statements.append(process_call_node(child))
+        
+            elif child['type'] == 'argument_list':
+                statements.append(process_argument_list(child))
+                
+            
+        return statements
+
+    def process_loop_expression_statement(node):
+        if 'children' in node and node['children']:
+            assignment_node = node['children'][0]
+            if assignment_node['type'] == 'assignment':
+                left = assignment_node['children'][0]['name']
+                right = assignment_node['children'][2]['name'] if 'name' in assignment_node['children'][2] else "unknown"
+                return f"{left} = {right}"
+            elif assignment_node['type'] == 'augmented_assignment':
+                left = assignment_node['children'][0]['name']
+                operator = assignment_node['children'][1]['type']
+                right = assignment_node['children'][2]['name'] if 'name' in assignment_node['children'][2] else "unknown"
+                return f"{left} {operator} {right}"
+            elif assignment_node['type'] == 'call':
+                function_name = assignment_node['children'][0]['name']
+                arguments = process_argument_list(
+                    assignment_node['children'][1])
+                return f"{function_name}{arguments}"
+        return "unknown_statement"
+
+    process_node(ast_node)
+    return loops_info
+    # return json.dumps(loops_info, indent=2)
 
 
 # Load the AST from the JSON file
@@ -322,6 +429,16 @@ for node in code_nodes:
         assignment_info = process_expression_statement(node)
         assignment_info['type'] = 'expression_statement'
         summary.append(dict(assignment_info))
+
+    elif node['type'] == "for_statement" or node['type'] == "while_statement":
+        loop = process_loops(node)
+        # print(type(loop_info))
+        for l in loop:
+            summary.append(dict(l))
+
+    # elif node['type'] == "while_statement":
+    #     loop_info = process_loops(node)
+    #     summary.append(dict(loop_info))
 
 
 print(summary)
