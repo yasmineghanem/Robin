@@ -1,0 +1,146 @@
+[
+    {
+        "class_name": "Person",
+        "class_methods": [
+            {
+                "method_name": "__init__",
+                "parameters": [
+                    "name"
+                ]
+            },
+            {
+                "method_name": "say_hello",
+                "parameters": []
+            },
+            {
+                "method_name": "deepCopy",
+                "parameters": []
+            }
+        ],
+        "type": "class_definition"
+    },
+    {
+        "class_name": "Robin",
+        "class_methods": [
+            {
+                "method_name": "say_hello",
+                "parameters": []
+            }
+        ],
+        "type": "class_definition"
+    },
+    {
+        "method_name": "swap_variables",
+        "parameters": [
+            "x",
+            "y"
+        ],
+        "type": "function_definition"
+    },
+    {
+        "left_side": "robin",
+        "right_side": {
+            "function_name": "Robin",
+            "arguments": "'Robin'"
+        },
+        "type": "expression_statement"
+    },
+    {
+        "left_side": "x",
+        "right_side": "10",
+        "type": "expression_statement"
+    },
+    {
+        "left_side": "y",
+        "right_side": "20",
+        "type": "expression_statement"
+    },
+    {
+        "left_side": "x",
+        "operation": "/=",
+        "right_side": "5",
+        "type": "expression_statement"
+    },
+    {
+        "left_side": "x",
+        "operation": "+=",
+        "right_side": "5",
+        "type": "expression_statement"
+    },
+    {
+        "left_side": "y",
+        "right_side": {
+            "left_side": "5",
+            "operator": "+",
+            "right_side": "x"
+        },
+        "type": "expression_statement"
+    },
+    {
+        "type": "loop",
+        "keyword": "for",
+        "condition": "",
+        "body": [
+            null
+        ],
+        "iterator": "i",
+        "iterable": {
+            "function_name": "range",
+            "arguments": "10"
+        }
+    },
+    {
+        "left_side": "x",
+        "right_side": [
+            "[",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "]"
+        ],
+        "type": "expression_statement"
+    },
+    {
+        "type": "loop",
+        "keyword": "for",
+        "condition": "",
+        "body": [
+            null
+        ],
+        "iterator": "",
+        "iterable": {
+            "function_name": "enumerate",
+            "arguments": "x"
+        }
+    },
+    {
+        "type": "loop",
+        "keyword": "for",
+        "condition": "",
+        "body": [
+            null
+        ],
+        "iterator": "x",
+        "iterable": ""
+    },
+    {
+        "left_side": "i",
+        "right_side": "0",
+        "type": "expression_statement"
+    },
+    {
+        "type": "loop",
+        "keyword": "while",
+        "condition": "i < 5",
+        "body": [
+            null,
+            {
+                "left_side": "i",
+                "operation": "+=",
+                "right_side": "1"
+            }
+        ]
+    }
+]

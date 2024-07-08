@@ -248,6 +248,44 @@ class ASTProcessor:
                 statements.append(self.process_expression_statement(child))
         return statements
 
+    # function to transform summary to be human readable 
+    def write_summary_to_file(self,summary,file_name='summary.txt'):
+        with open(file_name, 'w') as file:
+            file.write("Summary of the code:\n\n")
+            for item in summary:
+                if item['type'] == 'import':
+                    file.write(f"Imported: {item['library']}\n\n")
+                elif item['type'] == 'class_definition':
+                    file.write(f"Class Named: {item['class_name']}\n")
+                    for method in item['class_methods']:
+                        file.write(f"\tMethod Named: {method['method_name']} with parameters ({', '.join(method['parameters'])})\n\n")
+
+                elif item['type'] == 'function_definition':
+                    file.write(f"Function Named: {item['method_name']} with parameters ({', '.join(item['parameters'])})\n\n")
+
+                elif item['type'] == 'expression_statement':
+                    file.write("An expression statement: \n")
+                    if 'operation' in item:
+                        file.write(f"\t{item['left_side']} {item['operation']} {item['right_side']}\n\n")
+                    else:
+                        file.write(f"\t{item['left_side']} = {item['right_side']}\n\n")
+
+                elif item['type'] == 'loop':
+                    file.write(f"A {item['keyword']} loop:\n")
+                    if(item['keyword'] == 'for'):
+                        #broblem here
+                        print(item['iterable'])
+                        if isinstance(item['iterable'], dict):
+                            file.write(f"\t{item['keyword']} {item['iterator']} in {item['iterable']['function_name']}({item['iterable']['arguments']}) {item['condition']}:\n\n")
+                        # print(f"item['iterable'] is of type {type(item['iterable'])} and has value {item['iterable']}")
+                    else:
+                        # while loop
+                        file.write(f"\t{item['keyword']} {item['condition']}:\n\n")
+
+                    for statement in item['body']:
+                        file.write(f"\t{statement}\n\n")
+            
+            file.write("End of code\n")
 
 # Load the AST from the JSON file
 with open('./ast_3.json', 'r') as file:
@@ -325,7 +363,12 @@ with open('./ast_3.json', 'r') as file:
 # print(summary)
 
 
-processor = ASTProcessor(ast['ast'])
-summary = processor.process_ast()
+ast_processor = ASTProcessor(ast['ast'])
+summary = ast_processor.process_ast()
+ast_processor.write_summary_to_file(summary)
+# write into file
+with open('summary.json', 'w') as file:
+    json.dump(summary, file, indent=4)
+# print(summary)
 
-print(summary)
+

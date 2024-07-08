@@ -1,0 +1,61 @@
+Summary of the code:
+
+Class Named: Person
+	Method Named: __init__ with parameters (name)
+
+	Method Named: say_hello with parameters ()
+
+	Method Named: deepCopy with parameters ()
+
+Class Named: Robin
+	Method Named: say_hello with parameters ()
+
+Function Named: swap_variables with parameters (x, y)
+
+An expression statement: 
+	robin = {'function_name': 'Robin', 'arguments': "'Robin'"}
+
+An expression statement: 
+	x = 10
+
+An expression statement: 
+	y = 20
+
+An expression statement: 
+	x /= 5
+
+An expression statement: 
+	x += 5
+
+An expression statement: 
+	y = {'left_side': '5', 'operator': '+', 'right_side': 'x'}
+
+A for loop:
+	for i in range(10) :
+
+	None
+
+An expression statement: 
+	x = ['[', '1', '2', '3', '4', '5', ']']
+
+A for loop:
+	for  in enumerate(x) :
+
+	None
+
+A for loop:
+	:
+
+	None
+
+An expression statement: 
+	i = 0
+
+A while loop:
+	while i < 5:
+
+	None
+
+	{'left_side': 'i', 'operation': '+=', 'right_side': '1'}
+
+End of code
