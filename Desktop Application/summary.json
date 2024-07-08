@@ -1,91 +1,5 @@
 [
     {
-        "class_name": "Person",
-        "class_methods": [
-            {
-                "method_name": "__init__",
-                "parameters": [
-                    "name"
-                ]
-            },
-            {
-                "method_name": "say_hello",
-                "parameters": []
-            },
-            {
-                "method_name": "deepCopy",
-                "parameters": []
-            }
-        ],
-        "type": "class_definition"
-    },
-    {
-        "class_name": "Robin",
-        "class_methods": [
-            {
-                "method_name": "say_hello",
-                "parameters": []
-            }
-        ],
-        "type": "class_definition"
-    },
-    {
-        "method_name": "swap_variables",
-        "parameters": [
-            "x",
-            "y"
-        ],
-        "type": "function_definition"
-    },
-    {
-        "left_side": "robin",
-        "right_side": {
-            "function_name": "Robin",
-            "arguments": "'Robin'"
-        },
-        "type": "expression_statement"
-    },
-    {
-        "left_side": "x",
-        "right_side": "10",
-        "type": "expression_statement"
-    },
-    {
-        "left_side": "y",
-        "right_side": "20",
-        "type": "expression_statement"
-    },
-    {
-        "left_side": "x",
-        "operation": "/=",
-        "right_side": "5",
-        "type": "expression_statement"
-    },
-    {
-        "left_side": "x",
-        "operation": "+=",
-        "right_side": "5",
-        "type": "expression_statement"
-    },
-    {
-        "left_side": "y",
-        "right_side": {
-            "left_side": "5",
-            "operator": "+",
-            "right_side": "x"
-        },
-        "type": "expression_statement"
-    },
-    {
-        "type": "loop",
-        "keyword": "for",
-        "iterator": "i",
-        "iterable": "range(( 10 ))",
-        "body": [
-            "print(( i ))"
-        ]
-    },
-    {
         "left_side": "x",
         "right_side": [
             "[",
@@ -101,33 +15,10 @@
     {
         "type": "loop",
         "keyword": "for",
-        "iterator": "(index element)",
-        "iterable": "enumerate(( x ))",
+        "iterator": "index, element",
+        "iterable": "enumerate (, x, )",
         "body": [
-            "print(( index element ))"
-        ]
-    },
-    {
-        "type": "loop",
-        "keyword": "for",
-        "iterator": "x",
-        "iterable": "",
-        "body": [
-            "print(( x ))"
-        ]
-    },
-    {
-        "left_side": "i",
-        "right_side": "0",
-        "type": "expression_statement"
-    },
-    {
-        "type": "loop",
-        "keyword": "while",
-        "condition": "i < 5",
-        "body": [
-            "print(( i ))",
-            "i += 1"
+            "print(, index, element, )"
         ]
     }
 ]

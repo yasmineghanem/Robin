@@ -322,24 +322,23 @@ class ASTProcessor:
             return loop_info
 
         def process_call_node(node):
-            call_info = ""
+            call_info = []
             for child in node['children']:
                 if child['type'] == 'identifier' and 'name' in child:
-                    call_info += child['name']
+                    call_info.append(child['name'])
                 elif child['type'] == 'argument_list':
-                    call_info += process_argument_list(child)
-
-            # print('CALL INFO', call_info)
-            return call_info
+                    call_info.append(process_argument_list(child))
+            return ' '.join(call_info)
 
         def process_argument_list(node):
             arguments = []
             for child in node['children']:
-                if 'name' in child:
+                if 'name' in child and child['name']:
                     arguments.append(child['name'])
 
-            # print(arguments)
-            return f"({', '.join(arguments)})"
+            print("arguments")
+            print(arguments)
+            return f"{', '.join(arguments)}"
 
         def process_comparison_operator(node):
             comparison = []
