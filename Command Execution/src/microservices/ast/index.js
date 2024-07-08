@@ -188,7 +188,7 @@ function buildReadableASTJSON(node, code) {
       console.log("aahi");
       result.name = code.slice(node.startIndex, node.endIndex);
     }
-  } else if (node.type.length < 3 && ![",", ".", ":"].includes(node.type)) {
+  } else if (node.type.length < 3 && ![",", ".", ":",].includes(node.type)) {
     result.name = node.type;
   }
 
