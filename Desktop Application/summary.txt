@@ -31,22 +31,16 @@ An expression statement:
 	y = {'left_side': '5', 'operator': '+', 'right_side': 'x'}
 
 A for loop:
-	for i in range(10) :
-
-	None
+	print(( i ))
 
 An expression statement: 
 	x = ['[', '1', '2', '3', '4', '5', ']']
 
 A for loop:
-	for  in enumerate(x) :
-
-	None
+	print(( index element ))
 
 A for loop:
-	:
-
-	None
+	print(( x ))
 
 An expression statement: 
 	i = 0
@@ -54,8 +48,8 @@ An expression statement:
 A while loop:
 	while i < 5:
 
-	None
+	print(( i ))
 
-	{'left_side': 'i', 'operation': '+=', 'right_side': '1'}
+	i += 1
 
 End of code

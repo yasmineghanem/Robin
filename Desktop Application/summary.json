@@ -79,15 +79,11 @@
     {
         "type": "loop",
         "keyword": "for",
-        "condition": "",
-        "body": [
-            null
-        ],
         "iterator": "i",
-        "iterable": {
-            "function_name": "range",
-            "arguments": "10"
-        }
+        "iterable": "range(( 10 ))",
+        "body": [
+            "print(( i ))"
+        ]
     },
     {
         "left_side": "x",
@@ -105,25 +101,20 @@
     {
         "type": "loop",
         "keyword": "for",
-        "condition": "",
+        "iterator": "(index element)",
+        "iterable": "enumerate(( x ))",
         "body": [
-            null
-        ],
-        "iterator": "",
-        "iterable": {
-            "function_name": "enumerate",
-            "arguments": "x"
-        }
+            "print(( index element ))"
+        ]
     },
     {
         "type": "loop",
         "keyword": "for",
-        "condition": "",
-        "body": [
-            null
-        ],
         "iterator": "x",
-        "iterable": ""
+        "iterable": "",
+        "body": [
+            "print(( x ))"
+        ]
     },
     {
         "left_side": "i",
@@ -135,12 +126,8 @@
         "keyword": "while",
         "condition": "i < 5",
         "body": [
-            null,
-            {
-                "left_side": "i",
-                "operation": "+=",
-                "right_side": "1"
-            }
+            "print(( i ))",
+            "i += 1"
         ]
     }
 ]
