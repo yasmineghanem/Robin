@@ -25367,8 +25367,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const fileSystemCommands_1 = __importDefault(__webpack_require__(171));
 const IDECommands_1 = __importDefault(__webpack_require__(172));
-const gitCommands_1 = __importDefault(__webpack_require__(179));
-const codeCommands_1 = __importDefault(__webpack_require__(173));
+const gitCommands_1 = __importDefault(__webpack_require__(173));
+const codeCommands_1 = __importDefault(__webpack_require__(174));
 const activateRobin = () => vscode.commands.registerCommand("robin.activate", () => {
     vscode.window.showInformationMessage("Robin Activated!");
 });
@@ -26016,10 +26016,295 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
+const GIT_1 = __webpack_require__(167);
+// check if there's a repository
+const hasRepository = (api) => {
+    if (!api.repositories.length) {
+        vscode.window.showErrorMessage(GIT_1.NO_GIT_REPO);
+        return false;
+    }
+    return true;
+};
+// push to git
+const gitPush = async () => vscode.commands.registerCommand("robin.gitPush", async (args) => {
+    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    if (gitExtension) {
+        try {
+            const api = await gitExtension.getAPI(1);
+            // check if there's a repository
+            if (!hasRepository(api)) {
+                return {
+                    success: false,
+                    message: GIT_1.NO_GIT_REPO
+                };
+            }
+            const repo = api.repositories[0];
+            //Get all changes for first repository in list
+            const changes = await repo.diffWithHEAD();
+            // if no changes
+            if (changes.length === 0) {
+                vscode.window.showInformationMessage('No changes to push.');
+                return {
+                    success: true,
+                    message: 'No changes to push.'
+                };
+            }
+            // stage changes
+            await repo.add([]);
+            // Commit changes
+            await repo.commit(args?.message ?? 'Robin commit');
+            // Push changes
+            await repo.push();
+            vscode.window.showInformationMessage('Changes pushed successfully.');
+            return {
+                success: true,
+                message: 'Changes pushed successfully.'
+            };
+        }
+        catch (err) {
+            vscode.window.showErrorMessage('Error pushing changes.');
+            console.log("ROBIN GIT", err);
+            return {
+                success: false,
+                message: 'Error pushing changes.'
+            };
+        }
+    }
+    else {
+        vscode.window.showErrorMessage('Git extension not found.');
+        return {
+            success: false,
+            message: 'Git extension not found.'
+        };
+    }
+});
+// pull
+const gitPull = async () => vscode.commands.registerCommand("robin.gitPull", async () => {
+    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    if (gitExtension) {
+        try {
+            const api = gitExtension.getAPI(1);
+            // check if there's a repository
+            if (!hasRepository(api)) {
+                return {
+                    success: false,
+                    message: GIT_1.NO_GIT_REPO
+                };
+            }
+            const repo = api.repositories[0];
+            // Pull changes
+            await repo.pull();
+            vscode.window.showInformationMessage('Changes pulled successfully.');
+            return {
+                success: true,
+                message: 'Changes pulled successfully.'
+            };
+        }
+        catch (err) {
+            vscode.window.showErrorMessage('Error pulling changes.');
+            console.log("ROBIN GIT", err);
+            return {
+                success: false,
+                message: 'Error pulling changes.'
+            };
+        }
+    }
+    else {
+        vscode.window.showErrorMessage('Git extension not found.');
+        return {
+            success: false,
+            message: 'Git extension not found.'
+        };
+    }
+});
+//stage changes
+const gitStage = async () => vscode.commands.registerCommand(GIT_1.GIT_STAGE, async () => {
+    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    if (gitExtension) {
+        try {
+            const api = gitExtension.getAPI(1);
+            // check if there's a repository
+            if (!hasRepository(api)) {
+                return {
+                    success: false,
+                    message: GIT_1.NO_GIT_REPO
+                };
+            }
+            const repo = api.repositories[0];
+            //Get all changes for first repository in list
+            const changes = await repo.diffWithHEAD();
+            // if no changes
+            if (changes.length === 0) {
+                vscode.window.showInformationMessage('No present changes.');
+                return {
+                    success: true,
+                    message: 'No present changes .'
+                };
+            }
+            // stage changes
+            await repo.add([]);
+            vscode.window.showInformationMessage('Changes staged successfully.');
+            return {
+                success: true,
+                message: 'Changes staged successfully.'
+            };
+        }
+        catch (err) {
+            vscode.window.showErrorMessage('Error staging changes.');
+            console.log("ROBIN GIT", err);
+            return {
+                success: false,
+                message: 'Error staging changes.'
+            };
+        }
+    }
+    else {
+        vscode.window.showErrorMessage('Git extension not found.');
+        return {
+            success: false,
+            message: 'Git extension not found.'
+        };
+    }
+});
+//stash changes
+const gitStash = async () => vscode.commands.registerCommand(GIT_1.GIT_STASH, async () => {
+    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    if (gitExtension) {
+        try {
+            const api = gitExtension.getAPI(1);
+            // check if there's a repository
+            if (!hasRepository(api)) {
+                return {
+                    success: false,
+                    message: GIT_1.NO_GIT_REPO
+                };
+            }
+            const repo = api.repositories[0];
+            // stash changes
+            // await repo.createStash();
+            await repo.clean(repo.diffWithHEAD(), { cleanAfter: true, force: true });
+            // await repo.stash();
+            vscode.window.showInformationMessage('Changes stashed successfully.');
+            return {
+                success: true,
+                message: 'Changes stashed successfully.'
+            };
+        }
+        catch (err) {
+            vscode.window.showErrorMessage('Error stashing changes.');
+            console.log("ROBIN GIT", err);
+            return {
+                success: false,
+                message: 'Error stashing changes.'
+            };
+        }
+    }
+    else {
+        vscode.window.showErrorMessage('Git extension not found.');
+        return {
+            success: false,
+            message: 'Git extension not found.'
+        };
+    }
+});
+//discard changes
+const gitDiscard = async () => vscode.commands.registerCommand(GIT_1.GIT_DISCARD, async () => {
+    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    if (gitExtension) {
+        try {
+            const api = gitExtension.getAPI(1);
+            // check if there's a repository
+            if (!hasRepository(api)) {
+                return {
+                    success: false,
+                    message: GIT_1.NO_GIT_REPO
+                };
+            }
+            const repo = api.repositories[0];
+            //Get all changes for first repository in list
+            const changes = await repo.diffWithHEAD();
+            // if no changes
+            if (changes.length === 0) {
+                vscode.window.showInformationMessage('No present changes.');
+                return {
+                    success: true,
+                    message: 'No present changes.'
+                };
+            }
+            //checkout .
+            await repo.checkout(".");
+            vscode.window.showInformationMessage('Changes discarded successfully.');
+            return {
+                success: true,
+                message: 'Changes discarded successfully.'
+            };
+        }
+        catch (err) {
+            vscode.window.showErrorMessage('Error discarding changes.');
+            console.log("ROBIN GIT", err);
+            return {
+                success: false,
+                message: 'Error discarding changes.'
+            };
+        }
+    }
+    else {
+        vscode.window.showErrorMessage('Git extension not found.');
+        return {
+            success: false,
+            message: 'Git extension not found.'
+        };
+    }
+});
+// register commands
+const registerGITCommands = () => {
+    const commands = [
+        gitPull,
+        gitPush,
+        gitStage,
+        gitStash,
+        gitDiscard
+    ];
+    commands.forEach(command => command());
+};
+exports["default"] = registerGITCommands;
+
+
+/***/ }),
+/* 174 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const vscode = __importStar(__webpack_require__(1));
 const code_1 = __webpack_require__(162);
-const pythonCodeGenerator_1 = __webpack_require__(174);
+const pythonCodeGenerator_1 = __webpack_require__(175);
 const utilities_1 = __webpack_require__(163);
-const constants_1 = __webpack_require__(178);
+const constants_1 = __webpack_require__(179);
 // utilities
 const getCurrentPosition = (editor) => {
     const position = editor.selection.active;
@@ -26969,7 +27254,7 @@ exports["default"] = registerCodeCommands;
 
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -26979,9 +27264,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PythonCodeGenerator = void 0;
-const codeEnums_1 = __webpack_require__(175);
-const codeGenerator_1 = __webpack_require__(176);
-const pythonReserved_json_1 = __importDefault(__webpack_require__(177));
+const codeEnums_1 = __webpack_require__(176);
+const codeGenerator_1 = __webpack_require__(177);
+const pythonReserved_json_1 = __importDefault(__webpack_require__(178));
 class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Declare reserved keywords for each programming language
@@ -27156,9 +27441,10 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
             : ""}`)
             .join(", ");
-        const functionHeader = `def ${name}(${params}):`;
-        const functionBody = this.wrapInCodeBlock(body ?? [""]);
-        return `${functionHeader}\n${functionBody}`;
+        const f = `def ${name}(${params}):\n` +
+            this.tabString.repeat(this.handleIndentationLevel(true) + 1);
+        // const functionBody = this.wrapInCodeBlock(body ?? [""]);
+        return f;
     }
     generateFunctionCall(name, args) {
         const params = args
@@ -27172,7 +27458,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return `${name}(${params}) \n`;
     }
     generateReturn(value) {
-        return `return ${value ?? ""} `;
+        return (`return ${value ?? ""} ` +
+            this.tabString.repeat(this.handleIndentationLevel(true)));
     }
     /**
        * Declare Class
@@ -27377,13 +27664,13 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         switch (type) {
             case codeEnums_1.AssertionOperators.Equal:
-                return `assert ${variable} == ${value}\n` + this.handleIndentationLevel(true);
+                return (`assert ${variable} == ${value}\n` + this.handleIndentationLevel(true));
             case codeEnums_1.AssertionOperators.NotEqual:
-                return `assert ${variable} != ${value}\n` + this.handleIndentationLevel(true);
+                return (`assert ${variable} != ${value}\n` + this.handleIndentationLevel(true));
             case codeEnums_1.AssertionOperators.GreaterThanOrEqual:
-                return `assert ${variable} >= ${value}\n` + this.handleIndentationLevel(true);
+                return (`assert ${variable} >= ${value}\n` + this.handleIndentationLevel(true));
             case codeEnums_1.AssertionOperators.LessThanOrEqual:
-                return `assert ${variable} <= ${value}\n` + this.handleIndentationLevel(true);
+                return (`assert ${variable} <= ${value}\n` + this.handleIndentationLevel(true));
             default:
                 throw new Error(`Invalid assertion type: ${type}`);
         }
@@ -27397,21 +27684,26 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         switch (type) {
             case codeEnums_1.CastingTypes.Integer:
-                return `${variable} = int(${variable})\n` + this.handleIndentationLevel(true);
+                return (`${variable} = int(${variable})\n` + this.handleIndentationLevel(true));
             case codeEnums_1.CastingTypes.Float:
-                return `${variable} = float(${variable})\n` + this.handleIndentationLevel(true);
+                return (`${variable} = float(${variable})\n` +
+                    this.handleIndentationLevel(true));
             case codeEnums_1.CastingTypes.String:
-                return `${variable} = str(${variable})\n` + this.handleIndentationLevel(true);
+                return (`${variable} = str(${variable})\n` + this.handleIndentationLevel(true));
             case codeEnums_1.CastingTypes.Boolean:
-                return `${variable} = bool(${variable})\n` + this.handleIndentationLevel(true);
+                return (`${variable} = bool(${variable})\n` +
+                    this.handleIndentationLevel(true));
             case codeEnums_1.CastingTypes.List:
-                return `${variable} = list(${variable})\n` + this.handleIndentationLevel(true);
+                return (`${variable} = list(${variable})\n` +
+                    this.handleIndentationLevel(true));
             case codeEnums_1.CastingTypes.Tuple:
-                return `${variable} = tuple(${variable})\n` + this.handleIndentationLevel(true);
+                return (`${variable} = tuple(${variable})\n` +
+                    this.handleIndentationLevel(true));
             case codeEnums_1.CastingTypes.Set:
-                return `${variable} = set(${variable})\n` + this.handleIndentationLevel(true);
+                return (`${variable} = set(${variable})\n` + this.handleIndentationLevel(true));
             case codeEnums_1.CastingTypes.Dictionary:
-                return `${variable} = dict(${variable})\n` + this.handleIndentationLevel(true);
+                return (`${variable} = dict(${variable})\n` +
+                    this.handleIndentationLevel(true));
             default:
                 throw new Error(`Invalid casting type: ${type}`);
         }
@@ -27420,7 +27712,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Generate User Input
      **/
     generateUserInput(variable, message) {
-        return `${variable} = input(${message ? message : ""})\n` + this.handleIndentationLevel(true);
+        return (`${variable} = input(${message ? message : ""})\n` +
+            this.handleIndentationLevel(true));
     }
     /**
      * Generate Print
@@ -27440,13 +27733,15 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      **/
     //TODO: add options to read line, read all file, read character
     generateReadFile(path, variable) {
-        return `${variable} = open("${path}", 'r').read()\n` + this.handleIndentationLevel(true);
+        return (`${variable} = open("${path}", 'r').read()\n` +
+            this.handleIndentationLevel(true));
     }
     /**
      * Write file
      **/
     generateWriteFile(path, content) {
-        return `open("${path}", 'w').write("${content}")\n` + this.handleIndentationLevel(true);
+        return (`open("${path}", 'w').write("${content}")\n` +
+            this.handleIndentationLevel(true));
     }
     /**
      * White spaces
@@ -27506,18 +27801,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     exitScope() {
         let indentationLevel = this.handleIndentationLevel();
-        if (indentationLevel !== 0) {
-            indentationLevel -= 1;
-        }
-        const indentation = this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel);
-        return `\n${indentation}`;
+        return `\n${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, Math.max(indentationLevel - 1, 0))}`.repeat(2);
     }
 }
 exports.PythonCodeGenerator = PythonCodeGenerator;
 
 
 /***/ }),
-/* 175 */
+/* 176 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -27623,7 +27914,7 @@ var CastingTypes;
 
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -27641,14 +27932,14 @@ exports.CodeGenerator = CodeGenerator;
 
 
 /***/ }),
-/* 177 */
+/* 178 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"]}');
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -27659,291 +27950,6 @@ exports.EXTENSIONS = {
     PYTHON: "py",
     JUPYTER: "ipynb"
 };
-
-
-/***/ }),
-/* 179 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const vscode = __importStar(__webpack_require__(1));
-const GIT_1 = __webpack_require__(167);
-// check if there's a repository
-const hasRepository = (api) => {
-    if (!api.repositories.length) {
-        vscode.window.showErrorMessage(GIT_1.NO_GIT_REPO);
-        return false;
-    }
-    return true;
-};
-// push to git
-const gitPush = async () => vscode.commands.registerCommand("robin.gitPush", async (args) => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
-    if (gitExtension) {
-        try {
-            const api = await gitExtension.getAPI(1);
-            // check if there's a repository
-            if (!hasRepository(api)) {
-                return {
-                    success: false,
-                    message: GIT_1.NO_GIT_REPO
-                };
-            }
-            const repo = api.repositories[0];
-            //Get all changes for first repository in list
-            const changes = await repo.diffWithHEAD();
-            // if no changes
-            if (changes.length === 0) {
-                vscode.window.showInformationMessage('No changes to push.');
-                return {
-                    success: true,
-                    message: 'No changes to push.'
-                };
-            }
-            // stage changes
-            await repo.add([]);
-            // Commit changes
-            await repo.commit(args?.message ?? 'Robin commit');
-            // Push changes
-            await repo.push();
-            vscode.window.showInformationMessage('Changes pushed successfully.');
-            return {
-                success: true,
-                message: 'Changes pushed successfully.'
-            };
-        }
-        catch (err) {
-            vscode.window.showErrorMessage('Error pushing changes.');
-            console.log("ROBIN GIT", err);
-            return {
-                success: false,
-                message: 'Error pushing changes.'
-            };
-        }
-    }
-    else {
-        vscode.window.showErrorMessage('Git extension not found.');
-        return {
-            success: false,
-            message: 'Git extension not found.'
-        };
-    }
-});
-// pull
-const gitPull = async () => vscode.commands.registerCommand("robin.gitPull", async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
-    if (gitExtension) {
-        try {
-            const api = gitExtension.getAPI(1);
-            // check if there's a repository
-            if (!hasRepository(api)) {
-                return {
-                    success: false,
-                    message: GIT_1.NO_GIT_REPO
-                };
-            }
-            const repo = api.repositories[0];
-            // Pull changes
-            await repo.pull();
-            vscode.window.showInformationMessage('Changes pulled successfully.');
-            return {
-                success: true,
-                message: 'Changes pulled successfully.'
-            };
-        }
-        catch (err) {
-            vscode.window.showErrorMessage('Error pulling changes.');
-            console.log("ROBIN GIT", err);
-            return {
-                success: false,
-                message: 'Error pulling changes.'
-            };
-        }
-    }
-    else {
-        vscode.window.showErrorMessage('Git extension not found.');
-        return {
-            success: false,
-            message: 'Git extension not found.'
-        };
-    }
-});
-//stage changes
-const gitStage = async () => vscode.commands.registerCommand(GIT_1.GIT_STAGE, async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
-    if (gitExtension) {
-        try {
-            const api = gitExtension.getAPI(1);
-            // check if there's a repository
-            if (!hasRepository(api)) {
-                return {
-                    success: false,
-                    message: GIT_1.NO_GIT_REPO
-                };
-            }
-            const repo = api.repositories[0];
-            //Get all changes for first repository in list
-            const changes = await repo.diffWithHEAD();
-            // if no changes
-            if (changes.length === 0) {
-                vscode.window.showInformationMessage('No present changes.');
-                return {
-                    success: true,
-                    message: 'No present changes .'
-                };
-            }
-            // stage changes
-            await repo.add([]);
-            vscode.window.showInformationMessage('Changes staged successfully.');
-            return {
-                success: true,
-                message: 'Changes staged successfully.'
-            };
-        }
-        catch (err) {
-            vscode.window.showErrorMessage('Error staging changes.');
-            console.log("ROBIN GIT", err);
-            return {
-                success: false,
-                message: 'Error staging changes.'
-            };
-        }
-    }
-    else {
-        vscode.window.showErrorMessage('Git extension not found.');
-        return {
-            success: false,
-            message: 'Git extension not found.'
-        };
-    }
-});
-//stash changes
-const gitStash = async () => vscode.commands.registerCommand(GIT_1.GIT_STASH, async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
-    if (gitExtension) {
-        try {
-            const api = gitExtension.getAPI(1);
-            // check if there's a repository
-            if (!hasRepository(api)) {
-                return {
-                    success: false,
-                    message: GIT_1.NO_GIT_REPO
-                };
-            }
-            const repo = api.repositories[0];
-            // stash changes
-            // await repo.createStash();
-            await repo.clean(repo.diffWithHEAD(), { cleanAfter: true, force: true });
-            // await repo.stash();
-            vscode.window.showInformationMessage('Changes stashed successfully.');
-            return {
-                success: true,
-                message: 'Changes stashed successfully.'
-            };
-        }
-        catch (err) {
-            vscode.window.showErrorMessage('Error stashing changes.');
-            console.log("ROBIN GIT", err);
-            return {
-                success: false,
-                message: 'Error stashing changes.'
-            };
-        }
-    }
-    else {
-        vscode.window.showErrorMessage('Git extension not found.');
-        return {
-            success: false,
-            message: 'Git extension not found.'
-        };
-    }
-});
-//discard changes
-const gitDiscard = async () => vscode.commands.registerCommand(GIT_1.GIT_DISCARD, async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
-    if (gitExtension) {
-        try {
-            const api = gitExtension.getAPI(1);
-            // check if there's a repository
-            if (!hasRepository(api)) {
-                return {
-                    success: false,
-                    message: GIT_1.NO_GIT_REPO
-                };
-            }
-            const repo = api.repositories[0];
-            //Get all changes for first repository in list
-            const changes = await repo.diffWithHEAD();
-            // if no changes
-            if (changes.length === 0) {
-                vscode.window.showInformationMessage('No present changes.');
-                return {
-                    success: true,
-                    message: 'No present changes.'
-                };
-            }
-            //checkout .
-            await repo.checkout(".");
-            vscode.window.showInformationMessage('Changes discarded successfully.');
-            return {
-                success: true,
-                message: 'Changes discarded successfully.'
-            };
-        }
-        catch (err) {
-            vscode.window.showErrorMessage('Error discarding changes.');
-            console.log("ROBIN GIT", err);
-            return {
-                success: false,
-                message: 'Error discarding changes.'
-            };
-        }
-    }
-    else {
-        vscode.window.showErrorMessage('Git extension not found.');
-        return {
-            success: false,
-            message: 'Git extension not found.'
-        };
-    }
-});
-// register commands
-const registerGITCommands = () => {
-    const commands = [
-        gitPull,
-        gitPush,
-        gitStage,
-        gitStash,
-        gitDiscard
-    ];
-    commands.forEach(command => command());
-};
-exports["default"] = registerGITCommands;
 
 
 /***/ }),
