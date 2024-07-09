@@ -2,6 +2,6 @@ Summary of the code:
 
 An expression statement: 
 A for loop:
-	print( index element )
+	print(, index, element, )
 
 End of code

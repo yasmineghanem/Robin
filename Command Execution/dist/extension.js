@@ -26044,25 +26044,33 @@ const declareVariable = () => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             // check for extension
-            const ext = getFileExtension(editor);
-            let codeGenerator;
-            switch (ext) {
-                case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
-                    break;
-                case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
-                    break;
-                default:
-                    return handleFailure(code_1.FILE_EXT_FAILURE);
-            }
-            let s = await editor.edit((editBuilder) => {
-                editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareVariable(args.name, args.type, args.value));
-            });
-            if (!s) {
-                return handleFailure(code_1.VARIABLE_FAILURE);
-            }
-            return handleSuccess(code_1.VARIABLE_SUCCESS);
+            const document = editor.document;
+            const editorConfig = vscode.workspace.getConfiguration("editor", document.uri);
+            const insertSpaces = editorConfig.get("insertSpaces");
+            const tabSize = editorConfig.get("tabSize");
+            return handleSuccess(tabSize.toString());
+            // const ext = getFileExtension(editor);
+            // let codeGenerator;
+            // switch (ext) {
+            //     case EXTENSIONS.PYTHON:
+            //         codeGenerator = new PythonCodeGenerator();
+            //         break;
+            //     case EXTENSIONS.JUPYTER:
+            //         codeGenerator = new PythonCodeGenerator();
+            //         break;
+            //     default:
+            //         return handleFailure(FILE_EXT_FAILURE);
+            // }
+            // let s = await editor.edit((editBuilder) => {
+            //     editBuilder.insert(
+            //         getCurrentPosition(editor),
+            //         codeGenerator.declareVariable(args.name, args.type, args.value)
+            //     );
+            // });
+            // if (!s) {
+            //     return handleFailure(VARIABLE_FAILURE);
+            // }
+            // return handleSuccess(VARIABLE_SUCCESS);
         }
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
@@ -26407,7 +26415,7 @@ const tryExcept = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
-// conditional 
+// conditional
 const conditional = () => {
     vscode.commands.registerCommand(code_1.CONDITIONAL, async (args) => {
         const editor = vscode.window.activeTextEditor;
@@ -26856,7 +26864,7 @@ const writeFile = () => {
 //         }
 //     ]
 // }
-// declare class 
+// declare class
 const declareClass = () => {
     vscode.commands.registerCommand(code_1.DECLARE_CLASS, async (args) => {
         const editor = vscode.window.activeTextEditor;
@@ -26892,7 +26900,8 @@ const declareClass = () => {
 };
 // register commands
 const registerCodeCommands = () => {
-    const commands = [declareVariable,
+    const commands = [
+        declareVariable,
         declareFunction,
         getAST,
         functionCall,
@@ -26915,7 +26924,7 @@ const registerCodeCommands = () => {
         readFile,
         writeFile,
         declareClass,
-        tryExcept
+        tryExcept,
     ];
     commands.forEach((command) => {
         command();
