@@ -122,9 +122,21 @@ const declareVariable = () => {
             let s = await editor.edit((editBuilder) => {
                 editBuilder.insert(
                     getCurrentPosition(editor),
-                    codeGenerator.declareVariable(args.name, args.type, args.value)
+                    codeGenerator.declareVariable(
+
+                        editor.document.lineAt(editor.selection.active.line === 0 ? 0 :
+                            editor.selection.active.line - 1
+                        ).text,
+
+                        // cursor column
+                        // editor.selection.active.character,
+                        args.name, args.type, args.value,
+                        // current line
+
+                    )
                 );
             });
+            console.log('ay haga')
 
             if (!s) {
                 return handleFailure(VARIABLE_FAILURE);

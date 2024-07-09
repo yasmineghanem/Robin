@@ -1,9 +1,7 @@
 Summary of the code:
 
 An expression statement: 
-	x = ['[', '1', '2', '3', '4', '5', ']']
-
 A for loop:
-	print( index element )
+	print(, index, element, )
 
 End of code

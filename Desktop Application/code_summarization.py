@@ -393,7 +393,6 @@ class ASTProcessor:
 
 
     # function to transform summary to be human readable
-
     def write_summary_to_file(self, summary, file_name='summary.txt'):
         with open(file_name, 'w') as file:
             file.write("Summary of the code:\n\n")
@@ -413,17 +412,37 @@ class ASTProcessor:
                 elif item['type'] == 'expression_statement':
                     file.write("An expression statement: \n")
                     if 'operation' in item:
-                        file.write(
-                            f"\t{item['left_side']} {item['operation']} {item['right_side']}\n\n")
-                    else:
-                        file.write(
-                            f"\t{item['left_side']} = {item['right_side']}\n\n")
+                        match item['operation']:
+                            case '=':
+                                file.write(f"\tAssignment Operation: {item['left_side']} = {item['right_side']}\n\n")
+                            case '+':
+                                file.write(f"\tAddition Operation: {item['left_side']} + {item['right_side']}\n\n")
+                            case '-':
+                                file.write(f"\tSubtraction Operation: {item['left_side']} - {item['right_side']}\n\n")
+                            case '*':
+                                file.write(f"\tMultiplication Operation: {item['left_side']} * {item['right_side']}\n\n")
+                            case '/':
+                                file.write(f"\tDivision Operation: {item['left_side']} / {item['right_side']}\n\n")
+                            case '%':
+                                file.write(f"\tModulus Operation: {item['left_side']} % {item['right_side']}\n\n")
+                            case '==':
+                                file.write(f"\tEquality Operation: {item['left_side']} == {item['right_side']}\n\n")
+                            case '!=':
+                                file.write(f"\tInequality Operation: {item['left_side']} != {item['right_side']}\n\n")
+                            case '>':
+                                file.write(f"\tGreater Than Operation: {item['left_side']} > {item['right_side']}\n\n")
+                            case '<':
+                                file.write(f"\tLess Than Operation: {item['left_side']} < {item['right_side']}\n\n")
+                            case '>=':
+                                file.write(f"\tGreater Than or Equal Operation: {item['left_side']} >= {item['right_side']}\n\n")
+                            case '<=':
+                                file.write(f"\tLess Than or Equal Operation: {item['left_side']} <= {item['right_side']}\n\n")
 
                 elif item['type'] == 'loop':
                     file.write(f"A {item['keyword']} loop:\n")
                     if (item['keyword'] == 'for'):
                         # broblem here
-                        print(item['iterable'])
+                        # print(item['iterable'])
                         if isinstance(item['iterable'], dict):
                             file.write(
                                 f"\t{item['keyword']} {item['iterator']} in {item['iterable']['function_name']}({item['iterable']['arguments']}) {item['condition']}:\n\n")
@@ -451,3 +470,4 @@ ast_processor.write_summary_to_file(summary)
 with open('summary.json', 'w') as file:
     json.dump(summary, file, indent=4)
 # print(summary)
+

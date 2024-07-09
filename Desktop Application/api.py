@@ -10,6 +10,7 @@ class APIController:
             data = json.load(json_file)
             self.url = data['base_url']
 
+
     def get(self, endpoint, params=None):
         response = requests.get(self.url + endpoint, params=params)
         return response.json()
