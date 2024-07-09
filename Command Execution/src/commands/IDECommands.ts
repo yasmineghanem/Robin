@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON, SELECT, FIND } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON, SELECT, SELECT_RANGE, FIND } from '../constants/IDE';
 import fs from "fs";
 import { NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
 
@@ -72,7 +72,7 @@ const killTerminal = () => vscode.commands.registerCommand(KILL_TERMINAL, () => 
     vscode.commands.executeCommand('workbench.action.terminal.kill');
 });
 
-//select
+//select line
 const select = () => vscode.commands.registerCommand(SELECT, (data) => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
@@ -82,6 +82,28 @@ const select = () => vscode.commands.registerCommand(SELECT, (data) => {
         // editor.revealRange(new vscode.Range(start, end));
         vscode.commands.executeCommand(GO_TO_LINE, (data));
         vscode.commands.executeCommand('expandLineSelection');
+        return {
+            success: true
+        };
+    } else {
+        return {
+            success: false,
+            message: "No active text editor"
+        };
+
+    }
+}
+);
+
+//select multiple lines
+const selectRange = () => vscode.commands.registerCommand(SELECT_RANGE, (data) => {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const start = new vscode.Position(data.startLine ?? 0, data.startCharacter ?? 0);
+        const end = new vscode.Position(data.endLine ?? 0, data.endCharacter?? 0);
+        editor.selection = new vscode.Selection(start, end);
+        editor.revealRange(new vscode.Range(start, end));
+
         return {
             success: true
         };
@@ -299,6 +321,7 @@ const registerIDECommands = () => {
         runNotebook,
         runPython,
         select,
+        selectRange,
         find
 
     ];
