@@ -17,11 +17,14 @@ export class PythonCodeGenerator extends CodeGenerator {
      * Declare reserved keywords for each programming language
     **/
     protected reservedKeywords: Array<string>;
+    protected tabSize: number;
 
     // constructor
     constructor() {
         super();
         this.reservedKeywords = pythonReservedKeywords.reservedKeywords;
+        // TODO read tab size from .env
+        this.tabSize = 4;
     }
 
     //**********************Utility functions**********************//
@@ -53,6 +56,24 @@ export class PythonCodeGenerator extends CodeGenerator {
         return this.isValidVariableName(name);
     }
 
+
+    private handleIndentationLevel(currentLine: string): number {
+        // find the number of white spaces in the beginning of the line, 
+        // and calculate the number of tabs
+        let indentationLevel = 0;
+        for (let i = 0; i < currentLine.length; i++) {
+            if (currentLine[i] === ' ') {
+                indentationLevel++;
+            } else {
+                break;
+            }
+        }
+
+        // calculate the number of tabs
+        const tabs = Math.floor(indentationLevel / this.tabSize);
+        return tabs;
+
+    }
     /**
      * wrap code in a code block with '`' character
     **/
@@ -65,18 +86,45 @@ export class PythonCodeGenerator extends CodeGenerator {
      * 4 spaces before each line (if multiline)
     **/
     addIndentation(code: string): string {
-        return code.split('\n').map(line => `    ${line}`).join('\n');
+        // with tab_size
+        return code.split('\n').map(line => `${this.addWhiteSpace(Whitespace.Tab, this.tabSize)}${line}`).join('\n');
     }
     //********************************************//
-
     /**
      * Declare variables
     **/
-    declareVariable(name: string, type?: string, initialValue?: any): string {
+    declareVariable(currentLine: string, name: string, type?: string, initialValue?: any): string {
+
+
         if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid variable name: ${name}`);
         }
-        return `${name} = ${initialValue !== undefined ? initialValue : 'None'}\n`;
+
+        let indentationLevel = this.handleIndentationLevel(currentLine)
+
+        if (type) {
+            if (initialValue)
+                return `${this.addWhiteSpace(Whitespace.Tab, indentationLevel)}${name}: ${type} = ${initialValue}\n`;
+
+            return `${this.addWhiteSpace(Whitespace.Tab, indentationLevel)}${name}: ${type}\n`;
+        }
+
+        if (initialValue)
+            return `${this.addWhiteSpace(Whitespace.Tab, indentationLevel)}${name} = ${initialValue}\n`;
+
+        return `${this.addWhiteSpace(Whitespace.Tab, indentationLevel)}${name}\n`;
+
+        // if (type) {
+        //     if (initialValue)
+        //         return `${name}: ${type} = ${initialValue}\n`;
+
+        //     return `${name}: ${type}\n`;
+        // }
+
+        // if (initialValue)
+        //     return `${name} = ${initialValue}\n`;
+
+        // return name;
     }
 
     /**

@@ -26044,33 +26044,30 @@ const declareVariable = () => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             // check for extension
-            const document = editor.document;
-            const editorConfig = vscode.workspace.getConfiguration("editor", document.uri);
-            const insertSpaces = editorConfig.get("insertSpaces");
-            const tabSize = editorConfig.get("tabSize");
-            return handleSuccess(tabSize.toString());
-            // const ext = getFileExtension(editor);
-            // let codeGenerator;
-            // switch (ext) {
-            //     case EXTENSIONS.PYTHON:
-            //         codeGenerator = new PythonCodeGenerator();
-            //         break;
-            //     case EXTENSIONS.JUPYTER:
-            //         codeGenerator = new PythonCodeGenerator();
-            //         break;
-            //     default:
-            //         return handleFailure(FILE_EXT_FAILURE);
-            // }
-            // let s = await editor.edit((editBuilder) => {
-            //     editBuilder.insert(
-            //         getCurrentPosition(editor),
-            //         codeGenerator.declareVariable(args.name, args.type, args.value)
-            //     );
-            // });
-            // if (!s) {
-            //     return handleFailure(VARIABLE_FAILURE);
-            // }
-            // return handleSuccess(VARIABLE_SUCCESS);
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            let s = await editor.edit((editBuilder) => {
+                editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareVariable(editor.document.lineAt(editor.selection.active.line === 0 ? 0 :
+                    editor.selection.active.line - 1).text, 
+                // cursor column
+                // editor.selection.active.character,
+                args.name, args.type, args.value));
+            });
+            console.log('ay haga');
+            if (!s) {
+                return handleFailure(code_1.VARIABLE_FAILURE);
+            }
+            return handleSuccess(code_1.VARIABLE_SUCCESS);
         }
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
@@ -26415,7 +26412,7 @@ const tryExcept = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
-// conditional
+// conditional 
 const conditional = () => {
     vscode.commands.registerCommand(code_1.CONDITIONAL, async (args) => {
         const editor = vscode.window.activeTextEditor;
@@ -26864,7 +26861,7 @@ const writeFile = () => {
 //         }
 //     ]
 // }
-// declare class
+// declare class 
 const declareClass = () => {
     vscode.commands.registerCommand(code_1.DECLARE_CLASS, async (args) => {
         const editor = vscode.window.activeTextEditor;
@@ -26900,8 +26897,7 @@ const declareClass = () => {
 };
 // register commands
 const registerCodeCommands = () => {
-    const commands = [
-        declareVariable,
+    const commands = [declareVariable,
         declareFunction,
         getAST,
         functionCall,
@@ -26924,7 +26920,7 @@ const registerCodeCommands = () => {
         readFile,
         writeFile,
         declareClass,
-        tryExcept,
+        tryExcept
     ];
     commands.forEach((command) => {
         command();
@@ -26952,10 +26948,13 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Declare reserved keywords for each programming language
     **/
     reservedKeywords;
+    tabSize;
     // constructor
     constructor() {
         super();
         this.reservedKeywords = pythonReserved_json_1.default.reservedKeywords;
+        // TODO read tab size from .env
+        this.tabSize = 4;
     }
     //**********************Utility functions**********************//
     /**
@@ -26981,6 +26980,22 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     isValidClassName(name) {
         return this.isValidVariableName(name);
     }
+    handleIndentationLevel(currentLine) {
+        // find the number of white spaces in the beginning of the line, 
+        // and calculate the number of tabs
+        let indentationLevel = 0;
+        for (let i = 0; i < currentLine.length; i++) {
+            if (currentLine[i] === ' ') {
+                indentationLevel++;
+            }
+            else {
+                break;
+            }
+        }
+        // calculate the number of tabs
+        const tabs = Math.floor(indentationLevel / this.tabSize);
+        return tabs;
+    }
     /**
      * wrap code in a code block with '`' character
     **/
@@ -26992,17 +27007,34 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * 4 spaces before each line (if multiline)
     **/
     addIndentation(code) {
-        return code.split('\n').map(line => `    ${line}`).join('\n');
+        // with tab_size
+        return code.split('\n').map(line => `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, this.tabSize)}${line}`).join('\n');
     }
     //********************************************//
     /**
      * Declare variables
     **/
-    declareVariable(name, type, initialValue) {
+    declareVariable(currentLine, name, type, initialValue) {
         if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid variable name: ${name}`);
         }
-        return `${name} = ${initialValue !== undefined ? initialValue : 'None'}\n`;
+        let indentationLevel = this.handleIndentationLevel(currentLine);
+        if (type) {
+            if (initialValue)
+                return `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel)}${name}: ${type} = ${initialValue}\n`;
+            return `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel)}${name}: ${type}\n`;
+        }
+        if (initialValue)
+            return `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel)}${name} = ${initialValue}\n`;
+        return `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel)}${name}\n`;
+        // if (type) {
+        //     if (initialValue)
+        //         return `${name}: ${type} = ${initialValue}\n`;
+        //     return `${name}: ${type}\n`;
+        // }
+        // if (initialValue)
+        //     return `${name} = ${initialValue}\n`;
+        // return name;
     }
     /**
      * Declare constants
