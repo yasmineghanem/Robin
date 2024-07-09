@@ -328,7 +328,7 @@ void process_local_frame(const char *file)
 }
 int main()
 {
-    cudaError_t err = cudaDeviceSetLimit(cudaLimitMallocHeapSize, 1048576ULL * 1024 * 3);
+    cudaError_t err = cudaDeviceSetLimit(cudaLimitMallocHeapSize, 1048576ULL * 1024 * 5);
 
     // freopen("log.txt", "w", stdout);
     fill_features_info();

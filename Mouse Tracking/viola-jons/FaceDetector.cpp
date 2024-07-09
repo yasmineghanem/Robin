@@ -28,22 +28,22 @@ FaceDetector::FaceDetector()
 matrices FaceDetector::evaluate_single_layer(AdaBoost *fl, int *&predictions, double sl)
 {
     // set the value of the shifted value sl
-    matrices mat;
+
     for (int i = 0; i < this->train_dim.first; i++)
     {
         predictions[i] = fl->predict(X_train[i], sl);
     }
-    mat = calc_acuracy_metrices(y_train, predictions, this->train_dim.first);
+    matrices train_mat = calc_acuracy_metrices(y_train, predictions, this->train_dim.first);
     int p = 0, neg = 0;
     for (int i = 0; i < get<0>(this->val_dim); i++)
     {
         predictions[i] = fl->predict(X_val[i], get<1>(this->val_dim), sl);
     }
     matrices val_mat = calc_acuracy_metrices(y_val, predictions, get<0>(this->val_dim));
-    mat.false_positive_rate = max(val_mat.false_positive_rate, mat.false_positive_rate);
-    mat.false_negative_rate = max(val_mat.false_negative_rate, mat.false_negative_rate);
+    train_mat.false_positive_rate = max(val_mat.false_positive_rate, train_mat.false_positive_rate);
+    train_mat.false_negative_rate = max(val_mat.false_negative_rate, train_mat.false_negative_rate);
 
-    return mat;
+    return train_mat;
 }
 
 void FaceDetector::remove_negative_train_data()
@@ -156,11 +156,11 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                 {
 
                     // the shift sl is set to the smallest value that satisfies the false negative requirement.
-                    sl = -1.2;
+                    sl = -1.1;
                     auto mat = this->evaluate_single_layer(fl, predictions, sl);
                     Y = mat.false_positive_rate, B = mat.false_negative_rate;
                     cout << "adaboost number :  " << l << " layer number : " << Tl << " entered the dead loop" << endl;
-                    while (B > Bl)
+                    while (B > Bl && sl < 1.0)
                     {
                         sl += 0.01;
                         mat = this->evaluate_single_layer(fl, predictions, sl);
