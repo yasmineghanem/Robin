@@ -24409,27 +24409,27 @@ router.use((req, res, next) => {
     }
 });
 // declare variable
-router.post('/declare-variable', (req, res) => {
+router.post("/declare-variable", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.DECLARE_VARIABLE, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
 // assign variable
-router.post('/assign-variable', (req, res) => {
+router.post("/assign-variable", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.ASSIGN_VARIABLE, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
 // declare function
-router.post('/declare-function', (req, res) => {
+router.post("/declare-function", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.DECLARE_FUNCTION, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
 // function call
-router.post('/function-call', (req, res) => {
+router.post("/function-call", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.FUNCTION_CALL, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
 // declare constant
-router.post('/declare-constant', (req, res) => {
+router.post("/declare-constant", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.DECLARE_CONSTANT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
@@ -24442,16 +24442,16 @@ router.post("/while-loop", (req, res) => {
     (0, utilities_1.executeCommand)(code_1.WHILE_LOOP, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
 // add whitespace
-router.get('/add-whitespace', (req, res) => {
+router.get("/add-whitespace", (req, res) => {
     (0, utilities_1.executeCommand)(code_1.ADD_WHITESPACE, req.query, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
 // Import
-router.post('/import-library', (req, res) => {
+router.post("/import-library", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.IMPORT_LIBRARY, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
-// Module Import 
-router.post('/import-module', (req, res) => {
+// Module Import
+router.post("/import-module", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.IMPORT_MODULE, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
@@ -24511,7 +24511,7 @@ router.post("/declare-class", (req, res) => {
     (0, utilities_1.executeCommand)(code_1.DECLARE_CLASS, data, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
 // get AST
-router.get('/ast', (req, res) => {
+router.get("/ast", (req, res) => {
     // const data = req.body;
     (0, utilities_1.executeCommand)(code_1.GET_AST, {}, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
@@ -24519,6 +24519,10 @@ router.get('/ast', (req, res) => {
 router.post("/try-except", (req, res) => {
     const data = req.body;
     (0, utilities_1.executeCommand)(code_1.TRY_EXCEPT, data, utilities_1.successHandler, utilities_1.errorHandler, res);
+});
+// Try Except
+router.get("/exit-scope", (req, res) => {
+    (0, utilities_1.executeCommand)('robin.exitScope', {}, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
 exports["default"] = router;
 
@@ -26057,13 +26061,11 @@ const declareVariable = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             let s = await editor.edit((editBuilder) => {
-                editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareVariable(editor.document.lineAt(editor.selection.active.line === 0 ? 0 :
-                    editor.selection.active.line - 1).text, 
-                // cursor column
-                // editor.selection.active.character,
-                args.name, args.type, args.value));
+                editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareVariable(editor.document.lineAt(editor.selection.active.line === 0
+                    ? 0
+                    : editor.selection.active.line - 1).text, args.name, args.type, args.value));
             });
-            console.log('ay haga');
+            console.log("ay haga");
             if (!s) {
                 return handleFailure(code_1.VARIABLE_FAILURE);
             }
@@ -26412,7 +26414,7 @@ const tryExcept = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
-// conditional 
+// conditional
 const conditional = () => {
     vscode.commands.registerCommand(code_1.CONDITIONAL, async (args) => {
         const editor = vscode.window.activeTextEditor;
@@ -26861,7 +26863,7 @@ const writeFile = () => {
 //         }
 //     ]
 // }
-// declare class 
+// declare class
 const declareClass = () => {
     vscode.commands.registerCommand(code_1.DECLARE_CLASS, async (args) => {
         const editor = vscode.window.activeTextEditor;
@@ -26895,9 +26897,45 @@ const declareClass = () => {
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
 };
+const exitScope = () => {
+    vscode.commands.registerCommand("robin.exitScope", async (args) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // check for extension
+            const ext = getFileExtension(editor);
+            let codeGenerator;
+            switch (ext) {
+                case constants_1.EXTENSIONS.PYTHON:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                case constants_1.EXTENSIONS.JUPYTER:
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    break;
+                default:
+                    return handleFailure(code_1.FILE_EXT_FAILURE);
+            }
+            try {
+                let s = await editor.edit((editBuilder) => {
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.exitScope(
+                    //current line
+                    editor.document.lineAt(editor.selection.active.line).text));
+                });
+                if (!s) {
+                    return handleFailure(code_1.FUNCTION_FAILURE);
+                }
+            }
+            catch (e) {
+                return handleFailure(code_1.FUNCTION_FAILURE);
+            }
+            return handleSuccess(code_1.FUNCTION_SUCCESS);
+        }
+        return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
+    });
+};
 // register commands
 const registerCodeCommands = () => {
-    const commands = [declareVariable,
+    const commands = [
+        declareVariable,
         declareFunction,
         getAST,
         functionCall,
@@ -26920,7 +26958,8 @@ const registerCodeCommands = () => {
         readFile,
         writeFile,
         declareClass,
-        tryExcept
+        tryExcept,
+        exitScope,
     ];
     commands.forEach((command) => {
         command();
@@ -26946,9 +26985,10 @@ const pythonReserved_json_1 = __importDefault(__webpack_require__(177));
 class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Declare reserved keywords for each programming language
-    **/
+     **/
     reservedKeywords;
     tabSize;
+    tabString = "    ";
     // constructor
     constructor() {
         super();
@@ -26959,7 +26999,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     //**********************Utility functions**********************//
     /**
      * Check if the variable name is valid and not a reserved keyword
-    **/
+     **/
     isValidVariableName(name) {
         const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
         if (!pattern.test(name)) {
@@ -26981,16 +27021,21 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return this.isValidVariableName(name);
     }
     handleIndentationLevel(currentLine) {
-        // find the number of white spaces in the beginning of the line, 
+        // find the number of white spaces in the beginning of the line,
         // and calculate the number of tabs
         let indentationLevel = 0;
         for (let i = 0; i < currentLine.length; i++) {
-            if (currentLine[i] === ' ') {
+            if (currentLine[i] === " ") {
                 indentationLevel++;
             }
             else {
                 break;
             }
+        }
+        // check if first word in line is a scope
+        currentLine = currentLine.trim();
+        if (currentLine.endsWith(":")) {
+            indentationLevel += this.tabSize;
         }
         // calculate the number of tabs
         const tabs = Math.floor(indentationLevel / this.tabSize);
@@ -26998,47 +27043,45 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     /**
      * wrap code in a code block with '`' character
-    **/
+     **/
     wrapInCodeBlock(lines) {
-        return lines.map(line => `    ${line}`).join('\n');
+        return lines.map((line) => `    ${line}`).join("\n");
     }
     /**
      * Add Indentation to the code
      * 4 spaces before each line (if multiline)
-    **/
+     **/
     addIndentation(code) {
         // with tab_size
-        return code.split('\n').map(line => `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, this.tabSize)}${line}`).join('\n');
+        return code
+            .split("\n")
+            .map((line) => `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, this.tabSize)}${line}`)
+            .join("\n");
     }
     //********************************************//
     /**
      * Declare variables
-    **/
+     **/
     declareVariable(currentLine, name, type, initialValue) {
         if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid variable name: ${name}`);
         }
-        let indentationLevel = this.handleIndentationLevel(currentLine);
+        const indentationLevel = this.handleIndentationLevel(currentLine);
+        let indentation = this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel);
         if (type) {
-            if (initialValue)
-                return `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel)}${name}: ${type} = ${initialValue}\n`;
-            return `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel)}${name}: ${type}\n`;
+            if (initialValue) {
+                return `${name}: ${type} = ${initialValue}\n${indentation}`;
+            }
+            return `${name}: ${type}\n${indentation}`;
         }
-        if (initialValue)
-            return `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel)}${name} = ${initialValue}\n`;
-        return `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel)}${name}\n`;
-        // if (type) {
-        //     if (initialValue)
-        //         return `${name}: ${type} = ${initialValue}\n`;
-        //     return `${name}: ${type}\n`;
-        // }
-        // if (initialValue)
-        //     return `${name} = ${initialValue}\n`;
-        // return name;
+        if (initialValue) {
+            return `${name} = ${initialValue}\n${indentation}`;
+        }
+        return `${name}\n${indentation}`;
     }
     /**
      * Declare constants
-    **/
+     **/
     declareConstant(name, value) {
         if (!this.isValidConstantName(name.toUpperCase())) {
             throw new Error(`Invalid constant name: ${name}`);
@@ -27047,7 +27090,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     /**
      * Assign variables
-    **/
+     **/
     assignVariable(name, value, type) {
         //Check before if RHS is same type as LHS
         ///////// we need function to check the type of the variable /////////
@@ -27089,18 +27132,22 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Declare function
      * Call function
      * Return statement
-    **/
+     **/
     declareFunction(name, parameters, body, returnType) {
         if (!this.isValidFunctionName(name)) {
             throw new Error(`Invalid function name: ${name}`);
         }
         // check if valid parameters names
-        if (parameters.some(p => !this.isValidVariableName(p.name))) {
+        if (parameters.some((p) => !this.isValidVariableName(p.name))) {
             throw new Error(`Invalid parameter name`);
         }
         // sort the parameters so that the ones without a value come first
-        parameters.sort((a, b) => a.value === undefined ? -1 : 1);
-        const params = parameters.map(p => `${p.name}${p.value ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}` : ''}`).join(', ');
+        parameters.sort((a, b) => (a.value === undefined ? -1 : 1));
+        const params = parameters
+            .map((p) => `${p.name}${p.value
+            ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
+            : ""}`)
+            .join(", ");
         const functionHeader = `def ${name}(${params}):`;
         const functionBody = this.wrapInCodeBlock(body ?? [""]);
         return `${functionHeader}\n${functionBody}`;
@@ -27119,62 +27166,73 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     //         ]
     // }
     generateFunctionCall(name, args) {
-        const params = args.map(p => p.name ? `${p.name} = 
-                ${typeof p.value === "string" ? `"${p.value}"` : p.value}` :
-            typeof p.value === "string" ? `"${p.value}"` : p.value).join(', ');
+        const params = args
+            .map((p) => p.name
+            ? `${p.name} = 
+                ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
+            : typeof p.value === "string"
+                ? `"${p.value}"`
+                : p.value)
+            .join(", ");
         return `${name}(${params}) \n`;
     }
     generateReturn(value) {
         return `return ${value ?? ""} `;
     }
     /**
-     * Declare Class
-     * class Person:
-        def __init__(self, name, age):
-            self.name = name
-            self.age = age
-
-        def myfunc(self):
-            print("Hello my name is " + self.name)
-
-    **/
+       * Declare Class
+       * class Person:
+          def __init__(self, name, age):
+              self.name = name
+              self.age = age
+  
+          def myfunc(self):
+              print("Hello my name is " + self.name)
+  
+      **/
     declareClass(name, properties, methods) {
         if (!this.isValidClassName(name)) {
             throw new Error(`Invalid class name: ${name} `);
         }
         // check if valid properties names
-        if (properties.some(p => !this.isValidVariableName(p.name))) {
+        if (properties.some((p) => !this.isValidVariableName(p.name))) {
             throw new Error(`Invalid property name`);
         }
         // check if valid method names
-        if (methods.some(m => !this.isValidFunctionName(m.name))) {
+        if (methods.some((m) => !this.isValidFunctionName(m.name))) {
             throw new Error(`Invalid method name`);
         }
         let code = "";
         // add class name, capitalize first letter
         code += `class ${name.charAt(0).toUpperCase() + name.slice(1)}: \n`;
         // add constructor
-        code += `\tdef __init__(self, ${properties.map(p => p.name).join(', ')}): \n`;
+        code += `${this.tabString}def __init__(self, ${properties
+            .map((p) => p.name)
+            .join(", ")}): \n`;
         // add properties
-        properties.forEach(p => {
-            code += `\t\tself.${p.name} = ${p.name}\n`;
+        properties.forEach((p) => {
+            code += `${this.tabString}${this.tabString}self.${p.name} = ${p.name}\n`;
         });
         // add methods
-        methods.forEach(m => {
+        methods.forEach((m) => {
             // sort the parameters so that the one's without value come first
-            m.parameters.sort((a, b) => a.value === undefined ? -1 : 1);
-            const params = m.parameters.map(p => `${p.name}${p.value ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}` : ''}`).join(', ');
+            m.parameters.sort((a, b) => (a.value === undefined ? -1 : 1));
+            const params = m.parameters
+                .map((p) => `${p.name}${p.value
+                ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
+                : ""}`)
+                .join(", ");
             // code += "\n";
-            code += `\n\tdef ${m.name}(self, ${params}):\n\t`;
-            code += this.wrapInCodeBlock(m.body ?? ['pass\n']);
+            code += `\n${this.tabString}def ${m.name}(self, ${params}):\n${this.tabString}`;
+            code += this.wrapInCodeBlock(m.body ?? ["pass\n"]);
         });
         return code;
     }
     /**
      * Import modules
-    **/
+     **/
     generateImportModule(library, modules) {
-        return `from ${library} import ${modules.join(', ')}\n`;
+        return `from ${library} import ${modules.join(", ")}\n`;
     }
     generateImportLibrary(library) {
         return `import ${library}\n`;
@@ -27182,19 +27240,21 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Conditional statements
      * if, if-else
-    **/
+     **/
     generateIf(condition, body) {
         return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
     }
     generateIfElse(condition, ifBody, elseBody) {
         const ifCode = `if ${condition}: \n${this.wrapInCodeBlock(ifBody)} `;
-        const elseCode = elseBody ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} ` : '';
+        const elseCode = elseBody
+            ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} `
+            : "";
         return `${ifCode}${elseCode} `;
     }
     /**
      * Loop statements
      * for, while, do-while
-    **/
+     **/
     // generateForLoop(variable: string, iterable: string, body: string[]): string {
     //     const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
     //     return loopCode;
@@ -27212,84 +27272,86 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
     }
     generateIterableLoop(params, body) {
-        const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}: \n${this.wrapInCodeBlock(body ?? [''])} `;
+        const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}: \n${this.wrapInCodeBlock(body ?? [""])} `;
         return loopCode;
     }
     generateRangeLoop(params, body) {
         const { iterators, start, end, step } = params;
         // if there's no step and no start, just return range of the end
         if (!step && !start) {
-            return `for ${iterators.join(", ")} in range(${end ?? ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+            return `for ${iterators.join(", ")} in range(${end ?? ""}): \n${this.wrapInCodeBlock(body ?? [""])} `;
         }
         // if there's no step, just return range of start and end
         if (!step) {
-            return `for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${end ?? ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+            return `for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${end ?? ""}): \n${this.wrapInCodeBlock(body ?? [""])} `;
         }
         // if there's a step, return range of start, end and step
-        return `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${end ?? ''}, ${step}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+        return `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${end ?? ""}, ${step}): \n${this.wrapInCodeBlock(body ?? [""])} `;
     }
     generateEnumerateLoop(params, body) {
         const { iterators, iterable, start } = params;
-        return `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ''}): \n${this.wrapInCodeBlock(body ?? [''])} `;
+        return `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ""}): \n${this.wrapInCodeBlock(body ?? [""])} `;
     }
     generateWhileLoop(condition, body) {
-        const conditionCode = condition.map(c => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`).join(' ');
-        const loopCode = `while ${conditionCode}: \n${this.wrapInCodeBlock(body ?? [''])} `;
+        const conditionCode = condition
+            .map((c) => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`)
+            .join(" ");
+        const loopCode = `while ${conditionCode}: \n${this.wrapInCodeBlock(body ?? [""])} `;
         return loopCode;
     }
     /**
      * Try Except
      */
     generateTryExcept(tryBody, exception, exceptionInstance, exceptBody) {
-        const tryCode = `try: \n${this.wrapInCodeBlock(tryBody ?? [''])} `;
-        const exceptCode = `except ${exception} as ${exceptionInstance}: \n${this.wrapInCodeBlock(exceptBody ?? [''])} `;
+        const tryCode = `try: \n${this.wrapInCodeBlock(tryBody ?? [""])} `;
+        const exceptCode = `except ${exception} as ${exceptionInstance}: \n${this.wrapInCodeBlock(exceptBody ?? [""])} `;
         return `${tryCode} \n${exceptCode} `;
     }
     /**
      * Identity operators
      * is, is not
-    **/
+     **/
     generateIdentityOperation(left, operator, right) {
         return `${left} ${operator} ${right} `;
     }
     /**
      * Membership operation
      * in, not in
-    **/
+     **/
     generateMembershipOperation(left, operator, right) {
         return `${left} ${operator} ${right} `;
     }
     /**
      * Logical operators
      * and, or, not
-    **/
+     **/
     generateLogicalOperation(left, operator, right) {
         return `${left} ${operator} ${right} `;
     }
     /**
      * Comparison operators
      * <, >, <=, >=, ==, !=
-    **/
+     **/
     generateComparisonOperation(left, operator, right) {
         return `${left} ${operator} ${right} `;
     }
     /**
      * Arithmetic operators
      * +, -, *, /, %, // , **
-    **/
+     **/
     generateArithmeticOperation(left, operator, right) {
         return `${left} ${operator} ${right} `;
     }
     /**
      * Bitwise operators
      * &, |, ^, ~, <<, >>
-    **/
+     **/
     generateBitwiseOperation(left, operator, right) {
         return `${left} ${operator} ${right} `;
     }
     /**
      * Assertion
-    **/
+     **/
     generateAssertion(variable, value, type) {
         if (!Object.values(codeEnums_1.AssertionOperators).includes(type)) {
             throw new Error(`Invalid assertion type: ${type}`);
@@ -27309,7 +27371,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     /**
      * Generate Casting
-    **/
+     **/
     generateCasting(value, type) {
         if (!Object.values(codeEnums_1.CastingTypes).includes(type)) {
             throw new Error(`Invalid casting type: ${type}`);
@@ -27337,18 +27399,18 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     /**
      * Generate User Input
-    **/
+     **/
     generateUserInput(variable, message) {
-        return `${variable} = input(${message ? message : ''})\n`;
+        return `${variable} = input(${message ? message : ""})\n`;
     }
     /**
      * Generate Print
-    **/
+     **/
     generatePrint(value, type) {
         switch (type) {
-            case 'string':
+            case "string":
                 return `print("${value}")\n`;
-            case 'variable':
+            case "variable":
                 return `print(${value})\n`;
             default:
                 return `print w khalas(${value})\n`;
@@ -27356,14 +27418,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     /**
      * Read file
-    **/
+     **/
     //TODO: add options to read line, read all file, read character
     generateReadFile(path, variable) {
         return `${variable} = open("${path}", 'r').read()\n`;
     }
     /**
      * Write file
-    **/
+     **/
     generateWriteFile(path, content) {
         return `open("${path}", 'w').write("${content}")\n`;
     }
@@ -27374,16 +27436,17 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         let ws;
         switch (type) {
             case codeEnums_1.Whitespace.Space:
-                ws = ' ';
+                ws = " ";
                 break;
             case codeEnums_1.Whitespace.Tab:
-                ws = '\t';
+                ws = "    ";
+                console.log("TAAAAAAAAB");
                 break;
             case codeEnums_1.Whitespace.NewLine:
-                ws = '\n';
+                ws = "\n";
                 break;
             default:
-                ws = ' ';
+                ws = " ";
         }
         return ws.repeat(count ?? 1);
     }
@@ -27391,7 +27454,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Comments
      * Single line comments
      * Multi line comments
-    **/
+     **/
     generateLineComment(content) {
         return `# ${content}\n`;
     }
@@ -27423,10 +27486,12 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     //     }
     // ]
     generateConditional(conditions) {
-        let code = '';
-        conditions.forEach(c => {
-            if (c.keyword === 'if' || c.keyword === 'elif') {
-                code += `${c.keyword} ${c.condition?.map(cond => `${cond.logicalOperator ?? ""} ${cond.left} ${cond.operator} ${cond.right}`).join(' ')}: \n`;
+        let code = "";
+        conditions.forEach((c) => {
+            if (c.keyword === "if" || c.keyword === "elif") {
+                code += `${c.keyword} ${c.condition
+                    ?.map((cond) => `${cond.logicalOperator ?? ""} ${cond.left} ${cond.operator} ${cond.right}`)
+                    .join(" ")}: \n`;
             }
             else {
                 code += `\nelse: \n`;
@@ -27441,6 +27506,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     generateArrayOperation(name, operation) {
         // pack, uno
         return "";
+    }
+    exitScope(currentLine) {
+        let indentationLevel = this.handleIndentationLevel(currentLine);
+        if (indentationLevel !== 0) {
+            indentationLevel -= 1;
+        }
+        const indentation = this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel);
+        return `\n${indentation}`;
     }
 }
 exports.PythonCodeGenerator = PythonCodeGenerator;
