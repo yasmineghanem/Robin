@@ -25,6 +25,7 @@ export const READ_FILE = "robin.readFile";
 export const WRITE_FILE = "robin.writeFile";
 export const DECLARE_CLASS = "robin.declareClass";
 export const TRY_EXCEPT = "robin.tryExcept";
+export const EXIT_SCOPE = 'robin.exitScope';
 
 /**
  * Variable declaration messages
@@ -122,3 +123,7 @@ export const LOOP_FAILURE = "Failed to create loop!";
 // operation
 export const OPERATION_SUCCESS = "Operation created successfully!";
 export const OPERATION_FAILURE = "Failed to create operation!";
+
+// exit scope
+export const EXIT_SCOPE_SUCCESS = "Scope exited successfully!";
+export const EXIT_SCOPE_FAILURE = "Failed to exit scope!";

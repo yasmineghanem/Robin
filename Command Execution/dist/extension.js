@@ -24522,7 +24522,7 @@ router.post("/try-except", (req, res) => {
 });
 // Try Except
 router.get("/exit-scope", (req, res) => {
-    (0, utilities_1.executeCommand)('robin.exitScope', {}, utilities_1.successHandler, utilities_1.errorHandler, res);
+    (0, utilities_1.executeCommand)(code_1.EXIT_SCOPE, {}, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
 exports["default"] = router;
 
@@ -24534,8 +24534,8 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.WRITE_FILE_SUCCESS = exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.TRY_EXCEPT = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
-exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = void 0;
+exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.EXIT_SCOPE = exports.TRY_EXCEPT = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = void 0;
 /**
  * Commands
  */
@@ -24563,6 +24563,7 @@ exports.READ_FILE = "robin.readFile";
 exports.WRITE_FILE = "robin.writeFile";
 exports.DECLARE_CLASS = "robin.declareClass";
 exports.TRY_EXCEPT = "robin.tryExcept";
+exports.EXIT_SCOPE = 'robin.exitScope';
 /**
  * Variable declaration messages
  */
@@ -24640,6 +24641,9 @@ exports.LOOP_FAILURE = "Failed to create loop!";
 // operation
 exports.OPERATION_SUCCESS = "Operation created successfully!";
 exports.OPERATION_FAILURE = "Failed to create operation!";
+// exit scope
+exports.EXIT_SCOPE_SUCCESS = "Scope exited successfully!";
+exports.EXIT_SCOPE_FAILURE = "Failed to exit scope!";
 
 
 /***/ }),
@@ -25363,12 +25367,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const fileSystemCommands_1 = __importDefault(__webpack_require__(171));
 const IDECommands_1 = __importDefault(__webpack_require__(172));
-const codeCommands_1 = __importDefault(__webpack_require__(173));
 const gitCommands_1 = __importDefault(__webpack_require__(179));
-const activateRobin = () => vscode.commands.registerCommand('robin.activate', () => {
-    vscode.window.showInformationMessage('Robin Activated!');
+const codeCommands_1 = __importDefault(__webpack_require__(173));
+const activateRobin = () => vscode.commands.registerCommand("robin.activate", () => {
+    vscode.window.showInformationMessage("Robin Activated!");
 });
-// register commands 
+// register commands
 const registerAllCommands = () => {
     activateRobin();
     (0, fileSystemCommands_1.default)();
@@ -26052,18 +26056,16 @@ const declareVariable = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             let s = await editor.edit((editBuilder) => {
-                editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareVariable(editor.document.lineAt(editor.selection.active.line === 0
-                    ? 0
-                    : editor.selection.active.line - 1).text, args.name, args.type, args.value));
+                editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareVariable(args.name, args.type, args.value));
             });
             console.log("ay haga");
             if (!s) {
@@ -26081,10 +26083,10 @@ const assignVariable = () => {
             let codeGenerator;
             switch (getFileExtension(editor)) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26114,10 +26116,10 @@ const declareConstant = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26161,16 +26163,16 @@ const declareFunction = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                const code = codeGenerator.declareFunction(args.name, args.parameters ?? []);
+                const code = codeGenerator.declareFunction(args.name, args.parameters ?? [], args?.body);
                 let s = await editor.edit((editBuilder) => {
                     editBuilder.insert(getCurrentPosition(editor), code);
                 });
@@ -26233,10 +26235,10 @@ const functionCall = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26256,7 +26258,7 @@ const addWhiteSpace = () => {
     vscode.commands.registerCommand(code_1.ADD_WHITESPACE, async (args) => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
-            let codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+            let codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
             let s = await editor.edit((editBuilder) => {
                 editBuilder.insert(getCurrentPosition(editor), codeGenerator.addWhiteSpace(args.type, args?.count));
             });
@@ -26285,10 +26287,10 @@ const forLoop = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26319,10 +26321,10 @@ const whileLoop = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26354,10 +26356,10 @@ const operation = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26389,10 +26391,10 @@ const tryExcept = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26424,10 +26426,10 @@ const conditional = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26459,10 +26461,10 @@ const importLibrary = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26494,10 +26496,10 @@ const importModule = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26529,10 +26531,10 @@ const assertion = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26564,10 +26566,10 @@ const typeCasting = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26599,10 +26601,10 @@ const arrayOperations = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26634,10 +26636,10 @@ const userInput = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26669,10 +26671,10 @@ const printConsole = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26704,10 +26706,10 @@ const lineComment = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26739,10 +26741,10 @@ const blockComment = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26774,10 +26776,10 @@ const readFile = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26809,10 +26811,10 @@ const writeFile = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26873,10 +26875,10 @@ const declareClass = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
@@ -26898,7 +26900,7 @@ const declareClass = () => {
     });
 };
 const exitScope = () => {
-    vscode.commands.registerCommand("robin.exitScope", async (args) => {
+    vscode.commands.registerCommand(code_1.EXIT_SCOPE, async (args) => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             // check for extension
@@ -26906,28 +26908,26 @@ const exitScope = () => {
             let codeGenerator;
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 case constants_1.EXTENSIONS.JUPYTER:
-                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator();
+                    codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
                     break;
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
                 let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.exitScope(
-                    //current line
-                    editor.document.lineAt(editor.selection.active.line).text));
+                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.exitScope());
                 });
                 if (!s) {
-                    return handleFailure(code_1.FUNCTION_FAILURE);
+                    return handleFailure(code_1.EXIT_SCOPE_SUCCESS);
                 }
             }
             catch (e) {
-                return handleFailure(code_1.FUNCTION_FAILURE);
+                return handleFailure(code_1.EXIT_SCOPE_FAILURE);
             }
-            return handleSuccess(code_1.FUNCTION_SUCCESS);
+            return handleSuccess(code_1.EXIT_SCOPE_SUCCESS);
         }
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
@@ -26986,15 +26986,17 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Declare reserved keywords for each programming language
      **/
+    tabString = "    ";
+    editor;
     reservedKeywords;
     tabSize;
-    tabString = "    ";
     // constructor
-    constructor() {
+    constructor(editor) {
         super();
         this.reservedKeywords = pythonReserved_json_1.default.reservedKeywords;
         // TODO read tab size from .env
         this.tabSize = 4;
+        this.editor = editor;
     }
     //**********************Utility functions**********************//
     /**
@@ -27020,7 +27022,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     isValidClassName(name) {
         return this.isValidVariableName(name);
     }
-    handleIndentationLevel(currentLine) {
+    handleIndentationLevel(previous = false) {
+        let currentLine;
+        if (previous) {
+            currentLine = this.editor.document.lineAt(Math.max(this.editor.selection.active.line - 1, 0)).text;
+        }
+        else {
+            currentLine = this.editor.document.lineAt(this.editor.selection.active.line).text;
+        }
         // find the number of white spaces in the beginning of the line,
         // and calculate the number of tabs
         let indentationLevel = 0;
@@ -27062,12 +27071,11 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Declare variables
      **/
-    declareVariable(currentLine, name, type, initialValue) {
+    declareVariable(name, type, initialValue) {
         if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid variable name: ${name}`);
         }
-        const indentationLevel = this.handleIndentationLevel(currentLine);
-        let indentation = this.addWhiteSpace(codeEnums_1.Whitespace.Tab, indentationLevel);
+        const indentation = this.handleIndentationLevel(true); // previous line
         if (type) {
             if (initialValue) {
                 return `${name}: ${type} = ${initialValue}\n${indentation}`;
@@ -27086,7 +27094,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!this.isValidConstantName(name.toUpperCase())) {
             throw new Error(`Invalid constant name: ${name}`);
         }
-        return `${name.toUpperCase()} = ${value}\n`;
+        return (`${name.toUpperCase()} = ${value}\n` + this.handleIndentationLevel(true));
     }
     /**
      * Assign variables
@@ -27099,31 +27107,31 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         switch (type) {
             case codeEnums_1.AssignmentOperators.Equals:
-                return `${name} = ${value}\n`;
+                return `${name} = ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.PlusEquals:
-                return `${name} += ${value}\n`;
+                return `${name} += ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.MinusEquals:
-                return `${name} -= ${value}\n`;
+                return `${name} -= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.MultiplyEquals:
-                return `${name} *= ${value}\n`;
+                return `${name} *= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.DivideEquals:
-                return `${name} /= ${value}\n`;
+                return `${name} /= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.FloorDivideEquals:
-                return `${name} //= ${value}\n`;
+                return `${name} //= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.ModulusEquals:
-                return `${name} %= ${value}\n`;
+                return `${name} %= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.ExponentEquals:
-                return `${name} **= ${value}\n`;
+                return `${name} **= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.AndEquals:
-                return `${name} &= ${value}\n`;
+                return `${name} &= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.OrEquals:
-                return `${name} |= ${value}\n`;
+                return `${name} |= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.XorEquals:
-                return `${name} ^= ${value}\n`;
+                return `${name} ^= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.LeftShiftEquals:
-                return `${name} <<= ${value}\n`;
+                return `${name} <<= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssignmentOperators.RightShiftEquals:
-                return `${name} >>= ${value}\n`;
+                return `${name} >>= ${value}\n` + this.handleIndentationLevel(true);
             default:
                 throw new Error(`Invalid assignment type: ${type}`);
         }
@@ -27152,19 +27160,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         const functionBody = this.wrapInCodeBlock(body ?? [""]);
         return `${functionHeader}\n${functionBody}`;
     }
-    // {
-    //     "name": "x_string",
-    //         "args": [
-    //             {
-    //                 "name": "x",
-    //                 "value": "test"
-    //             },
-    //             {
-    //                 "name": "y",
-    //                 "value": "test"
-    //             }
-    //         ]
-    // }
     generateFunctionCall(name, args) {
         const params = args
             .map((p) => p.name
@@ -27307,48 +27302,72 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         const exceptCode = `except ${exception} as ${exceptionInstance}: \n${this.wrapInCodeBlock(exceptBody ?? [""])} `;
         return `${tryCode} \n${exceptCode} `;
     }
-    /**
-     * Identity operators
-     * is, is not
-     **/
-    generateIdentityOperation(left, operator, right) {
-        return `${left} ${operator} ${right} `;
-    }
-    /**
-     * Membership operation
-     * in, not in
-     **/
-    generateMembershipOperation(left, operator, right) {
-        return `${left} ${operator} ${right} `;
-    }
-    /**
-     * Logical operators
-     * and, or, not
-     **/
-    generateLogicalOperation(left, operator, right) {
-        return `${left} ${operator} ${right} `;
-    }
-    /**
-     * Comparison operators
-     * <, >, <=, >=, ==, !=
-     **/
-    generateComparisonOperation(left, operator, right) {
-        return `${left} ${operator} ${right} `;
-    }
-    /**
-     * Arithmetic operators
-     * +, -, *, /, %, // , **
-     **/
-    generateArithmeticOperation(left, operator, right) {
-        return `${left} ${operator} ${right} `;
-    }
-    /**
-     * Bitwise operators
-     * &, |, ^, ~, <<, >>
-     **/
-    generateBitwiseOperation(left, operator, right) {
-        return `${left} ${operator} ${right} `;
-    }
+    // /**
+    //  * Identity operators
+    //  * is, is not
+    //  **/
+    // generateIdentityOperation(
+    //   left: string,
+    //   operator: IdentityOperators,
+    //   right: string
+    // ): string {
+    //   return `${left} ${operator} ${right} `;
+    // }
+    // /**
+    //  * Membership operation
+    //  * in, not in
+    //  **/
+    // generateMembershipOperation(
+    //   left: string,
+    //   operator: MembershipOperators,
+    //   right: string
+    // ): string {
+    //   return `${left} ${operator} ${right} `;
+    // }
+    // /**
+    //  * Logical operators
+    //  * and, or, not
+    //  **/
+    // generateLogicalOperation(
+    //   left: string,
+    //   operator: LogicalOperators,
+    //   right: string
+    // ): string {
+    //   return `${left} ${operator} ${right} `;
+    // }
+    // /**
+    //  * Comparison operators
+    //  * <, >, <=, >=, ==, !=
+    //  **/
+    // generateComparisonOperation(
+    //   left: string,
+    //   operator: ComparisonOperators,
+    //   right: string
+    // ): string {
+    //   return `${left} ${operator} ${right} `;
+    // }
+    // /**
+    //  * Arithmetic operators
+    //  * +, -, *, /, %, // , **
+    //  **/
+    // generateArithmeticOperation(
+    //   left: string,
+    //   operator: ArithmeticOperators,
+    //   right: string
+    // ): string {
+    //   return `${left} ${operator} ${right} `;
+    // }
+    // /**
+    //  * Bitwise operators
+    //  * &, |, ^, ~, <<, >>
+    //  **/
+    // generateBitwiseOperation(
+    //   left: string,
+    //   operator: BitwiseOperators,
+    //   right: string
+    // ): string {
+    //   return `${left} ${operator} ${right} `;
+    // }
     /**
      * Assertion
      **/
@@ -27358,13 +27377,13 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         switch (type) {
             case codeEnums_1.AssertionOperators.Equal:
-                return `assert ${variable} == ${value}\n`;
+                return `assert ${variable} == ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssertionOperators.NotEqual:
-                return `assert ${variable} != ${value}\n`;
+                return `assert ${variable} != ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssertionOperators.GreaterThanOrEqual:
-                return `assert ${variable} >= ${value}\n`;
+                return `assert ${variable} >= ${value}\n` + this.handleIndentationLevel(true);
             case codeEnums_1.AssertionOperators.LessThanOrEqual:
-                return `assert ${variable} <= ${value}\n`;
+                return `assert ${variable} <= ${value}\n` + this.handleIndentationLevel(true);
             default:
                 throw new Error(`Invalid assertion type: ${type}`);
         }
@@ -27372,27 +27391,27 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Generate Casting
      **/
-    generateCasting(value, type) {
+    generateCasting(variable, type) {
         if (!Object.values(codeEnums_1.CastingTypes).includes(type)) {
             throw new Error(`Invalid casting type: ${type}`);
         }
         switch (type) {
             case codeEnums_1.CastingTypes.Integer:
-                return `int(${value})\n`;
+                return `${variable} = int(${variable})\n` + this.handleIndentationLevel(true);
             case codeEnums_1.CastingTypes.Float:
-                return `float(${value})\n`;
+                return `${variable} = float(${variable})\n` + this.handleIndentationLevel(true);
             case codeEnums_1.CastingTypes.String:
-                return `str(${value})\n`;
+                return `${variable} = str(${variable})\n` + this.handleIndentationLevel(true);
             case codeEnums_1.CastingTypes.Boolean:
-                return `bool(${value})\n`;
+                return `${variable} = bool(${variable})\n` + this.handleIndentationLevel(true);
             case codeEnums_1.CastingTypes.List:
-                return `list(${value})\n`;
+                return `${variable} = list(${variable})\n` + this.handleIndentationLevel(true);
             case codeEnums_1.CastingTypes.Tuple:
-                return `tuple(${value})\n`;
+                return `${variable} = tuple(${variable})\n` + this.handleIndentationLevel(true);
             case codeEnums_1.CastingTypes.Set:
-                return `set(${value})\n`;
+                return `${variable} = set(${variable})\n` + this.handleIndentationLevel(true);
             case codeEnums_1.CastingTypes.Dictionary:
-                return `dict(${value})\n`;
+                return `${variable} = dict(${variable})\n` + this.handleIndentationLevel(true);
             default:
                 throw new Error(`Invalid casting type: ${type}`);
         }
@@ -27401,7 +27420,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Generate User Input
      **/
     generateUserInput(variable, message) {
-        return `${variable} = input(${message ? message : ""})\n`;
+        return `${variable} = input(${message ? message : ""})\n` + this.handleIndentationLevel(true);
     }
     /**
      * Generate Print
@@ -27409,11 +27428,11 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     generatePrint(value, type) {
         switch (type) {
             case "string":
-                return `print("${value}")\n`;
+                return `print("${value}")\n` + this.handleIndentationLevel(true);
             case "variable":
-                return `print(${value})\n`;
+                return `print(${value})\n` + this.handleIndentationLevel(true);
             default:
-                return `print w khalas(${value})\n`;
+                return `print(${value})\n` + this.handleIndentationLevel(true);
         }
     }
     /**
@@ -27421,13 +27440,13 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      **/
     //TODO: add options to read line, read all file, read character
     generateReadFile(path, variable) {
-        return `${variable} = open("${path}", 'r').read()\n`;
+        return `${variable} = open("${path}", 'r').read()\n` + this.handleIndentationLevel(true);
     }
     /**
      * Write file
      **/
     generateWriteFile(path, content) {
-        return `open("${path}", 'w').write("${content}")\n`;
+        return `open("${path}", 'w').write("${content}")\n` + this.handleIndentationLevel(true);
     }
     /**
      * White spaces
@@ -27440,7 +27459,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 break;
             case codeEnums_1.Whitespace.Tab:
                 ws = "    ";
-                console.log("TAAAAAAAAB");
                 break;
             case codeEnums_1.Whitespace.NewLine:
                 ws = "\n";
@@ -27456,35 +27474,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Multi line comments
      **/
     generateLineComment(content) {
-        return `# ${content}\n`;
+        return `# ${content}\n` + this.handleIndentationLevel(true);
     }
     generateBlockComment(content) {
-        return `''' ${content.join("\n")} '''\n`;
+        return (`''' ${content.join("\n")} '''\n` + this.handleIndentationLevel(true));
     }
     generateOperation(left, operator, right) {
-        return `${left} ${operator} ${right} `;
+        return (`${left} ${operator} ${right} \n` + this.handleIndentationLevel(true));
     }
-    // [
-    //     {
-    //         "keyword": "if",
-    //         "condition": [
-    //             {
-    //                 "left": "x",
-    //                 "operator": ">",
-    //                 "right": "5"
-    //             },
-    //             {
-    //                 "logicalOperator": "and",
-    //                 "left": "x",
-    //                 "operator": ">",
-    //                 "right": "5"
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         "keyword": "else"
-    //     }
-    // ]
     generateConditional(conditions) {
         let code = "";
         conditions.forEach((c) => {
@@ -27507,8 +27504,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         // pack, uno
         return "";
     }
-    exitScope(currentLine) {
-        let indentationLevel = this.handleIndentationLevel(currentLine);
+    exitScope() {
+        let indentationLevel = this.handleIndentationLevel();
         if (indentationLevel !== 0) {
             indentationLevel -= 1;
         }

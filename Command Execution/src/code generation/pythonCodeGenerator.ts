@@ -12,6 +12,7 @@ import {
   Operator,
   Whitespace,
 } from "../constants/enums/codeEnums";
+import vscode from "vscode";
 import { CodeGenerator } from "./codeGenerator";
 import pythonReservedKeywords from "./language specifics/pythonReserved.json";
 
@@ -25,16 +26,18 @@ export class PythonCodeGenerator extends CodeGenerator {
   /**
    * Declare reserved keywords for each programming language
    **/
+  private tabString: string = "    ";
+  private editor: vscode.TextEditor;
   protected reservedKeywords: Array<string>;
   protected tabSize: number;
-  private tabString: string = "    ";
 
   // constructor
-  constructor() {
+  constructor(editor: vscode.TextEditor) {
     super();
     this.reservedKeywords = pythonReservedKeywords.reservedKeywords;
     // TODO read tab size from .env
     this.tabSize = 4;
+    this.editor = editor;
   }
 
   //**********************Utility functions**********************//
@@ -65,7 +68,17 @@ export class PythonCodeGenerator extends CodeGenerator {
     return this.isValidVariableName(name);
   }
 
-  private handleIndentationLevel(currentLine: string): number {
+  private handleIndentationLevel(previous: boolean = false): number {
+    let currentLine;
+    if (previous) {
+      currentLine = this.editor.document.lineAt(
+        Math.max(this.editor.selection.active.line - 1, 0)
+      ).text;
+    } else {
+      currentLine = this.editor.document.lineAt(
+        this.editor.selection.active.line
+      ).text;
+    }
     // find the number of white spaces in the beginning of the line,
     // and calculate the number of tabs
     let indentationLevel = 0;
@@ -86,6 +99,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     const tabs = Math.floor(indentationLevel / this.tabSize);
     return tabs;
   }
+
   /**
    * wrap code in a code block with '`' character
    **/
@@ -110,19 +124,12 @@ export class PythonCodeGenerator extends CodeGenerator {
   /**
    * Declare variables
    **/
-  declareVariable(
-    currentLine: string,
-    name: string,
-    type?: string,
-    initialValue?: any
-  ): string {
+  declareVariable(name: string, type?: string, initialValue?: any): string {
     if (!this.isValidVariableName(name)) {
       throw new Error(`Invalid variable name: ${name}`);
     }
 
-    const indentationLevel = this.handleIndentationLevel(currentLine);
-    let indentation = this.addWhiteSpace(Whitespace.Tab, indentationLevel);
-
+    const indentation = this.handleIndentationLevel(true); // previous line
     if (type) {
       if (initialValue) {
         return `${name}: ${type} = ${initialValue}\n${indentation}`;
@@ -145,7 +152,9 @@ export class PythonCodeGenerator extends CodeGenerator {
     if (!this.isValidConstantName(name.toUpperCase())) {
       throw new Error(`Invalid constant name: ${name}`);
     }
-    return `${name.toUpperCase()} = ${value}\n`;
+    return (
+      `${name.toUpperCase()} = ${value}\n` + this.handleIndentationLevel(true)
+    );
   }
 
   /**
@@ -161,31 +170,31 @@ export class PythonCodeGenerator extends CodeGenerator {
     }
     switch (type) {
       case AssignmentOperators.Equals:
-        return `${name} = ${value}\n`;
+        return `${name} = ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.PlusEquals:
-        return `${name} += ${value}\n`;
+        return `${name} += ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.MinusEquals:
-        return `${name} -= ${value}\n`;
+        return `${name} -= ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.MultiplyEquals:
-        return `${name} *= ${value}\n`;
+        return `${name} *= ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.DivideEquals:
-        return `${name} /= ${value}\n`;
+        return `${name} /= ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.FloorDivideEquals:
-        return `${name} //= ${value}\n`;
+        return `${name} //= ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.ModulusEquals:
-        return `${name} %= ${value}\n`;
+        return `${name} %= ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.ExponentEquals:
-        return `${name} **= ${value}\n`;
+        return `${name} **= ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.AndEquals:
-        return `${name} &= ${value}\n`;
+        return `${name} &= ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.OrEquals:
-        return `${name} |= ${value}\n`;
+        return `${name} |= ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.XorEquals:
-        return `${name} ^= ${value}\n`;
+        return `${name} ^= ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.LeftShiftEquals:
-        return `${name} <<= ${value}\n`;
+        return `${name} <<= ${value}\n` + this.handleIndentationLevel(true);
       case AssignmentOperators.RightShiftEquals:
-        return `${name} >>= ${value}\n`;
+        return `${name} >>= ${value}\n` + this.handleIndentationLevel(true);
       default:
         throw new Error(`Invalid assignment type: ${type}`);
     }
@@ -226,22 +235,9 @@ export class PythonCodeGenerator extends CodeGenerator {
       .join(", ");
     const functionHeader = `def ${name}(${params}):`;
     const functionBody = this.wrapInCodeBlock(body ?? [""]);
+
     return `${functionHeader}\n${functionBody}`;
   }
-
-  // {
-  //     "name": "x_string",
-  //         "args": [
-  //             {
-  //                 "name": "x",
-  //                 "value": "test"
-  //             },
-  //             {
-  //                 "name": "y",
-  //                 "value": "test"
-  //             }
-  //         ]
-  // }
 
   generateFunctionCall(
     name: string,
@@ -455,77 +451,78 @@ export class PythonCodeGenerator extends CodeGenerator {
     )} `;
     return `${tryCode} \n${exceptCode} `;
   }
-  /**
-   * Identity operators
-   * is, is not
-   **/
-  generateIdentityOperation(
-    left: string,
-    operator: IdentityOperators,
-    right: string
-  ): string {
-    return `${left} ${operator} ${right} `;
-  }
+  
+  // /**
+  //  * Identity operators
+  //  * is, is not
+  //  **/
+  // generateIdentityOperation(
+  //   left: string,
+  //   operator: IdentityOperators,
+  //   right: string
+  // ): string {
+  //   return `${left} ${operator} ${right} `;
+  // }
 
-  /**
-   * Membership operation
-   * in, not in
-   **/
-  generateMembershipOperation(
-    left: string,
-    operator: MembershipOperators,
-    right: string
-  ): string {
-    return `${left} ${operator} ${right} `;
-  }
+  // /**
+  //  * Membership operation
+  //  * in, not in
+  //  **/
+  // generateMembershipOperation(
+  //   left: string,
+  //   operator: MembershipOperators,
+  //   right: string
+  // ): string {
+  //   return `${left} ${operator} ${right} `;
+  // }
 
-  /**
-   * Logical operators
-   * and, or, not
-   **/
-  generateLogicalOperation(
-    left: string,
-    operator: LogicalOperators,
-    right: string
-  ): string {
-    return `${left} ${operator} ${right} `;
-  }
+  // /**
+  //  * Logical operators
+  //  * and, or, not
+  //  **/
+  // generateLogicalOperation(
+  //   left: string,
+  //   operator: LogicalOperators,
+  //   right: string
+  // ): string {
+  //   return `${left} ${operator} ${right} `;
+  // }
 
-  /**
-   * Comparison operators
-   * <, >, <=, >=, ==, !=
-   **/
-  generateComparisonOperation(
-    left: string,
-    operator: ComparisonOperators,
-    right: string
-  ): string {
-    return `${left} ${operator} ${right} `;
-  }
+  // /**
+  //  * Comparison operators
+  //  * <, >, <=, >=, ==, !=
+  //  **/
+  // generateComparisonOperation(
+  //   left: string,
+  //   operator: ComparisonOperators,
+  //   right: string
+  // ): string {
+  //   return `${left} ${operator} ${right} `;
+  // }
 
-  /**
-   * Arithmetic operators
-   * +, -, *, /, %, // , **
-   **/
-  generateArithmeticOperation(
-    left: string,
-    operator: ArithmeticOperators,
-    right: string
-  ): string {
-    return `${left} ${operator} ${right} `;
-  }
+  // /**
+  //  * Arithmetic operators
+  //  * +, -, *, /, %, // , **
+  //  **/
+  // generateArithmeticOperation(
+  //   left: string,
+  //   operator: ArithmeticOperators,
+  //   right: string
+  // ): string {
+  //   return `${left} ${operator} ${right} `;
+  // }
 
-  /**
-   * Bitwise operators
-   * &, |, ^, ~, <<, >>
-   **/
-  generateBitwiseOperation(
-    left: string,
-    operator: BitwiseOperators,
-    right: string
-  ): string {
-    return `${left} ${operator} ${right} `;
-  }
+  // /**
+  //  * Bitwise operators
+  //  * &, |, ^, ~, <<, >>
+  //  **/
+  // generateBitwiseOperation(
+  //   left: string,
+  //   operator: BitwiseOperators,
+  //   right: string
+  // ): string {
+  //   return `${left} ${operator} ${right} `;
+  // }
 
   /**
    * Assertion
@@ -538,13 +535,13 @@ export class PythonCodeGenerator extends CodeGenerator {
     }
     switch (type) {
       case AssertionOperators.Equal:
-        return `assert ${variable} == ${value}\n`;
+        return `assert ${variable} == ${value}\n` + this.handleIndentationLevel(true);
       case AssertionOperators.NotEqual:
-        return `assert ${variable} != ${value}\n`;
+        return `assert ${variable} != ${value}\n` + this.handleIndentationLevel(true);
       case AssertionOperators.GreaterThanOrEqual:
-        return `assert ${variable} >= ${value}\n`;
+        return `assert ${variable} >= ${value}\n` + this.handleIndentationLevel(true);
       case AssertionOperators.LessThanOrEqual:
-        return `assert ${variable} <= ${value}\n`;
+        return `assert ${variable} <= ${value}\n` + this.handleIndentationLevel(true);
       default:
         throw new Error(`Invalid assertion type: ${type}`);
     }
@@ -553,27 +550,27 @@ export class PythonCodeGenerator extends CodeGenerator {
   /**
    * Generate Casting
    **/
-  generateCasting(value: any, type: string): string {
+  generateCasting(variable: any, type: string): string {
     if (!Object.values(CastingTypes).includes(type as CastingTypes)) {
       throw new Error(`Invalid casting type: ${type}`);
     }
     switch (type) {
       case CastingTypes.Integer:
-        return `int(${value})\n`;
+        return `${variable} = int(${variable})\n`+ this.handleIndentationLevel(true);
       case CastingTypes.Float:
-        return `float(${value})\n`;
+        return `${variable} = float(${variable})\n`+ this.handleIndentationLevel(true);
       case CastingTypes.String:
-        return `str(${value})\n`;
+        return `${variable} = str(${variable})\n`+ this.handleIndentationLevel(true);
       case CastingTypes.Boolean:
-        return `bool(${value})\n`;
+        return `${variable} = bool(${variable})\n`+ this.handleIndentationLevel(true);
       case CastingTypes.List:
-        return `list(${value})\n`;
+        return `${variable} = list(${variable})\n`+ this.handleIndentationLevel(true);
       case CastingTypes.Tuple:
-        return `tuple(${value})\n`;
+        return `${variable} = tuple(${variable})\n`+ this.handleIndentationLevel(true);
       case CastingTypes.Set:
-        return `set(${value})\n`;
+        return `${variable} = set(${variable})\n`+ this.handleIndentationLevel(true);
       case CastingTypes.Dictionary:
-        return `dict(${value})\n`;
+        return `${variable} = dict(${variable})\n`+ this.handleIndentationLevel(true);
       default:
         throw new Error(`Invalid casting type: ${type}`);
     }
@@ -583,20 +580,20 @@ export class PythonCodeGenerator extends CodeGenerator {
    * Generate User Input
    **/
   generateUserInput(variable: string, message?: string | undefined): string {
-    return `${variable} = input(${message ? message : ""})\n`;
+    return `${variable} = input(${message ? message : ""})\n`+ this.handleIndentationLevel(true);
   }
 
   /**
    * Generate Print
    **/
-  generatePrint(value: any, type: string): string {
+  generatePrint(value: any, type?: string): string {
     switch (type) {
       case "string":
-        return `print("${value}")\n`;
+        return `print("${value}")\n`+ this.handleIndentationLevel(true);
       case "variable":
-        return `print(${value})\n`;
+        return `print(${value})\n`+ this.handleIndentationLevel(true);
       default:
-        return `print w khalas(${value})\n`;
+        return `print(${value})\n`+ this.handleIndentationLevel(true);
     }
   }
 
@@ -605,14 +602,14 @@ export class PythonCodeGenerator extends CodeGenerator {
    **/
   //TODO: add options to read line, read all file, read character
   generateReadFile(path: string, variable: any): string {
-    return `${variable} = open("${path}", 'r').read()\n`;
+    return `${variable} = open("${path}", 'r').read()\n`+ this.handleIndentationLevel(true);
   }
 
   /**
    * Write file
    **/
   generateWriteFile(path: string, content: any): string {
-    return `open("${path}", 'w').write("${content}")\n`;
+    return `open("${path}", 'w').write("${content}")\n`+ this.handleIndentationLevel(true);
   }
 
   /**
@@ -626,7 +623,6 @@ export class PythonCodeGenerator extends CodeGenerator {
         break;
       case Whitespace.Tab:
         ws = "    ";
-        console.log("TAAAAAAAAB");
         break;
       case Whitespace.NewLine:
         ws = "\n";
@@ -643,38 +639,21 @@ export class PythonCodeGenerator extends CodeGenerator {
    * Multi line comments
    **/
   generateLineComment(content: string): string {
-    return `# ${content}\n`;
+    return `# ${content}\n` + this.handleIndentationLevel(true);
   }
 
   generateBlockComment(content: string[]): string {
-    return `''' ${content.join("\n")} '''\n`;
+    return (
+      `''' ${content.join("\n")} '''\n` + this.handleIndentationLevel(true)
+    );
   }
 
   generateOperation(left: string, operator: Operator, right: string): string {
-    return `${left} ${operator} ${right} `;
+    return (
+      `${left} ${operator} ${right} \n` + this.handleIndentationLevel(true)
+    );
   }
 
-  // [
-  //     {
-  //         "keyword": "if",
-  //         "condition": [
-  //             {
-  //                 "left": "x",
-  //                 "operator": ">",
-  //                 "right": "5"
-  //             },
-  //             {
-  //                 "logicalOperator": "and",
-  //                 "left": "x",
-  //                 "operator": ">",
-  //                 "right": "5"
-  //             }
-  //         ]
-  //     },
-  //     {
-  //         "keyword": "else"
-  //     }
-  // ]
   generateConditional(
     conditions: {
       keyword: "if" | "else" | "elif";
@@ -709,14 +688,12 @@ export class PythonCodeGenerator extends CodeGenerator {
     return "";
   }
 
-  exitScope(currentLine: string): string {
-    let indentationLevel = this.handleIndentationLevel(currentLine);
+  exitScope(): string {
+    let indentationLevel = this.handleIndentationLevel();
     if (indentationLevel !== 0) {
       indentationLevel -= 1;
     }
-    const indentation = this.addWhiteSpace(
-      Whitespace.Tab,indentationLevel
-    );
+    const indentation = this.addWhiteSpace(Whitespace.Tab, indentationLevel);
     return `\n${indentation}`;
   }
 }

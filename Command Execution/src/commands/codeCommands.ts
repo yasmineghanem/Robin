@@ -60,6 +60,9 @@ import {
   TRY_EXCEPT,
   TRY_EXCEPT_FAILURE,
   TRY_EXCEPT_SUCCESS,
+  EXIT_SCOPE,
+  EXIT_SCOPE_SUCCESS,
+  EXIT_SCOPE_FAILURE,
 } from "../constants/code";
 import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
 import { showError, showMessage } from "../communication/utilities";
@@ -108,10 +111,10 @@ const declareVariable = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -120,16 +123,7 @@ const declareVariable = () => {
       let s = await editor.edit((editBuilder) => {
         editBuilder.insert(
           getCurrentPosition(editor),
-          codeGenerator.declareVariable(
-            editor.document.lineAt(
-              editor.selection.active.line === 0
-                ? 0
-                : editor.selection.active.line - 1
-            ).text,
-            args.name,
-            args.type,
-            args.value
-          )
+          codeGenerator.declareVariable(args.name, args.type, args.value)
         );
       });
       console.log("ay haga");
@@ -153,10 +147,10 @@ const assignVariable = () => {
 
       switch (getFileExtension(editor)) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -193,10 +187,10 @@ const declareConstant = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -249,10 +243,10 @@ const declareFunction = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -261,7 +255,8 @@ const declareFunction = () => {
       try {
         const code = codeGenerator.declareFunction(
           args.name,
-          args.parameters ?? []
+          args.parameters ?? [],
+          args?.body
         );
         let s = await editor.edit((editBuilder) => {
           editBuilder.insert(getCurrentPosition(editor), code);
@@ -334,10 +329,10 @@ const functionCall = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -365,7 +360,7 @@ const addWhiteSpace = () => {
     const editor = vscode.window.activeTextEditor;
 
     if (editor) {
-      let codeGenerator = new PythonCodeGenerator();
+      let codeGenerator = new PythonCodeGenerator(editor);
       let s = await editor.edit((editBuilder) => {
         editBuilder.insert(
           getCurrentPosition(editor),
@@ -402,10 +397,10 @@ const forLoop = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -444,10 +439,10 @@ const whileLoop = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -487,10 +482,10 @@ const operation = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -534,10 +529,10 @@ const tryExcept = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -582,10 +577,10 @@ const conditional = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -625,10 +620,10 @@ const importLibrary = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -668,10 +663,10 @@ const importModule = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -711,10 +706,10 @@ const assertion = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -758,10 +753,10 @@ const typeCasting = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -801,10 +796,10 @@ const arrayOperations = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -848,10 +843,10 @@ const userInput = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -891,10 +886,10 @@ const printConsole = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -934,10 +929,10 @@ const lineComment = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -977,10 +972,10 @@ const blockComment = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -1020,10 +1015,10 @@ const readFile = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -1062,10 +1057,10 @@ const writeFile = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -1136,10 +1131,10 @@ const declareClass = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -1171,7 +1166,7 @@ const declareClass = () => {
 };
 
 const exitScope = () => {
-  vscode.commands.registerCommand("robin.exitScope", async (args) => {
+  vscode.commands.registerCommand(EXIT_SCOPE, async (args) => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
       // check for extension
@@ -1181,10 +1176,10 @@ const exitScope = () => {
 
       switch (ext) {
         case EXTENSIONS.PYTHON:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         case EXTENSIONS.JUPYTER:
-          codeGenerator = new PythonCodeGenerator();
+          codeGenerator = new PythonCodeGenerator(editor);
           break;
         default:
           return handleFailure(FILE_EXT_FAILURE);
@@ -1194,21 +1189,18 @@ const exitScope = () => {
         let s = await editor.edit((editBuilder) => {
           editBuilder.insert(
             getCurrentPosition(editor),
-            codeGenerator.exitScope(
-              //current line
-              editor.document.lineAt(editor.selection.active.line).text
-            )
+            codeGenerator.exitScope()
           );
         });
 
         if (!s) {
-          return handleFailure(FUNCTION_FAILURE);
+          return handleFailure(EXIT_SCOPE_SUCCESS);
         }
       } catch (e) {
-        return handleFailure(FUNCTION_FAILURE);
+        return handleFailure(EXIT_SCOPE_FAILURE);
       }
 
-      return handleSuccess(FUNCTION_SUCCESS);
+      return handleSuccess(EXIT_SCOPE_SUCCESS);
     }
     return handleFailure(NO_ACTIVE_TEXT_EDITOR);
   });

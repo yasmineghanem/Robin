@@ -24,6 +24,7 @@ import {
   WRITE_FILE,
   TRY_EXCEPT,
   DECLARE_CLASS,
+  EXIT_SCOPE,
 } from "../constants/code";
 import {
   errorHandler,
@@ -182,7 +183,7 @@ router.post("/try-except", (req: Request, res: Response) => {
 
 // Try Except
 router.get("/exit-scope", (req: Request, res: Response) => {
-  executeCommand('robin.exitScope', {}, successHandler, errorHandler, res);
+  executeCommand(EXIT_SCOPE, {}, successHandler, errorHandler, res);
 });
 
 export default router;
