@@ -147,7 +147,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                 if (Tl > Nl)
                 {
                     // the shift sl is set to the smallest value that satisfies the false negative requirement.
-                    sl = -1.0;
+                    sl = -1.1;
                     auto mat = this->evaluate_single_layer(fl, predictions, sl);
                     Y = mat.false_positive_rate, B = mat.false_negative_rate;
                     cout << "adaboost number :  " << l << " layer number : " << Tl << " entered the dead loop" << endl;
