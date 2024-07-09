@@ -97,7 +97,7 @@ int AdaBoost::predict(int *&X, double sl)
     double sum = 0;
     for (size_t i = 0; i < this->learners.size(); ++i)
     {
-        sum += this->alphas[i] * (this->learners[i]->predict(X) + sl * sign(this->alphas[i]));
+        sum += (this->alphas[i] * this->learners[i]->predict(X)) + (sl * abs(this->alphas[i]));
     }
     return sum >= 0.0 ? 1 : -1;
 }
@@ -108,7 +108,7 @@ int AdaBoost::predict(int **&X, int size, double sl, double devide)
     double sum = 0;
     for (size_t i = 0; i < this->learners.size(); ++i)
     {
-        sum += this->alphas[i] * (this->learners[i]->predict(X, size, devide) + sl * sign(this->alphas[i]));
+        sum += (this->alphas[i] * this->learners[i]->predict(X, size, devide)) + (sl * abs(this->alphas[i]));
     }
     return sum >= 0.0 ? 1 : -1;
 }
