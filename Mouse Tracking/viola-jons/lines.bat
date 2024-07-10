@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 set count=0
-for %%f in (*.cpp *.h) do (
+for %%f in (*.cpp *.h *.py) do (
   if not "%%~pf"=="%cd%\stb\" (
         if not "%%~nxf"=="stb*.cpp" (
             if not "%%~nxf"== "stb_image.h" (

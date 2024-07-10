@@ -9,6 +9,10 @@
 #include <filesystem>
 #include <fstream>
 #include <algorithm>
+#include <thread>
+#include <mutex>
+#include <cmath>
+
 using namespace std;
 FaceDetector::FaceDetector(int **&X_train, int *&y_train, int ***&X_val, int *&y_val, pair<int, int> train_dim, tuple<int, int, int> val_dim, string folder)
 {
@@ -243,13 +247,11 @@ bool FaceDetector::window_test1(window *win, int **II, long long **IIsq)
     }
     return false;
 }
-
 // Utility function to check if a point (px, py) is inside a window
 bool isInside(const window &win, int px, int py)
 {
     return (px >= win.x && px < win.x + win.w && py >= win.y && py < win.y + win.h);
 }
-
 // Function to calculate the center of a window
 pair<int, int> getCenter(const window &win)
 {
@@ -268,7 +270,7 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
     // Fill E with the sizes of the windows
     for (const auto &w : windows)
     {
-        E[w->x][w->y] = w->w;
+        E[w->x][w->y] = max(w->w, E[w->x][w->y]);
     }
 
     // Run a connected component algorithm on E
@@ -301,10 +303,10 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
 
                     labels[x][y] = current_label;
                     component.push_back({x, y});
-                    stack.push_back({x + 1, y});
-                    stack.push_back({x - 1, y});
-                    stack.push_back({x, y + 1});
-                    stack.push_back({x, y - 1});
+                    stack.push_back({x + this->stride, y});
+                    stack.push_back({x - this->stride, y});
+                    stack.push_back({x, y + this->stride});
+                    stack.push_back({x, y - this->stride});
                 }
 
                 components.push_back(component);
@@ -398,10 +400,146 @@ bool skin_test(int **skin_denisty, int size, int i, int j)
     return (double)skin / (size * size) >= threshold;
 }
 
-void FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c)
+void FaceDetector::window_test3(vector<window *> &windows, int **&img, int M, int N, int min_confidence)
 {
-    // TODO change this constant if needed before descussion
-    const float smallest_box = 1.0 / 1000;
+    // Create an M × N matrix E filled with zeros
+    int **E = new int *[M];
+    int **freq = new int *[M];
+    for (int i = 0; i < M; ++i)
+    {
+        E[i] = new int[N]{0};
+        freq[i] = new int[N]{0};
+    }
+
+    // Fill E with the sizes of the windows
+    for (const auto &w : windows)
+    {
+        E[w->x][w->y] = w->w;
+        freq[w->x][w->y]++;
+    }
+
+    // Run a connected component algorithm on E
+    vector<vector<int>> labels(M, vector<int>(N, 0));
+    int current_label = 0;
+    vector<vector<pair<int, int>>> components;
+
+    for (int i = 0; i < M; ++i)
+    {
+        for (int j = 0; j < N; ++j)
+        {
+            if (freq[i][j] > 0)
+            {
+                components.push_back({{i, j}});
+            }
+            // continue;
+            if (E[i][j] > 0 && labels[i][j] == 0)
+            {
+                // start dfs from this point
+                current_label++;
+                vector<pair<int, int>> stack = {{i, j}};
+                vector<pair<int, int>> component;
+
+                while (!stack.empty())
+                {
+                    pair<int, int> p = stack.back();
+                    stack.pop_back();
+                    int x = p.first;
+                    int y = p.second;
+
+                    if (x < 0 || x >= M || y < 0 || y >= N || labels[x][y] > 0)
+                    {
+                        continue;
+                    }
+
+                    labels[x][y] = current_label;
+                    component.push_back({x, y});
+                    stack.push_back({x + 3, y});
+                    stack.push_back({x - 3, y});
+                    stack.push_back({x, y + 1});
+                    stack.push_back({x, y - 1});
+                }
+
+                components.push_back(component);
+            }
+        }
+    }
+
+    // Process each component
+    vector<pair<window, double>> P;
+    for (const auto &component : components)
+    {
+        int eC = E[component[0].first][component[0].second];
+        int size = freq[component[0].first][component[0].second];
+        double confidence = size * (24.0 / eC);
+
+        if (confidence >= min_confidence)
+        {
+            int max_x = 0, max_y = 0;
+            for (const auto &p : component)
+            {
+                int x = p.first;
+                int y = p.second;
+                max_x = max(max_x, x);
+                max_y = max(max_y, y);
+            }
+            P.push_back({{max_x, max_y, eC, eC}, confidence});
+        }
+    }
+
+    //  Sort the elements in P in ascending order of window size
+    sort(P.begin(), P.end(), [](const pair<window, double> &a, const pair<window, double> &b)
+         { return (a.first.w * a.first.h) < (b.first.w * b.first.h); });
+
+    //  Remove redundant windows
+    // for (size_t i = 0; i < P.size(); ++i)
+    // {
+    //     auto center = getCenter(P[i].first);
+    //     for (size_t j = i + 1; j < P.size(); ++j)
+    //     {
+
+    //         if (isInside(P[j].first, center.first, center.second))
+    //         {
+    //             // window i has a higher detection confidence than window j ,detlet window j
+    //             if (P[i].second > P[j].second)
+    //             {
+    //                 P[j].first = {0, 0, 0, 0}; // Remove P[j]
+    //             }
+    //             else
+    //             {
+    //                 P[i].first = {0, 0, 0, 0}; // Remove P[i]
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
+
+    for (auto &w : windows)
+    {
+        delete w;
+    }
+    windows.clear();
+    for (auto &w : P)
+    {
+        if (w.first.w == 0 || w.first.h == 0)
+            continue;
+        window *x = new window;
+        x->x = w.first.x;
+        x->y = w.first.y;
+        x->w = w.first.w;
+        x->h = w.first.h;
+        windows.push_back(x);
+    }
+
+    // Clean up the allocated memory for E
+    for (int i = 0; i < M; ++i)
+    {
+        delete[] E[i];
+    }
+    delete[] E;
+}
+
+vector<window *> FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c)
+{
     const bool return_biggest = 1;
     int L = this->cascade.size();
     int **II = new int *[M];
@@ -421,41 +559,67 @@ void FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c
     integral_image(skin_denisty, skin_denisty, M, N);
     integral_image(img, II, M, N);
     integral_image(IIsq, IIsq, M, N);
-
-    long long tot = 0;
     vector<window *> P;
 
-    for (int e = static_cast<int>(24 * c); e <= std::min(M, N); e = static_cast<int>(e * c))
+    vector<int> sizes;
+    int last = 24;
+    while (last <= min(M, N))
     {
-        if (e * e < smallest_box * M * N)
-            continue;
-        for (int i = 0; i + e < M; ++i)
+        if (last * last >= this->smallest_box * M * N)
+            sizes.push_back(last);
+        last = static_cast<int>(last * c);
+    }
+    std::mutex mtx;
+
+    auto worker = [&](int start, int end)
+    {
+        vector<window *> my_P;
+        window my_temp;
+        for (int j = start; j < end; ++j)
         {
-            for (int j = 0; j + e < N; ++j)
+            for (int i = 0; i + sizes[j] < M; i += this->stride)
             {
-                if (!skin_test(skin_denisty, e, i, j))
-                    continue;
-                window *w = new window;
-                w->x = i;
-                w->y = j;
-                w->w = e;
-                w->h = e;
-                if (this->window_test1(w, II, IIsq))
+                for (int k = 0; k + sizes[j] < N; k += this->stride)
                 {
-                    P.push_back(w);
-                    tot += (long long)e * e;
-                }
-                else
-                {
-                    delete w;
+                    if (!skin_test(skin_denisty, sizes[j], i, k))
+                        continue;
+                    my_temp.x = i;
+                    my_temp.y = k;
+                    my_temp.w = sizes[j];
+                    my_temp.h = sizes[j];
+                    if (this->window_test1(&my_temp, II, IIsq))
+                    {
+                        window *w = new window;
+                        w->x = i;
+                        w->y = k;
+                        w->w = sizes[j];
+                        w->h = sizes[j];
+                        std::lock_guard<std::mutex> lock(mtx);
+                        P.push_back(w);
+                    }
                 }
             }
         }
+    };
+    size_t num_threads = max(2, min((int)sizes.size(), (int)std::thread::hardware_concurrency()));
+    std::vector<std::thread> threads;
+    int sizes_per_thread = (sizes.size()) / num_threads;
+    int remaining = sizes.size() % num_threads;
+    for (size_t i = 0; i < num_threads; ++i)
+    {
+        int start = i * sizes_per_thread;
+        int end = start + sizes_per_thread + (i < remaining ? 1 : 0);
+        threads.emplace_back(worker, start, end);
     }
-    std::cout << "P size after filtter1 : " << P.size() << endl;
+    for (auto &t : threads)
+    {
+        t.join();
+    }
+
+    // std::cout << "P size after filtter1 : " << P.size() << endl;
     window_test2(P, img, M, N);
     std::cout << "P size after filtter2 : " << P.size() << endl;
-    drawGreenRectangles(color_img, M, N, P, 1);
+    // drawGreenRectangles(color_img, M, N, P, 1);
     for (int i = 0; i < P.size(); i++)
     {
         delete P[i];
@@ -464,9 +628,12 @@ void FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c
     {
         delete[] II[i];
         delete[] IIsq[i];
+        delete[] skin_denisty[i];
     }
     delete[] II;
     delete[] IIsq;
+    delete[] skin_denisty;
+    return P;
 }
 
 void FaceDetector::save(const string folder)

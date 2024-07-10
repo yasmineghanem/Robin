@@ -269,6 +269,7 @@ void validate(int &start_i, int &start_j, int &end_i, int &end_j, int size)
 
 int haar_feature_scaling(int **&image, int size, const char &feature_type, int i, int j, int w, int h)
 {
+    // return 0;
     int e = size;
 
     auto round_nearest_integer = [](double z)
@@ -281,20 +282,23 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
     case 'a':
     {
         int a = 2 * w * h;
-        i = round_nearest_integer(i * e / 24);
-        j = round_nearest_integer(j * e / 24);
-        h = round_nearest_integer(h * e / 24);
-        int temp_w = 0;
-        for (int k = 1; k < round_nearest_integer(1 + 2 * w * e / 24) / 2 + 1; k++)
-        {
-            if (2 * k <= e - j + 1)
-            {
-                temp_w = k;
-            }
-        }
-        w = temp_w;
-        if (i >= e || j >= e)
-            return 0;
+        i = (i * e / 24);
+        j = (j * e / 24);
+        h = (h * e / 24);
+        // int temp_w = 0;
+        // for (int k = 1; k < (1 + 2 * w * e / 24) / 2 + 1; k++)
+        // {
+        //     if (2 * k <= e - j + 1)
+        //     {
+        //         temp_w = k;
+        //     }
+        //     else
+        //         break;
+        // }
+        // w = temp_w;
+        w = (1 + 2 * w * e / 24) / 2;
+        // if (i >= e || j >= e)
+        //     return 0;
         int start_i = i - 1, start_j = j - 1;
         int end_i = i - 1 + h - 1;
         int end_j = j - 1 + w - 1;
@@ -312,20 +316,23 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
     case 'b':
     {
         int a = 3 * w * h;
-        i = round_nearest_integer(i * e / 24);
-        j = round_nearest_integer(j * e / 24);
-        h = round_nearest_integer(h * e / 24);
-        int temp_w = 0;
-        for (int k = 1; k < round_nearest_integer(1 + 3 * w * e / 24) / 3 + 1; k++)
-        {
-            if (3 * k <= e - j + 1)
-            {
-                temp_w = k;
-            }
-        }
-        if (i >= e || j >= e)
-            return 0;
-        w = temp_w;
+        i = (i * e / 24);
+        j = (j * e / 24);
+        h = (h * e / 24);
+        // int temp_w = 0;
+        // for (int k = 1; k < (1 + 3 * w * e / 24) / 3 + 1; k++)
+        // {
+        //     if (3 * k <= e - j + 1)
+        //     {
+        //         temp_w = k;
+        //     }
+        //     else
+        //         break;
+        // }
+        // if (i >= e || j >= e)
+        //     return 0;
+        // w = temp_w;
+        w = (1 + 3 * w * e / 24) / 3;
         int start_i = i - 1, start_j = j - 1;
         int end_i = i - 1 + h - 1, end_j = j - 1 + w - 1;
         validate(start_i, start_j, end_i, end_j, e);
@@ -347,21 +354,24 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
     case 'c':
     {
         int a = 2 * w * h;
-        i = round_nearest_integer(i * e / 24);
-        j = round_nearest_integer(j * e / 24);
-        w = round_nearest_integer(w * e / 24);
-        int temp_h = 0;
-        for (int k = 1; k < round_nearest_integer(1 + 2 * h * e / 24) / 2 + 1; k++)
-        {
-            if (2 * k <= e - i + 1)
-            {
-                temp_h = k;
-            }
-        }
-        if (i >= e || j >= e)
-            return 0;
+        i = (i * e / 24);
+        j = (j * e / 24);
+        w = (w * e / 24);
+        // int temp_h = 0;
+        // for (int k = 1; k < (1 + 2 * h * e / 24) / 2 + 1; k++)
+        // {
+        //     if (2 * k <= e - i + 1)
+        //     {
+        //         temp_h = k;
+        //     }
+        //     else
+        //         break;
+        // }
+        // if (i >= e || j >= e)
+        //     return 0;
 
-        h = temp_h;
+        // h = temp_h;
+        h = (1 + 2 * h * e / 24) / 2;
         int start_i = i - 1, start_j = j - 1;
         int end_i = i - 1 + h - 1, end_j = j - 1 + w - 1;
         validate(start_i, start_j, end_i, end_j, e);
@@ -378,22 +388,25 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
     case 'd':
     {
         int a = 3 * w * h;
-        i = round_nearest_integer(i * e / 24);
-        j = round_nearest_integer(j * e / 24);
-        w = round_nearest_integer(w * e / 24);
+        i = (i * e / 24);
+        j = (j * e / 24);
+        w = (w * e / 24);
         // h = max(k for k in range(1, round_nearest_integer(1 + 3 * h * e / 24) // 3 + 1) if 3 * k <= e - i + 1)
-        int temp_h = 0;
-        for (int k = 1; k < round_nearest_integer(1 + 3 * h * e / 24) / 3 + 1; k++)
-        {
-            if (3 * k <= e - i + 1)
-            {
-                temp_h = k;
-            }
-        }
-        if (i >= e || j >= e)
-            return 0;
+        // int temp_h = 0;
+        // for (int k = 1; k < (1 + 3 * h * e / 24) / 3 + 1; k++)
+        // {
+        //     if (3 * k <= e - i + 1)
+        //     {
+        //         temp_h = k;
+        //     }
+        //     else
+        //         break;
+        // }
+        // if (i >= e || j >= e)
+        //     return 0;
 
-        h = temp_h;
+        // h = temp_h;
+        h = (1 + 3 * h * e / 24) / 3;
         int start_i = i - 1, start_j = j - 1;
         int end_i = i - 1 + h - 1, end_j = j - 1 + w - 1;
         validate(start_i, start_j, end_i, end_j, e);
@@ -414,29 +427,33 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
     case 'e':
     {
         int a = 4 * w * h;
-        i = round_nearest_integer(i * e / 24);
-        j = round_nearest_integer(j * e / 24);
-        int temp_w = 0; // max(k for k in range(1, round_nearest_integer(1 + 2 * w * e / 24) // 2 + 1) if 2 * k <= e - j + 1)
-        int temp_h = 0; // max(k for k in range(1, round_nearest_integer(1 + 2 * h * e / 24) // 2 + 1) if 2 * k <= e - i + 1)
-        for (int k = 1; k < round_nearest_integer(1 + 2 * w * e / 24) / 2 + 1; k++)
+        i = (i * e / 24);
+        j = (j * e / 24);
+        int temp_w = 0;
+        int temp_h = 0;
+        for (int k = 1; k < (1 + 2 * w * e / 24) / 2 + 1; k++)
         {
             if (2 * k <= e - j + 1)
             {
                 temp_w = k;
             }
+            else
+                break;
         }
-        for (int k = 1; k < round_nearest_integer(1 + 2 * h * e / 24) / 2 + 1; k++)
+        for (int k = 1; k < (1 + 2 * h * e / 24) / 2 + 1; k++)
         {
             if (2 * k <= e - i + 1)
             {
                 temp_h = k;
             }
         }
-        if (i >= e || j >= e)
-            return 0;
+        // if (i >= e || j >= e)
+        //     return 0;
 
         w = temp_w;
         h = temp_h;
+        // w = (1 + 2 * w * e / 24) / 2;
+        // h = (1 + 2 * h * e / 24) / 2;
         int start_i = i - 1, start_j = j - 1;
         int end_i = i - 1 + h - 1, end_j = j - 1 + w - 1;
         validate(start_i, start_j, end_i, end_j, e);
@@ -459,7 +476,6 @@ int haar_feature_scaling(int **&image, int size, const char &feature_type, int i
         return (S1 - S2 - S3 + S4) * a / (4 * w * h);
         break;
     }
-    
     default:
         return 0;
         break;

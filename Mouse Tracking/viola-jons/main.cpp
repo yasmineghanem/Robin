@@ -307,10 +307,11 @@ void process_local_frame(const char *file)
     int M, N;
     load_image(file, color_img, img, M, N);
     auto start = std::chrono::high_resolution_clock::now();
-    classifier.process(img, color_img, M, N);
+    auto faces = classifier.process(img, color_img, M, N);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
     cout << "Processing time: " << duration.count() << " s\n";
+    drawGreenRectangles(color_img, M, N, faces);
     saveImageAsPNG("output/output.png", color_img, img, M, N, true);
     for (int i = 0; i < M; i++)
     {
@@ -327,6 +328,7 @@ void process_local_frame(const char *file)
     }
     delete[] color_img;
 }
+
 int main()
 {
     // freopen("log.txt", "w", stdout);

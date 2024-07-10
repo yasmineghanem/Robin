@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.0)
 project(MouseControlling)
 
+
+# Set the C++ standard to C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 # Set the OpenCV_DIR variable
 set(OpenCV_DIR "C:/TempDesktop/opencv")
 
@@ -17,8 +23,20 @@ set(Dlib_DIR "C:/TempDesktop/dlib-19.24")
 include_directories(${Dlib_DIR})
 add_subdirectory(${Dlib_DIR} dlib_build)
 
-# Add the executable
-add_executable(MouseControlling main.cpp landmark.cpp mousecontroller.cpp)
+# Include the directory containing FaceDetector.h
+include_directories(${CMAKE_SOURCE_DIR}/viola-jons)
+
+# Add the executable with additional source files
+add_executable(MouseControlling
+    main.cpp 
+    landmark.cpp 
+    mousecontroller.cpp 
+    viola-jons/FaceDetector.cpp 
+    viola-jons/AdaBoost.cpp 
+    viola-jons/learner.cpp 
+    viola-jons/utils.cpp
+)
+
 
 # Link OpenCV and Dlib libraries
 target_link_libraries(MouseControlling ${OpenCV_LIBS} dlib::dlib)
