@@ -1,0 +1,120 @@
+output the variable max value.
+write the variable result.
+show the variable element.
+display the variable j.
+output the variable is active.
+display the variable is verified.
+write the variable k.
+output the variable max value.
+print the variable has access.
+show the variable item.
+display the value 1.5678.
+show the value 1234567.
+show the value -777777.
+output the value -202020.
+display the value 2.99792458.
+print the value -0.27182.
+show the value 2023.
+display the value -1.1.
+show the value -1.0.
+output the value 909090.
+write the variable user email to the user.
+output the variable has errors to the user.
+display the variable max value to the user.
+display the variable iteration to the user.
+print the variable is logged in to the user.
+output the variable k to the user.
+display the variable index to the user.
+output the variable loop index to the user.
+show the variable is logged in to the user.
+show the variable file path to the user.
+display the value 1.5678 to the user.
+show the value 888888 to the user.
+print the value -121212 to the user.
+output the value 252525 to the user.
+output the value 131313 to the user.
+show the value 9.81 to the user.
+display the value -6.789 to the user.
+display the value 1.234 to the user.
+display the value 505050 to the user.
+display the value -1e-07 to the user.
+show variable is enabled.
+show variable total amount.
+show variable is active.
+write variable max value.
+print variable max value.
+print variable is enabled.
+output variable is approved.
+show variable has access.
+display variable k.
+write variable user name.
+output value -456.
+show value 1e-06.
+write value 5.0.
+output value 0.707.
+show value 7.1234.
+print value 0.999999.
+output value -606060.
+write value -7654321.
+display value 5.6789.
+write value 1.0.
+show the message Hello World!.
+show the message The result is.
+output the message output size.
+output the message mask shape.
+write the message The value is.
+display the message failed the test.
+output the message output size.
+output the message The output is.
+print the message The output is.
+display the message output format.
+display message output shape: to the user.
+print message output type to the user.
+display message output format to the user.
+display message welcome to the program! to the user.
+show message The output is to the user.
+output message this is an output message to the user.
+write message output format to the user.
+output message welcome to the program! to the user.
+print message this is an output message to the user.
+print message this is an output statement to the user.
+output the variable counter with message The value is.
+show the variable file path with message this is an output message.
+display the variable is logged in with message output size.
+print the variable username with message output format.
+print the variable index with message output size.
+display the variable username with message output size.
+output the variable is enabled with message Hello World!.
+show the variable completed with message text length.
+print the variable item with message output size.
+display the variable pos with message output format.
+write the value 1.234 with message output type.
+output the value -54321 with message this is an output message.
+output the value 1e-06 with message The value is.
+write the value 7.1234 with message The value is.
+print the value -1.602176634 with message mask shape.
+write the value 1.23456789 with message welcome to the program!.
+display the value -222222 with message output shape:.
+write the value 30303 with message passed the test.
+output the value -1.602176634 with message passed the test.
+print the value 123 with message The result is.
+show the variable file path to the user with message output size.
+display the variable i to the user with message The value is.
+display the variable i to the user with message welcome to the program!.
+show the variable counter to the user with message output type.
+display the variable total amount to the user with message this is an output statement.
+print the variable end date to the user with message this is an error message.
+output the variable average score to the user with message this is an output message.
+print the variable index to the user with message output shape:.
+output the variable loop index to the user with message The value is.
+write the variable user name to the user with message The result is.
+display the value 171717 to the user with message mask shape.
+show the value -8.2345 to the user with message The output is.
+write the value 1.1 to the user with message The output is.
+display the value 0.999999 to the user with message output type.
+output the value 0.999999 to the user with message there's and error.
+output the value -262626 to the user with message failed the test.
+print the value -40404 to the user with message welcome to the program!.
+print the value 0.12345 to the user with message this is an output message.
+display the value 0 to the user with message output type.
+print the value 171717 to the user with message The result is.
