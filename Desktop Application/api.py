@@ -371,4 +371,4 @@ class APIController:
         return self.__post(CODE_ASSIGN_VARIABLE, data)
 
     def exit_scope(self):
-        return self.__get(CODE_EXIST_SCOPE)
+        return self.__get(CODE_EXIT_SCOPE)
