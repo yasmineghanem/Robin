@@ -109,3 +109,7 @@ Training time: 155.917 s
 Accuracy: 0.867142
 False positive rate: 0.12104
 False negative rate: 0.622881
+
+# FPR 0.72 FNR 0.12 -> using smaller dataset + 6 layers with equation 10\*n+10 , bl = 0.05
+
+# FPR 0.346 FNR 0.536 -> using smaller dataset + 6 layers with equation 10 , bl = 0.05 ==> better in frame processing

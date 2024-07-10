@@ -331,7 +331,7 @@ int main()
 {
     // freopen("log.txt", "w", stdout);
     fill_features_info();
-    mode current_mode = TEST_FACE_DETECTION;
+    mode current_mode = PROCESS_LOCAL_FRAME;
     if (current_mode == TRAIN_ADABOOST)
     {
         // train_ADA_BOOST("model2.txt", 10, 1000);

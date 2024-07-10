@@ -128,8 +128,15 @@ class Mouse_Controller():
                 if cv2.waitKey(10) & 0xFF == ord('q'):
                     break
     def detect_nose(self,frame,gray):
-        # Apply histogram equalization
         equalized = cv2.equalizeHist(gray)
+        # find part of the frame that has red>100 and green<100 and blue<100
+        mask = cv2.inRange(frame, (100, 0, 0), (255, 100, 100))
+        # show mask
+        cv2.imshow('mask', mask)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        # Apply histogram equalization
+        
         # Apply edge detection (Canny)
         edges = cv2.Canny(equalized, 50, 150)
             # Use morphological operations to close gaps in edges
@@ -164,10 +171,6 @@ class Mouse_Controller():
         # Find contours
         contours, _ = cv2.findContours(closed, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        # cv2.imshow('eroded',opend)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
-
         # Find contours
         contours, _ = cv2.findContours(closed, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         
@@ -195,13 +198,13 @@ class Mouse_Controller():
         # cv2.destroyAllWindows()
 
     def process_single_frame(self):
-        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +'haarcascade_frontalface_default.xml') 
         # load image 'viola-jons/imgs/img1.jpg'
-        frame = cv2.imread('./color1.png')
+        frame = cv2.cvtColor(cv2.imread('./img1.jpg'),cv2.COLOR_BGR2RGB)
         
         # Convert the frame to grayscale
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         self.detect_nose(frame,gray)
+        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +'haarcascade_frontalface_default.xml') 
         faces = face_cascade.detectMultiScale(gray, 1.3, 10) 
         for (x, y, w, h) in faces: 
             cv2.rectangle(frame, (x, y), ((x + w), (y + h)), (255, 0, 0), 2) 
