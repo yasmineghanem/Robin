@@ -129,7 +129,9 @@ export class PythonCodeGenerator extends CodeGenerator {
       throw new Error(`Invalid variable name: ${name}`);
     }
 
-    const indentation = this.handleIndentationLevel(true); // previous line
+    const indentation = this.tabString.repeat(
+      this.handleIndentationLevel(true)
+    ); // previous line
     if (type) {
       if (initialValue) {
         return `${name}: ${type} = ${initialValue}\n${indentation}`;
@@ -236,7 +238,6 @@ export class PythonCodeGenerator extends CodeGenerator {
     const f =
       `def ${name}(${params}):\n` +
       this.tabString.repeat(this.handleIndentationLevel(true) + 1);
-    // const functionBody = this.wrapInCodeBlock(body ?? [""]);
 
     return f;
   }
@@ -246,16 +247,12 @@ export class PythonCodeGenerator extends CodeGenerator {
     args: { name?: string; value: any }[]
   ): string {
     const params = args
-      .map((p) =>
-        p.name
-          ? `${p.name} = 
-                ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
-          : typeof p.value === "string"
-          ? `"${p.value}"`
-          : p.value
-      )
+      .map((p) => (p.name ? `${p.name} = ${p.value}` : `${p.value}`))
       .join(", ");
-    return `${name}(${params}) \n`;
+    return (
+      `${name}(${params}) \n` +
+      this.tabString.repeat(this.handleIndentationLevel())
+    );
   }
 
   generateReturn(value?: string): string {
@@ -265,17 +262,6 @@ export class PythonCodeGenerator extends CodeGenerator {
     );
   }
 
-  /**
-     * Declare Class
-     * class Person:
-        def __init__(self, name, age):
-            self.name = name
-            self.age = age
-
-        def myfunc(self):
-            print("Hello my name is " + self.name)
-
-    **/
   declareClass(
     name: string,
     properties: { name: string; type?: string }[],
@@ -376,11 +362,11 @@ export class PythonCodeGenerator extends CodeGenerator {
   generateForLoop(type: ForLoop, params: any, body?: string[]): string {
     switch (type) {
       case ForLoop.Range:
-        return this.generateRangeLoop(params, body);
+        return this.generateRangeLoop(params);
       case ForLoop.Iterable:
-        return this.generateIterableLoop(params, body);
+        return this.generateIterableLoop(params);
       case ForLoop.Enumerate:
-        return this.generateEnumerateLoop(params, body);
+        return this.generateEnumerateLoop(params);
       default:
         return `for `;
     }
@@ -397,26 +383,32 @@ export class PythonCodeGenerator extends CodeGenerator {
   }
 
   generateRangeLoop(
-    params: { iterators: string[]; start: number; end: number; step?: number },
-    body?: string[]
+    params: { iterators: string[]; start: number; end: number; step?: number }
+    // body?: string[]
   ): string {
     const { iterators, start, end, step } = params;
     // if there's no step and no start, just return range of the end
     if (!step && !start) {
-      return `for ${iterators.join(", ")} in range(${
-        end ?? ""
-      }): \n${this.wrapInCodeBlock(body ?? [""])} `;
+      return (
+        `for ${iterators.join(", ")} in range(${end ?? ""}): \n` +
+        this.tabString.repeat(this.handleIndentationLevel())
+      );
     }
     // if there's no step, just return range of start and end
     if (!step) {
-      return `for ${iterators.join(", ")} in range(${
-        start ? start + ", " : ""
-      } ${end ?? ""}): \n${this.wrapInCodeBlock(body ?? [""])} `;
+      return (
+        `for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${
+          end ?? ""
+        }): \n` + this.tabString.repeat(this.handleIndentationLevel() + 1)
+      );
     }
     // if there's a step, return range of start, end and step
-    return `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${
-      end ?? ""
-    }, ${step}): \n${this.wrapInCodeBlock(body ?? [""])} `;
+    return (
+      `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${
+        end ?? ""
+      }, ${step}): \n` +
+      this.tabString.repeat(this.handleIndentationLevel() + 1)
+    );
   }
 
   generateEnumerateLoop(
@@ -424,9 +416,11 @@ export class PythonCodeGenerator extends CodeGenerator {
     body?: string[]
   ): string {
     const { iterators, iterable, start } = params;
-    return `for ${iterators.join(", ")} in enumerate(${iterable}${
-      start ? ` ,${start}` : ""
-    }): \n${this.wrapInCodeBlock(body ?? [""])} `;
+    return (
+      `for ${iterators.join(", ")} in enumerate(${iterable}${
+        start ? ` ,${start}` : ""
+      }): \n` + this.tabString.repeat(this.handleIndentationLevel(true) + 1)
+    );
   }
 
   generateWhileLoop(condition: Condition[], body?: string[]): string {

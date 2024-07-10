@@ -27360,7 +27360,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid variable name: ${name}`);
         }
-        const indentation = this.handleIndentationLevel(true); // previous line
+        const indentation = this.tabString.repeat(this.handleIndentationLevel(true)); // previous line
         if (type) {
             if (initialValue) {
                 return `${name}: ${type} = ${initialValue}\n${indentation}`;
@@ -27443,35 +27443,19 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             .join(", ");
         const f = `def ${name}(${params}):\n` +
             this.tabString.repeat(this.handleIndentationLevel(true) + 1);
-        // const functionBody = this.wrapInCodeBlock(body ?? [""]);
         return f;
     }
     generateFunctionCall(name, args) {
         const params = args
-            .map((p) => p.name
-            ? `${p.name} = 
-                ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
-            : typeof p.value === "string"
-                ? `"${p.value}"`
-                : p.value)
+            .map((p) => (p.name ? `${p.name} = ${p.value}` : `${p.value}`))
             .join(", ");
-        return `${name}(${params}) \n`;
+        return (`${name}(${params}) \n` +
+            this.tabString.repeat(this.handleIndentationLevel()));
     }
     generateReturn(value) {
         return (`return ${value ?? ""} ` +
             this.tabString.repeat(this.handleIndentationLevel(true)));
     }
-    /**
-       * Declare Class
-       * class Person:
-          def __init__(self, name, age):
-              self.name = name
-              self.age = age
-  
-          def myfunc(self):
-              print("Hello my name is " + self.name)
-  
-      **/
     declareClass(name, properties, methods) {
         if (!this.isValidClassName(name)) {
             throw new Error(`Invalid class name: ${name} `);
@@ -27544,11 +27528,11 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     generateForLoop(type, params, body) {
         switch (type) {
             case codeEnums_1.ForLoop.Range:
-                return this.generateRangeLoop(params, body);
+                return this.generateRangeLoop(params);
             case codeEnums_1.ForLoop.Iterable:
-                return this.generateIterableLoop(params, body);
+                return this.generateIterableLoop(params);
             case codeEnums_1.ForLoop.Enumerate:
-                return this.generateEnumerateLoop(params, body);
+                return this.generateEnumerateLoop(params);
             default:
                 return `for `;
         }
@@ -27557,22 +27541,26 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}: \n${this.wrapInCodeBlock(body ?? [""])} `;
         return loopCode;
     }
-    generateRangeLoop(params, body) {
+    generateRangeLoop(params
+    // body?: string[]
+    ) {
         const { iterators, start, end, step } = params;
         // if there's no step and no start, just return range of the end
         if (!step && !start) {
-            return `for ${iterators.join(", ")} in range(${end ?? ""}): \n${this.wrapInCodeBlock(body ?? [""])} `;
+            return (`for ${iterators.join(", ")} in range(${end ?? ""}): \n` +
+                this.tabString.repeat(this.handleIndentationLevel()));
         }
         // if there's no step, just return range of start and end
         if (!step) {
-            return `for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${end ?? ""}): \n${this.wrapInCodeBlock(body ?? [""])} `;
+            return (`for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${end ?? ""}): \n` + this.tabString.repeat(this.handleIndentationLevel() + 1));
         }
         // if there's a step, return range of start, end and step
-        return `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${end ?? ""}, ${step}): \n${this.wrapInCodeBlock(body ?? [""])} `;
+        return (`for ${iterators.join(", ")} in range(${start ? start : "0"} ,${end ?? ""}, ${step}): \n` +
+            this.tabString.repeat(this.handleIndentationLevel() + 1));
     }
     generateEnumerateLoop(params, body) {
         const { iterators, iterable, start } = params;
-        return `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ""}): \n${this.wrapInCodeBlock(body ?? [""])} `;
+        return (`for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ""}): \n` + this.tabString.repeat(this.handleIndentationLevel(true) + 1));
     }
     generateWhileLoop(condition, body) {
         const conditionCode = condition
