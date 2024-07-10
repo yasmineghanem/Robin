@@ -172,31 +172,31 @@ export class PythonCodeGenerator extends CodeGenerator {
     }
     switch (type) {
       case AssignmentOperators.Equals:
-        return `${name} = ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} = ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.PlusEquals:
-        return `${name} += ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} += ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.MinusEquals:
-        return `${name} -= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} -= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.MultiplyEquals:
-        return `${name} *= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} *= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.DivideEquals:
-        return `${name} /= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} /= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.FloorDivideEquals:
-        return `${name} //= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} //= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.ModulusEquals:
-        return `${name} %= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} %= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.ExponentEquals:
-        return `${name} **= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} **= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.AndEquals:
-        return `${name} &= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} &= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.OrEquals:
-        return `${name} |= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} |= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.XorEquals:
-        return `${name} ^= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} ^= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.LeftShiftEquals:
-        return `${name} <<= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} <<= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.RightShiftEquals:
-        return `${name} >>= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} >>= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       default:
         throw new Error(`Invalid assignment type: ${type}`);
     }
@@ -609,7 +609,7 @@ export class PythonCodeGenerator extends CodeGenerator {
    **/
   generateUserInput(variable: string, message?: string | undefined): string {
     return (
-      `${variable} = input(${message ? message : ""})\n` +
+      `${variable} = input('${message ? message : ""}')\n` +
       this.tabString.repeat(this.handleIndentationLevel(true))
     );
   }
