@@ -25273,6 +25273,18 @@ router.get("/select", (req, res) => {
         res.end(JSON.stringify(err));
     });
 });
+//select range
+router.get("/select-range", (req, res) => {
+    const data = req.body;
+    // vscode.commands.executeCommand('editor.action.smartSelect', data).then(
+    vscode.commands.executeCommand(IDE_1.SELECT_RANGE, data).then(() => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Selected Range!" }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
 //find
 router.get("/find", (req, res) => {
     vscode.commands.executeCommand(IDE_1.FIND).then(() => {
@@ -25294,7 +25306,7 @@ exports["default"] = router;
 
 // commands
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FIND = exports.SELECT = exports.RUN_PYTHON = exports.RUN_NOTEBOOK = exports.RUN_NOTEBOOK_CELL = exports.SELECT_KERNEL = exports.REDO = exports.UNDO = exports.CUT = exports.COPY = exports.PASTE = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
+exports.FIND = exports.SELECT_RANGE = exports.SELECT = exports.RUN_PYTHON = exports.RUN_NOTEBOOK = exports.RUN_NOTEBOOK_CELL = exports.SELECT_KERNEL = exports.REDO = exports.UNDO = exports.CUT = exports.COPY = exports.PASTE = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
 exports.GO_TO_LINE = "robin.goToLine";
 // go to file
 exports.GO_TO_FILE = "robin.goToFile";
@@ -25324,6 +25336,8 @@ exports.RUN_NOTEBOOK = "robin.runNotebook";
 exports.RUN_PYTHON = "robin.runPython";
 //select
 exports.SELECT = "robin.select";
+//select range
+exports.SELECT_RANGE = "robin.selectRange";
 //find
 exports.FIND = "robin.find";
 /**
@@ -25792,7 +25806,7 @@ const newTerminal = () => vscode.commands.registerCommand(IDE_1.NEW_TERMINAL, ()
 const killTerminal = () => vscode.commands.registerCommand(IDE_1.KILL_TERMINAL, () => {
     vscode.commands.executeCommand('workbench.action.terminal.kill');
 });
-//select
+//select line
 const select = () => vscode.commands.registerCommand(IDE_1.SELECT, (data) => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
@@ -25802,6 +25816,25 @@ const select = () => vscode.commands.registerCommand(IDE_1.SELECT, (data) => {
         // editor.revealRange(new vscode.Range(start, end));
         vscode.commands.executeCommand(IDE_1.GO_TO_LINE, (data));
         vscode.commands.executeCommand('expandLineSelection');
+        return {
+            success: true
+        };
+    }
+    else {
+        return {
+            success: false,
+            message: "No active text editor"
+        };
+    }
+});
+//select multiple lines
+const selectRange = () => vscode.commands.registerCommand(IDE_1.SELECT_RANGE, (data) => {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const start = new vscode.Position(data.startLine ?? 0, data.startCharacter ?? 0);
+        const end = new vscode.Position(data.endLine ?? 0, data.endCharacter ?? 0);
+        editor.selection = new vscode.Selection(start, end);
+        editor.revealRange(new vscode.Range(start, end));
         return {
             success: true
         };
@@ -25977,6 +26010,7 @@ const registerIDECommands = () => {
         runNotebook,
         runPython,
         select,
+        selectRange,
         find
     ];
     commands.
