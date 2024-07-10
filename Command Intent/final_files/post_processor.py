@@ -951,7 +951,7 @@ class PostProcessor:
 
         return final_parameters
 
-    # not done in the command execution module
+    # DONE but not done in the command execution module
     def post_process_array_operation(self, parameters):
         '''
             tags:
