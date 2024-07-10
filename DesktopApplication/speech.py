@@ -22,7 +22,7 @@ class SpeechRecognition:
         # self.recognizer = sr.Recognizer()
         # self.microphone = sr.Microphone()
         self.gui = gui
-        self.command_intent = CommandIntent('../CommandIntent/models/intent_detection_model.keras',
+        self.command_intent = CommandIntentClass('../CommandIntent/models/intent_detection_model.keras',
                                             '../CommandIntent/models/ner_model2.pth')
 
         # vosk
