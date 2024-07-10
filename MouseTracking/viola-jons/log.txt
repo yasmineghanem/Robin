@@ -1,0 +1,5 @@
+Accuracy: 0.826132
+Error rate: 0.173868
+False positive rate: 0.038
+False negative rate: 0.317797
+Testing time: 1.054 s

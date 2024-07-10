@@ -1,0 +1,10 @@
+python-tkdnd
+customtkinter
+SpeechRecognition
+openwakeword
+pyaudio
+hupper
+tk
+requests
+vosk
+pyttsx3
