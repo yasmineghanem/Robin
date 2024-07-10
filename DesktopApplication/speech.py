@@ -12,7 +12,7 @@ import sys
 sys.path.append(os.path.abspath('../CommandIntent/final_files/command_intent.py'))
 
 # Now you can import your module
-import CommandIntent
+import CommandIntentClass
 
 # # Use the module's functionality
 # module.some_function()
