@@ -14,7 +14,7 @@ class APIController:
         response = requests.get(self.url + endpoint, params=params, timeout=15)
         return response.json()
 
-    def __post(self, endpoint, data):
+    def __post(self, endpoint, data={}):
         response = requests.post(self.url + endpoint, json=data,
                                  headers={'Content-Type': 'application/json',
                                           'Accept': 'application/json'
@@ -27,67 +27,66 @@ class APIController:
         return response.json
     # File System Endpoints
 
-    def create_file(self, fileName, extension, content):
-        data = {
-            "fileName": fileName,
-            "extension": extension,
-            "content": content
-        }
-        return self.__post(FILE_SYSTEM_CREATE_FILE, data)
+    def create_file(self,body):
+        # data = {
+        #     "fileName": fileName,
+        #     "extension": extension,
+        #     "content": content
+        # }
+        return self.__post(FILE_SYSTEM_CREATE_FILE, body)
 
-    def create_directory(self, name):
-        data = {
-            "name": name
-        }
-        return self.__post(FILE_SYSTEM_CREATE_DIRECTORY, data)
+    def create_directory(self, body):
+        # data = {
+        #     "name": name
+        # }
+        return self.__post(FILE_SYSTEM_CREATE_DIRECTORY, body)
 
-    def copy_file(self, source, destination):
-        data = {
-            "source": source,
-            "destination": destination
-        }
-        return self.__post(FILE_SYSTEM_COPY_FILE, data)
+    def copy_file(self, body):
+        # data = {
+        #     "source": source,
+        #     "destination": destination
+        # }
+        return self.__post(FILE_SYSTEM_COPY_FILE, body)
 
-    def copy_directory(self, source, destination):
-        data = {
-            "source": source,
-            "destination": destination
-        }
-        return self.__post(FILE_SYSTEM_COPY_DIRECTORY, data)
+    def copy_directory(self, body):
+        # data = {
+        #     "source": source,
+        #     "destination": destination
+        # }
+        return self.__post(FILE_SYSTEM_COPY_DIRECTORY, body)
 
-    def delete(self, source):
-        data = {
-            "source": source
-        }
-        return self.__post(FILE_SYSTEM_DELETE, data)
+    def delete(self, body):
+        # data = {
+        #     "source": source
+        # }
+        return self.__post(FILE_SYSTEM_DELETE, body)
 
-    def rename(self, source, destination):
-        data = {
-            "source": source,
-            "destination": destination
-        }
-        return self.__post(FILE_SYSTEM_RENAME, data)
+    def rename(self, body):
+        # data = {
+        #     "source": source,
+        #     "destination": destination
+        # }
+        return self.__post(FILE_SYSTEM_RENAME, body)
 
     def save(self):
-        data = {}
-        return self.__post(FILE_SYSTEM_SAVE, data)
+        return self.__post(FILE_SYSTEM_SAVE)
 
     def get_files(self):
-        return self.__post(FILE_SYSTEM_GET_FILES, data={})
+        return self.__post(FILE_SYSTEM_GET_FILES)
 
     # IDE Endpoints
-    def go_to_line(self, line, character):
-        data = {
-            "line": line,
-            "character": character
-        }
-        return self.__post(IDE_GO_TO_LINE, data)
+    def go_to_line(self, body):
+        # data = {
+        #     "line": line,
+        #     "character": character
+        # }
+        return self.__post(IDE_GO_TO_LINE, body)
 
-    def go_to_file(self, path):
-        data = {
-            "path": path
-        }
-        return self.__post(IDE_GO_TO_FILE, data)
+    def go_to_file(self, body):
+        # data = {
+        #     "path": path
+        # }
+        return self.__post(IDE_GO_TO_FILE, body)
 
     def focus_terminal(self):
         return self.__get(IDE_FOCUS_TERMINAL)
@@ -113,29 +112,29 @@ class APIController:
     def redo(self):
         return self.__get(IDE_REDO)
 
-    def select(self, line):
-        data = {
-            "line": line
-        }
-        return self.__get(IDE_SELECT, data)
+    def select(self, ):
+        # data = {
+        #     "line": line
+        # }
+        return self.__get(IDE_SELECT, )
 
-    def find(self, line):
-        data = {
-            "line": line
-        }
-        return self.__get(IDE_FIND, data)
+    def find(self,):
+        # data = {
+        #     "line": line
+        # }
+        return self.__get(IDE_FIND)
 
     def run_notebook(self):
         return self.__get(IDE_RUN_NOTEBOOK)
 
-    def run_python_file(self, path):
-        data = {
-            "path": path
-        }
-        return self.__post(IDE_RUN_PYTHON_FILE, data)
+    def run_python_file(self, body):
+        # data = {
+        #     "path": path
+        # }
+        return self.__post(IDE_RUN_PYTHON_FILE, body)
 
-    def run_notebook_cell(self, data):
-        return self.__get(IDE_RUN_NOTEBOOK_CELL, data)
+    def run_notebook_cell(self):
+        return self.__get(IDE_RUN_NOTEBOOK_CELL)
 
     def select_kernel(self, data):
         return self.__post(IDE_SELECT_KERNEL, data)
@@ -154,153 +153,166 @@ class APIController:
         return self.__get(GIT_STASH_ENDPOINT)
 
     # Code Execution Endpoints
-    def try_except(self, tryBody, exception, exceptionInstance, exceptBody):
-        data = {
-            "tryBody": tryBody,
-            "exception": exception,
-            "exceptionInstance": exceptionInstance,
-            "exceptBody": exceptBody
-        }
-        return self.__post(CODE_TRY_EXCEPT, data)
+    def try_except(self, body):
+        # data = {
+        #     "tryBody": tryBody,
+        #     "exception": exception,
+        #     "exceptionInstance": exceptionInstance,
+        #     "exceptBody": exceptBody
+        # }
+        return self.__post(CODE_TRY_EXCEPT, body)
 
-    def declare_constant(self, name, value):
-        data = {
-            "name": name,
-            "value": value
-        }
-        return self.__post(CODE_DECLARE_CONSTANT, data)
+    def declare_constant(self, body):
+        # data = {
+        #     "name": name,
+        #     "value": value
+        # }
+        return self.__post(CODE_DECLARE_CONSTANT, body)
 
     def declare_variable(
         self,
-        variable_name,
-        variable_value,
-        variable_type=None,
+        body
+        # variable_name,
+        # variable_value=None,
+        # variable_type=None,
     ):
-        var_data = {
-            "name": variable_name,
-            "value": variable_value,
-        }
-        if variable_type:
-            var_data["type"] = variable_type
-        return self.__post(CODE_DECLARE_VARIABLE, var_data)
+        # var_data = {
+        #     "name": variable_name,
+        #     # "value": variable_value,
+        # }
+        
+        # if variable_value:
+        #     var_data["value"] = variable_value
+        # if variable_type:
+        #     var_data["type"] = variable_type
+        return self.__post(CODE_DECLARE_VARIABLE, body)
 
     def write_file(
         self,
-        path,
-        content
+        body
+        # path,
+        # content
     ):
-        data = {
-            "path": path,
-            "content": content
-        }
-        return self.__post(CODE_WRITE_FILE, data)
+        # data = {
+        #     "path": path,
+        #     "content": content
+        # }
+        return self.__post(CODE_WRITE_FILE, body)
 
     def read_file(
         self,
-        path,
-        variable=None
+        body
+        # path,
+        # variable=None
     ):
-        data = {
-            "path": path
-        }
-        if variable:
-            data["variable"] = variable
-        return self.__post(CODE_READ_FILE, data)
+        # data = {
+        #     "path": path
+        # }
+        # if variable:
+        #     data["variable"] = variable
+        return self.__post(CODE_READ_FILE, body)
 
     def block_comment(
         self,
-        content
+        # content
+        body
     ):
-        data = {
-            "content": content
-        }
-        return self.__post(CODE_BLOCK_COMMENT, data)
+        # data = {
+        #     "content": content
+        # }
+        return self.__post(CODE_BLOCK_COMMENT, body)
 
     def line_comment(
         self,
-        content
+        # content
     ):
-        data = {
-            "content": content
-        }
-        return self.__post(CODE_LINE_COMMENT, data)
+        # data = {
+        #     "content": content
+        # }
+        return self.__post(CODE_LINE_COMMENT, body)
 
     def print_code(
         self,
-        variable,
-        type=None
+        body
+        # variable,
+        # type=None
     ):
-        data = {
-            "variable": variable
-        }
-        if type:
-            data["type"] = type
-        return self.__post(CODE_PRINT, data)
+        # data = {
+        #     "variable": variable
+        # }
+        # if type:
+        #     data["type"] = type
+        return self.__post(CODE_PRINT, body)
 
     def user_input(
         self,
-        variable,
-        message
+        data
+        # variable,
+        # message
     ):
-        data = {
-            "variable": variable
-        }
-        if message:
-            data["message"] = message
+        # data = {
+        #     "variable": variable
+        # }
+        # if message:
+        #     data["message"] = message
         return self.__post(CODE_USER_INPUT, data)
 
     def type_casting(
         self,
-        variable,
-        type
+        data
+        # variable,
+        # type        
     ):
-        data = {
-            "variable": variable,
-            "type": type
-        }
+        # data = {
+        #     "variable": variable,
+        #     "type": type
+        # }
         return self.__post(CODE_TYPE_CASTING, data)
 
     def assertion(
         self,
-        variable,
-        type,
-        value
+        data
+        # variable,
+        # type,
+        # value
     ):
-        data = {
-            "variable": variable,
-            "type": type,
-            "value": value
-        }
+        # data = {
+        #     "variable": variable,
+        #     "type": type,
+        #     "value": value
+        # }
         return self.__post(CODE_ASSERTION, data)
 
     def import_library(
         self,
-        library
+        data
+        # library
     ):
-        data = {
-            "library": library
-        }
+        # data = {
+        #     "library": library
+        # }
         return self.__post(CODE_IMPORT_LIBRARY, data)
 
     def import_module(
         self,
-        library,
-        modules
+        data
+        # library,
+        # modules
     ):
-        data = {
-            "library": library,
-            "modules": modules
-        }
+        # data = {
+        #     "library": library,
+        #     "modules": modules
+        # }
         return self.__post(CODE_IMPORT_MODULE, data)
 
-    def declare_class(self, name, properties, methods):
-        data = {
-            "name": name,
-        }
-        if properties:
-            data["properties"] = properties
-        if methods:
-            data["methods"] = methods
+    def declare_class(self, data):
+        # data = {
+        #     "name": name,
+        # }
+        # if properties:
+        #     data["properties"] = properties
+        # if methods:
+        #     data["methods"] = methods
         return self.__post(CODE_DECLARE_CLASS, data)
 
     def conditional(self, data: [{"keyword": str, "condition": [{"left": str, "operator": str, "right": str}]}]):
@@ -319,26 +331,26 @@ class APIController:
             }
         )
 
-    def declare_function(self, name, parameters):
-        data = {
-            "name": name,
-            "parameters": parameters
-        }
+    def declare_function(self, data):
+        # data = {
+        #     "name": name,
+        #     "parameters": parameters
+        # }
         return self.__post(CODE_DECLARE_FUNCTION, data)
 
-    def function_call(self, name, args):
-        data = {
-            "name": name,
-            "args": args
-        }
+    def function_call(self, data):
+        # data = {
+        #     "name": name,
+        #     "args": args
+        # }
         return self.__post(CODE_FUNCTION_CALL, data)
 
-    def operation(self, right, operator, left):
-        data = {
-            "right": right,
-            "operator": operator,
-            "left": left
-        }
+    def operation(self, data):
+        # data = {
+        #     "right": right,
+        #     "operator": operator,
+        #     "left": left
+        # }
         return self.__post(CODE_OPERATION, data)
 
     def for_loop(self, loop_type, rest):
@@ -350,24 +362,22 @@ class APIController:
 
     def while_loop(
         self,
-        condition
+        data
     ):
-        data = {
-            "condition": condition
-        }
+        # data = {
+        #     "condition": condition
+        # }
         return self.__post(CODE_WHILE_LOOP, data)
 
     def assign_variable(
         self,
-        name,
-        type,
-        value
+        data
     ):
-        data = {
-            "name": name,
-            "type": type,
-            "value": value
-        }
+        # data = {
+        #     "name": name,
+        #     "type": type,
+        #     "value": value
+        # }
         return self.__post(CODE_ASSIGN_VARIABLE, data)
 
     def exit_scope(self):

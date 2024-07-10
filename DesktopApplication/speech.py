@@ -4,12 +4,15 @@ from vosk import Model, KaldiRecognizer
 import pyaudio
 import requests
 from api import *
-
+from CommandIntent.final_files import CommandIntent
 
 class SpeechRecognition:
-    def __init__(self):
+    def __init__(self, gui):
         # self.recognizer = sr.Recognizer()
         # self.microphone = sr.Microphone()
+        self.gui = gui
+        self.command_intent = CommandIntent('../CommandIntent/models/intent_detection_model.keras',
+                                            '../CommandIntent/models/ner_model2.pth')
 
         # vosk
         self.model = Model("./Assets/voice_recognition_models/v_2")
@@ -38,38 +41,43 @@ class SpeechRecognition:
             if self.recognizer.AcceptWaveform(data):
                 r = self.recognizer.Result()
 
-                print(r)
+                # print(r)
 
-                # declare variable
-                self.api.declare_variable('new_variable', 5)
+                # response = self.command_intent.process_command(r['text'])
+                response = self.command_intent.process_command('cast variable x to integer')
 
-                # declare function
-                self.api.declare_function('new_function',  [
-                    {
-                        "name": "x_variable",
-                        "value": "test"
-                    },
-                    {
-                        "name": "y"
-                    }
-                ])
+                
 
-                # if condition
-                self.api.conditional([{"keyword": 'if', "condition": [
-                    {
-                        "left": "x",
-                        "operator": ">",
-                        "right": "5"
-                    }
-                ]}])
+                # # declare variable
+                # self.api.declare_variable('new_variable', 5)
 
-                # for loop
-                self.api.for_loop('enumerate', {"iterators": [
-                    "i",
-                    "x"
-                ],
-                    "iterable": "x"
-                })
+                # # declare function
+                # self.api.declare_function('new_function',  [
+                #     {
+                #         "name": "x_variable",
+                #         "value": "test"
+                #     },
+                #     {
+                #         "name": "y"
+                #     }
+                # ])
 
-                # function call to print
-                self.api.function_call('print', [{'value': 'x'}])
+                # # if condition
+                # self.api.conditional([{"keyword": 'if', "condition": [
+                #     {
+                #         "left": "x",
+                #         "operator": ">",
+                #         "right": "5"
+                #     }
+                # ]}])
+
+                # # for loop
+                # self.api.for_loop('enumerate', {"iterators": [
+                #     "i",
+                #     "x"
+                # ],
+                #     "iterable": "x"
+                # })
+
+                # # function call to print
+                # self.api.function_call('print', [{'value': 'x'}])

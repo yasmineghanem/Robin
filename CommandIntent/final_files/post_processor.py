@@ -1,6 +1,7 @@
 import utils
 import re
-
+from constants import *
+from DesktopApplication.api_controller import ApiController
 # TODO: handle if the intent is wrong
 
 
@@ -20,13 +21,14 @@ class PostProcessor:
 
     def __init__(self, intent_to_tags):
         self.intent_to_tags = intent_to_tags
+        self.api = ApiController()
 
     def post_process(self, sentence, intent, tags):
         '''
             post_process function is used to post process the output of the two models.
             It takes the detected intent along with the entities and maps them to the final output.
             The final output is then sent to the command execution module using the API.
-            The main purpose is to send th ecorrect values with the correct types to the command execution module.
+            The main purpose is to send th correct values with the correct types to the command execution module.
         '''
         sentence = sentence.split()
 
@@ -39,77 +41,97 @@ class PostProcessor:
         match intent:
             case 'variable declaration':
                 final_parameters = self.post_process_declaration(parameters)
+                response = self.api.declare_variable(final_parameters['name'], final_parameters['value'], final_parameters['type'])
 
             case 'constant declaration':
                 final_parameters = self.post_process_declaration(parameters)
+                response = self.api.declare_constant(final_parameters['name'], final_parameters['value'])
 
             case 'function declaration':
                 final_parameters = self.post_process_function_declaration(
                     parameters)
+                response = self.api.declare_function(final_parameters['name'], final_parameters['parameters'])
 
             case 'class declaration':
                 final_parameters = self.post_process_class_declaration(
                     parameters)
+                response = self.api.declare_class(final_parameters['name'])
 
             case 'for loop':
                 final_parameters = self.post_process_for_loop(parameters)
+                response = self.api.for_loop(final_parameters['type'], final_parameters['iterators'], final_parameters['start'], final_parameters['end'], final_parameters['step'], final_parameters['iterable'], final_parameters['body'])
 
             case 'while loop':
                 final_parameters = self.post_process_while_loop(parameters)
+                response = self.api.conditional(final_parameters)
 
             case 'assignment operation':
                 final_parameters = self.post_process_assignment_operation(
                     parameters)
+                response = self.api.assignment(final_parameters)
 
             case 'bitwise operation':
                 final_parameters = self.post_process_operation(parameters)
+                response = self.api.operation(final_parameters)
 
             case 'casting':
                 final_parameters = self.post_process_casting(parameters)
+                response = self.api.casting(final_parameters)
 
             case 'input':
                 final_parameters = self.post_process_input(parameters)
-
+                response = self.api.user_input(final_parameters)
             case 'output':
                 final_parameters = self.post_process_output(parameters)
+                response = self.api.print(final_parameters)
 
             case 'assertion':
                 final_parameters = self.post_process_assertion(parameters)
+                response = self.api.assertion(final_parameters)
 
             case 'libraries':
                 final_parameters = self.post_process_libraries(parameters)
+                response = self.api.import_library(final_parameters)
 
             case 'comment':
                 final_parameters = self.post_process_comment(parameters)
+                response = self.api.comment(final_parameters)
 
             case 'conditional operation':
                 final_parameters = self.post_process_conditional_operation(
                     parameters)
+                response = self.api.conditional(final_parameters)
 
             case 'file system':
                 final_parameters = self.post_process_file_system(parameters)
+                response = self.api.file_system(final_parameters)
 
             case 'git operation':
                 self.post_process_git_operation(parameters)
+                response = self.api.git_operation(final_parameters)
 
             case 'interactive commands':
                 self.post_process_interactive_commands(parameters)
+                response = self.api.interactive_commands(final_parameters)
 
             case 'membership operation':
                 final_parameters = self.post_process_conditional_operation(
                     parameters)
+                response = self.api.conditional(final_parameters)
 
             case 'mathematical operation':
                 final_parameters = self.post_process_operation(parameters)
+                response = self.api.operation(final_parameters)
 
             case 'ide operation':
                 final_parameters = self.post_process_ide_operation(parameters)
+                response = self.api.ide_operation(final_parameters)
 
             case 'array operation':
-                final_parameters = self.post_process_array_operation(
-                    parameters)
+                final_parameters = self.post_process_array_operation(parameters)
+                response = self.api.operation(final_parameters)
 
-        return final_parameters
+        return response
 
     def __get_parameters(self, intent, sentence, tags, intent_tags):
         '''
@@ -197,16 +219,19 @@ class PostProcessor:
             # based on intuition and regex
             # for example if the value is 'True/False' then the type is probably boolean
             # if the value is a number then the type is probably int or float
-            # if not the previosu then the type is probably string
+            # if not the previous then the type is probably string
             # if the value is empty and the type is not specified -> leave it as None
-            check = re.match(integer_regex, value)
             if re.match(integer_regex, value) is not None:
+                # integer value
                 final_value = int(value)
             elif re.match(float_regex, value) is not None:
+                # float value
                 final_value = float(value)
             elif re.match(boolean_regex, value) is not None:
+                # boolean value
                 final_value = bool(value.capitalize())
             else:
+                # string value
                 final_value = value
 
         return final_value
@@ -366,7 +391,7 @@ class PostProcessor:
         '''
             This function is used to post process the variable declaration intent to send to the execution
             we need to map the tags to the correct format.
-            and check the type to get the corrct value.
+            and check the type to get the correct value.
             the tags for this intent are:
             - VAR : the variable name
             - VALUE : the value of the variable (optional)
@@ -394,7 +419,7 @@ class PostProcessor:
     # DONE: mapping final parameters
     def post_process_function_declaration(self, parameters):
         '''
-            This function is used to post process the funciotn declaration intent.
+            This function is used to post process the function declaration intent.
             to get the final parameters to send to the command execution module.
             the tags for this intent are:
             - FUNC : the function name
@@ -490,19 +515,22 @@ class PostProcessor:
 
         if parameters['COLLECTION'] is not None:
             final_parameters['type'] = 'iterable'
-            final_parameters['iterators'] = [parameters['VAR']
-                                             if parameters['VAR'] is not None else 'i']
+            final_parameters['iterators'] = [parameters['VAR'] if parameters['VAR'] is not None else 'i']
             final_parameters['iterable'] = parameters['COLLECTION']
             final_parameters['body'] = None
 
         else:
             final_parameters['type'] = 'range'
-            final_parameters['iterators'] = [parameters['VAR']
-                                             if parameters['VAR'] is not None else 'i']
-            final_parameters['start'] = parameters['START'] if parameters['START'] is not None else '0'
+            final_parameters['iterators'] = [parameters['VAR'] if parameters['VAR'] is not None else 'i']
+            
+            # TODO : check if the start, end, and step are numbers
+
+            # the start and the step are optional
+            final_parameters['start'] = parameters['START']
+            final_parameters['step'] = parameters['STEP'] 
+
             # must be provided by the user
             final_parameters['end'] = parameters['END']
-            final_parameters['step'] = parameters['STEP'] if parameters['STEP'] is not None else '1'
 
         return final_parameters
 
@@ -564,7 +592,7 @@ class PostProcessor:
     # DONE: assignment operation intent
     def post_process_assignment_operation(self, parameters):
         '''
-            The tags for the assignemtn intent:
+            The tags for the assignment intent:
             - LHS -> always has to be a variable
             - RHS -> could be a variable or value (need to map to the correct type)
 
@@ -613,7 +641,7 @@ class PostProcessor:
     # DONE: libraries intent
     def post_process_libraries(self, parameters):
         '''
-            the tags for librares intent:
+            the tags for libraries intent:
             - LIB_NAME : the name of the library
 
             final format:
@@ -659,7 +687,7 @@ class PostProcessor:
 
         return final_parameters
 
-    # DONE: comment intetn
+    # DONE: comment intent
     def post_process_comment(self, parameters):
         '''
             This will be the line comment 
@@ -707,7 +735,7 @@ class PostProcessor:
             - VAL
             - MESSAGE
 
-            should be atmost 1
+            should be at most 1
 
             final format:
             {
@@ -844,7 +872,7 @@ class PostProcessor:
             elif parameters['DIR'] is not None:  # then create directory
                 # final format:
                 # {
-                #     "name" : "new_folder/aaah"
+                #     "name" : "new_folder/c"
                 # }
                 final_parameters['name'] = parameters['DIR']
 
@@ -902,7 +930,7 @@ class PostProcessor:
 
             - TYPE -> file | terminal | line 
             - LINE -> numbers
-            - FILE -> filname
+            - FILE -> filename
         '''
         final_parameters = {}
 
@@ -918,7 +946,7 @@ class PostProcessor:
             # possible actions
             # goto
             # {
-            #  "path" : "aa.sadas"
+            #  "path" : "aa.x"
             # }
             final_parameters['type'] = 'file'
             final_parameters['path'] = parameters['FILE']

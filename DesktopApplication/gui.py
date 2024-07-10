@@ -8,7 +8,7 @@ class GUI:
 
     def __init__(self):
         
-        self.sr = SpeechRecognition()
+        self.sr = SpeechRecognition(self)
         
         self.sr_thread = threading.Thread(target=self.sr.recognize)
         self.sr_thread.daemon = True
