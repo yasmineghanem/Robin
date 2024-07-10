@@ -44,6 +44,9 @@ export const RUN_PYTHON = "robin.runPython";
 //select
 export const SELECT = "robin.select";
 
+//select range
+export const SELECT_RANGE = "robin.selectRange";
+
 //find
 export const FIND = "robin.find";
 

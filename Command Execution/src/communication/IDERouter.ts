@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON, SELECT, FIND } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON, SELECT, FIND, SELECT_RANGE } from '../constants/IDE';
 const router = require('express').Router();
 
 
@@ -264,6 +264,25 @@ router.get(
             () => {
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ message: "Selected!" }));
+            },
+            (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            }
+        );
+    }
+);
+
+//select range
+router.get(
+    "/select-range",
+    (req: any, res: any) => {
+        const data = req.body;
+        // vscode.commands.executeCommand('editor.action.smartSelect', data).then(
+        vscode.commands.executeCommand(SELECT_RANGE, data).then(
+            () => {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Selected Range!" }));
             },
             (err) => {
                 res.writeHead(400, { "Content-Type": "application/json" });

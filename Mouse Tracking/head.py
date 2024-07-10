@@ -60,6 +60,7 @@ class head_controller():
         is_smiling = smile_ratio > 4.0  # This threshold may need tuning
         # print(smile_ratio)
         return is_smiling
+    
     def process(self):
         eye = eye_controller(self.URL)
         self.cap = cv2.VideoCapture(self.URL)
