@@ -4,7 +4,18 @@ from vosk import Model, KaldiRecognizer
 import pyaudio
 import requests
 from api import *
-from CommandIntent.final_files.command_intent import CommandIntent
+import os
+import sys
+# from CommandIntent.final_files.command_intent import CommandIntent
+
+# Add the directory containing the module to the Python path
+sys.path.append(os.path.abspath('../CommandIntent/final_files/command_intent.py'))
+
+# Now you can import your module
+import CommandIntent
+
+# # Use the module's functionality
+# module.some_function()
 
 class SpeechRecognition:
     def __init__(self, gui):
