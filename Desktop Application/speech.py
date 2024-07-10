@@ -3,6 +3,7 @@ import speech_recognition as sr
 from vosk import Model, KaldiRecognizer
 import pyaudio
 import requests
+from api import *
 
 
 class SpeechRecognition:
@@ -14,11 +15,12 @@ class SpeechRecognition:
         self.model = Model("./Assets/voice_recognition_models/v_2")
         self.recognizer = KaldiRecognizer(self.model, 16000)
         self.mic = pyaudio.PyAudio()
-        
-        
+
         self.stream = self.mic.open(format=pyaudio.paInt16, channels=1,
                                     rate=16000, input=True, frames_per_buffer=8192)
         self.active = True
+
+        self.api = APIController()
 
     def activate(self):
         self.active = True
@@ -34,21 +36,40 @@ class SpeechRecognition:
             if len(data) == 0:
                 break
             if self.recognizer.AcceptWaveform(data):
-                print(self.recognizer.Result())
+                r = self.recognizer.Result()
 
-                # request to localhost:2805
-                # try:
-                #     response = requests.get('http://localhost:2805/git/pull')
-                #     print(response.text)
-                    
-                # except Exception as e:
-                #     print(f"Error in recognize: {e}")
-                    
+                print(r)
 
-    # destructor
+                # declare variable
+                self.api.declare_variable('new_variable', 5)
 
-    # def __del__(self):
-    #     self.stream.stop_stream()
-    #     self.stream.close()
-    #     self.mic.terminate()
-    #     print('SpeechRecognition object deleted')
+                # declare function
+                self.api.declare_function('new_function',  [
+                    {
+                        "name": "x_variable",
+                        "value": "test"
+                    },
+                    {
+                        "name": "y"
+                    }
+                ])
+
+                # if condition
+                self.api.conditional([{"keyword": 'if', "condition": [
+                    {
+                        "left": "x",
+                        "operator": ">",
+                        "right": "5"
+                    }
+                ]}])
+
+                # for loop
+                self.api.for_loop('enumerate', {"iterators": [
+                    "i",
+                    "x"
+                ],
+                    "iterable": "x"
+                })
+
+                # function call to print
+                self.api.function_call('print', [{'value': 'x'}])

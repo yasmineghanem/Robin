@@ -1,0 +1,1649 @@
+{
+    "classes": [
+        "VAR",
+        "VAL",
+        "MESSAGE"
+    ],
+    "annotations": [
+        [
+            "output the variable max value.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        29,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the variable result.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        25,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the variable element.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        25,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable j.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        22,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the variable is active.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        29,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable is verified.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        32,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the variable k.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        20,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the variable max value.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        29,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable has access.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        29,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the variable item.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        22,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value 1.5678.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        24,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the value 1234567.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        22,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the value -777777.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        22,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value -202020.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        24,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value 2.99792458.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        28,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the value -0.27182.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        24,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the value 2023.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        19,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value -1.1.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        22,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the value -1.0.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        19,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value 909090.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        23,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the variable user email to the user.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        29,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the variable has errors to the user.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        30,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable max value to the user.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        30,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable iteration to the user.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        30,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable is logged in to the user.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        31,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the variable k to the user.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        21,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable index to the user.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        26,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the variable loop index to the user.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        30,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the variable is logged in to the user.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        30,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the variable file path to the user.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        27,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value 1.5678 to the user.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        24,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the value 888888 to the user.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        21,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the value -121212 to the user.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        23,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value 252525 to the user.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        23,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value 131313 to the user.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        23,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the value 9.81 to the user.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        19,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value -6.789 to the user.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        24,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value 1.234 to the user.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        23,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value 505050 to the user.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        24,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value -1e-07 to the user.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        24,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show variable is enabled.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        24,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show variable total amount.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        26,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show variable is active.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        23,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write variable max value.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        24,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print variable max value.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        24,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print variable is enabled.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        25,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output variable is approved.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        27,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show variable has access.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        24,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display variable k.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        18,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write variable user name.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        24,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output value -456.\r",
+            {
+                "entities": [
+                    [
+                        13,
+                        17,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show value 1e-06.\r",
+            {
+                "entities": [
+                    [
+                        11,
+                        16,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write value 5.0.\r",
+            {
+                "entities": [
+                    [
+                        12,
+                        15,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output value 0.707.\r",
+            {
+                "entities": [
+                    [
+                        13,
+                        18,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show value 7.1234.\r",
+            {
+                "entities": [
+                    [
+                        11,
+                        17,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print value 0.999999.\r",
+            {
+                "entities": [
+                    [
+                        12,
+                        20,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output value -606060.\r",
+            {
+                "entities": [
+                    [
+                        13,
+                        20,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write value -7654321.\r",
+            {
+                "entities": [
+                    [
+                        12,
+                        20,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display value 5.6789.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        20,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write value 1.0.\r",
+            {
+                "entities": [
+                    [
+                        12,
+                        15,
+                        "VAL"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the message Hello World!.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        28,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the message The result is.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        30,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the message output size.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        30,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the message mask shape.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        29,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the message The value is.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        30,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the message failed the test.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        35,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the message output size.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        30,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the message The output is.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        32,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the message The output is.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        31,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the message output format.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        33,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display message output shape: to the user.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        29,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print message output type to the user.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        25,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display message output format to the user.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        29,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display message welcome to the program! to the user.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        39,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show message The output is to the user.\r",
+            {
+                "entities": [
+                    [
+                        13,
+                        26,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output message this is an output message to the user.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        40,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write message output format to the user.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        27,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output message welcome to the program! to the user.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        38,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print message this is an output message to the user.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        39,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print message this is an output statement to the user.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        41,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the variable counter with message The value is.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        27,
+                        "VAR"
+                    ],
+                    [
+                        41,
+                        53,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the variable file path with message this is an output message.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        27,
+                        "VAR"
+                    ],
+                    [
+                        41,
+                        66,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable is logged in with message output size.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        33,
+                        "VAR"
+                    ],
+                    [
+                        47,
+                        58,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable username with message output format.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        27,
+                        "VAR"
+                    ],
+                    [
+                        41,
+                        54,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable index with message output size.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        24,
+                        "VAR"
+                    ],
+                    [
+                        38,
+                        49,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable username with message output size.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        29,
+                        "VAR"
+                    ],
+                    [
+                        43,
+                        54,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the variable is enabled with message Hello World!.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        30,
+                        "VAR"
+                    ],
+                    [
+                        44,
+                        56,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the variable completed with message text length.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        27,
+                        "VAR"
+                    ],
+                    [
+                        41,
+                        52,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable item with message output size.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        23,
+                        "VAR"
+                    ],
+                    [
+                        37,
+                        48,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable pos with message output format.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        24,
+                        "VAR"
+                    ],
+                    [
+                        38,
+                        51,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the value 1.234 with message output type.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        21,
+                        "VAL"
+                    ],
+                    [
+                        35,
+                        46,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value -54321 with message this is an output message.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        23,
+                        "VAL"
+                    ],
+                    [
+                        37,
+                        62,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value 1e-06 with message The value is.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        22,
+                        "VAL"
+                    ],
+                    [
+                        36,
+                        48,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the value 7.1234 with message The value is.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        22,
+                        "VAL"
+                    ],
+                    [
+                        36,
+                        48,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the value -1.602176634 with message mask shape.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        28,
+                        "VAL"
+                    ],
+                    [
+                        42,
+                        52,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the value 1.23456789 with message welcome to the program!.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        26,
+                        "VAL"
+                    ],
+                    [
+                        40,
+                        63,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value -222222 with message output shape:.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        25,
+                        "VAL"
+                    ],
+                    [
+                        39,
+                        51,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the value 30303 with message passed the test.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        21,
+                        "VAL"
+                    ],
+                    [
+                        35,
+                        50,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value -1.602176634 with message passed the test.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        29,
+                        "VAL"
+                    ],
+                    [
+                        43,
+                        58,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the value 123 with message The result is.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        19,
+                        "VAL"
+                    ],
+                    [
+                        33,
+                        46,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the variable file path to the user with message output size.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        27,
+                        "VAR"
+                    ],
+                    [
+                        53,
+                        64,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable i to the user with message The value is.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        22,
+                        "VAR"
+                    ],
+                    [
+                        48,
+                        60,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable i to the user with message welcome to the program!.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        22,
+                        "VAR"
+                    ],
+                    [
+                        48,
+                        71,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the variable counter to the user with message output type.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        25,
+                        "VAR"
+                    ],
+                    [
+                        51,
+                        62,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable total amount to the user with message this is an output statement.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        33,
+                        "VAR"
+                    ],
+                    [
+                        59,
+                        86,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable end date to the user with message this is an error message.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        27,
+                        "VAR"
+                    ],
+                    [
+                        53,
+                        77,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the variable average score to the user with message this is an output message.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        33,
+                        "VAR"
+                    ],
+                    [
+                        59,
+                        84,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable index to the user with message output shape:.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        24,
+                        "VAR"
+                    ],
+                    [
+                        50,
+                        63,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the variable loop index to the user with message The value is.\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        30,
+                        "VAR"
+                    ],
+                    [
+                        56,
+                        68,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the variable user name to the user with message The result is.\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        28,
+                        "VAR"
+                    ],
+                    [
+                        54,
+                        67,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value 171717 to the user with message mask shape.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        24,
+                        "VAL"
+                    ],
+                    [
+                        50,
+                        60,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the value -8.2345 to the user with message The output is.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        22,
+                        "VAL"
+                    ],
+                    [
+                        48,
+                        61,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the value 1.1 to the user with message The output is.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        19,
+                        "VAL"
+                    ],
+                    [
+                        45,
+                        58,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value 0.999999 to the user with message output type.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        26,
+                        "VAL"
+                    ],
+                    [
+                        52,
+                        63,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value 0.999999 to the user with message there's and error.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        25,
+                        "VAL"
+                    ],
+                    [
+                        51,
+                        68,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value -262626 to the user with message failed the test.\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        24,
+                        "VAL"
+                    ],
+                    [
+                        50,
+                        65,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the value -40404 to the user with message welcome to the program!.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        22,
+                        "VAL"
+                    ],
+                    [
+                        48,
+                        71,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the value 0.12345 to the user with message this is an output message.\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        23,
+                        "VAL"
+                    ],
+                    [
+                        49,
+                        74,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value 0 to the user with message output type.\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        19,
+                        "VAL"
+                    ],
+                    [
+                        45,
+                        56,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the value 171717 to the user with message The result is.",
+            {
+                "entities": [
+                    [
+                        16,
+                        22,
+                        "VAL"
+                    ],
+                    [
+                        48,
+                        61,
+                        "MESSAGE"
+                    ]
+                ]
+            }
+        ]
+    ]
+}

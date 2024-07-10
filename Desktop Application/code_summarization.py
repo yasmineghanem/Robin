@@ -41,6 +41,8 @@ class ASTProcessor:
     def process_ast(self):
         import_nodes, constant_nodes, code_nodes = self.extract_import_nodes()
         summary = []
+        summary.append(import_nodes)
+        summary.append(constant_nodes)
         for node in code_nodes:
             if node['type'] == "class_definition":
                 info = self.process_class_node(node, class_info={})
@@ -57,17 +59,8 @@ class ASTProcessor:
                 assignment_info['type'] = 'expression_statement'
                 summary.append(dict(assignment_info))
 
-            # elif node['type'] == "for_statement":
-            #     loop = self.process_for_loop(node)
-            #     summary.append(dict(loop))
-
-            # elif node['type'] == "while_statement":
-            #     loop = self.process_while_loop(node)
-            #     # print(type(loop_info))
-            #     summary.append(dict(loop))
             elif node['type'] == "for_statement" or node['type'] == "while_statement":
                 loop = self.process_loops(node)
-        # print(type(loop_info))
                 for l in loop:
                     summary.append(dict(l))
 
@@ -393,69 +386,64 @@ class ASTProcessor:
 
 
     # function to transform summary to be human readable
-    def write_summary_to_file(self, summary, file_name='summary.txt'):
-        with open(file_name, 'w') as file:
-            file.write("Summary of the code:\n\n")
-            for item in summary:
-                if item['type'] == 'import':
-                    file.write(f"Imported: {item['library']}\n\n")
-                elif item['type'] == 'class_definition':
-                    file.write(f"Class Named: {item['class_name']}\n")
-                    for method in item['class_methods']:
-                        file.write(
-                            f"\tMethod Named: {method['method_name']} with parameters ({', '.join(method['parameters'])})\n\n")
+    def get_summary(self, ast_summary):
+        summary_text_to_speech = "Summary of the code:\n\n"
+        for item in ast_summary:
+            if item['type'] == 'import':
+                summary_text_to_speech+= f"Imported: {item['library']}\n\n"
 
-                elif item['type'] == 'function_definition':
-                    file.write(
-                        f"Function Named: {item['method_name']} with parameters ({', '.join(item['parameters'])})\n\n")
+            elif item['type'] == 'class_definition':
+                summary_text_to_speech += f"Class Named: {item['class_name']}\n"
 
-                elif item['type'] == 'expression_statement':
-                    file.write("An expression statement: \n")
-                    if 'operation' in item:
-                        match item['operation']:
-                            case '=':
-                                file.write(f"\tAssignment Operation: {item['left_side']} = {item['right_side']}\n\n")
-                            case '+':
-                                file.write(f"\tAddition Operation: {item['left_side']} + {item['right_side']}\n\n")
-                            case '-':
-                                file.write(f"\tSubtraction Operation: {item['left_side']} - {item['right_side']}\n\n")
-                            case '*':
-                                file.write(f"\tMultiplication Operation: {item['left_side']} * {item['right_side']}\n\n")
-                            case '/':
-                                file.write(f"\tDivision Operation: {item['left_side']} / {item['right_side']}\n\n")
-                            case '%':
-                                file.write(f"\tModulus Operation: {item['left_side']} % {item['right_side']}\n\n")
-                            case '==':
-                                file.write(f"\tEquality Operation: {item['left_side']} == {item['right_side']}\n\n")
-                            case '!=':
-                                file.write(f"\tInequality Operation: {item['left_side']} != {item['right_side']}\n\n")
-                            case '>':
-                                file.write(f"\tGreater Than Operation: {item['left_side']} > {item['right_side']}\n\n")
-                            case '<':
-                                file.write(f"\tLess Than Operation: {item['left_side']} < {item['right_side']}\n\n")
-                            case '>=':
-                                file.write(f"\tGreater Than or Equal Operation: {item['left_side']} >= {item['right_side']}\n\n")
-                            case '<=':
-                                file.write(f"\tLess Than or Equal Operation: {item['left_side']} <= {item['right_side']}\n\n")
+                for method in item['class_methods']:
+                    summary_text_to_speech+= f"\tMethod Named: {method['method_name']} with parameters ({', '.join(method['parameters'])})\n\n"
 
-                elif item['type'] == 'loop':
-                    file.write(f"A {item['keyword']} loop:\n")
-                    if (item['keyword'] == 'for'):
-                        # broblem here
-                        # print(item['iterable'])
-                        if isinstance(item['iterable'], dict):
-                            file.write(
-                                f"\t{item['keyword']} {item['iterator']} in {item['iterable']['function_name']}({item['iterable']['arguments']}) {item['condition']}:\n\n")
-                        # print(f"item['iterable'] is of type {type(item['iterable'])} and has value {item['iterable']}")
-                    else:
-                        # while loop
-                        file.write(
-                            f"\t{item['keyword']} {item['condition']}:\n\n")
+            elif item['type'] == 'function_definition':
+                summary_text_to_speech += f"Function Named: {item['method_name']} with parameters ({', '.join(item['parameters'])})\n\n"
 
-                    for statement in item['body']:
-                        file.write(f"\t{statement}\n\n")
+            elif item['type'] == 'expression_statement':
+                summary_text_to_speech += "An expression statement: \n"
+                if 'operation' in item:
+                    match item['operation']:
+                        case '=':
+                            summary_text_to_speech+= f"\tAssignment Operation: {item['left_side']} = {item['right_side']}\n\n"
+                        case '+':
+                            summary_text_to_speech+= f"\tAddition Operation: {item['left_side']} + {item['right_side']}\n\n"
+                        case '-':
+                            summary_text_to_speech+= f"\tSubtraction Operation: {item['left_side']} - {item['right_side']}\n\n"
+                        case '*':
+                            summary_text_to_speech+= f"\tMultiplication Operation: {item['left_side']} * {item['right_side']}\n\n"
+                        case '/':
+                            summary_text_to_speech+= f"\tDivision Operation: {item['left_side']} / {item['right_side']}\n\n"
+                        case '%':
+                            summary_text_to_speech+= f"\tModulus Operation: {item['left_side']} % {item['right_side']}\n\n"
+                        case '==':
+                            summary_text_to_speech+= f"\tEquality Operation: {item['left_side']} == {item['right_side']}\n\n"
+                        case '!=':
+                            summary_text_to_speech+= f"\tInequality Operation: {item['left_side']} != {item['right_side']}\n\n"
+                        case '>':
+                            summary_text_to_speech+= f"\tGreater Than Operation: {item['left_side']} > {item['right_side']}\n\n"
+                        case '<':
+                            summary_text_to_speech+= f"\tLess Than Operation: {item['left_side']} < {item['right_side']}\n\n"
+                        case '>=':
+                            summary_text_to_speech+= f"\tGreater Than or Equal Operation: {item['left_side']} >= {item['right_side']}\n\n"
+                        case '<=':
+                            summary_text_to_speech+= f"\tLess Than or Equal Operation: {item['left_side']} <= {item['right_side']}\n\n"
 
-            file.write("End of code\n")
+            elif item['type'] == 'loop':
+                summary_text_to_speech+= f"A {item['keyword']} loop:\n"
+                if (item['keyword'] == 'for'):
+                    if isinstance(item['iterable'], dict):
+                        summary_text_to_speech+= f"\t{item['keyword']} {item['iterator']} in {item['iterable']['function_name']}({item['iterable']['arguments']}) {item['condition']}:\n\n"
+                else:
+                    # while loop
+                    summary_text_to_speech+= f"\t{item['keyword']} {item['condition']}:\n\n"
+
+                for statement in item['body']:
+                    summary_text_to_speech+= f"\t{statement}\n\n"
+
+        summary_text_to_speech+= "End of code\n"
+        return summary_text_to_speech
 
 
 # Load the AST from the JSON file
@@ -465,9 +453,9 @@ with open('./ast_3.json', 'r') as file:
 
 ast_processor = ASTProcessor(ast['ast'])
 summary = ast_processor.process_ast()
-ast_processor.write_summary_to_file(summary)
+final = ast_processor.get_summary(summary)
 # write into file
-with open('summary.json', 'w') as file:
-    json.dump(summary, file, indent=4)
+# with open('summary.json', 'w') as file:
+    # json.dump(summary, file, indent=4)
 # print(summary)
 

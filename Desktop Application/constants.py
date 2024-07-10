@@ -25,7 +25,7 @@ CODE_CONDITIONAL = '/code/conditional'
 CODE_DECLARE_CLASS = '/code/declare-class'
 CODE_GET_AST = '/code/ast'
 CODE_TRY_EXCEPT = '/code/try-except'
-
+CODE_EXIT_SCOPE = '/code/exit-scope'
 
 '''
 file system endpoints

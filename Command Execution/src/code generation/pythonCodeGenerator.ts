@@ -129,7 +129,9 @@ export class PythonCodeGenerator extends CodeGenerator {
       throw new Error(`Invalid variable name: ${name}`);
     }
 
-    const indentation = this.handleIndentationLevel(true); // previous line
+    const indentation = this.tabString.repeat(
+      this.handleIndentationLevel(true)
+    ); // previous line
     if (type) {
       if (initialValue) {
         return `${name}: ${type} = ${initialValue}\n${indentation}`;
@@ -170,31 +172,31 @@ export class PythonCodeGenerator extends CodeGenerator {
     }
     switch (type) {
       case AssignmentOperators.Equals:
-        return `${name} = ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} = ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.PlusEquals:
-        return `${name} += ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} += ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.MinusEquals:
-        return `${name} -= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} -= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.MultiplyEquals:
-        return `${name} *= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} *= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.DivideEquals:
-        return `${name} /= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} /= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.FloorDivideEquals:
-        return `${name} //= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} //= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.ModulusEquals:
-        return `${name} %= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} %= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.ExponentEquals:
-        return `${name} **= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} **= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.AndEquals:
-        return `${name} &= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} &= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.OrEquals:
-        return `${name} |= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} |= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.XorEquals:
-        return `${name} ^= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} ^= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.LeftShiftEquals:
-        return `${name} <<= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} <<= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case AssignmentOperators.RightShiftEquals:
-        return `${name} >>= ${value}\n` + this.handleIndentationLevel(true);
+        return `${name} >>= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       default:
         throw new Error(`Invalid assignment type: ${type}`);
     }
@@ -236,7 +238,6 @@ export class PythonCodeGenerator extends CodeGenerator {
     const f =
       `def ${name}(${params}):\n` +
       this.tabString.repeat(this.handleIndentationLevel(true) + 1);
-    // const functionBody = this.wrapInCodeBlock(body ?? [""]);
 
     return f;
   }
@@ -246,16 +247,12 @@ export class PythonCodeGenerator extends CodeGenerator {
     args: { name?: string; value: any }[]
   ): string {
     const params = args
-      .map((p) =>
-        p.name
-          ? `${p.name} = 
-                ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
-          : typeof p.value === "string"
-          ? `"${p.value}"`
-          : p.value
-      )
+      .map((p) => (p.name ? `${p.name} = ${p.value}` : `${p.value}`))
       .join(", ");
-    return `${name}(${params}) \n`;
+    return (
+      `${name}(${params}) \n` +
+      this.tabString.repeat(this.handleIndentationLevel())
+    );
   }
 
   generateReturn(value?: string): string {
@@ -265,17 +262,6 @@ export class PythonCodeGenerator extends CodeGenerator {
     );
   }
 
-  /**
-     * Declare Class
-     * class Person:
-        def __init__(self, name, age):
-            self.name = name
-            self.age = age
-
-        def myfunc(self):
-            print("Hello my name is " + self.name)
-
-    **/
   declareClass(
     name: string,
     properties: { name: string; type?: string }[],
@@ -376,11 +362,11 @@ export class PythonCodeGenerator extends CodeGenerator {
   generateForLoop(type: ForLoop, params: any, body?: string[]): string {
     switch (type) {
       case ForLoop.Range:
-        return this.generateRangeLoop(params, body);
+        return this.generateRangeLoop(params);
       case ForLoop.Iterable:
-        return this.generateIterableLoop(params, body);
+        return this.generateIterableLoop(params);
       case ForLoop.Enumerate:
-        return this.generateEnumerateLoop(params, body);
+        return this.generateEnumerateLoop(params);
       default:
         return `for `;
     }
@@ -397,26 +383,32 @@ export class PythonCodeGenerator extends CodeGenerator {
   }
 
   generateRangeLoop(
-    params: { iterators: string[]; start: number; end: number; step?: number },
-    body?: string[]
+    params: { iterators: string[]; start: number; end: number; step?: number }
+    // body?: string[]
   ): string {
     const { iterators, start, end, step } = params;
     // if there's no step and no start, just return range of the end
     if (!step && !start) {
-      return `for ${iterators.join(", ")} in range(${
-        end ?? ""
-      }): \n${this.wrapInCodeBlock(body ?? [""])} `;
+      return (
+        `for ${iterators.join(", ")} in range(${end ?? ""}): \n` +
+        this.tabString.repeat(this.handleIndentationLevel())
+      );
     }
     // if there's no step, just return range of start and end
     if (!step) {
-      return `for ${iterators.join(", ")} in range(${
-        start ? start + ", " : ""
-      } ${end ?? ""}): \n${this.wrapInCodeBlock(body ?? [""])} `;
+      return (
+        `for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${
+          end ?? ""
+        }): \n` + this.tabString.repeat(this.handleIndentationLevel() + 1)
+      );
     }
     // if there's a step, return range of start, end and step
-    return `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${
-      end ?? ""
-    }, ${step}): \n${this.wrapInCodeBlock(body ?? [""])} `;
+    return (
+      `for ${iterators.join(", ")} in range(${start ? start : "0"} ,${
+        end ?? ""
+      }, ${step}): \n` +
+      this.tabString.repeat(this.handleIndentationLevel() + 1)
+    );
   }
 
   generateEnumerateLoop(
@@ -424,9 +416,11 @@ export class PythonCodeGenerator extends CodeGenerator {
     body?: string[]
   ): string {
     const { iterators, iterable, start } = params;
-    return `for ${iterators.join(", ")} in enumerate(${iterable}${
-      start ? ` ,${start}` : ""
-    }): \n${this.wrapInCodeBlock(body ?? [""])} `;
+    return (
+      `for ${iterators.join(", ")} in enumerate(${iterable}${
+        start ? ` ,${start}` : ""
+      }): \n` + this.tabString.repeat(this.handleIndentationLevel(true) + 1)
+    );
   }
 
   generateWhileLoop(condition: Condition[], body?: string[]): string {
@@ -541,19 +535,19 @@ export class PythonCodeGenerator extends CodeGenerator {
     switch (type) {
       case AssertionOperators.Equal:
         return (
-          `assert ${variable} == ${value}\n` + this.handleIndentationLevel(true)
+          `assert ${variable} == ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true))
         );
       case AssertionOperators.NotEqual:
         return (
-          `assert ${variable} != ${value}\n` + this.handleIndentationLevel(true)
+          `assert ${variable} != ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true))
         );
       case AssertionOperators.GreaterThanOrEqual:
         return (
-          `assert ${variable} >= ${value}\n` + this.handleIndentationLevel(true)
+          `assert ${variable} >= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true))
         );
       case AssertionOperators.LessThanOrEqual:
         return (
-          `assert ${variable} <= ${value}\n` + this.handleIndentationLevel(true)
+          `assert ${variable} <= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true))
         );
       default:
         throw new Error(`Invalid assertion type: ${type}`);
@@ -570,40 +564,40 @@ export class PythonCodeGenerator extends CodeGenerator {
     switch (type) {
       case CastingTypes.Integer:
         return (
-          `${variable} = int(${variable})\n` + this.handleIndentationLevel(true)
+          `${variable} = int(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true))
         );
       case CastingTypes.Float:
         return (
           `${variable} = float(${variable})\n` +
-          this.handleIndentationLevel(true)
+          this.tabString.repeat(this.handleIndentationLevel(true))
         );
       case CastingTypes.String:
         return (
-          `${variable} = str(${variable})\n` + this.handleIndentationLevel(true)
+          `${variable} = str(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true))
         );
       case CastingTypes.Boolean:
         return (
           `${variable} = bool(${variable})\n` +
-          this.handleIndentationLevel(true)
+          this.tabString.repeat(this.handleIndentationLevel(true))
         );
       case CastingTypes.List:
         return (
           `${variable} = list(${variable})\n` +
-          this.handleIndentationLevel(true)
+          this.tabString.repeat(this.handleIndentationLevel(true))
         );
       case CastingTypes.Tuple:
         return (
           `${variable} = tuple(${variable})\n` +
-          this.handleIndentationLevel(true)
+          this.tabString.repeat(this.handleIndentationLevel(true))
         );
       case CastingTypes.Set:
         return (
-          `${variable} = set(${variable})\n` + this.handleIndentationLevel(true)
+          `${variable} = set(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true))
         );
       case CastingTypes.Dictionary:
         return (
           `${variable} = dict(${variable})\n` +
-          this.handleIndentationLevel(true)
+          this.tabString.repeat(this.handleIndentationLevel(true))
         );
       default:
         throw new Error(`Invalid casting type: ${type}`);
@@ -615,8 +609,8 @@ export class PythonCodeGenerator extends CodeGenerator {
    **/
   generateUserInput(variable: string, message?: string | undefined): string {
     return (
-      `${variable} = input(${message ? message : ""})\n` +
-      this.handleIndentationLevel(true)
+      `${variable} = input('${message ? message : ""}')\n` +
+      this.tabString.repeat(this.handleIndentationLevel(true))
     );
   }
 
@@ -626,11 +620,11 @@ export class PythonCodeGenerator extends CodeGenerator {
   generatePrint(value: any, type?: string): string {
     switch (type) {
       case "string":
-        return `print("${value}")\n` + this.handleIndentationLevel(true);
+        return `print("${value}")\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       case "variable":
-        return `print(${value})\n` + this.handleIndentationLevel(true);
+        return `print(${value})\n` + this.tabString.repeat(this.handleIndentationLevel(true));
       default:
-        return `print(${value})\n` + this.handleIndentationLevel(true);
+        return `print(${value})\n` + this.tabString.repeat(this.handleIndentationLevel(true));
     }
   }
 
@@ -641,7 +635,7 @@ export class PythonCodeGenerator extends CodeGenerator {
   generateReadFile(path: string, variable: any): string {
     return (
       `${variable} = open("${path}", 'r').read()\n` +
-      this.handleIndentationLevel(true)
+      this.tabString.repeat(this.handleIndentationLevel(true))
     );
   }
 
@@ -651,7 +645,7 @@ export class PythonCodeGenerator extends CodeGenerator {
   generateWriteFile(path: string, content: any): string {
     return (
       `open("${path}", 'w').write("${content}")\n` +
-      this.handleIndentationLevel(true)
+      this.tabString.repeat(this.handleIndentationLevel(true))
     );
   }
 
@@ -682,12 +676,12 @@ export class PythonCodeGenerator extends CodeGenerator {
    * Multi line comments
    **/
   generateLineComment(content: string): string {
-    return `# ${content}\n` + this.handleIndentationLevel(true);
+    return `# ${content}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
   }
 
   generateBlockComment(content: string[]): string {
     return (
-      `''' ${content.join("\n")} '''\n` + this.handleIndentationLevel(true)
+      `''' ${content.join("\n")} '''\n` +this.tabString.repeat(this.handleIndentationLevel(true))
     );
   }
 
