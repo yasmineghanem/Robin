@@ -1,0 +1,220 @@
+go get all the files in the project.
+list all the files in the project.
+get me all the files in the project.
+show me all the files in the project.
+go get all the files in the project.
+get all the files in the project.
+go list all the files in the project.
+go get all the files in the project.
+get all the files in the project.
+list me all the files in the project.
+go list all the files.
+go get all the files.
+fetch all the files.
+list all the files.
+list all the files.
+list me all the files.
+show all the files.
+go list all the files.
+list me all the files.
+go list all the files.
+show files.
+list me files.
+list files.
+show me files.
+get files.
+list files.
+fetch files.
+show me files.
+go list files.
+display files.
+get the files.
+display the files.
+list me the files.
+get the files.
+list me the files.
+fetch the files.
+show the files.
+show me the files.
+show me the files.
+retrieve the files.
+get me all the errors in the project.
+go list all the errors in the project.
+retrieve all the errors in the project.
+show all the errors in the project.
+get me all the errors in the project.
+display all the errors in the project.
+go get all the errors in the project.
+get me all the errors in the project.
+list me all the errors in the project.
+display all the errors in the project.
+list all the errors.
+list me all the errors.
+go get all the errors.
+go list all the errors.
+get me all the errors.
+get all the errors.
+retrieve all the errors.
+show all the errors.
+show me all the errors.
+fetch all the errors.
+show me errors.
+get me errors.
+show errors.
+list me errors.
+list me errors.
+list me errors.
+fetch errors.
+show me errors.
+show errors.
+list errors.
+go list the errors.
+list me the errors.
+show the errors.
+list me the errors.
+go list the errors.
+list me the errors.
+get the errors.
+go get the errors.
+get me the errors.
+show me the errors.
+show me all the folders in the project.
+list me all the folders in the project.
+fetch all the folders in the project.
+display all the folders in the project.
+show me all the folders in the project.
+go list all the folders in the project.
+show me all the folders in the project.
+list all the folders in the project.
+get all the folders in the project.
+go get all the folders in the project.
+go get all the folders.
+retrieve all the folders.
+show all the folders.
+fetch all the folders.
+list me all the folders.
+list all the folders.
+go list all the folders.
+retrieve all the folders.
+get me all the folders.
+retrieve all the folders.
+go get folders.
+get me folders.
+list folders.
+list folders.
+get me folders.
+list folders.
+fetch folders.
+fetch folders.
+display folders.
+list folders.
+list me the folders.
+get me the folders.
+show the folders.
+list the folders.
+list me the folders.
+get the folders.
+get the folders.
+list the folders.
+retrieve the folders.
+retrieve the folders.
+get me all the directories in the project.
+fetch all the directories in the project.
+get me all the directories in the project.
+display all the directories in the project.
+show all the directories in the project.
+get me all the directories in the project.
+get me all the directories in the project.
+list me all the directories in the project.
+fetch all the directories in the project.
+show all the directories in the project.
+show me all the directories.
+display all the directories.
+display all the directories.
+list all the directories.
+show me all the directories.
+get me all the directories.
+display all the directories.
+get me all the directories.
+get all the directories.
+list all the directories.
+get directories.
+go get directories.
+go list directories.
+fetch directories.
+display directories.
+fetch directories.
+show me directories.
+list directories.
+get directories.
+show directories.
+go get the code tree.
+go list the code tree.
+retrieve the code tree.
+display the code tree.
+display the code tree.
+get the code tree.
+go get the code tree.
+retrieve the code tree.
+list me the code tree.
+get me the code tree.
+list me the code.
+go list the code.
+list the code.
+list the code.
+list the code.
+go get the code.
+fetch the code.
+fetch the code.
+get me the code.
+show the code.
+display the functions in the code.
+get me the functions in the code.
+fetch the functions in the code.
+get me the functions in the code.
+get the functions in the code.
+list the functions in the code.
+retrieve the functions in the code.
+go get the functions in the code.
+list the functions in the code.
+go list the functions in the code.
+list the classes in the code.
+list the classes in the code.
+retrieve the classes in the code.
+get the classes in the code.
+get the classes in the code.
+go list the classes in the code.
+get the classes in the code.
+go list the classes in the code.
+go get the classes in the code.
+get the classes in the code.
+list me the functions.
+list the functions.
+get me the functions.
+get the functions.
+show me the functions.
+display the functions.
+list the functions.
+go list the functions.
+list me the functions.
+get the functions.
+go get the methods.
+go list the methods.
+display the methods.
+get the methods.
+display the methods.
+show the methods.
+get me the methods.
+show the methods.
+show me the methods.
+list the methods.
+get me the classes.
+get the classes.
+fetch the classes.
+list me the classes.
+display the classes.
+get the classes.
+go get the classes.
+list the classes.
+list me the classes.
+get me the classes.
