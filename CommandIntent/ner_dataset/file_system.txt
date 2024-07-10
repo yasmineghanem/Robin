@@ -1,0 +1,150 @@
+change name.
+delete.
+copy.
+create.
+add.
+update.
+make.
+remove.
+change name.
+duplicate.
+read file document.txt.
+change name file presentation.pptx.
+change name file script.py.
+copy file manual.doc.
+make file script.py.
+update file index.html.
+add file config.json.
+change name file data.csv.
+rename file photo.png.
+read file script.py.
+read new file notes.docx.
+read new file database.db.
+remove new file config.json.
+create new file logfile.log.
+add new file report.pdf.
+save new file notes.docx.
+copy new file document.txt.
+make new file config.json.
+duplicate new file document.txt.
+read new file spreadsheet.xlsx.
+copy new file identified script.py.
+update new file identified database.db.
+delete new file called presentation.pptx.
+read new file labelled as presentation.pptx.
+create new file titled presentation.pptx.
+change name new file call it index.html.
+rename new file its name is archive.zip.
+remove new file identified image.jpg.
+add new file has the name notes.docx.
+save new file named spreadsheet.xlsx.
+copy a new file titled as config.json.
+read a new file its name is presentation.pptx.
+save a new file with name notes.docx.
+copy a new file named presentation.pptx.
+delete a new file its name is diagram.svg.
+duplicate a new file with name diagram.svg.
+remove a new file labelled presentation.pptx.
+rename a new file under the name report.pdf.
+create a new file with name index.html.
+save a new file titled database.db.
+delete photo.png.
+update spreadsheet.xlsx.
+add summary.txt.
+add index.html.
+duplicate report.pdf.
+change name summary.txt.
+create data.csv.
+duplicate style.css.
+duplicate notes.docx.
+make spreadsheet.xlsx.
+delete new notes.docx.
+make new summary.txt.
+update new presentation.pptx.
+copy new archive.zip.
+create new video.mp4.
+change name new database.db.
+copy new database.db.
+create new archive.zip.
+delete new manual.doc.
+copy new index.html.
+read a new notes.docx.
+get a new database.db.
+duplicate a new report.pdf.
+create a new document.txt.
+make a new style.css.
+add a new presentation.pptx.
+make a new database.db.
+create a new data.csv.
+get a new script.py.
+delete a new index.html.
+add a file name it archive.zip.
+add a file has the name notes.docx.
+rename a file called manual.doc.
+save a file named config.json.
+create a file named as spreadsheet.xlsx.
+delete a file has the name logfile.log.
+create a file called image.jpg.
+change name a file under the name index.html.
+get a file labelled as presentation.pptx.
+save a file called notes.docx.
+add a file diagram.svg.
+update a file database.db.
+read a file report.pdf.
+rename a file archive.zip.
+update a file logfile.log.
+remove a file archive.zip.
+duplicate a file data.csv.
+read a file report.pdf.
+create a file summary.txt.
+delete a file audio.mp3.
+change name notes.docx in summaries.
+change name data.csv in styles.
+read video.mp4 in styles.
+create video.mp4 in documents.
+update style.css in spreadsheets.
+save script.py in styles.
+make video.mp4 in spreadsheets.
+rename manual.doc in logs.
+delete audio.mp3 in databases.
+remove diagram.svg in videos.
+create file data.csv in directory notes.
+duplicate file image.jpg in directory notes.
+create file config.json in directory html.
+save file config.json in directory configs.
+delete file logfile.log in directory photos.
+make file logfile.log in directory diagrams.
+create file summary.txt in directory configs.
+rename file report.pdf in directory configs.
+rename file logfile.log in directory videos.
+duplicate file video.mp4 in directory notes.
+create file style.css in folder photos.
+save file photo.png in folder html.
+make file config.json in folder videos.
+rename file data.csv in folder videos.
+make file style.css in folder databases.
+remove file archive.zip in folder presentations.
+save file summary.txt in folder data.
+copy file config.json in folder data.
+get file presentation.pptx in folder photos.
+delete file config.json in folder presentations.
+read a new file notes.docx in the folder photos.
+save a new file archive.zip in the folder images.
+duplicate a new file photo.png in the folder diagrams.
+make a new file style.css in the folder styles.
+remove a new file script.py in the folder documents.
+delete a new file archive.zip in the folder notes.
+add a new file photo.png in the folder manuals.
+update a new file script.py in the folder diagrams.
+change name a new file image.jpg in the folder manuals.
+delete a new file video.mp4 in the folder videos.
+update a new file style.css in the directory archives.
+rename a new file script.py in the directory archives.
+get a new file database.db in the directory diagrams.
+remove a new file image.jpg in the directory databases.
+make a new file summary.txt in the directory videos.
+change name a new file logfile.log in the directory databases.
+create a new file audio.mp3 in the directory reports.
+make a new file archive.zip in the directory documents.
+delete a new file photo.png in the directory videos.
+change name a new file video.mp4 in the directory diagrams.

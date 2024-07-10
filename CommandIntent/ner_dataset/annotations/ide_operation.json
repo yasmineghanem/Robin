@@ -1,0 +1,2161 @@
+{
+  "classes": ["ACTION", "TYPE", "LINE", "FILE"],
+  "annotations": [
+    [
+      "launch terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 15, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "launch terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 15, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "terminate terminal.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "exit terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 13, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "launch terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 15, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "terminate terminal.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "create terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 15, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "kill terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 13, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "close terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 14, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "terminate terminal.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "close a terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [8, 16, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "launch a terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [9, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "close a terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [8, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "exit a terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [7, 15, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "exit a terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [7, 15, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "kill a terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [7, 15, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "exit a terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [7, 15, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "exit a terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [7, 15, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "create a terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [9, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "run a terminal.\r",
+      {
+        "entities": [
+          [0, 3, "ACTION"],
+          [6, 14, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "exit a new terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [11, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "create a new terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [13, 21, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "kill a new terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [11, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "focus a new terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [12, 20, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "create a new terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [13, 21, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "run a new terminal.\r",
+      {
+        "entities": [
+          [0, 3, "ACTION"],
+          [10, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "close a new terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [12, 20, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "kill a new terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [11, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "create a new terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [13, 21, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "kill a new terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [11, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "kill new terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [9, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "terminate new terminal.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [14, 22, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "terminate new terminal.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [14, 22, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "close new terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [10, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "kill new terminal.\r",
+      {
+        "entities": []
+      }
+    ],
+    [
+      "kill new terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [9, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "focus new terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [10, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "exit new terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [9, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "run new terminal.\r",
+      {
+        "entities": [
+          [0, 3, "ACTION"],
+          [8, 16, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "focus new terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [10, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "start the terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [10, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "terminate the terminal.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [14, 22, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "terminate the terminal.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [14, 22, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "open the terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [9, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "close the terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [10, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "create the terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [11, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "run the terminal.\r",
+      {
+        "entities": [
+          [0, 3, "ACTION"],
+          [8, 16, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "kill the terminal.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [9, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "focus the terminal.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [10, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "create the terminal.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [11, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "switch to line 16.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 17, "LINE"]
+        ]
+      }
+    ],
+    [
+      "move to line 87.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 12, "TYPE"],
+          [13, 15, "LINE"]
+        ]
+      }
+    ],
+    [
+      "switch to line 95.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 17, "LINE"]
+        ]
+      }
+    ],
+    [
+      "navigate line 61.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [9, 13, "TYPE"],
+          [14, 16, "LINE"]
+        ]
+      }
+    ],
+    [
+      "jump to line 76.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 12, "TYPE"],
+          [13, 15, "LINE"]
+        ]
+      }
+    ],
+    [
+      "move to line 90.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 12, "TYPE"],
+          [13, 15, "LINE"]
+        ]
+      }
+    ],
+    [
+      "navigate line 91.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [9, 13, "TYPE"],
+          [14, 16, "LINE"]
+        ]
+      }
+    ],
+    [
+      "jump to line 11.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 12, "TYPE"],
+          [13, 15, "LINE"]
+        ]
+      }
+    ],
+    [
+      "go to line 15.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 10, "TYPE"],
+          [11, 13, "LINE"]
+        ]
+      }
+    ],
+    [
+      "navigate line 71.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [9, 13, "TYPE"],
+          [14, 16, "LINE"]
+        ]
+      }
+    ],
+    [
+      "navigate line number 71.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [9, 13, "TYPE"],
+          [21, 23, "LINE"]
+        ]
+      }
+    ],
+    [
+      "go to line number 76.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 10, "TYPE"],
+          [18, 20, "LINE"]
+        ]
+      }
+    ],
+    [
+      "go to line number 29.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 10, "TYPE"],
+          [18, 20, "LINE"]
+        ]
+      }
+    ],
+    [
+      "jump to line number 23.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 12, "TYPE"],
+          [20, 22, "LINE"]
+        ]
+      }
+    ],
+    [
+      "go to line number 10.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 10, "TYPE"],
+          [18, 20, "LINE"]
+        ]
+      }
+    ],
+    [
+      "go to line number 61.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 10, "TYPE"],
+          [18, 20, "LINE"]
+        ]
+      }
+    ],
+    [
+      "jump to line number 49.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 12, "TYPE"],
+          [20, 22, "LINE"]
+        ]
+      }
+    ],
+    [
+      "navigate line number 75.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [9, 13, "TYPE"],
+          [21, 23, "LINE"]
+        ]
+      }
+    ],
+    [
+      "go to line number 75.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 10, "TYPE"],
+          [18, 20, "LINE"]
+        ]
+      }
+    ],
+    [
+      "switch to line number 67.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [10, 14, "TYPE"],
+          [22, 24, "LINE"]
+        ]
+      }
+    ],
+    [
+      "move to the 41 line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [12, 14, "LINE"],
+          [15, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "go to the 13 line.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [10, 12, "LINE"],
+          [13, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "jump to the 40 line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [12, 14, "LINE"],
+          [15, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "switch to the 62 line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [14, 16, "LINE"],
+          [17, 21, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "navigate the 52 line.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [13, 15, "LINE"],
+          [16, 20, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "switch to the 89 line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [14, 16, "LINE"],
+          [17, 21, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "move to the 98 line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [12, 14, "LINE"],
+          [15, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "go to the 2 line.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [10, 11, "LINE"],
+          [12, 16, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "go to the 89 line.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [10, 12, "LINE"],
+          [13, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "go to the 96 line.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [10, 12, "LINE"],
+          [13, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "jump to image.jpg.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 17, "FILE"]
+        ]
+      }
+    ],
+    [
+      "go to notes.docx.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 16, "FILE"]
+        ]
+      }
+    ],
+    [
+      "go to presentation.pptx.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 23, "FILE"]
+        ]
+      }
+    ],
+    [
+      "go to manual.doc.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 16, "FILE"]
+        ]
+      }
+    ],
+    [
+      "go to index.html.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 16, "FILE"]
+        ]
+      }
+    ],
+    [
+      "go to style.css.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 15, "FILE"]
+        ]
+      }
+    ],
+    [
+      "jump to index.html.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 18, "FILE"]
+        ]
+      }
+    ],
+    [
+      "switch to logfile.log.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [10, 21, "FILE"]
+        ]
+      }
+    ],
+    [
+      "navigate video.mp4.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [9, 18, "FILE"]
+        ]
+      }
+    ],
+    [
+      "jump to notes.docx.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 18, "FILE"]
+        ]
+      }
+    ],
+    [
+      "move to file data.csv.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [13, 21, "FILE"]
+        ]
+      }
+    ],
+    [
+      "go to file presentation.pptx.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 10, "TYPE"],
+          [11, 28, "FILE"]
+        ]
+      }
+    ],
+    [
+      "jump to file photo.png.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 12, "TYPE"],
+          [13, 22, "FILE"]
+        ]
+      }
+    ],
+    [
+      "go to file logfile.log.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 10, "TYPE"],
+          [11, 22, "FILE"]
+        ]
+      }
+    ],
+    [
+      "jump to file video.mp4.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 12, "TYPE"],
+          [13, 22, "FILE"]
+        ]
+      }
+    ],
+    [
+      "switch to file audio.mp3.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 24, "FILE"]
+        ]
+      }
+    ],
+    [
+      "switch to file notes.docx.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 25, "FILE"]
+        ]
+      }
+    ],
+    [
+      "navigate file script.py.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [9, 13, "TYPE"],
+          [14, 23, "FILE"]
+        ]
+      }
+    ],
+    [
+      "jump to file photo.png.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [8, 12, "TYPE"],
+          [13, 22, "FILE"]
+        ]
+      }
+    ],
+    [
+      "go to file video.mp4.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [6, 10, "TYPE"],
+          [11, 20, "FILE"]
+        ]
+      }
+    ],
+    [
+      "jump to the file audio.mp3.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [12, 16, "TYPE"],
+          [17, 26, "FILE"]
+        ]
+      }
+    ],
+    [
+      "jump to the file diagram.svg.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [12, 16, "TYPE"],
+          [17, 28, "FILE"]
+        ]
+      }
+    ],
+    [
+      "navigate the file config.json.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [13, 17, "TYPE"],
+          [18, 29, "FILE"]
+        ]
+      }
+    ],
+    [
+      "switch to the file index.html.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [14, 18, "TYPE"],
+          [19, 29, "FILE"]
+        ]
+      }
+    ],
+    [
+      "switch to the file video.mp4.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [14, 18, "TYPE"],
+          [19, 28, "FILE"]
+        ]
+      }
+    ],
+    [
+      "jump to the file database.db.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [12, 16, "TYPE"],
+          [17, 28, "FILE"]
+        ]
+      }
+    ],
+    [
+      "switch to the file style.css.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [14, 18, "TYPE"],
+          [19, 28, "FILE"]
+        ]
+      }
+    ],
+    [
+      "jump to the file manual.doc.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [12, 16, "TYPE"],
+          [17, 27, "FILE"]
+        ]
+      }
+    ],
+    [
+      "navigate the file index.html.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [13, 17, "TYPE"],
+          [18, 28, "FILE"]
+        ]
+      }
+    ],
+    [
+      "switch to the file audio.mp3.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [14, 18, "TYPE"],
+          [19, 28, "FILE"]
+        ]
+      }
+    ],
+    [
+      "navigate the named as data.csv.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [22, 30, "FILE"]
+        ]
+      }
+    ],
+    [
+      "move to the labelled photo.png.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [21, 30, "FILE"]
+        ]
+      }
+    ],
+    [
+      "navigate the titled as image.jpg.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [23, 32, "ACTION"]
+        ]
+      }
+    ],
+    [
+      "switch to the call it database.db.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [22, 33, "FILE"]
+        ]
+      }
+    ],
+    [
+      "go to the called as audio.mp3.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [20, 29, "FILE"]
+        ]
+      }
+    ],
+    [
+      "jump to the identified as manual.doc.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [26, 36, "ACTION"]
+        ]
+      }
+    ],
+    [
+      "switch to the has the name report.pdf.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [27, 37, "FILE"]
+        ]
+      }
+    ],
+    [
+      "switch to the labelled data.csv.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [23, 31, "FILE"]
+        ]
+      }
+    ],
+    [
+      "switch to the titled audio.mp3.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [21, 30, "ACTION"]
+        ]
+      }
+    ],
+    [
+      "navigate the its name is logfile.log.\r",
+      {
+        "entities": [
+          [0, 8, "ACTION"],
+          [25, 36, "FILE"]
+        ]
+      }
+    ],
+    [
+      "select line 6.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 11, "TYPE"],
+          [12, 13, "LINE"]
+        ]
+      }
+    ],
+    [
+      "pick line 79.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 9, "TYPE"],
+          [10, 12, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight line 57.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 17, "LINE"]
+        ]
+      }
+    ],
+    [
+      "mark line 14.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 9, "TYPE"],
+          [10, 12, "LINE"]
+        ]
+      }
+    ],
+    [
+      "mark line 93.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 9, "TYPE"],
+          [10, 12, "LINE"]
+        ]
+      }
+    ],
+    [
+      "select line 62.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 11, "TYPE"],
+          [12, 14, "LINE"]
+        ]
+      }
+    ],
+    [
+      "select line 36.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 11, "TYPE"],
+          [12, 14, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight line 36.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 17, "LINE"]
+        ]
+      }
+    ],
+    [
+      "choose line 97.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 11, "TYPE"],
+          [12, 14, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight line 29.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 17, "LINE"]
+        ]
+      }
+    ],
+    [
+      "select from line 22 to 22.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [12, 16, "TYPE"],
+          [17, 19, "LINE"],
+          [23, 25, "LINE"]
+        ]
+      }
+    ],
+    [
+      "pick from line 50 to 50.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 17, "LINE"],
+          [21, 23, "LINE"]
+        ]
+      }
+    ],
+    [
+      "choose from line 17 to 17.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [12, 16, "TYPE"],
+          [17, 19, "LINE"],
+          [23, 25, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight from line 24 to 24.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [15, 19, "TYPE"],
+          [20, 22, "LINE"],
+          [26, 28, "LINE"]
+        ]
+      }
+    ],
+    [
+      "mark from line 44 to 44.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 17, "LINE"],
+          [21, 24, "LINE"]
+        ]
+      }
+    ],
+    [
+      "mark from line 13 to 13.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 17, "LINE"],
+          [21, 23, "LINE"]
+        ]
+      }
+    ],
+    [
+      "mark from line 68 to 68.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [10, 14, "TYPE"],
+          [15, 17, "LINE"],
+          [21, 23, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight from line 17 to 17.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [15, 19, "TYPE"],
+          [20, 22, "LINE"],
+          [26, 28, "LINE"]
+        ]
+      }
+    ],
+    [
+      "choose from line 80 to 80.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [12, 16, "TYPE"],
+          [17, 19, "LINE"],
+          [23, 25, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight from line 85 to 85.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [15, 19, "TYPE"],
+          [20, 22, "LINE"],
+          [26, 28, "LINE"]
+        ]
+      }
+    ],
+    [
+      "select all.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 10, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight all.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 13, "LINE"]
+        ]
+      }
+    ],
+    [
+      "select all.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 10, "LINE"]
+        ]
+      }
+    ],
+    [
+      "pick all.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 8, "LINE"]
+        ]
+      }
+    ],
+    [
+      "pick all.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 8, "LINE"]
+        ]
+      }
+    ],
+    [
+      "select all.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 10, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight all.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 13, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight all.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 13, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight all.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 13, "ACTION"]
+        ]
+      }
+    ],
+    [
+      "pick all.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 8, "LINE"]
+        ]
+      }
+    ],
+    [
+      "highlight the 98 line.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [14, 16, "LINE"],
+          [17, 21, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "highlight the 1 line.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [14, 15, "LINE"],
+          [16, 20, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "choose the 38 line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [11, 13, "LINE"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "highlight the 31 line.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [14, 16, "LINE"],
+          [17, 21, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "choose the 79 line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [11, 13, "LINE"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "pick the 4 line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [9, 10, "LINE"],
+          [11, 15, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "highlight the 11 line.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [14, 16, "LINE"],
+          [17, 21, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "highlight the 32 line.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [14, 16, "LINE"],
+          [17, 21, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "pick the 73 line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [9, 11, "LINE"],
+          [12, 16, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "choose the 16 line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [11, 13, "LINE"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "highlight the entire file.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [21, 25, "FILE"]
+        ]
+      }
+    ],
+    [
+      "select the entire file.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [18, 22, "FILE"]
+        ]
+      }
+    ],
+    [
+      "choose the entire file.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [18, 22, "FILE"]
+        ]
+      }
+    ],
+    [
+      "highlight the entire file.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [21, 25, "FILE"]
+        ]
+      }
+    ],
+    [
+      "highlight the entire file.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [21, 25, "FILE"]
+        ]
+      }
+    ],
+    [
+      "mark the entire file.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [16, 20, "FILE"]
+        ]
+      }
+    ],
+    [
+      "highlight the entire file.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [21, 25, "FILE"]
+        ]
+      }
+    ],
+    [
+      "highlight the entire file.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [21, 25, "FILE"]
+        ]
+      }
+    ],
+    [
+      "mark the entire file.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [16, 20, "FILE"]
+        ]
+      }
+    ],
+    [
+      "mark the entire file.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [16, 20, "FILE"]
+        ]
+      }
+    ],
+    [
+      "select file.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 11, "FILE"]
+        ]
+      }
+    ],
+    [
+      "pick file.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 9, "FILE"]
+        ]
+      }
+    ],
+    [
+      "highlight file.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 14, "FILE"]
+        ]
+      }
+    ],
+    [
+      "select file.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 11, "FILE"]
+        ]
+      }
+    ],
+    [
+      "pick file.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 9, "FILE"]
+        ]
+      }
+    ],
+    [
+      "mark file.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 9, "FILE"]
+        ]
+      }
+    ],
+    [
+      "choose file.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 11, "ACTION"]
+        ]
+      }
+    ],
+    [
+      "highlight file.\r",
+      {
+        "entities": [
+          [0, 9, "ACTION"],
+          [10, 14, "FILE"]
+        ]
+      }
+    ],
+    [
+      "select file.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [7, 11, "FILE"]
+        ]
+      }
+    ],
+    [
+      "pick file.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [5, 9, "FILE"]
+        ]
+      }
+    ],
+    [
+      "cut.\r",
+      {
+        "entities": [[0, 3, "ACTION"]]
+      }
+    ],
+    [
+      "paste.\r",
+      {
+        "entities": [[0, 5, "ACTION"]]
+      }
+    ],
+    [
+      "insert.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "insert.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "search.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "paste.\r",
+      {
+        "entities": [[0, 5, "ACTION"]]
+      }
+    ],
+    [
+      "insert.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "insert.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "delete.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "copy.\r",
+      {
+        "entities": [[0, 4, "ACTION"]]
+      }
+    ],
+    [
+      "find selected.\r",
+      {
+        "entities": [[0, 4, "ACTION"]]
+      }
+    ],
+    [
+      "delete selected.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "search selected.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "delete selected.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "insert selected.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "cut selected.\r",
+      {
+        "entities": [[0, 3, "ACTION"]]
+      }
+    ],
+    [
+      "find selected.\r",
+      {
+        "entities": [[0, 4, "ACTION"]]
+      }
+    ],
+    [
+      "copy selected.\r",
+      {
+        "entities": [[0, 4, "ACTION"]]
+      }
+    ],
+    [
+      "cut selected.\r",
+      {
+        "entities": [[0, 3, "ACTION"]]
+      }
+    ],
+    [
+      "insert selected.\r",
+      {
+        "entities": [[0, 6, "ACTION"]]
+      }
+    ],
+    [
+      "paste selected line.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [15, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "copy selected line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "delete selected line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [16, 20, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "copy selected line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "cut selected line.\r",
+      {
+        "entities": [
+          [0, 3, "ACTION"],
+          [13, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "search selected line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [16, 20, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "paste selected line.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [15, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "copy selected line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "cut selected line.\r",
+      {
+        "entities": [
+          [0, 3, "ACTION"],
+          [13, 17, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "delete selected line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [16, 20, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "copy the selected line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [18, 22, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "search the selected line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [20, 24, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "search the selected line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [20, 24, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "search the selected line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [20, 24, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "find the selected line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [18, 22, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "copy the selected line.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [18, 22, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "delete the selected line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [20, 24, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "insert the selected line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [20, 24, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "search the selected line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [20, 24, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "search the selected line.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [20, 24, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "delete selected text.\r",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [16, 20, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "copy selected text.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "copy selected text.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "paste selected text.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [15, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "copy selected text.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "copy selected text.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "paste selected text.\r",
+      {
+        "entities": [
+          [0, 5, "ACTION"],
+          [15, 19, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "find selected text.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "copy selected text.\r",
+      {
+        "entities": [
+          [0, 4, "ACTION"],
+          [14, 18, "TYPE"]
+        ]
+      }
+    ],
+    [
+      "insert selected text.",
+      {
+        "entities": [
+          [0, 6, "ACTION"],
+          [16, 20, "TYPE"]
+        ]
+      }
+    ],
+    ["reset the last action.\r", { "entities": [[0, 5, "ACTION"]] }],
+    ["reset the last action.\r", { "entities": [[0, 5, "ACTION"]] }],
+    ["restore the last action.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["revert the last action.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["cancel the last action.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["undo the last action.\r", { "entities": [[0, 4, "ACTION"]] }],
+    ["revert the last action.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["revoke the last action.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["repeat the last action.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["reverse the last action.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["reverse the previous action.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["cancel the previous action.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["revoke the previous action.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["reverse the previous action.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["repeat the previous action.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["undo the previous action.\r", { "entities": [[0, 4, "ACTION"]] }],
+    ["redo the previous action.\r", { "entities": [[0, 4, "ACTION"]] }],
+    ["redo the previous action.\r", { "entities": [[0, 4, "ACTION"]] }],
+    ["revert the previous action.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["undo the previous action.\r", { "entities": [[0, 4, "ACTION"]] }],
+    ["revoke the last operation.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["revoke the last operation.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["restore the last operation.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["cancel the last operation.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["restore the last operation.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["reverse the last operation.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["reverse the last operation.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["undo the last operation.\r", { "entities": [[0, 4, "ACTION"]] }],
+    ["revert the last operation.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["revert the last operation.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["revoke what I just did.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["repeat what I just did.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["revert what I just did.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["cancel what I just did.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["reverse what I just did.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["revoke what I just did.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["restore what I just did.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["restore what I just did.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["cancel what I just did.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["restore what I just did.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["reset the last step.\r", { "entities": [[0, 5, "ACTION"]] }],
+    ["reset the last step.\r", { "entities": [[0, 5, "ACTION"]] }],
+    ["repeat the last step.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["revert the last step.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["revert the last step.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["repeat the last step.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["revoke the last step.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["reset the last step.\r", { "entities": [[0, 5, "ACTION"]] }],
+    ["reset the last step.\r", { "entities": [[0, 5, "ACTION"]] }],
+    ["cancel the last step.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["cancel the last change.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["undo the last change.\r", { "entities": [[0, 4, "ACTION"]] }],
+    ["reverse the last change.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["revert the last change.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["cancel the last change.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["restore the last change.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["repeat the last change.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["reverse the last change.\r", { "entities": [[0, 7, "ACTION"]] }],
+    ["repeat the last change.\r", { "entities": [[0, 6, "ACTION"]] }],
+    ["revoke the last change.", { "entities": [[0, 6, "ACTION"]] }]
+  ]
+}

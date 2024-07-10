@@ -1,0 +1,2203 @@
+{
+    "classes": [
+        "FUNC",
+        "TYPE",
+        "PARAM"
+    ],
+    "annotations": [
+        [
+            "write a procedure named rayleigh quotient iteration algorithm.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        61,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a procedure named rayleigh quotient iteration algorithm.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        61,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a subroutine named subtract.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        32,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a method with the name householder algorithm.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        50,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a method under the name rayleigh quotient iteration algorithm.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        69,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a method named as sort.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        29,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a method titled as householder transformation.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        53,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a method called householder algorithm.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        45,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a procedure with the name inverse power iteration.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        55,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a method under the name determinant.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        42,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a function titled update.\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        32,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a new routine under the name cholesky algorithm with parameters emergency contact and return type int.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        53,
+                        "FUNC"
+                    ],
+                    [
+                        70,
+                        87,
+                        "PARAM"
+                    ],
+                    [
+                        104,
+                        107,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a new method labelled cholesky algorithm containing parameters string buffer and return type list.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        47,
+                        "FUNC"
+                    ],
+                    [
+                        70,
+                        83,
+                        "PARAM"
+                    ],
+                    [
+                        100,
+                        104,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a new function identified cofactor with parameters is enabled and return type string.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        41,
+                        "FUNC"
+                    ],
+                    [
+                        58,
+                        68,
+                        "PARAM"
+                    ],
+                    [
+                        85,
+                        91,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a new method identified as gram-schmidt algorithm consisting of parameters tax rate and return type boolean.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        56,
+                        "FUNC"
+                    ],
+                    [
+                        82,
+                        85,
+                        "PARAM"
+                    ],
+                    [
+                        86,
+                        90,
+                        "PARAM"
+                    ],
+                    [
+                        107,
+                        114,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a new routine titled as update including parameters pos and return type void.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        37,
+                        "FUNC"
+                    ],
+                    [
+                        59,
+                        62,
+                        "PARAM"
+                    ],
+                    [
+                        79,
+                        83,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a new subroutine with name eigenvector that needs parameters i and return type void.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        43,
+                        "FUNC"
+                    ],
+                    [
+                        66,
+                        67,
+                        "PARAM"
+                    ],
+                    [
+                        84,
+                        88,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a new function name it insert including parameters partner name and return type float.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        36,
+                        "FUNC"
+                    ],
+                    [
+                        58,
+                        65,
+                        "PARAM"
+                    ],
+                    [
+                        66,
+                        70,
+                        "PARAM"
+                    ],
+                    [
+                        87,
+                        92,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a new subroutine name it adjoint with parameters expense report and return type char.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        39,
+                        "FUNC"
+                    ],
+                    [
+                        56,
+                        70,
+                        "PARAM"
+                    ],
+                    [
+                        87,
+                        91,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a new procedure labelled rayleigh quotient iteration containing parameters main address and return type int.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        59,
+                        "FUNC"
+                    ],
+                    [
+                        82,
+                        94,
+                        "PARAM"
+                    ],
+                    [
+                        111,
+                        114,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a new procedure name it qr algorithm that requires parameters debit amount and return type double.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        44,
+                        "FUNC"
+                    ],
+                    [
+                        70,
+                        82,
+                        "PARAM"
+                    ],
+                    [
+                        99,
+                        105,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a new procedure with name singular value algorithm that accepts parameters completed and return type int.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        55,
+                        "FUNC"
+                    ],
+                    [
+                        80,
+                        89,
+                        "PARAM"
+                    ],
+                    [
+                        106,
+                        109,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a new function name it divide with parameters total revenue and return type string.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        35,
+                        "FUNC"
+                    ],
+                    [
+                        52,
+                        65,
+                        "PARAM"
+                    ],
+                    [
+                        82,
+                        88,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a new routine called as inverse power iteration algorithm comprising parameters result table and return type character.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        64,
+                        "FUNC"
+                    ],
+                    [
+                        87,
+                        93,
+                        "PARAM"
+                    ],
+                    [
+                        94,
+                        99,
+                        "PARAM"
+                    ],
+                    [
+                        116,
+                        125,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a method under the name add having parameters creation date and return type float.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        34,
+                        "FUNC"
+                    ],
+                    [
+                        53,
+                        66,
+                        "PARAM"
+                    ],
+                    [
+                        83,
+                        88,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a routine titled shuffle consisting of parameters user type and return type character.\r",
+            {
+                "entities": [
+                    [
+                        22,
+                        29,
+                        "FUNC"
+                    ],
+                    [
+                        55,
+                        64,
+                        "PARAM"
+                    ],
+                    [
+                        81,
+                        90,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a function identified as update with parameters order queue and return type string.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        39,
+                        "FUNC"
+                    ],
+                    [
+                        56,
+                        67,
+                        "PARAM"
+                    ],
+                    [
+                        84,
+                        90,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a subroutine identified inverse power iteration algorithm that takes parameters environment and return type list.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        62,
+                        "FUNC"
+                    ],
+                    [
+                        85,
+                        96,
+                        "PARAM"
+                    ],
+                    [
+                        113,
+                        117,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a subroutine call it givens rotation algorithm with parameters user gender and return type float.\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        51,
+                        "FUNC"
+                    ],
+                    [
+                        68,
+                        79,
+                        "PARAM"
+                    ],
+                    [
+                        96,
+                        101,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a procedure called as rotate including parameters j and return type bool.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        35,
+                        "FUNC"
+                    ],
+                    [
+                        57,
+                        58,
+                        "PARAM"
+                    ],
+                    [
+                        75,
+                        79,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a function named gram-schmidt algorithm including parameters secondary contact and return type int.\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        45,
+                        "FUNC"
+                    ],
+                    [
+                        67,
+                        84,
+                        "PARAM"
+                    ],
+                    [
+                        101,
+                        104,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a method named as power iteration containing parameters iteration and return type float.\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        41,
+                        "FUNC"
+                    ],
+                    [
+                        64,
+                        73,
+                        "PARAM"
+                    ],
+                    [
+                        90,
+                        95,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a subroutine labelled as split that accepts parameters end date and return type character.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        35,
+                        "FUNC"
+                    ],
+                    [
+                        60,
+                        68,
+                        "PARAM"
+                    ],
+                    [
+                        85,
+                        94,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a procedure labelled as merge that accepts parameters average score and return type char.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        37,
+                        "FUNC"
+                    ],
+                    [
+                        62,
+                        69,
+                        "PARAM"
+                    ],
+                    [
+                        70,
+                        75,
+                        "PARAM"
+                    ],
+                    [
+                        92,
+                        96,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a subroutine with the name svd algorithm containing parameters geo coordinates and return type char.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        45,
+                        "FUNC"
+                    ],
+                    [
+                        68,
+                        83,
+                        "PARAM"
+                    ],
+                    [
+                        100,
+                        104,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a procedure called svd algorithm including parameters due date and return type bool.\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        39,
+                        "FUNC"
+                    ],
+                    [
+                        61,
+                        69,
+                        "PARAM"
+                    ],
+                    [
+                        86,
+                        90,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a procedure titled as givens rotation algorithm that requires parameters step and return type double.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        54,
+                        "FUNC"
+                    ],
+                    [
+                        80,
+                        84,
+                        "PARAM"
+                    ],
+                    [
+                        101,
+                        107,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "titled as rank define a method.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        14,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "labelled as shuffle write a procedure.\r",
+            {
+                "entities": [
+                    [
+                        12,
+                        19,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "titled as split declare a function.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        15,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "name it cholesky algorithm make a function.\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        26,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "identified as power create a method.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        19,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "identified as multiply create a subroutine.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        22,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "labelled transpose matrix make a method.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        25,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "with name merge declare a method.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        15,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "labelled givens rotation algorithm make a procedure.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        34,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "call it qr algorithm create a procedure.\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        20,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "under the name transpose declare a function.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        24,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "name it rayleigh quotient iteration algorithm declare a method.\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        45,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "called householder algorithm write a new function comprising parameters key and return type void.\r",
+            {
+                "entities": [
+                    [
+                        7,
+                        28,
+                        "FUNC"
+                    ],
+                    [
+                        72,
+                        75,
+                        "PARAM"
+                    ],
+                    [
+                        92,
+                        96,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "labelled search declare a new routine having parameters config path and return type boolean.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        15,
+                        "FUNC"
+                    ],
+                    [
+                        56,
+                        67,
+                        "PARAM"
+                    ],
+                    [
+                        84,
+                        91,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "labelled jacobi eigenvalue algorithm declare a new method that accepts parameters user settings and return type boolean.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        36,
+                        "FUNC"
+                    ],
+                    [
+                        82,
+                        95,
+                        "PARAM"
+                    ],
+                    [
+                        112,
+                        119,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "named lu algorithm create a new function with parameters expense report and return type char.\r",
+            {
+                "entities": [
+                    [
+                        6,
+                        18,
+                        "FUNC"
+                    ],
+                    [
+                        57,
+                        71,
+                        "PARAM"
+                    ],
+                    [
+                        88,
+                        92,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "titled as shuffle declare a new method that accepts parameters data, info and item and return type void.\r",
+            {
+                "entities": [
+                    [
+                        10,
+                        17,
+                        "FUNC"
+                    ],
+                    [
+                        63,
+                        67,
+                        "PARAM"
+                    ],
+                    [
+                        69,
+                        73,
+                        "PARAM"
+                    ],
+                    [
+                        78,
+                        82,
+                        "PARAM"
+                    ],
+                    [
+                        99,
+                        103,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "under the name givens rotation algorithm write a new procedure with parameters time stamp and return type int.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        40,
+                        "FUNC"
+                    ],
+                    [
+                        79,
+                        89,
+                        "PARAM"
+                    ],
+                    [
+                        106,
+                        109,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "titled qr algorithm write a new routine consisting of parameters expense report and return type list.\r",
+            {
+                "entities": [
+                    [
+                        7,
+                        19,
+                        "FUNC"
+                    ],
+                    [
+                        65,
+                        79,
+                        "PARAM"
+                    ],
+                    [
+                        96,
+                        100,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "name it inverse power iteration algorithm define a new function containing parameters guardian name and return type void.\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        31,
+                        "FUNC"
+                    ],
+                    [
+                        86,
+                        99,
+                        "PARAM"
+                    ],
+                    [
+                        116,
+                        120,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "under the name power iteration declare a new subroutine containing parameters user list and return type void.\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        30,
+                        "FUNC"
+                    ],
+                    [
+                        78,
+                        87,
+                        "PARAM"
+                    ],
+                    [
+                        104,
+                        108,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "labelled qr algorithm create a new method that requires parameters budget allocation and return type array.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        21,
+                        "FUNC"
+                    ],
+                    [
+                        67,
+                        84,
+                        "PARAM"
+                    ],
+                    [
+                        101,
+                        106,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "identified as power iteration algorithm write a new routine consisting of parameters product id and return type bool.\r",
+            {
+                "entities": [
+                    [
+                        14,
+                        39,
+                        "FUNC"
+                    ],
+                    [
+                        85,
+                        95,
+                        "PARAM"
+                    ],
+                    [
+                        112,
+                        116,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "call it lu decomposition make a new method consisting of parameters user status and return type array.\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        24,
+                        "FUNC"
+                    ],
+                    [
+                        68,
+                        79,
+                        "PARAM"
+                    ],
+                    [
+                        96,
+                        101,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "labelled householder algorithm create a new routine consisting of parameters emergency contact and return type boolean.\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        30,
+                        "FUNC"
+                    ],
+                    [
+                        77,
+                        94,
+                        "PARAM"
+                    ],
+                    [
+                        111,
+                        118,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a procedure call it cholesky decomposition that requires parameters preferences and returns char.\r",
+            {
+                "entities": [
+                    [
+                        26,
+                        48,
+                        "FUNC"
+                    ],
+                    [
+                        74,
+                        85,
+                        "PARAM"
+                    ],
+                    [
+                        98,
+                        102,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a procedure identified divide consisting of parameters total amount and returns string.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        36,
+                        "FUNC"
+                    ],
+                    [
+                        62,
+                        74,
+                        "PARAM"
+                    ],
+                    [
+                        87,
+                        93,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a procedure with name singular value decomposition that requires parameters guardian name and returns integer.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        55,
+                        "FUNC"
+                    ],
+                    [
+                        81,
+                        89,
+                        "PARAM"
+                    ],
+                    [
+                        90,
+                        94,
+                        "PARAM"
+                    ],
+                    [
+                        107,
+                        114,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a subroutine identified as rayleigh quotient iteration algorithm that requires parameters transaction amount and returns string.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        69,
+                        "FUNC"
+                    ],
+                    [
+                        95,
+                        113,
+                        "PARAM"
+                    ],
+                    [
+                        126,
+                        132,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a subroutine labelled as power iteration algorithm with parameters value count and returns void.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        56,
+                        "FUNC"
+                    ],
+                    [
+                        73,
+                        78,
+                        "PARAM"
+                    ],
+                    [
+                        79,
+                        84,
+                        "PARAM"
+                    ],
+                    [
+                        97,
+                        101,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a method called adjoint consisting of parameters item array and returns char.\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        28,
+                        "FUNC"
+                    ],
+                    [
+                        54,
+                        64,
+                        "PARAM"
+                    ],
+                    [
+                        77,
+                        81,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a subroutine with the name transpose consisting of parameters item array and returns array.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        43,
+                        "FUNC"
+                    ],
+                    [
+                        69,
+                        79,
+                        "PARAM"
+                    ],
+                    [
+                        92,
+                        97,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a procedure with the name singular value algorithm that needs parameters current date and returns integer.\r",
+            {
+                "entities": [
+                    [
+                        33,
+                        57,
+                        "FUNC"
+                    ],
+                    [
+                        80,
+                        92,
+                        "PARAM"
+                    ],
+                    [
+                        105,
+                        112,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a routine identified qr algorithm that requires parameters data, info and item and returns boolean.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        40,
+                        "FUNC"
+                    ],
+                    [
+                        66,
+                        70,
+                        "PARAM"
+                    ],
+                    [
+                        72,
+                        76,
+                        "PARAM"
+                    ],
+                    [
+                        81,
+                        85,
+                        "PARAM"
+                    ],
+                    [
+                        98,
+                        105,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a subroutine identified as inverse power iteration algorithm that needs parameters employee record and returns string.\r",
+            {
+                "entities": [
+                    [
+                        35,
+                        68,
+                        "FUNC"
+                    ],
+                    [
+                        91,
+                        106,
+                        "PARAM"
+                    ],
+                    [
+                        119,
+                        125,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a method labelled as householder algorithm that requires parameters end date and returns character.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        48,
+                        "FUNC"
+                    ],
+                    [
+                        74,
+                        82,
+                        "PARAM"
+                    ],
+                    [
+                        95,
+                        104,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a method with the name sort consisting of parameters user email and returns void.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        33,
+                        "FUNC"
+                    ],
+                    [
+                        59,
+                        69,
+                        "PARAM"
+                    ],
+                    [
+                        82,
+                        86,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a subroutine called singular value that needs parameters schedule time and returns int.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        42,
+                        "FUNC"
+                    ],
+                    [
+                        65,
+                        78,
+                        "PARAM"
+                    ],
+                    [
+                        91,
+                        94,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a function named as inverse power iteration algorithm comprising parameters debit amount and returns list.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        61,
+                        "FUNC"
+                    ],
+                    [
+                        84,
+                        96,
+                        "PARAM"
+                    ],
+                    [
+                        109,
+                        113,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a procedure named rayleigh quotient iteration algorithm that accepts parameters creation date and returns integer.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        62,
+                        "FUNC"
+                    ],
+                    [
+                        87,
+                        100,
+                        "PARAM"
+                    ],
+                    [
+                        113,
+                        120,
+                        "TYPE"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a subroutine titled jacobi eigenvalue algorithm containing parameters user gender.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        54,
+                        "FUNC"
+                    ],
+                    [
+                        77,
+                        88,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a procedure labelled power iteration algorithm containing parameters schedule time.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        54,
+                        "FUNC"
+                    ],
+                    [
+                        77,
+                        90,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a subroutine titled as qr algorithm that takes parameters sibling count.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        42,
+                        "FUNC"
+                    ],
+                    [
+                        65,
+                        78,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a subroutine titled lu algorithm that needs parameters budget allocation.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        39,
+                        "FUNC"
+                    ],
+                    [
+                        62,
+                        79,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a function call it lu algorithm having parameters product price.\r",
+            {
+                "entities": [
+                    [
+                        25,
+                        37,
+                        "FUNC"
+                    ],
+                    [
+                        56,
+                        63,
+                        "PARAM"
+                    ],
+                    [
+                        64,
+                        69,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a function titled as inverse power iteration algorithm that requires parameters app config.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        61,
+                        "FUNC"
+                    ],
+                    [
+                        87,
+                        97,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a method under the name qr algorithm consisting of parameters product price.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        44,
+                        "FUNC"
+                    ],
+                    [
+                        70,
+                        83,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a function identified as lu algorithm comprising parameters user age.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        44,
+                        "FUNC"
+                    ],
+                    [
+                        67,
+                        75,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a method titled jacobi eigenvalue algorithm containing parameters country code.\r",
+            {
+                "entities": [
+                    [
+                        24,
+                        51,
+                        "FUNC"
+                    ],
+                    [
+                        74,
+                        81,
+                        "PARAM"
+                    ],
+                    [
+                        82,
+                        86,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a routine labelled as reverse that accepts parameters colleague email.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        35,
+                        "FUNC"
+                    ],
+                    [
+                        60,
+                        75,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a method identified svd algorithm with parameters has errors.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        40,
+                        "FUNC"
+                    ],
+                    [
+                        57,
+                        67,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a subroutine that returns float and with the name rayleigh quotient iteration.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        39,
+                        "TYPE"
+                    ],
+                    [
+                        58,
+                        85,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a routine that returns list and with name svd algorithm.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        34,
+                        "TYPE"
+                    ],
+                    [
+                        49,
+                        62,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a subroutine that returns char and called search.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        35,
+                        "TYPE"
+                    ],
+                    [
+                        47,
+                        53,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a procedure that returns character and called jacobi eigenvalue algorithm.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        41,
+                        "PARAM"
+                    ],
+                    [
+                        53,
+                        80,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a function that returns dictionary and identified as svd algorithm.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        39,
+                        "TYPE"
+                    ],
+                    [
+                        58,
+                        71,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a function that returns string and with name transpose matrix.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        35,
+                        "TYPE"
+                    ],
+                    [
+                        50,
+                        66,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a routine that returns array and identified shuffle.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        34,
+                        "TYPE"
+                    ],
+                    [
+                        50,
+                        57,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a routine that returns bool and titled as determinant.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        34,
+                        "TYPE"
+                    ],
+                    [
+                        49,
+                        60,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a method that returns void and titled as gram-schmidt algorithm.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        34,
+                        "TYPE"
+                    ],
+                    [
+                        49,
+                        71,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write a routine that returns double and labelled as prime.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        35,
+                        "TYPE"
+                    ],
+                    [
+                        52,
+                        57,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a routine that returns integer and with the name givens rotation algorithm.\r",
+            {
+                "entities": [
+                    [
+                        28,
+                        35,
+                        "TYPE"
+                    ],
+                    [
+                        54,
+                        79,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a subroutine that returns char and named householder algorithm.\r",
+            {
+                "entities": [
+                    [
+                        34,
+                        38,
+                        "TYPE"
+                    ],
+                    [
+                        49,
+                        70,
+                        "FUNC"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a function that returns double and titled singular value algorithm and having parameters expiry date.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        37,
+                        "TYPE"
+                    ],
+                    [
+                        49,
+                        73,
+                        "FUNC"
+                    ],
+                    [
+                        96,
+                        107,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a routine that returns boolean and name it cholesky algorithm and that accepts parameters category type.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        37,
+                        "TYPE"
+                    ],
+                    [
+                        50,
+                        68,
+                        "FUNC"
+                    ],
+                    [
+                        97,
+                        110,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a method that returns character and named cholesky decomposition and including parameters last updated.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        39,
+                        "TYPE"
+                    ],
+                    [
+                        50,
+                        72,
+                        "FUNC"
+                    ],
+                    [
+                        98,
+                        110,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a routine that returns array and called qr decomposition and consisting of parameters product id.\r",
+            {
+                "entities": [
+                    [
+                        30,
+                        35,
+                        "TYPE"
+                    ],
+                    [
+                        47,
+                        63,
+                        "FUNC"
+                    ],
+                    [
+                        93,
+                        100,
+                        "PARAM"
+                    ],
+                    [
+                        101,
+                        103,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a procedure that returns string and labelled as reverse and consisting of parameters file path.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        38,
+                        "TYPE"
+                    ],
+                    [
+                        55,
+                        62,
+                        "FUNC"
+                    ],
+                    [
+                        92,
+                        101,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a method that returns list and called as givens rotation algorithm and that requires parameters result, start, end.\r",
+            {
+                "entities": [
+                    [
+                        27,
+                        31,
+                        "TYPE"
+                    ],
+                    [
+                        46,
+                        71,
+                        "FUNC"
+                    ],
+                    [
+                        101,
+                        107,
+                        "PARAM"
+                    ],
+                    [
+                        109,
+                        114,
+                        "PARAM"
+                    ],
+                    [
+                        116,
+                        119,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a procedure that returns integer and labelled as rank and that requires parameters i.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        39,
+                        "TYPE"
+                    ],
+                    [
+                        56,
+                        60,
+                        "FUNC"
+                    ],
+                    [
+                        90,
+                        91,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "make a subroutine that returns character and identified singular value algorithm and that takes parameters app config.\r",
+            {
+                "entities": [
+                    [
+                        31,
+                        40,
+                        "TYPE"
+                    ],
+                    [
+                        56,
+                        80,
+                        "FUNC"
+                    ],
+                    [
+                        107,
+                        117,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a function that returns void and identified eigenvalue and that accepts parameters total amount.\r",
+            {
+                "entities": [
+                    [
+                        32,
+                        36,
+                        "TYPE"
+                    ],
+                    [
+                        52,
+                        62,
+                        "FUNC"
+                    ],
+                    [
+                        91,
+                        103,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "define a method that returns double and titled power and with parameters time elapsed.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        35,
+                        "TYPE"
+                    ],
+                    [
+                        47,
+                        52,
+                        "FUNC"
+                    ],
+                    [
+                        73,
+                        85,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "create a method that returns int and with the name givens rotation algorithm and comprising parameters system properties.\r",
+            {
+                "entities": [
+                    [
+                        29,
+                        32,
+                        "TYPE"
+                    ],
+                    [
+                        51,
+                        76,
+                        "FUNC"
+                    ],
+                    [
+                        103,
+                        120,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ],
+        [
+            "declare a method that returns char and under the name power iteration algorithm and including parameters emergency contact.",
+            {
+                "entities": [
+                    [
+                        30,
+                        34,
+                        "TYPE"
+                    ],
+                    [
+                        54,
+                        79,
+                        "FUNC"
+                    ],
+                    [
+                        105,
+                        122,
+                        "PARAM"
+                    ]
+                ]
+            }
+        ]
+    ]
+}

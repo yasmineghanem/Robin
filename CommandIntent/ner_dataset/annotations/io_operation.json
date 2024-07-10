@@ -1,0 +1,1635 @@
+{
+    "classes": [
+        "VAR",
+        "INPUT",
+        "OUTPUT"
+    ],
+    "annotations": [
+        [
+            "take input from the user for their region name\r",
+            {
+                "entities": [
+                    [
+                        5,
+                        10,
+                        "INPUT"
+                    ],
+                    [
+                        35,
+                        46,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request input from the user for their debit amount\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        13,
+                        "INPUT"
+                    ],
+                    [
+                        38,
+                        50,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "enter input from the user for their building number\r",
+            {
+                "entities": [
+                    [
+                        6,
+                        11,
+                        "INPUT"
+                    ],
+                    [
+                        36,
+                        51,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "fetch input from the user for their colleague email\r",
+            {
+                "entities": [
+                    [
+                        6,
+                        11,
+                        "INPUT"
+                    ],
+                    [
+                        36,
+                        51,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request input from the user for their discount rate\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        13,
+                        "INPUT"
+                    ],
+                    [
+                        38,
+                        51,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "retrieve input from the user for their last updated\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        14,
+                        "INPUT"
+                    ],
+                    [
+                        39,
+                        51,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request input from the user for their guardian name\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        13,
+                        "INPUT"
+                    ],
+                    [
+                        38,
+                        51,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "get input from the user for their counter\r",
+            {
+                "entities": [
+                    [
+                        4,
+                        9,
+                        "INPUT"
+                    ],
+                    [
+                        34,
+                        41,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "prompt input from the user for their result\r",
+            {
+                "entities": [
+                    [
+                        7,
+                        12,
+                        "INPUT"
+                    ],
+                    [
+                        37,
+                        43,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "prompt input from the user for their file path\r",
+            {
+                "entities": [
+                    [
+                        7,
+                        12,
+                        "INPUT"
+                    ],
+                    [
+                        37,
+                        46,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "retrieve input from user and store it in key\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        14,
+                        "INPUT"
+                    ],
+                    [
+                        41,
+                        44,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request input from user and store it in net profit\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        13,
+                        "INPUT"
+                    ],
+                    [
+                        40,
+                        50,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "prompt input from user and store it in counter\r",
+            {
+                "entities": [
+                    [
+                        7,
+                        12,
+                        "INPUT"
+                    ],
+                    [
+                        39,
+                        46,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "enter input from user and store it in environment\r",
+            {
+                "entities": [
+                    [
+                        6,
+                        11,
+                        "INPUT"
+                    ],
+                    [
+                        38,
+                        49,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "read input from user and store it in has errors\r",
+            {
+                "entities": [
+                    [
+                        5,
+                        10,
+                        "INPUT"
+                    ],
+                    [
+                        37,
+                        47,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "read input from user and store it in file path\r",
+            {
+                "entities": [
+                    [
+                        5,
+                        10,
+                        "INPUT"
+                    ],
+                    [
+                        37,
+                        46,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "take input from user and store it in is logged in\r",
+            {
+                "entities": [
+                    [
+                        5,
+                        10,
+                        "INPUT"
+                    ],
+                    [
+                        37,
+                        49,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request input from user and store it in country code\r",
+            {
+                "entities": [
+                    [
+                        8,
+                        13,
+                        "INPUT"
+                    ],
+                    [
+                        40,
+                        52,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "enter input from user and store it in counter\r",
+            {
+                "entities": [
+                    [
+                        6,
+                        11,
+                        "INPUT"
+                    ],
+                    [
+                        38,
+                        45,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "fetch input from user and store it in j\r",
+            {
+                "entities": [
+                    [
+                        6,
+                        11,
+                        "INPUT"
+                    ],
+                    [
+                        38,
+                        39,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "retrieve from user the input and store it in office location\r",
+            {
+                "entities": [
+                    [
+                        23,
+                        28,
+                        "INPUT"
+                    ],
+                    [
+                        45,
+                        60,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request from user the input and store it in emergency contact\r",
+            {
+                "entities": [
+                    [
+                        22,
+                        27,
+                        "INPUT"
+                    ],
+                    [
+                        44,
+                        61,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "take from user the input and store it in end date\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        24,
+                        "INPUT"
+                    ],
+                    [
+                        41,
+                        49,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "receive from user the input and store it in alternate address\r",
+            {
+                "entities": [
+                    [
+                        22,
+                        27,
+                        "INPUT"
+                    ],
+                    [
+                        44,
+                        61,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "read from user the input and store it in user age\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        24,
+                        "INPUT"
+                    ],
+                    [
+                        41,
+                        49,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "enter from user the input and store it in min value\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        25,
+                        "INPUT"
+                    ],
+                    [
+                        42,
+                        51,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "prompt from user the input and store it in has access\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        26,
+                        "INPUT"
+                    ],
+                    [
+                        43,
+                        53,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "prompt from user the input and store it in building number\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        26,
+                        "INPUT"
+                    ],
+                    [
+                        43,
+                        58,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "prompt from user the input and store it in mentor id\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        26,
+                        "INPUT"
+                    ],
+                    [
+                        43,
+                        52,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "receive from user the input and store it in max value\r",
+            {
+                "entities": [
+                    [
+                        22,
+                        27,
+                        "INPUT"
+                    ],
+                    [
+                        44,
+                        53,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "prompt the user to input min value\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        24,
+                        "INPUT"
+                    ],
+                    [
+                        25,
+                        34,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "prompt the user to input is approved\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        24,
+                        "INPUT"
+                    ],
+                    [
+                        25,
+                        36,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "ask the user to input supplier name\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        21,
+                        "INPUT"
+                    ],
+                    [
+                        22,
+                        35,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "take the user to input file path\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        22,
+                        "INPUT"
+                    ],
+                    [
+                        23,
+                        32,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "take the user to input debit amount\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        22,
+                        "INPUT"
+                    ],
+                    [
+                        23,
+                        35,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "fetch the user to input building number\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        23,
+                        "INPUT"
+                    ],
+                    [
+                        24,
+                        39,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "read the user to input time stamp\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        22,
+                        "INPUT"
+                    ],
+                    [
+                        23,
+                        33,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "enter the user to input min value\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        23,
+                        "INPUT"
+                    ],
+                    [
+                        24,
+                        33,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request the user to input order number\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        25,
+                        "INPUT"
+                    ],
+                    [
+                        26,
+                        38,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request the user to input customer map\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        25,
+                        "INPUT"
+                    ],
+                    [
+                        26,
+                        38,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request the user to input result table\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        25,
+                        "INPUT"
+                    ],
+                    [
+                        26,
+                        38,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "get the user to input user gender\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        21,
+                        "INPUT"
+                    ],
+                    [
+                        22,
+                        33,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "read the user to input user profile\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        22,
+                        "INPUT"
+                    ],
+                    [
+                        23,
+                        35,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "ask the user to input data frame\r",
+            {
+                "entities": [
+                    [
+                        16,
+                        21,
+                        "INPUT"
+                    ],
+                    [
+                        22,
+                        32,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request the user to input user list\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        25,
+                        "INPUT"
+                    ],
+                    [
+                        26,
+                        35,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "take the user to input result\r",
+            {
+                "entities": [
+                    [
+                        17,
+                        22,
+                        "INPUT"
+                    ],
+                    [
+                        23,
+                        29,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "request the user to input creation date\r",
+            {
+                "entities": [
+                    [
+                        20,
+                        25,
+                        "INPUT"
+                    ],
+                    [
+                        26,
+                        39,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "fetch the user to input max value\r",
+            {
+                "entities": [
+                    [
+                        18,
+                        23,
+                        "INPUT"
+                    ],
+                    [
+                        24,
+                        33,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "retrieve the user to input guardian name\r",
+            {
+                "entities": [
+                    [
+                        21,
+                        26,
+                        "INPUT"
+                    ],
+                    [
+                        27,
+                        40,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "prompt the user to input is active\r",
+            {
+                "entities": [
+                    [
+                        19,
+                        24,
+                        "INPUT"
+                    ],
+                    [
+                        25,
+                        34,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable employee record\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        19,
+                        34,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable supplier name\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        21,
+                        34,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable min value\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        19,
+                        28,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the variable is enabled\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        6,
+                        "OUTPUT"
+                    ],
+                    [
+                        20,
+                        30,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable average score\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        19,
+                        32,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the variable options\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        4,
+                        "OUTPUT"
+                    ],
+                    [
+                        18,
+                        25,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the variable data frame\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        19,
+                        29,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the variable alternate address\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        21,
+                        38,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the variable colleague email\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        4,
+                        "OUTPUT"
+                    ],
+                    [
+                        18,
+                        33,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        null,
+        [
+            "show the value -1010101\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        4,
+                        "OUTPUT"
+                    ],
+                    [
+                        15,
+                        23,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value -456\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        18,
+                        22,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the value 0\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        4,
+                        "OUTPUT"
+                    ],
+                    [
+                        15,
+                        16,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "send the value REINFORCEMENT LEARNING\r",
+            {
+                "entities": [
+                    [
+                        15,
+                        37,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the value machine learning\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        4,
+                        "OUTPUT"
+                    ],
+                    [
+                        15,
+                        31,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value CASCADING STYLE SHEETS\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        6,
+                        "OUTPUT"
+                    ],
+                    [
+                        17,
+                        39,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the value SEMI-SUPERVISED LEARNING\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        18,
+                        42,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value python programming\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        6,
+                        "OUTPUT"
+                    ],
+                    [
+                        17,
+                        35,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the value Full Stack Developer\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        6,
+                        "OUTPUT"
+                    ],
+                    [
+                        17,
+                        37,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the value openai gpt-4\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        16,
+                        28,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the product price to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        12,
+                        25,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        null,
+        [
+            "write the is enabled to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        10,
+                        20,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the position to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        6,
+                        "OUTPUT"
+                    ],
+                    [
+                        11,
+                        19,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "send the total revenue to the user\r",
+            {
+                "entities": [
+                    [
+                        9,
+                        22,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the time elapsed to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        12,
+                        24,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the schedule time to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        12,
+                        25,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the i to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        10,
+                        11,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the feature flags to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        12,
+                        25,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "show the total amount to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        4,
+                        "OUTPUT"
+                    ],
+                    [
+                        9,
+                        21,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the -1.1 to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        12,
+                        16,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output the database management to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        6,
+                        "OUTPUT"
+                    ],
+                    [
+                        11,
+                        30,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print the 131313 to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        10,
+                        16,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the algorithm design to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        10,
+                        26,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the -606060 to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        10,
+                        17,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write the network security to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        10,
+                        26,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the graphical user interface to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        12,
+                        36,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        null,
+        [
+            "output the javascript framework to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        6,
+                        "OUTPUT"
+                    ],
+                    [
+                        11,
+                        31,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display the SEMI-SUPERVISED LEARNING to the user\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        12,
+                        36,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "send time elapsed\r",
+            {
+                "entities": []
+            }
+        ],
+        [
+            "write total amount\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        6,
+                        18,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "send geo coordinates\r",
+            {
+                "entities": [
+                    [
+                        5,
+                        20,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write time stamp\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        6,
+                        16,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write default config\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        6,
+                        20,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "write last updated\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        6,
+                        18,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display start date\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        8,
+                        18,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "output product price\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        6,
+                        "OUTPUT"
+                    ],
+                    [
+                        7,
+                        20,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "print user name\r",
+            {
+                "entities": [
+                    [
+                        0,
+                        5,
+                        "OUTPUT"
+                    ],
+                    [
+                        6,
+                        15,
+                        "VAR"
+                    ]
+                ]
+            }
+        ],
+        [
+            "display user login",
+            {
+                "entities": [
+                    [
+                        0,
+                        7,
+                        "OUTPUT"
+                    ],
+                    [
+                        8,
+                        18,
+                        "VAR"
+                    ]
+                ]
+            }
+        ]
+    ]
+}

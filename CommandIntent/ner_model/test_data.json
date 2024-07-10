@@ -1,0 +1,99 @@
+{
+    "test_data": [
+        {
+            "sentence": "declare a new variable n of type int and assign it the value 5", 
+            "tags": ["O", "O", "O", "O", "B-VAR", "O", "O", "B-TYPE", "O", "O", "O", "O", "O", "B-VAL"],
+            "intent": "variable declaration"
+        },
+        {
+            "sentence": "create a float variable named pi and set its value to 3.14",
+            "tags": ["O", "O", "B-TYPE", "O", "O", "B-VAR", "O", "O", "O", "B-VAL"],
+            "intent": "variable declaration"
+        },
+        {
+            "sentence": "define a function named calculate area that takes two parameters",
+            "tags": ["O", "O", "O", "O", "B-FUNC", "I-FUNC", "O", "O", "O", "O", "O", "B-PARAM"],
+            "intent": "function declaration"
+        },
+        {
+            "sentence": "create a class named animal",
+            "tags": ["O", "O", "O", "B-CLASS_NAME"],
+            "intent": "class declaration"
+        },
+        {
+            "sentence": "assign the value 10 to the variable x",
+            "tags": ["O", "O", "O", "B-VAL", "O", "O", "B-VAR"],
+            "intent": "assignment operation"
+        },
+        {
+            "sentence": "if the value of x is greater than 10, print x",
+            "tags": ["O", "O", "O", "O", "B-VAR", "O", "O", "O", "O", "B-FUNC", "B-VAR"],
+            "intent": "conditional statement"
+        },
+        {
+            "sentence": "if the value of x is greater than 10, print x",
+            "tags": ["O", "O", "O", "O", "B-VAR", "O", "O", "O", "O", "B-FUNC", "B-VAR"],
+            "intent": "conditional statement"
+        },
+        {
+            "sentence": "repeat the loop until i is less than 10",
+            "tags": ["O", "O", "O", "O", "B-VAR", "O", "O", "O", "B-VAL"],
+            "intent": "iterative statement"
+        },
+        {
+            "sentence": "append the value 5 to the array nums",
+            "tags": ["O", "O", "O", "B-VAL", "O", "O", "B-ARRAY"],
+            "intent": "array operation"
+        },
+        {
+            "sentence": "perform bitwise AND operation on a and b",
+            "tags": ["O", "O", "O", "B-OP", "O", "O", "B-VAR", "O", "B-VAR"],
+            "intent": "bitwise operation"
+        },
+        {
+            "sentence": "multiply the value of a by 2 and store it in b",
+            "tags": ["O", "O", "O", "O", "B-VAR", "O", "B-VAL", "O", "O", "B-VAR"],
+            "intent": "mathematical operation"
+        },
+        {
+            "sentence": "check if 3 is in the list numbers",
+            "tags": ["O", "O", "B-VAL", "O", "O", "O", "B-ARRAY"],
+            "intent": "membership operation"
+        },
+        {
+            "sentence": "convert the string '123' to an integer",
+            "tags": ["O", "O", "O", "B-TYPE", "O", "B-VAL"],
+            "intent": "casting"
+        },
+        {
+            "sentence": "convert the string '123' to an integer",
+            "tags": ["O", "O", "O", "B-TYPE", "O", "B-VAL"],
+            "intent": "casting"
+        },
+        {
+            "sentence": "assert that x is greater than 0",
+            "tags": ["O", "O", "B-VAR", "O", "O", "B-VAL"],
+            "intent": "assertion"
+        },
+        {
+            "sentence": "assert that x is greater than 0",
+            "tags": ["O", "O", "B-VAR", "O", "O", "B-VAL"],
+            "intent": "assertion"
+        },
+        {
+            "sentence": "delete the file old_data.csv from the directory",
+            "tags": ["O", "O", "B-FILE", "O", "O", "O"],
+            "intent": "file system"
+        },
+        {
+            "sentence": "open the project in the IDE",
+            "tags": ["O", "O", "B-PROJECT", "O", "O", "B-IDE"],
+            "intent": "ide operation"
+        },
+        {
+            "sentence": "add a comment explaining the next block of code",
+            "tags": ["O", "O", "O", "O", "O", "O", "O", "B-COMMENT"],
+            "intent": "comments"
+        }
+    ]
+}
