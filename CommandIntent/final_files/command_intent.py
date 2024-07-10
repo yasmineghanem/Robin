@@ -5,7 +5,7 @@ from data_preparation import IntentData, NERData
 from post_processor import PostProcessor
 import torch
 
-class CommandIntentClass:
+class CommandIntent:
     def __init__(self, intent_model_path, ner_model_path):
         self.intent_data = IntentData('../intent_detection_dataset/final_intents_dataset.json')
         self.ner_data = NERData('../ner_dataset/ner_dataset.csv', '../ner_dataset/intent_to_tags.json')
