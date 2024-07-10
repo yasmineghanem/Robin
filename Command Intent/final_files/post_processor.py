@@ -60,11 +60,10 @@ class PostProcessor:
             case 'assignment operation':
                 final_parameters = self.post_process_assignment_operation(
                     parameters)
-                
+
             case 'bitwise operation':
-                final_parameters = self.post_process_bitwise_operation(
-                    parameters)
-                
+                final_parameters = self.post_process_operation(parameters)
+
             case 'casting':
                 final_parameters = self.post_process_casting(parameters)
 
@@ -84,30 +83,31 @@ class PostProcessor:
                 final_parameters = self.post_process_comment(parameters)
 
             case 'conditional operation':
-                pass
+                final_parameters = self.post_process_conditional_operation(
+                    parameters)
 
             case 'file system':
-                pass
+                final_parameters = self.post_process_file_system(parameters)
 
-            case 'ide operation':
-                pass
+            case 'git operation':
+                self.post_process_git_operation(parameters)
 
             case 'interactive commands':
-                pass
-            case 'git operation':
-                pass
-
-            case 'array operation':
-                pass
-
-            case 'mathematical operation':
-                pass
+                self.post_process_interactive_commands(parameters)
 
             case 'membership operation':
-                pass
-            
+                final_parameters = self.post_process_conditional_operation(
+                    parameters)
 
-        # print(f"Final parameters: {final_parameters}")
+            case 'mathematical operation':
+                final_parameters = self.post_process_operation(parameters)
+
+            case 'ide operation':
+                final_parameters = self.post_process_ide_operation(parameters)
+
+            case 'array operation':
+                final_parameters = self.post_process_array_operation(
+                    parameters)
 
         return final_parameters
 
@@ -315,16 +315,51 @@ class PostProcessor:
 
         return final_operator
 
-    def __map_bitwise_operator(self, operator):
+    def __map_operator(self, operator, intent):
 
         final_operator = None
 
-        for key, value in utils.BITWISE_OPERATORS.items():
-            if key in operator:
-                final_operator = value
-                break
+        if intent == 'bitwise operation':
+            for key, value in utils.BITWISE_OPERATORS.items():
+                if key in operator:
+                    final_operator = value
+                    break
+
+        elif intent == 'mathematical operation':
+            pass
 
         return final_operator
+
+    def __map_actions(self, action, intent):
+        '''
+            Maps actions for:
+            - file system operations
+            - git operations
+
+            The actions are:
+            1. File system operations: create | copy | delete | rename | save 
+            2. Git operations: pull | push | discard | stage | stash
+        '''
+        final_action = None
+
+        intent_actions = utils.ACTIONS[intent]
+
+        for key, value in intent_actions.items():
+            if action in value:
+                final_action = key
+                break
+
+        return final_action
+
+    def __get_file_extension(self):
+        return None
+
+    def __map_array_function(self, function):
+        pass
+
+    def __map_ide_type(self, operation_type):
+        final_type = None
+        return final_type
 
     # DONE: variable and constant declaration
     def post_process_declaration(self, parameters):
@@ -593,9 +628,10 @@ class PostProcessor:
         return final_parameters
 
     # DONE: bitwise operation intent
-    def post_process_bitwise_operation(self, parameters):
+    def post_process_operation(self, parameters, intent):
         '''
             intent tags are:
+            - VAR (not always)
             - OPERAND : the operands of the bitwise operation
             - OPERATOR : the bitwise operation (and, or, not, shift left, shift right, xor) -> map the operator
 
@@ -613,13 +649,13 @@ class PostProcessor:
             if parameters['OPERATOR'] in utils.BITWISE_OPERATORS['not']:
                 final_parameters['left'] = parameters['OPERAND'][0]
                 final_parameters['right'] = None
-                final_parameters['operator'] = self.__map_bitwise_operator(
-                    parameters['OPERATOR'])
+                final_parameters['operator'] = self.__map_operator(
+                    parameters['OPERATOR'], intent)
         else:
             final_parameters['left'] = parameters['OPERAND'][0]
             final_parameters['right'] = parameters['OPERAND'][1]
-            final_parameters['operator'] = self.__map_bitwise_operator(
-                parameters['OPERATOR'])
+            final_parameters['operator'] = self.__map_operator(
+                parameters['OPERATOR'], intent)
 
         return final_parameters
 
@@ -745,28 +781,187 @@ class PostProcessor:
                     'right': rhs
                 }
             )
-        
+
         return final_parameters
 
-    def post_process_file_system(self, parameters):
-        pass
-
-    def post_process_ide_operation(self, parameters):
-        pass
-
-    def post_process_interactive_commands(self, parameters):
-        pass
-
+    # DONE: git operation intent
     def post_process_git_operation(self, parameters):
-        pass
+        '''
+            the tags for git operation are:
+            - ACTION : the operation to perform
+            - MESSAGE : the message for the commit operation
 
-    def post_process_mathematical_operation(self, parameters):
-        pass
+            available commands:
+            - discard
+            - pull
+            - push (commit and push) -> message is required
+            - stage
+            - stash
+        '''
+        final_parameters = {}
 
-    def post_process_membership_operation(self, parameters):
-        pass
+        # TODO: map actions to the correct git commands
+        final_parameters['action'] = self.__map_actions(
+            parameters['ACTION'], 'git')
+
+        if final_parameters['action'] == 'push':
+            final_parameters['message'] = parameters['MESSAGE']
+
+        return final_parameters
+
+    # DONE file system intent ish
+    def post_process_file_system(self, parameters):
+        '''
+            the tags for file system operation are:
+            - ACTION : the operation to perform
+            - FILE : the file name
+            - DIR : the message for the operation
+
+            available commands:
+            - create
+            - delete
+            - read
+            - write
+        '''
+        final_parameters = {}
+
+        action = self.__map_actions(parameters['ACTION'], 'file')
+        final_parameters['action'] = parameters['ACTION']
+
+        if action == 'create':  # could be file or directory
+            if parameters['FILE'] is not None:
+                # {
+                #     "fileName": "test file - ahmed",
+                #     "extension": ".txt",
+                #     "content": "n"
+                # }
+                final_parameters['fileName'] = parameters['FILE']
+                if parameters['DIR'] is not None:
+                    final_parameters['directory'] = parameters['DIR']
+                final_parameters['extension'] = self.__get_file_extension()
+                final_parameters['content'] = None
+
+            elif parameters['DIR'] is not None:  # then create directory
+                # final format:
+                # {
+                #     "name" : "new_folder/aaah"
+                # }
+                final_parameters['name'] = parameters['DIR']
+
+        elif action == 'delete':
+            # {
+            #  "source" : "aa.a"
+            # }
+            final_parameters['source'] = parameters['FILE']
+
+        elif action == 'copy':
+            # {
+            #  "source" : "aa.b",
+            #  "destination" : "copied.py"
+            # }
+            if parameters['FILE'] is not None:
+                final_parameters['source'] = parameters['FILE']
+                final_parameters['destination'] = None
+
+            elif parameters['DIR'] is not None:  # then create directory
+                final_parameters['source'] = parameters['DIR']
+                final_parameters['destination'] = None
+
+        elif action == 'rename':
+            # final format
+            #  {
+            #     "source": "test file - ahmed.txt",
+            #     "destination": "renamed - ahmed"
+            # }
+            final_parameters['source'] = parameters['FILE']
+            final_parameters['destination'] = parameters['FILE']
+
+        return final_parameters
+
+    # DONE: interactive commands
+    def post_process_interactive_commands(self, parameters):
+        '''
+            tags for interactive commands:
+            - action
+            - type: file | folders | code | functions | classes
+        '''
+        # map to single type
+        final_parameters = {'type': parameters['TYPE']}
+
+        return final_parameters
+
+    # DONE: ide operations
+    def post_process_ide_operation(self, parameters):
+        '''
+            the tags for the ide operation:
+            - ACTION: in general : undo | redo | copy | paste | find | cut | run
+                type specific:
+                    file: goto 
+                    line: goto | select | copy | paste
+                    terminal: new | kill | focus
+
+            - TYPE -> file | terminal | line 
+            - LINE -> numbers
+            - FILE -> filname
+        '''
+        final_parameters = {}
+
+        action = self.__map_actions(parameters['ACTION'], 'ide')
+        final_parameters['action'] = action
+
+        operation_type = self.__map_ide_type(parameters['TYPE'])
+
+        if operation_type == 'terminal':
+            final_parameters['type'] = 'terminal'
+
+        elif operation_type == 'file':
+            # possible actions
+            # goto
+            # {
+            #  "path" : "aa.sadas"
+            # }
+            final_parameters['type'] = 'file'
+            final_parameters['path'] = parameters['FILE']
+
+        elif operation_type == 'line':
+            # possible actions
+            # goto line
+            # select line (one or multiple (range))
+            # copy
+            # paste
+            # {
+            #     "line": 5,
+            #     "character" :6
+            # }
+            final_parameters['type'] = 'line'
+            if len(parameters['LINE'] > 1):
+                # {
+                #     "startLine":4,
+                #     "startCharacter": 0,
+                #     "endLine": 6,
+                #     "endCharacter": 10
+                # }
+                final_parameters['startLine'] = parameters['LINE'][0]
+                final_parameters['endLine'] = parameters['LINE'][1]
+                final_parameters['startCharacter'] = None
+                final_parameters['endCharacter'] = None
+            else:
+                final_parameters['line'] = parameters['LINE']
+                final_parameters['character'] = None
+
+        return final_parameters
 
     # not done in the command execution module
     def post_process_array_operation(self, parameters):
-        pass
+        '''
+            tags:
+            OPERATION
+            ARRAY
+            ELEMENT (optional)
+        '''
+        final_parameters = {}
 
+        final_parameters['function'] = self.__map_array_function(
+            parameters['OPERATION'])
+        final_parameters['element'] = self.__map_values(parameters['ELEMENT'])
+        final_parameters['array'] = parameters['ARRAY']

@@ -18,7 +18,7 @@ import torch
 
 def main():
     # for now the user input is hardcoded
-    input = "cast the variable x to integer"
+    input = "list all the files in the program"
 
     interactive = True
     mouse = False

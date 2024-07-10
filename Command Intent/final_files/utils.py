@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class Intents(Enum):
     VARIABLE = 1
     CONSTANT = 2
@@ -55,6 +54,42 @@ BITWISE_OPERATORS = {
     'shift right': '>>',
     'xor': '^'
 }
+
+MATHEMATICAL_OPERATORS = {
+
+}
+
+ACTIONS = {
+    'file': {
+        'create': ['create', 'make', 'generate'],
+        'delete': ['delete', 'remove', 'erase'],
+        'rename': ['rename', 'change'],
+        'copy': ['copy', 'duplicate'],
+        'save': ['save', 'store']
+    },
+    'git': {
+        'push': ['push', 'upload', 'commit'],
+        'pull': ['pull', 'download', 'fetch', 'get'],
+        'discard': ['revert', 'undo', 'remove', 'discard', 'reset'],
+        'stash': ['stash', 'store', 'save'],
+        'stage': ['stage', 'add', 'track'],
+    },
+    'ide': {
+        'goto': [],
+        'focus': [],
+        'undo': [],
+        'kill': [],
+        'copy': [],
+        'cut': [],
+        'paste': [],
+        'redo': [],
+        'select': [],
+        'find': [],
+        'run': [],
+        'new': []
+    }
+}
+
 
 def clean(line):
     '''
