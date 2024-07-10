@@ -4,7 +4,7 @@ from vosk import Model, KaldiRecognizer
 import pyaudio
 import requests
 from api import *
-from CommandIntent.final_files import CommandIntent
+from CommandIntent.final_files.command_intent import CommandIntent
 
 class SpeechRecognition:
     def __init__(self, gui):

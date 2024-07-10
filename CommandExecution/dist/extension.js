@@ -27579,18 +27579,17 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     // body?: string[]
     ) {
         const { iterators, start, end, step } = params;
-        // if there's no step and no start, just return range of the end
-        if (!step && !start) {
-            return (`for ${iterators.join(", ")} in range(${end ?? ""}): \n` +
-                this.tabString.repeat(this.handleIndentationLevel()));
+        let forLoop = "";
+        let actualStart = start ?? 0;
+        let actualEnd = end ?? 0;
+        let actualStep = step ?? 1;
+        if (actualStart < actualEnd) {
+            forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${actualStep}): \n`;
         }
-        // if there's no step, just return range of start and end
-        if (!step) {
-            return (`for ${iterators.join(", ")} in range(${start ? start + ", " : ""} ${end ?? ""}): \n` + this.tabString.repeat(this.handleIndentationLevel() + 1));
+        else {
+            forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${-actualStep}): \n`;
         }
-        // if there's a step, return range of start, end and step
-        return (`for ${iterators.join(", ")} in range(${start ? start : "0"} ,${end ?? ""}, ${step}): \n` +
-            this.tabString.repeat(this.handleIndentationLevel() + 1));
+        return forLoop + this.tabString.repeat(this.handleIndentationLevel() + 1);
     }
     generateEnumerateLoop(params, body) {
         const { iterators, iterable, start } = params;
