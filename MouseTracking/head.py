@@ -123,3 +123,20 @@ class head_controller():
                 cv2.imshow('frame', cv2.flip(frame,1))
                 if cv2.waitKey(10) & 0xFF == ord('q'):
                     break
+img = cv2.imread('img1.jpg')
+mp_face_mesh = mp.solutions.face_mesh
+with mp_face_mesh.FaceMesh(max_num_faces=1,
+                        refine_landmarks=True,
+                        min_detection_confidence=0.5,
+                        min_tracking_confidence=0.5) as face_mesh:
+    
+    result = face_mesh.process(img)
+    if result.multi_face_landmarks is None :
+        pass
+    for face_landmarks in result.multi_face_landmarks:
+        nose = face_landmarks.landmark[4]
+        # draw nose
+        cv2.circle(img, (int(nose.x * img.shape[1]), int(nose.y * img.shape[0])), 5, (0, 255, 0), -1)
+        
+cv2.imshow('frame', img)
+cv2.waitKey(0)

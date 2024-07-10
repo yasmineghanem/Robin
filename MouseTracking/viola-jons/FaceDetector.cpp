@@ -166,7 +166,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                     cout << "adaboost number :  " << l << " layer number : " << Tl << " entered the dead loop" << endl;
                     while (B > Bl && sl < 1.0)
                     {
-                        sl += 0.01;
+                        sl += 0.0001;
                         mat = this->evaluate_single_layer(fl, predictions, sl);
                         B = mat.false_negative_rate;
                         Y = mat.false_positive_rate;
@@ -258,21 +258,34 @@ pair<int, int> getCenter(const window &win)
     return {win.x + win.w / 2, win.y + win.h / 2};
 }
 
-void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, int N, int min_confidence)
+void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, int N)
 {
     // Create an M × N matrix E filled with zeros
     int **E = new int *[M];
+    // int **freq = new int *[M];
     for (int i = 0; i < M; ++i)
     {
         E[i] = new int[N]{0};
+        // freq[i] = new int[N]{0};
     }
 
     // Fill E with the sizes of the windows
     for (const auto &w : windows)
     {
-        E[w->x][w->y] = max(w->w, E[w->x][w->y]);
+        // E[w->x][w->y] = max(w->w, E[w->x][w->y]);
+        E[w->x][w->y] = w->w;
+        // freq[w->x][w->y]++;
     }
-
+    // for (int i = 0; i < M; ++i)
+    // {
+    //     for (int j = 0; j < N; ++j)
+    //     {
+    //         if (freq[i][j] > 0)
+    //         {
+    //             E[i][j] /= freq[i][j];
+    //         }
+    //     }
+    // }
     // Run a connected component algorithm on E
     vector<vector<int>> labels(M, vector<int>(N, 0));
     int current_label = 0;
@@ -341,27 +354,27 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
          { return (a.first.w * a.first.h) < (b.first.w * b.first.h); });
 
     //  Remove redundant windows
-    for (size_t i = 0; i < P.size(); ++i)
-    {
-        auto center = getCenter(P[i].first);
-        for (size_t j = i + 1; j < P.size(); ++j)
-        {
+    // for (size_t i = 0; i < P.size(); ++i)
+    // {
+    //     auto center = getCenter(P[i].first);
+    //     for (size_t j = i + 1; j < P.size(); ++j)
+    //     {
 
-            if (isInside(P[j].first, center.first, center.second))
-            {
-                // window i has a higher detection confidence than window j ,detlet window j
-                if (P[i].second > P[j].second)
-                {
-                    P[j].first = {0, 0, 0, 0}; // Remove P[j]
-                }
-                else
-                {
-                    P[i].first = {0, 0, 0, 0}; // Remove P[i]
-                    break;
-                }
-            }
-        }
-    }
+    //         if (isInside(P[j].first, center.first, center.second))
+    //         {
+    //             // window i has a higher detection confidence than window j ,detlet window j
+    //             if (P[i].second > P[j].second)
+    //             {
+    //                 P[j].first = {0, 0, 0, 0}; // Remove P[j]
+    //             }
+    //             else
+    //             {
+    //                 P[i].first = {0, 0, 0, 0}; // Remove P[i]
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
 
     for (auto &w : windows)
     {
@@ -400,7 +413,7 @@ bool skin_test(int **skin_denisty, int size, int i, int j)
     return (double)skin / (size * size) >= threshold;
 }
 
-void FaceDetector::window_test3(vector<window *> &windows, int **&img, int M, int N, int min_confidence)
+void FaceDetector::window_test3(vector<window *> &windows, int **&img, int M, int N)
 {
     // Create an M × N matrix E filled with zeros
     int **E = new int *[M];
@@ -620,10 +633,7 @@ vector<window *> FaceDetector::process(int **&img, int ***&color_img, int M, int
     window_test2(P, img, M, N);
     std::cout << "P size after filtter2 : " << P.size() << endl;
     // drawGreenRectangles(color_img, M, N, P, 1);
-    for (int i = 0; i < P.size(); i++)
-    {
-        delete P[i];
-    }
+
     for (int i = 0; i < M; ++i)
     {
         delete[] II[i];

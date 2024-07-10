@@ -75,7 +75,7 @@ int main()
 
     // Load the cascade and landmark model
     FaceDetector face_cascade;
-    face_cascade.load("face1");
+    face_cascade.load("face7");
 
     // cv::CascadeClassifier classifier;
     Landmark landmark_extractor;
@@ -101,7 +101,7 @@ int main()
         //
         // cv::Mat frame;
         // cv::flip(fliped, frame, 1);
-        cv::Mat frame = cv::imread("img1.jpg", IMREAD_COLOR);
+        cv::Mat frame = cv::imread("img7.jpg", IMREAD_COLOR);
 
         if (frame.empty())
         {
@@ -124,30 +124,53 @@ int main()
         // Call the process function
         double c = 1.5; // Example parameter
         auto faces = face_cascade.process(grayArray, colorArray, M, N, c);
-
-        // Initialize Landmark extractor
-
-        // Process each detected face
-        for (size_t i = 0; i < std::min<size_t>(100, faces.size()); i++)
+        sort(faces.begin(), faces.end(), [](window *a, window *b)
+             { 
+                int y1=a->y;
+                int y2=b->y;
+                int x1=a->x;
+                int x2=b->x;
+                int w1=a->w;
+                int w2=b->w;
+                if (y1 != y2)
+                    return y1 < y2;
+                if (x1 != x2)
+                    return x1 < x2;
+                return w1 < w2; });
+        int maxi = -1;
+        for (int i = 0; i < faces.size(); i++)
         {
-            // Create a rectangle using cv::Rect
-            cv::Rect rect(faces[i]->y, faces[i]->x, faces[i]->w, faces[i]->h);
+            maxi = max(maxi, faces[i]->w);
+        }
+        for (size_t i = 0; i < std::min<size_t>(100000, faces.size()); i++)
+        {
+            if (faces[i]->w < maxi / 2)
+                continue;
+            cv::Rect rect(faces[i]->y, faces[i]->x, faces[i]->w, faces[i]->w);
+            // std::cout << "Face " << i + 1 << ": x=" << faces[i]->y << ", y=" << faces[i]->x
+            //           << ", width=" << faces[i]->w << ", height=" << rect.height << std::endl;
 
             cv::rectangle(frame, rect, cv::Scalar(255, 0, 0), 2);
-            // cv::Mat face = frame(faces[i]); // Use the color frame to draw the circles
-            // std::vector<std::pair<int, int>> landmarks = landmark_extractor.extract_land_mark(face);
-            // for (auto &landmark : landmarks)
-            // {
-            //     // find the abslute position of the landmark
-            //     landmark.first += faces[i].x;
-            //     landmark.second += faces[i].y;
-            // }
-            // for (auto &landmark : landmarks)
-            // {
-            //     cout << landmark.first << " " << landmark.second << endl;
-            //     cv::circle(frame, cv::Point(landmark.first, landmark.second), 2, cv::Scalar(0, 255, 0), -1);
-            // }
+            cv::Mat face = frame(rect);
+
+            std::vector<std::pair<int, int>> landmarks = landmark_extractor.extract_land_mark(face);
+            // cout << landmarks.size() << endl;
+            for (auto &landmark : landmarks)
+            {
+                // find the abslute position of the landmark
+                landmark.first += faces[i]->y;
+                landmark.second += faces[i]->x;
+            }
+            for (auto &landmark : landmarks)
+            {
+                // cout << landmark.first << " " << landmark.second << endl;
+                cv::circle(frame, cv::Point(landmark.first, landmark.second), 2, cv::Scalar(0, 255, 0), -1);
+            }
             // mouse_controller.control(landmarks);
+            // std::string windowName = "Face " + std::to_string(i + 1);
+            // cv::imshow("img", face);
+            // cv::waitKey(0);
+            // cv::destroyAllWindows();
         }
 
         // Display the flipped frame

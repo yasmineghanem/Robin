@@ -153,7 +153,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                     cout << "adaboost number :  " << l << " layer number : " << Tl << " entered the dead loop" << endl;
                     while (B > Bl && sl < 1.0)
                     {
-                        sl += 0.01;
+                        sl += 0.0001;
                         mat = this->evaluate_single_layer(fl, predictions, sl);
                         B = mat.false_negative_rate;
                         Y = mat.false_positive_rate;

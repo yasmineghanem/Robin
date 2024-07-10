@@ -16,10 +16,10 @@
 #include <cuda_runtime.h>
 
 using namespace std;
-std::string train_pos_path = "imgs/face_data_24_24/trainset/faces";
-std::string train_neg_path = "imgs/face_data_24_24/trainset/non-faces";
-std::string test_pos_path = "imgs/face_data_24_24/testset/faces";
-std::string test_neg_path = "imgs/face_data_24_24/testset/non-faces";
+std::string train_pos_path = "imgs/face_data_24_24_old/trainset/faces";
+std::string train_neg_path = "imgs/face_data_24_24_old/trainset/non-faces";
+std::string test_pos_path = "imgs/face_data_24_24_old/testset/faces";
+std::string test_neg_path = "imgs/face_data_24_24_old/testset/non-faces";
 
 enum mode
 {
@@ -347,7 +347,7 @@ int main()
     {
         // The targeted false positive and false negative rate for each layer
         // were set to 0.5 and 0.995
-        train_face_detector("face1", -1, 0.1, 0.2, 0.05);
+        train_face_detector("face1", -1, 0.05, 0.2, 0.03);
         test_face_detector_threads("face1", -1);
         return 0;
     }

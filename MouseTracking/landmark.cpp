@@ -40,8 +40,9 @@ std::vector<std::pair<int, int>> Landmark::extract_land_mark(cv::Mat &face_image
     for (int idx : indices)
     {
         dlib::point pt = shape.part(idx);
+        // cout << pt.x() << " " << pt.y() << endl;
         landmarks.emplace_back(pt.x(), pt.y());
     }
-
+    // cout << " end \n";
     return landmarks;
 }
