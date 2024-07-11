@@ -1,7 +1,7 @@
 import utils
 import re
 from constants import *
-from DesktopApplication.api import APIController
+from api import APIController
 # TODO: handle if the intent is wrong
 
 
@@ -76,7 +76,8 @@ class PostProcessor:
 
             case 'casting':
                 final_parameters = self.post_process_casting(parameters)
-                response = self.api.casting(final_parameters)
+                print(final_parameters)
+                response = self.api.type_casting(final_parameters)
 
             case 'input':
                 final_parameters = self.post_process_input(parameters)

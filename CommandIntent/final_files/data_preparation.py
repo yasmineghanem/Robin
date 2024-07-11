@@ -8,6 +8,7 @@ import json
 import utils
 import pandas as pd
 import torch
+import os
 
 # ignore warnings
 import warnings
@@ -40,7 +41,9 @@ class IntentData:
             The constructor initializes the class members and sets the parameters of the class.
 
         '''
-        self.dataset_path = dataset_path
+        # self.dataset_path = dataset_path
+        self.dataset_path = os.path.abspath(dataset_path)
+
         self.tokenizer = Tokenizer(filters='', oov_token='<unk>')
         self.__set_parameters()
 
@@ -180,8 +183,11 @@ class NERData:
     '''
 
     def __init__(self, dataset_path=None, intent_tag_path=None, train=False):
-        self.dataset_path = dataset_path
-        self.intent_tags_path = intent_tag_path
+        # self.dataset_path = dataset_path
+        self.dataset_path = os.path.abspath(dataset_path)
+
+        # self.intent_tags_path = intent_tag_path
+        self.intent_tags_path = os.path.abspath(intent_tag_path)
         self.__set_parameters()
 
         if train:
@@ -237,7 +243,7 @@ class NERData:
 
     
     def read_data(self):
-        data = pd.read_csv('../ner_dataset/ner_dataset.csv', encoding='latin1')
+        data = pd.read_csv(self.dataset_path, encoding='latin1')
 
         # remove white spaces from column names
         # columns = ['Sentence #', 'Word', 'Tag', 'Intent']
