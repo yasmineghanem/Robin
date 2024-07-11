@@ -1,7 +1,7 @@
 import utils
 import re
 from constants import *
-from DesktopApplication.api_controller import ApiController
+from DesktopApplication.api import APIController
 # TODO: handle if the intent is wrong
 
 
@@ -21,7 +21,7 @@ class PostProcessor:
 
     def __init__(self, intent_to_tags):
         self.intent_to_tags = intent_to_tags
-        self.api = ApiController()
+        self.api = APIController()
 
     def post_process(self, sentence, intent, tags):
         '''
