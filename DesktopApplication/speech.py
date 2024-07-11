@@ -6,13 +6,13 @@ import requests
 from api import *
 import os
 import sys
-# from CommandIntent.final_files.command_intent import CommandIntent
+from CommandIntent.final_files.command_intent import CommandIntent
 
 # Add the directory containing the module to the Python path
-sys.path.append(os.path.abspath('../CommandIntent/final_files'))
+# sys.path.append(os.path.abspath('../CommandIntent/final_files'))
 
-# Now you can import your module
-import command_intent
+# # Now you can import your module
+# import command_intent
 
 # # Use the module's functionality
 # module.some_function()
@@ -22,7 +22,7 @@ class SpeechRecognition:
         # self.recognizer = sr.Recognizer()
         # self.microphone = sr.Microphone()
         self.gui = gui
-        self.command_intent = command_intent.CommandIntent('../CommandIntent/models/intent_detection_model.keras',
+        self.command_intent = CommandIntent('../CommandIntent/models/intent_detection_model.keras',
                                             '../CommandIntent/models/ner_model2.pth')
 
         # vosk
