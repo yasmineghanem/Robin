@@ -85,9 +85,10 @@ class CommandIntent:
         '''
         # get the intent of the command
         intent = self.__get_intent(command)
-
+        print(intent)
         # get the entities of the command
         entities = self.__get_entities(command, intent)
+        print(entities)
 
         # post process the entities
         response = self.post_processor.post_process(command, intent, entities)

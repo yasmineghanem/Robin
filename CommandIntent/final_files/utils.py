@@ -43,7 +43,7 @@ CONDITIONS = {
     '!': ['not', 'different'],
     '>': ['greater', 'more', 'bigger', 'larger'],
     '<': ['less', 'fewer', 'lesser', 'smaller'],
-    '==': ['equal', 'is', 'same'],
+    '==': ['equal', 'same'], # add is with some conditions for membership operation
 }
 
 BITWISE_OPERATORS = {

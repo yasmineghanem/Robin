@@ -82,9 +82,10 @@ class PostProcessor:
             case 'input':
                 final_parameters = self.post_process_input(parameters)
                 response = self.api.user_input(final_parameters)
+            
             case 'output':
                 final_parameters = self.post_process_output(parameters)
-                response = self.api.print(final_parameters)
+                response = self.api.print_code(final_parameters)
 
             case 'assertion':
                 final_parameters = self.post_process_assertion(parameters)
@@ -130,8 +131,9 @@ class PostProcessor:
 
             case 'array operation':
                 final_parameters = self.post_process_array_operation(parameters)
-                response = self.api.operation(final_parameters)
+                # response = self.api.operation(final_parameters)
 
+        print("Final parameters: ", final_parameters)
         return response
 
     def __get_parameters(self, intent, sentence, tags, intent_tags):
@@ -411,9 +413,11 @@ class PostProcessor:
         final_parameters['name'] = parameters['VAR']
 
         final_parameters['value'] = self.__map_values(
-            parameters['VALUE'], parameters['TYPE'])
+            parameters['VAL'], parameters['TYPE'])
 
         final_parameters['type'] = parameters['TYPE']
+
+        print(final_parameters)
 
         return final_parameters
 
@@ -608,9 +612,10 @@ class PostProcessor:
         final_parameters = {}
 
         final_parameters['name'] = parameters['LHS']
-        final_parameters['type'] = '=s'
+        final_parameters['type'] = '='
         final_parameters['value'] = self.__map_values(parameters['RHS'], None)
 
+        print(final_parameters)
         return final_parameters
 
     # DONE: assertion intent
