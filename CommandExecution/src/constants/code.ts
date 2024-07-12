@@ -127,3 +127,8 @@ export const OPERATION_FAILURE = "Failed to create operation!";
 // exit scope
 export const EXIT_SCOPE_SUCCESS = "Scope exited successfully!";
 export const EXIT_SCOPE_FAILURE = "Failed to exit scope!";
+
+
+// class
+export const CLASS_SUCCESS = "Class created successfully!";
+export const CLASS_FAILURE = "Failed to create class!";

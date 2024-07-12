@@ -63,6 +63,8 @@ import {
   EXIT_SCOPE,
   EXIT_SCOPE_SUCCESS,
   EXIT_SCOPE_FAILURE,
+  CLASS_SUCCESS,
+  CLASS_FAILURE,
 } from "../constants/code";
 import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
 import { showError, showMessage } from "../communication/utilities";
@@ -1153,13 +1155,13 @@ const declareClass = () => {
         });
 
         if (!s) {
-          return handleFailure(FUNCTION_FAILURE);
+          return handleFailure(CLASS_SUCCESS);
         }
       } catch (e) {
-        return handleFailure(FUNCTION_FAILURE);
+        return handleFailure(CLASS_FAILURE);
       }
 
-      return handleSuccess(FUNCTION_SUCCESS);
+      return handleSuccess(CLASS_SUCCESS);
     }
     return handleFailure(NO_ACTIVE_TEXT_EDITOR);
   });

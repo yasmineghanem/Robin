@@ -45,6 +45,9 @@ export class PythonCodeGenerator extends CodeGenerator {
    * Check if the variable name is valid and not a reserved keyword
    **/
   private isValidVariableName(name: string): boolean {
+    // swap spaces with underscores
+    name = name.replace(/ /g, "_");
+
     const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
     if (!pattern.test(name)) {
       return false;
@@ -53,6 +56,8 @@ export class PythonCodeGenerator extends CodeGenerator {
   }
 
   private isValidConstantName(name: string): boolean {
+    // swap spaces with underscores
+    name = name.replace(/ /g, "_");
     const pattern = /^[A-Z_][A-Z0-9_]*$/;
     if (!pattern.test(name)) {
       return false;
@@ -60,15 +65,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     return !this.reservedKeywords.includes(name);
   }
 
-  private isValidFunctionName(name: string): boolean {
-    return this.isValidVariableName(name);
-  }
-
-  private isValidClassName(name: string): boolean {
-    return this.isValidVariableName(name);
-  }
-
-  private handleIndentationLevel(previous: boolean = false): number {
+  private handleIndentationLevel(previous: boolean = true): number {
     let currentLine;
     if (previous) {
       currentLine = this.editor.document.lineAt(
@@ -253,7 +250,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     body?: string[],
     returnType?: string
   ): string {
-    if (!this.isValidFunctionName(name)) {
+    if (!this.isValidVariableName(name)) {
       throw new Error(`Invalid function name: ${name}`);
     }
 
@@ -311,7 +308,7 @@ export class PythonCodeGenerator extends CodeGenerator {
       body?: string[];
     }[]
   ): string {
-    if (!this.isValidClassName(name)) {
+    if (!this.isValidVariableName(name)) {
       throw new Error(`Invalid class name: ${name} `);
     }
 
@@ -321,18 +318,26 @@ export class PythonCodeGenerator extends CodeGenerator {
     }
 
     // check if valid method names
-    if (methods?.some((m) => !this.isValidFunctionName(m.name))) {
+    if (methods?.some((m) => !this.isValidVariableName(m.name))) {
       throw new Error(`Invalid method name`);
     }
 
     let code = "";
-    // add class name, capitalize first letter
-    code += `class ${name.charAt(0).toUpperCase() + name.slice(1)}: \n`;
+    // add class name, capitalize first letter and swap spaces with underScores
+
+    let className: string =
+      name.charAt(0).toUpperCase() + name.slice(1).replace(/ /g, "_");
+    let firstIndentationLevel = this.handleIndentationLevel();
+    code += `${this.tabString.repeat(
+      firstIndentationLevel
+    )}class ${className}: \n`;
 
     // add constructor
-    code += `${this.tabString}def __init__(self, ${properties
-      ?.map((p) => p.name)
-      .join(", ")}): \n`;
+    code += `${this.tabString.repeat(firstIndentationLevel + 1)}${
+      this.tabString
+    }def __init__(self, ${
+      properties ? properties.map((p) => p.name).join(", ") : ""
+    }): \n`;
 
     // add properties
     properties?.forEach((p) => {
@@ -358,7 +363,7 @@ export class PythonCodeGenerator extends CodeGenerator {
       code += this.wrapInCodeBlock(m.body ?? ["pass\n"]);
     });
 
-    return code;
+    return code + "\n" + this.tabString.repeat(firstIndentationLevel + 3);
   }
 
   /**

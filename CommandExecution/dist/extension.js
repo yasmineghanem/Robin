@@ -24535,7 +24535,7 @@ exports["default"] = router;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.EXIT_SCOPE = exports.TRY_EXCEPT = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
-exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = void 0;
+exports.CLASS_FAILURE = exports.CLASS_SUCCESS = exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = void 0;
 /**
  * Commands
  */
@@ -24644,6 +24644,9 @@ exports.OPERATION_FAILURE = "Failed to create operation!";
 // exit scope
 exports.EXIT_SCOPE_SUCCESS = "Scope exited successfully!";
 exports.EXIT_SCOPE_FAILURE = "Failed to exit scope!";
+// class
+exports.CLASS_SUCCESS = "Class created successfully!";
+exports.CLASS_FAILURE = "Failed to create class!";
 
 
 /***/ }),
@@ -27207,13 +27210,13 @@ const declareClass = () => {
                     editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareClass(args?.name, args?.properties, args?.methods));
                 });
                 if (!s) {
-                    return handleFailure(code_1.FUNCTION_FAILURE);
+                    return handleFailure(code_1.CLASS_SUCCESS);
                 }
             }
             catch (e) {
-                return handleFailure(code_1.FUNCTION_FAILURE);
+                return handleFailure(code_1.CLASS_FAILURE);
             }
-            return handleSuccess(code_1.FUNCTION_SUCCESS);
+            return handleSuccess(code_1.CLASS_SUCCESS);
         }
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
@@ -27322,6 +27325,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Check if the variable name is valid and not a reserved keyword
      **/
     isValidVariableName(name) {
+        // swap spaces with underscores
+        name = name.replace(/ /g, "_");
         const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
         if (!pattern.test(name)) {
             return false;
@@ -27329,19 +27334,15 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return !this.reservedKeywords.includes(name);
     }
     isValidConstantName(name) {
+        // swap spaces with underscores
+        name = name.replace(/ /g, "_");
         const pattern = /^[A-Z_][A-Z0-9_]*$/;
         if (!pattern.test(name)) {
             return false;
         }
         return !this.reservedKeywords.includes(name);
     }
-    isValidFunctionName(name) {
-        return this.isValidVariableName(name);
-    }
-    isValidClassName(name) {
-        return this.isValidVariableName(name);
-    }
-    handleIndentationLevel(previous = false) {
+    handleIndentationLevel(previous = true) {
         let currentLine;
         if (previous) {
             currentLine = this.editor.document.lineAt(Math.max(this.editor.selection.active.line - 1, 0)).text;
@@ -27413,7 +27414,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!this.isValidConstantName(name.toUpperCase())) {
             throw new Error(`Invalid constant name: ${name}`);
         }
-        return (`${name.toUpperCase()} = ${value}\n` + this.handleIndentationLevel(true));
+        return (`${name.toUpperCase()} = ${value}\n` +
+            this.tabString.repeat(this.handleIndentationLevel(true)));
     }
     /**
      * Assign variables
@@ -27426,31 +27428,44 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         switch (type) {
             case codeEnums_1.AssignmentOperators.Equals:
-                return `${name} = ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} = ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.PlusEquals:
-                return `${name} += ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} += ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.MinusEquals:
-                return `${name} -= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} -= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.MultiplyEquals:
-                return `${name} *= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} *= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.DivideEquals:
-                return `${name} /= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} /= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.FloorDivideEquals:
-                return `${name} //= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} //= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.ModulusEquals:
-                return `${name} %= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} %= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.ExponentEquals:
-                return `${name} **= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} **= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.AndEquals:
-                return `${name} &= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} &= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.OrEquals:
-                return `${name} |= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} |= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.XorEquals:
-                return `${name} ^= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} ^= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.LeftShiftEquals:
-                return `${name} <<= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} <<= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssignmentOperators.RightShiftEquals:
-                return `${name} >>= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`${name} >>= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             default:
                 throw new Error(`Invalid assignment type: ${type}`);
         }
@@ -27461,7 +27476,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Return statement
      **/
     declareFunction(name, parameters, body, returnType) {
-        if (!this.isValidFunctionName(name)) {
+        if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid function name: ${name}`);
         }
         // check if valid parameters names
@@ -27491,30 +27506,30 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             this.tabString.repeat(this.handleIndentationLevel(true)));
     }
     declareClass(name, properties, methods) {
-        if (!this.isValidClassName(name)) {
+        if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid class name: ${name} `);
         }
         // check if valid properties names
-        if (properties.some((p) => !this.isValidVariableName(p.name))) {
+        if (properties?.some((p) => !this.isValidVariableName(p.name))) {
             throw new Error(`Invalid property name`);
         }
         // check if valid method names
-        if (methods.some((m) => !this.isValidFunctionName(m.name))) {
+        if (methods?.some((m) => !this.isValidVariableName(m.name))) {
             throw new Error(`Invalid method name`);
         }
         let code = "";
-        // add class name, capitalize first letter
-        code += `class ${name.charAt(0).toUpperCase() + name.slice(1)}: \n`;
+        // add class name, capitalize first letter and swap spaces with underScores
+        let className = name.charAt(0).toUpperCase() + name.slice(1).replace(/ /g, "_");
+        let firstIndentationLevel = this.handleIndentationLevel();
+        code += `${this.tabString.repeat(firstIndentationLevel)}class ${className}: \n`;
         // add constructor
-        code += `${this.tabString}def __init__(self, ${properties
-            .map((p) => p.name)
-            .join(", ")}): \n`;
+        code += `${this.tabString.repeat(firstIndentationLevel + 1)}${this.tabString}def __init__(self, ${properties ? properties.map((p) => p.name).join(", ") : ""}): \n`;
         // add properties
-        properties.forEach((p) => {
+        properties?.forEach((p) => {
             code += `${this.tabString}${this.tabString}self.${p.name} = ${p.name}\n`;
         });
         // add methods
-        methods.forEach((m) => {
+        methods?.forEach((m) => {
             // sort the parameters so that the one's without value come first
             m.parameters.sort((a, b) => (a.value === undefined ? -1 : 1));
             const params = m.parameters
@@ -27526,13 +27541,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             code += `\n${this.tabString}def ${m.name}(self, ${params}):\n${this.tabString}`;
             code += this.wrapInCodeBlock(m.body ?? ["pass\n"]);
         });
-        return code;
+        return code + "\n" + this.tabString.repeat(firstIndentationLevel + 2);
     }
     /**
      * Import modules
      **/
     generateImportModule(library, modules) {
-        return `from ${library} import ${modules.join(", ")}\n`;
+        return (`from ${library} import ${modules.join(", ")}\n` +
+            this.tabString.repeat(this.handleIndentationLevel(true)));
     }
     generateImportLibrary(library) {
         return `import ${library}\n`;
@@ -27685,13 +27701,17 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         switch (type) {
             case codeEnums_1.AssertionOperators.Equal:
-                return (`assert ${variable} == ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
+                return (`assert ${variable} == ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssertionOperators.NotEqual:
-                return (`assert ${variable} != ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
+                return (`assert ${variable} != ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssertionOperators.GreaterThanOrEqual:
-                return (`assert ${variable} >= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
+                return (`assert ${variable} >= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.AssertionOperators.LessThanOrEqual:
-                return (`assert ${variable} <= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
+                return (`assert ${variable} <= ${value}\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             default:
                 throw new Error(`Invalid assertion type: ${type}`);
         }
@@ -27705,12 +27725,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         switch (type) {
             case codeEnums_1.CastingTypes.Integer:
-                return (`${variable} = int(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
+                return (`${variable} = int(${variable})\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.CastingTypes.Float:
                 return (`${variable} = float(${variable})\n` +
                     this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.CastingTypes.String:
-                return (`${variable} = str(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
+                return (`${variable} = str(${variable})\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.CastingTypes.Boolean:
                 return (`${variable} = bool(${variable})\n` +
                     this.tabString.repeat(this.handleIndentationLevel(true)));
@@ -27721,7 +27743,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 return (`${variable} = tuple(${variable})\n` +
                     this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.CastingTypes.Set:
-                return (`${variable} = set(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
+                return (`${variable} = set(${variable})\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case codeEnums_1.CastingTypes.Dictionary:
                 return (`${variable} = dict(${variable})\n` +
                     this.tabString.repeat(this.handleIndentationLevel(true)));
@@ -27742,11 +27765,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     generatePrint(value, type) {
         switch (type) {
             case "string":
-                return `print("${value}")\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`print("${value}")\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             case "variable":
-                return `print(${value})\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`print(${value})\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
             default:
-                return `print(${value})\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                return (`print(${value})\n` +
+                    this.tabString.repeat(this.handleIndentationLevel(true)));
         }
     }
     /**
@@ -27790,10 +27816,12 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Multi line comments
      **/
     generateLineComment(content) {
-        return `# ${content}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+        return (`# ${content}\n` +
+            this.tabString.repeat(this.handleIndentationLevel(true)));
     }
     generateBlockComment(content) {
-        return (`''' ${content.join("\n")} '''\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
+        return (`''' ${content.join("\n")} '''\n` +
+            this.tabString.repeat(this.handleIndentationLevel(true)));
     }
     generateOperation(left, operator, right) {
         return (`${left} ${operator} ${right} \n` + this.handleIndentationLevel(true));
@@ -27803,7 +27831,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         conditions.forEach((c) => {
             if (c.keyword === "if" || c.keyword === "elif") {
                 code += `${c.keyword} ${c.condition
-                    ?.map((cond) => `${cond.logicalOperator ?? ""} ${cond.left} ${cond.operator} ${cond.right}`)
+                    ?.map((cond) => `${cond.logicalOperator ?? ""} ${cond.left} ${cond?.operator ?? "=="} ${cond.right}`)
                     .join(" ")}: \n`;
             }
             else {
@@ -27923,14 +27951,14 @@ var ForLoop;
 })(ForLoop || (exports.ForLoop = ForLoop = {}));
 var CastingTypes;
 (function (CastingTypes) {
-    CastingTypes["Integer"] = "int";
+    CastingTypes["Integer"] = "integer";
     CastingTypes["Float"] = "float";
-    CastingTypes["String"] = "str";
-    CastingTypes["Boolean"] = "bool";
+    CastingTypes["String"] = "string";
+    CastingTypes["Boolean"] = "boolean";
     CastingTypes["List"] = "list";
     CastingTypes["Tuple"] = "tuple";
     CastingTypes["Set"] = "set";
-    CastingTypes["Dictionary"] = "dict";
+    CastingTypes["Dictionary"] = "dictionary";
 })(CastingTypes || (exports.CastingTypes = CastingTypes = {}));
 
 
@@ -27966,10 +27994,29 @@ module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","T
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXTENSIONS = void 0;
+exports.TYPE_MAPPING = exports.GENERIC_TYPES = exports.EXTENSIONS = void 0;
 exports.EXTENSIONS = {
     PYTHON: "py",
-    JUPYTER: "ipynb"
+    JUPYTER: "ipynb",
+};
+var GENERIC_TYPES;
+(function (GENERIC_TYPES) {
+    GENERIC_TYPES["STRING"] = "string";
+    GENERIC_TYPES["INTEGER"] = "integer";
+    GENERIC_TYPES["FLOAT"] = "float";
+    GENERIC_TYPES["BOOLEAN"] = "boolean";
+    GENERIC_TYPES["LIST"] = "list";
+    GENERIC_TYPES["TUPLE"] = "tuple";
+    GENERIC_TYPES["DICTIONARY"] = "dictionary";
+})(GENERIC_TYPES || (exports.GENERIC_TYPES = GENERIC_TYPES = {}));
+exports.TYPE_MAPPING = {
+    string: "str",
+    integer: "int",
+    float: "float",
+    boolean: "bool",
+    list: "list",
+    tuple: "tuple",
+    dictionary: "dict",
 };
 
 
