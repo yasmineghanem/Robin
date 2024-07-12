@@ -1,20 +1,15 @@
+import vscode from "vscode";
 import {
-  ArithmeticOperators,
   AssertionOperators,
   AssignmentOperators,
-  BitwiseOperators,
   CastingTypes,
-  ComparisonOperators,
   ForLoop,
-  IdentityOperators,
   LogicalOperators,
-  MembershipOperators,
   Operator,
   Whitespace,
 } from "../constants/enums/codeEnums";
-import vscode from "vscode";
 import { CodeGenerator } from "./codeGenerator";
-import pythonReservedKeywords from "./language specifics/pythonReserved.json";
+import pythonSpecifics from "./language specifics/pythonReserved.json";
 
 interface Condition {
   logicalOperator?: LogicalOperators;
@@ -28,13 +23,15 @@ export class PythonCodeGenerator extends CodeGenerator {
    **/
   private tabString: string = "    ";
   private editor: vscode.TextEditor;
+  protected typeMappings: { [key: string]: string };
   protected reservedKeywords: Array<string>;
   protected tabSize: number;
 
   // constructor
   constructor(editor: vscode.TextEditor) {
     super();
-    this.reservedKeywords = pythonReservedKeywords.reservedKeywords;
+    this.reservedKeywords = pythonSpecifics.reservedKeywords;
+    this.typeMappings = pythonSpecifics.typeMappings;
     // TODO read tab size from .env
     this.tabSize = 4;
     this.editor = editor;
@@ -97,6 +94,18 @@ export class PythonCodeGenerator extends CodeGenerator {
     return tabs;
   }
 
+  // check if the cursor position is in the same level as the indentation level
+  private checkCursorPosition(indentationLevel: number): any {
+    // let currentLine = this.editor.document.lineAt(
+    //   this.editor.selection.active.line
+    // ).text;
+    let currentIndentationLevel = this.handleIndentationLevel(false);
+    if (currentIndentationLevel === indentationLevel) {
+      return true;
+    }
+    return false;
+  }
+
   /**
    * wrap code in a code block with '`' character
    **/
@@ -130,11 +139,14 @@ export class PythonCodeGenerator extends CodeGenerator {
       this.handleIndentationLevel(true)
     ); // previous line
     if (type) {
+      let mappedType: string =
+        this.typeMappings[type.toLowerCase() as keyof typeof this.typeMappings];
+
       if (initialValue) {
-        return `${name}: ${type} = ${initialValue}\n${indentation}`;
+        return `${name}: ${mappedType} = ${initialValue}\n${indentation}`;
       }
 
-      return `${name}: ${type}\n${indentation}`;
+      return `${name}: ${mappedType}\n${indentation}`;
     }
 
     if (initialValue) {
@@ -328,6 +340,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     let className: string =
       name.charAt(0).toUpperCase() + name.slice(1).replace(/ /g, "_");
     let firstIndentationLevel = this.handleIndentationLevel();
+
     code += `${this.tabString.repeat(
       firstIndentationLevel
     )}class ${className}: \n`;
@@ -441,7 +454,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     let actualEnd = end ?? 0;
     let actualStep = step ?? 1;
 
-    let currentIndentationLevel = this.handleIndentationLevel();
+    let currentIndentationLevel = this.handleIndentationLevel(false);
     forLoop += this.tabString.repeat(currentIndentationLevel);
 
     if (actualStart < actualEnd) {
@@ -462,10 +475,14 @@ export class PythonCodeGenerator extends CodeGenerator {
     body?: string[]
   ): string {
     const { iterators, iterable, start } = params;
+    let currentIndentationLevel = this.handleIndentationLevel();
+    // this.tabString.repeat(currentIndentationLevel);
+
     return (
-      `for ${iterators.join(", ")} in enumerate(${iterable}${
-        start ? ` ,${start}` : ""
-      }): \n` + this.tabString.repeat(this.handleIndentationLevel(true) + 1)
+      `${this.tabString.repeat(currentIndentationLevel)}for ${iterators.join(
+        ", "
+      )} in enumerate(${iterable}${start ? ` ,${start}` : ""}): \n` +
+      this.tabString.repeat(currentIndentationLevel + 1)
     );
   }
 
@@ -475,9 +492,14 @@ export class PythonCodeGenerator extends CodeGenerator {
         (c) => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`
       )
       .join(" ");
-    const loopCode = `while ${conditionCode}: \n${this.wrapInCodeBlock(
-      body ?? [""]
-    )} `;
+
+    let currentIndentationLevel = this.handleIndentationLevel();
+
+    const loopCode = `${this.tabString.repeat(
+      currentIndentationLevel
+    )}while ${conditionCode}: \n${this.tabString.repeat(
+      currentIndentationLevel + 1
+    )}} `;
     return loopCode;
   }
 
@@ -608,53 +630,18 @@ export class PythonCodeGenerator extends CodeGenerator {
    * Generate Casting
    **/
   generateCasting(variable: any, type: string): string {
-    if (!Object.values(CastingTypes).includes(type as CastingTypes)) {
+    // this.typemappings
+    if (
+      !Object.keys(this.typeMappings).includes(
+        type.toLowerCase() as CastingTypes
+      )
+    ) {
       throw new Error(`Invalid casting type: ${type}`);
     }
-    switch (type) {
-      case CastingTypes.Integer:
-        return (
-          `${variable} = int(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.Float:
-        return (
-          `${variable} = float(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.String:
-        return (
-          `${variable} = str(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.Boolean:
-        return (
-          `${variable} = bool(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.List:
-        return (
-          `${variable} = list(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.Tuple:
-        return (
-          `${variable} = tuple(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.Set:
-        return (
-          `${variable} = set(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.Dictionary:
-        return (
-          `${variable} = dict(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      default:
-        throw new Error(`Invalid casting type: ${type}`);
-    }
+    return (
+      `${variable} = ${this.typeMappings[type]}(${variable})\n` +
+      this.tabString.repeat(this.handleIndentationLevel(true))
+    );
   }
 
   /**
@@ -792,7 +779,7 @@ export class PythonCodeGenerator extends CodeGenerator {
   }
 
   exitScope(): string {
-    let indentationLevel = this.handleIndentationLevel();
+    let indentationLevel = this.handleIndentationLevel(false);
     return `\n${this.addWhiteSpace(
       Whitespace.Tab,
       Math.max(indentationLevel - 1, 0)
