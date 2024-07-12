@@ -21,8 +21,8 @@ spec.loader.exec_module(command_intent)
 CommandIntent = command_intent.CommandIntent
 
 # Correctly resolve paths relative to the script's location
-intent_model_path = os.path.abspath('../CommandIntent/models/intent_detection_model.keras')
-ner_model_path = os.path.abspath('../CommandIntent/models/ner_model.pth')
+intent_model_path = os.path.abspath('../CommandIntent/models/intent_detection_model.h5')
+ner_model_path = os.path.abspath('../CommandIntent/models/full_ner_model.pth')
 
 # Create an instance of CommandIntent with correct paths
 command_test = CommandIntent(intent_model_path, ner_model_path)
@@ -52,6 +52,6 @@ test_sentences = [
     'select line 10',
 ]
 
-print(command_test.process_command(test_sentences[18]))
+print(command_test.process_command(test_sentences[2]))
 
 print("ESHTAGHALLLLL")
