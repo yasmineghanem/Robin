@@ -159,8 +159,8 @@ void resizeToMaxDimension(Mat &image, int maxDim)
 
 int main()
 {
-    
-    const char *filename = "img8.jpg";
+
+    const char *filename = "img2.jpg";
     fill_features_info();
     MouseController mouse_controller;
     // int x = 500, y = 500;
@@ -182,7 +182,7 @@ int main()
 
     // Load the cascade and landmark model
     FaceDetector face_cascade;
-    face_cascade.load("face4");
+    face_cascade.load("face18_best");
 
     // cv::CascadeClassifier classifier;
     Landmark landmark_extractor;
