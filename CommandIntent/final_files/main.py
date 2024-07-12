@@ -35,8 +35,7 @@ def main():
     # declarations
     intent_data = IntentData(
         '../intent_detection_dataset/final_intents_dataset.json')
-    ner_data = NERData('../ner_dataset/ner_dataset.csv',
-                       '../ner_dataset/intent_to_tags.json')
+    ner_data = NERData('../ner_dataset/ner_dataset.csv', '../ner_dataset/intent_to_tags.json')
 
     # load models from the provided paths
     # 1. load the intent model
@@ -55,8 +54,7 @@ def main():
 
     ner_model_path = args[1]
 
-    ner_model = NERModel(vocab_size=ner_data.vocab_size,
-                         index_to_tag=ner_data.index_to_tag)
+    ner_model = NERModel(vocab_size=ner_data.vocab_size, index_to_tag=ner_data.index_to_tag, output_dim=ner_data.num_of_tags, number_of_intents=ner_data.num_of_intents)
     state_dict = torch.load(ner_model_path)
     ner_model.load_state_dict(state_dict)
     # 2. load the ner model

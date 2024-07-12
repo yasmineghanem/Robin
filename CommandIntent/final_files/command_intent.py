@@ -1,4 +1,5 @@
 import sys
+import os
 from intent_detection_model import load_model, predict_intent
 from ner_model import NERModel, predict_entities
 from data_preparation import IntentData, NERData
@@ -7,19 +8,30 @@ import torch
 
 class CommandIntent:
     def __init__(self, intent_model_path, ner_model_path):
-        self.intent_data = IntentData('../intent_detection_dataset/final_intents_dataset.json')
-        self.ner_data = NERData('../ner_dataset/ner_dataset.csv', '../ner_dataset/intent_to_tags.json')
+        # self.intent_data = IntentData('../intent_detection_dataset/final_intents_dataset.json')
+        self.intent_model_path = os.path.abspath(intent_model_path)
+        self.ner_model_path = os.path.abspath(ner_model_path)
+        self.intent_to_tags_path = os.path.abspath('../ner_dataset/intent_to_tags.json')
+        self.intent_data = IntentData(self._resolve_path('../intent_detection_dataset/final_intents_dataset.json'))
+        # self.ner_data = NERData('../ner_dataset/ner_dataset.csv', '../ner_dataset/intent_to_tags.json')
+        self.ner_data = NERData(self._resolve_path('../ner_dataset/ner_dataset.csv'), self._resolve_path('../ner_dataset/intent_to_tags.json'))
         
         # load the intent model
-        self.intent_model = load_model(intent_model_path)
+        self.intent_model = load_model(self.intent_model_path)
         
         # load the ner model
         self.ner_model = NERModel(vocab_size=self.ner_data.vocab_size, index_to_tag=self.ner_data.index_to_tag)
-        state_dict = torch.load(ner_model_path)
-        self.ner_model.load_state_dict(state_dict)
+        state_dict = torch.load(self.ner_model_path)
+        self.ner_model.load_state_dict(state_dict, strict=False)
+
+        # print model keys
+        print(self.ner_model.state_dict().keys())
 
         self.post_processor = PostProcessor(self.ner_data.intent_to_tags)
 
+    def _resolve_path(self, relative_path):
+        return os.path.abspath(os.path.join(os.path.dirname(__file__), relative_path))
+    
     def __get_intent(self, command):
         '''
             This function takes the command as input and returns the intent of the command.
@@ -76,9 +88,10 @@ class CommandIntent:
         '''
         # get the intent of the command
         intent = self.__get_intent(command)
-
+        print(intent)
         # get the entities of the command
         entities = self.__get_entities(command, intent)
+        print(entities)
 
         # post process the entities
         response = self.post_processor.post_process(command, intent, entities)

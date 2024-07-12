@@ -15,6 +15,9 @@ class APIController:
         return response.json()
 
     def __post(self, endpoint, data={}):
+        # print data
+        print("REQUEST DATA")
+        print(data)
         response = requests.post(self.url + endpoint, json=data,
                                  headers={'Content-Type': 'application/json',
                                           'Accept': 'application/json'
@@ -224,6 +227,7 @@ class APIController:
 
     def line_comment(
         self,
+        body
         # content
     ):
         # data = {
@@ -353,12 +357,12 @@ class APIController:
         # }
         return self.__post(CODE_OPERATION, data)
 
-    def for_loop(self, loop_type, rest):
-        data = {
-            "type": loop_type,
-            **rest
-        }
-        return self.__post(CODE_FOR_LOOP, data)
+    def for_loop(self,body):
+        # data = {
+        #     "type": loop_type,
+        #     **rest
+        # }
+        return self.__post(CODE_FOR_LOOP, body)
 
     def while_loop(
         self,

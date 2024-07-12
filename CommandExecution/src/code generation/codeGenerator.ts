@@ -192,7 +192,7 @@ export abstract class CodeGenerator {
      * @returns The code string for the assertion.
      * @throws An error if the assertion is not valid.
     */
-    abstract generateAssertion(variable: string, value: any, type: string): string;
+    // abstract generateAssertion(variable: string, value: any, type: string): string;
 
     /**
      * Generate Casting operations

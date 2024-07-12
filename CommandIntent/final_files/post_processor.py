@@ -1,7 +1,7 @@
 import utils
 import re
 from constants import *
-from DesktopApplication.api_controller import ApiController
+from api import APIController
 # TODO: handle if the intent is wrong
 
 
@@ -21,7 +21,7 @@ class PostProcessor:
 
     def __init__(self, intent_to_tags):
         self.intent_to_tags = intent_to_tags
-        self.api = ApiController()
+        self.api = APIController()
 
     def post_process(self, sentence, intent, tags):
         '''
@@ -41,49 +41,54 @@ class PostProcessor:
         match intent:
             case 'variable declaration':
                 final_parameters = self.post_process_declaration(parameters)
-                response = self.api.declare_variable(final_parameters['name'], final_parameters['value'], final_parameters['type'])
+                # response = self.api.declare_variable(final_parameters['name'], final_parameters['value'], final_parameters['type'])
+                response = self.api.declare_variable(final_parameters)
 
             case 'constant declaration':
                 final_parameters = self.post_process_declaration(parameters)
-                response = self.api.declare_constant(final_parameters['name'], final_parameters['value'])
+                # response = self.api.declare_constant(final_parameters['name'], final_parameters['value'])
+                response = self.api.declare_constant(final_parameters)
 
             case 'function declaration':
                 final_parameters = self.post_process_function_declaration(
                     parameters)
-                response = self.api.declare_function(final_parameters['name'], final_parameters['parameters'])
+                response = self.api.declare_function(final_parameters)
 
             case 'class declaration':
                 final_parameters = self.post_process_class_declaration(
                     parameters)
-                response = self.api.declare_class(final_parameters['name'])
+                response = self.api.declare_class(final_parameters)
 
             case 'for loop':
                 final_parameters = self.post_process_for_loop(parameters)
-                response = self.api.for_loop(final_parameters['type'], final_parameters['iterators'], final_parameters['start'], final_parameters['end'], final_parameters['step'], final_parameters['iterable'], final_parameters['body'])
+                # response = self.api.for_loop(final_parameters['type'], final_parameters['iterators'], final_parameters['start'], final_parameters['end'], final_parameters['step'], final_parameters['iterable'], final_parameters['body'])
+                response = self.api.for_loop(final_parameters)
 
             case 'while loop':
                 final_parameters = self.post_process_while_loop(parameters)
-                response = self.api.conditional(final_parameters)
+                response = self.api.while_loop(final_parameters)
 
             case 'assignment operation':
                 final_parameters = self.post_process_assignment_operation(
                     parameters)
-                response = self.api.assignment(final_parameters)
+                response = self.api.assign_variable(final_parameters)
 
             case 'bitwise operation':
-                final_parameters = self.post_process_operation(parameters)
+                final_parameters = self.post_process_operation(parameters, intent)
                 response = self.api.operation(final_parameters)
 
             case 'casting':
                 final_parameters = self.post_process_casting(parameters)
-                response = self.api.casting(final_parameters)
+                print(final_parameters)
+                response = self.api.type_casting(final_parameters)
 
             case 'input':
                 final_parameters = self.post_process_input(parameters)
                 response = self.api.user_input(final_parameters)
+
             case 'output':
                 final_parameters = self.post_process_output(parameters)
-                response = self.api.print(final_parameters)
+                response = self.api.print_code(final_parameters)
 
             case 'assertion':
                 final_parameters = self.post_process_assertion(parameters)
@@ -95,12 +100,26 @@ class PostProcessor:
 
             case 'comment':
                 final_parameters = self.post_process_comment(parameters)
-                response = self.api.comment(final_parameters)
+                response = self.api.line_comment(final_parameters)
 
             case 'conditional operation':
                 final_parameters = self.post_process_conditional_operation(
                     parameters)
-                response = self.api.conditional(final_parameters)
+                response = self.api.conditional({
+                    "condition": [
+                        {
+                            "left": "x",
+                            "operator": ">",
+                            "right": "5"
+                        },
+                        {
+                            "logicalOperator": "and",
+                            "left": "x",
+                            "operator": ">",
+                            "right": "5"
+                        }
+                    ]
+                })
 
             case 'file system':
                 final_parameters = self.post_process_file_system(parameters)
@@ -128,9 +147,11 @@ class PostProcessor:
                 response = self.api.ide_operation(final_parameters)
 
             case 'array operation':
-                final_parameters = self.post_process_array_operation(parameters)
-                response = self.api.operation(final_parameters)
+                final_parameters = self.post_process_array_operation(
+                    parameters)
+                # response = self.api.operation(final_parameters)
 
+        print("Final parameters: ", final_parameters)
         return response
 
     def __get_parameters(self, intent, sentence, tags, intent_tags):
@@ -188,31 +209,31 @@ class PostProcessor:
 
         return parameters
 
-    def __map_values(self, value, type):
+    def __map_values(self, value, var_type):
         final_value = None
 
         integer_regex = r'^-?\d+$'
         float_regex = r'^-?\d*\.\d+$'
         boolean_regex = r'^([Tt]rue|[Ff]alse)$'
 
-        if type is not None:
-            if type in utils.TYPES['int']:
+        if var_type is not None:
+            if var_type in utils.TYPES['int']:
                 final_value = int(value)
-            elif type in utils.TYPES['float']:
+            elif var_type in utils.TYPES['float']:
                 final_value = float(value)
-            elif type in utils.TYPES['double']:
+            elif var_type in utils.TYPES['double']:
                 final_value = float(value)
-            elif type in utils.TYPES['str']:
+            elif var_type in utils.TYPES['str']:
                 final_value = value
-            elif type in utils.TYPES['bool']:
+            elif var_type in utils.TYPES['bool']:
                 final_value = bool(value)
-            elif type in utils.TYPES['list']:
+            elif var_type in utils.TYPES['list']:
                 final_value = []
-            elif type in utils.TYPES['dictionary']:
+            elif var_type in utils.TYPES['dictionary']:
                 final_value = {}
-            elif type in utils.TYPES['tuple']:
+            elif var_type in utils.TYPES['tuple']:
                 final_value = tuple()
-            elif type in utils.TYPES['set']:
+            elif var_type in utils.TYPES['set']:
                 final_value = set()
         else:
             # if a type is not specified then check the value and map it to correct type
@@ -236,25 +257,25 @@ class PostProcessor:
 
         return final_value
 
-    def __map_type(self, type):
+    def __map_type(self, var_type):
 
-        if type in utils.TYPES['int']:
-            final_type = 'int'
-        elif type in utils.TYPES['float']:
+        if var_type in utils.TYPES['int']:
+            final_type = 'integer'
+        elif var_type in utils.TYPES['float']:
             final_type = 'float'
-        elif type in utils.TYPES['double']:
+        elif var_type in utils.TYPES['double']:
             final_type = 'double'
-        elif type in utils.TYPES['str']:
+        elif var_type in utils.TYPES['str']:
             final_type = 'string'
-        elif type in utils.TYPES['bool']:
-            final_type = 'bool'
-        elif type in utils.TYPES['list']:
+        elif var_type in utils.TYPES['bool']:
+            final_type = 'boolean'
+        elif var_type in utils.TYPES['list']:
             final_type = 'list'
-        elif type in utils.TYPES['dictionary']:
-            final_type = 'dict'
-        elif type in utils.TYPES['tuple']:
+        elif var_type in utils.TYPES['dictionary']:
+            final_type = 'dictionary'
+        elif var_type in utils.TYPES['tuple']:
             final_type = 'tuple'
-        elif type in utils.TYPES['set']:
+        elif var_type in utils.TYPES['set']:
             final_type = 'set'
 
         return final_type
@@ -410,9 +431,11 @@ class PostProcessor:
         final_parameters['name'] = parameters['VAR']
 
         final_parameters['value'] = self.__map_values(
-            parameters['VALUE'], parameters['TYPE'])
+            parameters['VAL'], parameters['TYPE'])
 
-        final_parameters['type'] = parameters['TYPE']
+        final_parameters['type'] = self.__map_type(parameters['TYPE'])
+
+        print(final_parameters)
 
         return final_parameters
 
@@ -515,19 +538,21 @@ class PostProcessor:
 
         if parameters['COLLECTION'] is not None:
             final_parameters['type'] = 'iterable'
-            final_parameters['iterators'] = [parameters['VAR'] if parameters['VAR'] is not None else 'i']
+            final_parameters['iterators'] = [parameters['VAR']
+                                             if parameters['VAR'] is not None else 'i']
             final_parameters['iterable'] = parameters['COLLECTION']
             final_parameters['body'] = None
 
         else:
             final_parameters['type'] = 'range'
-            final_parameters['iterators'] = [parameters['VAR'] if parameters['VAR'] is not None else 'i']
-            
+            final_parameters['iterators'] = [parameters['VAR']
+                                             if parameters['VAR'] is not None else 'i']
+
             # TODO : check if the start, end, and step are numbers
 
             # the start and the step are optional
             final_parameters['start'] = parameters['START']
-            final_parameters['step'] = parameters['STEP'] 
+            final_parameters['step'] = parameters['STEP']
 
             # must be provided by the user
             final_parameters['end'] = parameters['END']
@@ -567,7 +592,7 @@ class PostProcessor:
             'operator': self.__map_condition(parameters['CONDITION']),
             'right': parameters['RHS']
         })
-        pass
+        return final_parameters
 
     # DONE: casting intent
     def post_process_casting(self, parameters):
@@ -607,9 +632,10 @@ class PostProcessor:
         final_parameters = {}
 
         final_parameters['name'] = parameters['LHS']
-        final_parameters['type'] = '=s'
+        final_parameters['type'] = '='
         final_parameters['value'] = self.__map_values(parameters['RHS'], None)
 
+        print(final_parameters)
         return final_parameters
 
     # DONE: assertion intent
