@@ -11,7 +11,7 @@ MouseController::MouseController()
 // distance ^1.7
 double MouseController::distance_equ(double distance)
 {
-    return pow(distance, 1.7);
+    return pow(distance, 1.4);
 }
 // Function to move the mouse to (x, y) position
 // x and y are the screen coordinates
