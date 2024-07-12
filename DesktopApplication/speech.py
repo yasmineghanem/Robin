@@ -74,7 +74,7 @@ class SpeechRecognition:
             if self.recognizer.AcceptWaveform(data):
                 r = self.recognizer.Result()
 
-                # print(r)
+                print(r)
 
                 response = self.command_intent.process_command(r['text'])
                 # response = self.command_intent.process_command('cast the variable x to integer')
