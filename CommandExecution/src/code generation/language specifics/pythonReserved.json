@@ -44,5 +44,7 @@
     "list": "list",
     "tuple": "tuple",
     "dictionary": "dict"
-  }
+  },
+
+  ""
 }

@@ -27635,7 +27635,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             .map((c) => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`)
             .join(" ");
         let currentIndentationLevel = this.handleIndentationLevel();
-        const loopCode = `${this.tabString.repeat(currentIndentationLevel)}while ${conditionCode}: \n${this.tabString.repeat(currentIndentationLevel + 1)}} `;
+        const loopCode = `${this.tabString.repeat(currentIndentationLevel)}while ${conditionCode}: \n${this.tabString.repeat(currentIndentationLevel + 1)}`;
         return loopCode;
     }
     /**

@@ -499,7 +499,7 @@ export class PythonCodeGenerator extends CodeGenerator {
       currentIndentationLevel
     )}while ${conditionCode}: \n${this.tabString.repeat(
       currentIndentationLevel + 1
-    )}} `;
+    )}`;
     return loopCode;
   }
 
