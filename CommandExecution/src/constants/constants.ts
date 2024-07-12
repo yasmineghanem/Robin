@@ -13,12 +13,3 @@ export enum GENERIC_TYPES {
   DICTIONARY = "dictionary",
 }
 
-export const TYPE_MAPPING = {
-    string: "str",
-    integer: "int",
-    float: "float",
-    boolean: "bool",
-    list: "list",
-    tuple: "tuple",
-    dictionary: "dict",
-};

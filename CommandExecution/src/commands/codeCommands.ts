@@ -1,82 +1,76 @@
 import * as vscode from "vscode";
+import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
+import { showError, showMessage } from "../communication/utilities";
 import {
   ADD_WHITESPACE,
+  ARRAY_OPERATION,
+  ASSERTION,
+  ASSERTION_FAILURE,
+  ASSERTION_SUCCESS,
+  ASSIGN_VARIABLE,
+  ASSIGNMENT_FAILURE,
+  ASSIGNMENT_SUCCESS,
+  BLOCK_COMMENT,
+  BLOCK_COMMENT_FAILURE,
+  BLOCK_COMMENT_SUCCESS,
+  CASTING_FAILURE,
+  CASTING_SUCCESS,
+  CLASS_FAILURE,
+  CLASS_SUCCESS,
   CONDITIONAL,
+  DECLARE_CLASS,
   DECLARE_CONSTANT,
   DECLARE_FUNCTION,
   DECLARE_VARIABLE,
-  ASSIGN_VARIABLE,
+  EXIT_SCOPE,
+  EXIT_SCOPE_FAILURE,
+  EXIT_SCOPE_SUCCESS,
+  FILE_EXT_FAILURE,
   FOR_LOOP,
   FUNCTION_CALL,
-  GET_AST,
-  NO_ACTIVE_TEXT_EDITOR,
-  OPERATION,
-  IMPORT_LIBRARY,
-  IMPORT_MODULE,
-  FILE_EXT_FAILURE,
-  LOOP_FAILURE,
-  LOOP_SUCCESS,
   FUNCTION_CALL_FAILURE,
   FUNCTION_CALL_SUCCESS,
   FUNCTION_FAILURE,
   FUNCTION_SUCCESS,
+  GET_AST,
+  IMPORT_FAILURE,
+  IMPORT_LIBRARY,
+  IMPORT_MODULE,
+  IMPORT_SUCCESS,
+  LINE_COMMENT,
+  LINE_COMMENT_FAILURE,
+  LINE_COMMENT_SUCCESS,
+  LOOP_FAILURE,
+  LOOP_SUCCESS,
+  NO_ACTIVE_TEXT_EDITOR,
+  OPERATION,
   OPERATION_FAILURE,
   OPERATION_SUCCESS,
+  PRINT,
+  PRINT_FAILURE,
+  PRINT_SUCCESS,
+  READ_FILE,
+  READ_FILE_FAILURE,
+  READ_FILE_SUCCESS,
+  TRY_EXCEPT,
+  TRY_EXCEPT_FAILURE,
+  TRY_EXCEPT_SUCCESS,
+  TYPE_CASTING,
+  USER_INPUT,
+  USER_INPUT_FAILURE,
+  USER_INPUT_SUCCESS,
   VARIABLE_FAILURE,
   VARIABLE_SUCCESS,
   WHILE_LOOP,
   WHITE_SPACE_FAILURE,
   WHITE_SPACE_SUCCESS,
-  ASSIGNMENT_FAILURE,
-  ASSIGNMENT_SUCCESS,
-  IMPORT_SUCCESS,
-  IMPORT_FAILURE,
-  ARRAY_OPERATION,
-  ASSERTION,
-  ASSERTION_FAILURE,
-  ASSERTION_SUCCESS,
-  TYPE_CASTING,
-  CASTING_FAILURE,
-  CASTING_SUCCESS,
-  USER_INPUT,
-  USER_INPUT_FAILURE,
-  USER_INPUT_SUCCESS,
-  PRINT,
-  PRINT_FAILURE,
-  PRINT_SUCCESS,
-  LINE_COMMENT,
-  LINE_COMMENT_FAILURE,
-  LINE_COMMENT_SUCCESS,
-  BLOCK_COMMENT,
-  BLOCK_COMMENT_FAILURE,
-  BLOCK_COMMENT_SUCCESS,
-  READ_FILE,
-  READ_FILE_FAILURE,
-  READ_FILE_SUCCESS,
   WRITE_FILE,
   WRITE_FILE_FAILURE,
   WRITE_FILE_SUCCESS,
-  DECLARE_CLASS,
-  TRY_EXCEPT,
-  TRY_EXCEPT_FAILURE,
-  TRY_EXCEPT_SUCCESS,
-  EXIT_SCOPE,
-  EXIT_SCOPE_SUCCESS,
-  EXIT_SCOPE_FAILURE,
-  CLASS_SUCCESS,
-  CLASS_FAILURE,
 } from "../constants/code";
-import { PythonCodeGenerator } from "../code generation/pythonCodeGenerator";
-import { showError, showMessage } from "../communication/utilities";
 import { EXTENSIONS } from "../constants/constants";
 
 // utilities
-
-const getCurrentPosition = (editor: vscode.TextEditor): vscode.Position => {
-  const position = editor.selection.active;
-  return position;
-};
-
 const getFileExtension = (editor: vscode.TextEditor): string | undefined => {
   return editor.document.fileName.split(".").pop();
 };
@@ -122,14 +116,7 @@ const declareVariable = () => {
           return handleFailure(FILE_EXT_FAILURE);
       }
 
-      let s = await editor.edit((editBuilder) => {
-        editBuilder.insert(
-          getCurrentPosition(editor),
-          codeGenerator.declareVariable(args.name, args.type, args.value)
-        );
-      });
-      console.log("ay haga");
-
+      let s = codeGenerator.declareVariable(args.name, args.type, args.value);
       if (!s) {
         return handleFailure(VARIABLE_FAILURE);
       }
@@ -159,12 +146,7 @@ const assignVariable = () => {
       }
 
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.assignVariable(args.name, args.value, args.type)
-          );
-        });
+        let s = codeGenerator.assignVariable(args.name, args.value, args.type);
         if (!s) {
           return handleFailure(ASSIGNMENT_FAILURE);
         }
@@ -199,12 +181,7 @@ const declareConstant = () => {
       }
 
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.declareConstant(args.name, args.value)
-          );
-        });
+        let s = codeGenerator.declareConstant(args.name, args.value);
 
         if (!s) {
           return handleFailure(VARIABLE_FAILURE);
@@ -255,14 +232,11 @@ const declareFunction = () => {
       }
 
       try {
-        const code = codeGenerator.declareFunction(
+        let s = codeGenerator.declareFunction(
           args.name,
           args.parameters ?? [],
           args?.body
         );
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(getCurrentPosition(editor), code);
-        });
 
         if (!s) {
           return handleFailure(FUNCTION_FAILURE);
@@ -340,12 +314,7 @@ const functionCall = () => {
           return handleFailure(FILE_EXT_FAILURE);
       }
 
-      let s = await editor.edit((editBuilder) => {
-        editBuilder.insert(
-          getCurrentPosition(editor),
-          codeGenerator.generateFunctionCall(args.name, args.args)
-        );
-      });
+      let s = codeGenerator.generateFunctionCall(args.name, args.args);
 
       if (!s) {
         return handleFailure(FUNCTION_CALL_FAILURE);
@@ -363,12 +332,13 @@ const addWhiteSpace = () => {
 
     if (editor) {
       let codeGenerator = new PythonCodeGenerator(editor);
-      let s = await editor.edit((editBuilder) => {
-        editBuilder.insert(
-          getCurrentPosition(editor),
-          codeGenerator.addWhiteSpace(args.type, args?.count)
-        );
-      });
+      let s =
+        // await editor.edit((editBuilder) => {
+        //   editBuilder.insert(
+        //     getCurrentPosition(editor),
+        codeGenerator.addWhiteSpace(args.type, args?.count);
+      //   );
+      // });
 
       if (!s) {
         return handleFailure(WHITE_SPACE_FAILURE);
@@ -410,12 +380,7 @@ const forLoop = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateForLoop(args.type, args)
-          );
-        });
+        let s = codeGenerator.generateForLoop(args.type, args);
 
         if (!s) {
           return handleFailure(LOOP_FAILURE);
@@ -452,12 +417,7 @@ const whileLoop = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateWhileLoop(args.condition, args?.body)
-          );
-        });
+        const s = codeGenerator.generateWhileLoop(args.condition, args?.body);
 
         if (!s) {
           return handleFailure(LOOP_FAILURE);
@@ -495,16 +455,11 @@ const operation = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateOperation(
-              args.left,
-              args.operator,
-              args.right
-            )
-          );
-        });
+        let s = codeGenerator.generateOperation(
+          args.left,
+          args.operator,
+          args.right
+        );
 
         if (!s) {
           return handleFailure(OPERATION_FAILURE);
@@ -542,17 +497,12 @@ const tryExcept = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateTryExcept(
-              args.tryBody,
-              args.exception,
-              args.exceptionInstance,
-              args.exceptBody
-            )
-          );
-        });
+        let s = codeGenerator.generateTryExcept(
+          args.tryBody,
+          args.exception,
+          args.exceptionInstance,
+          args.exceptBody
+        );
 
         if (!s) {
           return handleFailure(TRY_EXCEPT_FAILURE);
@@ -590,12 +540,7 @@ const conditional = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateConditional(args)
-          );
-        });
+        let s = codeGenerator.generateConditional(args);
 
         if (!s) {
           return handleFailure(OPERATION_FAILURE);
@@ -633,12 +578,7 @@ const importLibrary = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateImportLibrary(args.library)
-          );
-        });
+        let s = codeGenerator.generateImportLibrary(args.library);
 
         if (!s) {
           return handleFailure(IMPORT_FAILURE);
@@ -676,12 +616,7 @@ const importModule = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateImportModule(args.library, args?.modules)
-          );
-        });
+        let s = codeGenerator.generateImportModule(args.library, args?.modules);
 
         if (!s) {
           return handleFailure(IMPORT_FAILURE);
@@ -719,16 +654,11 @@ const assertion = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateAssertion(
-              args.variable,
-              args.value,
-              args.type
-            )
-          );
-        });
+        let s = codeGenerator.generateAssertion(
+          args.variable,
+          args.value,
+          args.type
+        );
 
         if (!s) {
           return handleFailure(ASSERTION_FAILURE);
@@ -766,12 +696,7 @@ const typeCasting = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateCasting(args.variable, args.type)
-          );
-        });
+        let s = codeGenerator.generateCasting(args.variable, args.type);
 
         if (!s) {
           return handleFailure(CASTING_FAILURE);
@@ -809,16 +734,11 @@ const arrayOperations = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateOperation(
-              args.left,
-              args.operator,
-              args.right
-            )
-          );
-        });
+        let s = codeGenerator.generateOperation(
+          args.left,
+          args.operator,
+          args.right
+        );
 
         if (!s) {
           return handleFailure(OPERATION_FAILURE);
@@ -856,12 +776,7 @@ const userInput = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateUserInput(args.variable, args.message)
-          );
-        });
+        let s = codeGenerator.generateUserInput(args.variable, args.message);
 
         if (!s) {
           return handleFailure(USER_INPUT_FAILURE);
@@ -899,12 +814,7 @@ const printConsole = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generatePrint(args.variable, args.type)
-          );
-        });
+        let s = codeGenerator.generatePrint(args.variable, args.type);
 
         if (!s) {
           return handleFailure(PRINT_FAILURE);
@@ -942,12 +852,7 @@ const lineComment = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateLineComment(args.content)
-          );
-        });
+        let s = codeGenerator.generateLineComment(args.content);
 
         if (!s) {
           return handleFailure(LINE_COMMENT_FAILURE);
@@ -985,12 +890,7 @@ const blockComment = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateBlockComment(args.content)
-          );
-        });
+        let s = codeGenerator.generateBlockComment(args.content);
 
         if (!s) {
           return handleFailure(BLOCK_COMMENT_FAILURE);
@@ -1028,12 +928,7 @@ const readFile = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateReadFile(args.path, args.variable)
-          );
-        });
+        let s = codeGenerator.generateReadFile(args.path, args.variable);
 
         if (!s) {
           return handleFailure(READ_FILE_FAILURE);
@@ -1070,12 +965,7 @@ const writeFile = () => {
 
       // try catch
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.generateWriteFile(args.path, args.content)
-          );
-        });
+        let s = codeGenerator.generateWriteFile(args.path, args.content);
 
         if (!s) {
           return handleFailure(WRITE_FILE_FAILURE);
@@ -1143,16 +1033,11 @@ const declareClass = () => {
       }
 
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.declareClass(
-              args?.name,
-              args?.properties,
-              args?.methods
-            )
-          );
-        });
+        let s = codeGenerator.declareClass(
+          args?.name,
+          args?.properties,
+          args?.methods
+        );
 
         if (!s) {
           return handleFailure(CLASS_SUCCESS);
@@ -1188,12 +1073,7 @@ const exitScope = () => {
       }
 
       try {
-        let s = await editor.edit((editBuilder) => {
-          editBuilder.insert(
-            getCurrentPosition(editor),
-            codeGenerator.exitScope()
-          );
-        });
+        let s = codeGenerator.exitScope();
 
         if (!s) {
           return handleFailure(EXIT_SCOPE_SUCCESS);
