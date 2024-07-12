@@ -103,9 +103,9 @@ void FaceDetector::remove_negative_val_data()
     get<0>(this->val_dim) = new_count;
 }
 
-void FaceDetector::train(double Yo, double Yl, double Bl)
+void FaceDetector::train(double Yo, double Yl, double Bl, bool restric)
 {
-    double cur_Y = 1;
+    // double cur_Y = 1;
     int l = 0;
     int *predictions = new int[max(this->train_dim.first, get<0>(this->val_dim))];
     int last = 0;
@@ -115,6 +115,10 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
         l += 1;
 
         int Nl = min(10 * l + 10, 200);
+        if (restric)
+        {
+            Nl = 30;
+        }
         double sl = 0;
         int Tl = 1;
         AdaBoost *fl = new AdaBoost(this->X_train, this->y_train, this->train_dim);
@@ -166,7 +170,7 @@ void FaceDetector::train(double Yo, double Yl, double Bl)
                     cout << "adaboost number :  " << l << " layer number : " << Tl << " entered the dead loop" << endl;
                     while (B > Bl && sl < 1.0)
                     {
-                        sl += 0.0001;
+                        sl += 0.01;
                         mat = this->evaluate_single_layer(fl, predictions, sl);
                         B = mat.false_negative_rate;
                         Y = mat.false_positive_rate;
@@ -260,6 +264,7 @@ pair<int, int> getCenter(const window &win)
 
 void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, int N)
 {
+
     // Create an M × N matrix E filled with zeros
     int **E = new int *[M];
     // int **freq = new int *[M];
@@ -268,12 +273,11 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
         E[i] = new int[N]{0};
         // freq[i] = new int[N]{0};
     }
-
     // Fill E with the sizes of the windows
     for (const auto &w : windows)
     {
-        // E[w->x][w->y] = max(w->w, E[w->x][w->y]);
-        E[w->x][w->y] = w->w;
+        E[w->x][w->y] = max(w->w, E[w->x][w->y]);
+        // E[w->x][w->y] = w->w;
         // freq[w->x][w->y]++;
     }
     // for (int i = 0; i < M; ++i)
@@ -310,6 +314,7 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
                     int y = p.second;
 
                     if (x < 0 || x >= M || y < 0 || y >= N || labels[x][y] > 0 || E[x][y] != E[i][j])
+                    // if (x < 0 || x >= M || y < 0 || y >= N || labels[x][y] > 0)
                     {
                         continue;
                     }
@@ -337,15 +342,20 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
 
         if (confidence >= min_confidence)
         {
-            int max_x = 0, max_y = 0;
+            int max_x = component[0].first, max_y = component[0].second;
+            int avg_x = 0, avg_y = 0;
             for (const auto &p : component)
             {
                 int x = p.first;
                 int y = p.second;
                 max_x = max(max_x, x);
                 max_y = max(max_y, y);
+                avg_x += x;
+                avg_y += y;
             }
-            P.push_back({{max_x, max_y, eC, eC}, confidence});
+            avg_x /= size;
+            avg_y /= size;
+            P.push_back({{avg_x, avg_y, eC, eC}, confidence});
         }
     }
 
@@ -353,28 +363,28 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
     sort(P.begin(), P.end(), [](const pair<window, double> &a, const pair<window, double> &b)
          { return (a.first.w * a.first.h) < (b.first.w * b.first.h); });
 
-    //  Remove redundant windows
-    // for (size_t i = 0; i < P.size(); ++i)
-    // {
-    //     auto center = getCenter(P[i].first);
-    //     for (size_t j = i + 1; j < P.size(); ++j)
-    //     {
+    // Remove redundant windows
+    for (size_t i = 0; i < P.size(); ++i)
+    {
+        auto center = getCenter(P[i].first);
+        for (size_t j = i + 1; j < P.size(); ++j)
+        {
 
-    //         if (isInside(P[j].first, center.first, center.second))
-    //         {
-    //             // window i has a higher detection confidence than window j ,detlet window j
-    //             if (P[i].second > P[j].second)
-    //             {
-    //                 P[j].first = {0, 0, 0, 0}; // Remove P[j]
-    //             }
-    //             else
-    //             {
-    //                 P[i].first = {0, 0, 0, 0}; // Remove P[i]
-    //                 break;
-    //             }
-    //         }
-    //     }
-    // }
+            if (isInside(P[j].first, center.first, center.second))
+            {
+                // window i has a higher detection confidence than window j ,detlet window j
+                if (P[i].second > P[j].second)
+                {
+                    P[j].first = {0, 0, 0, 0}; // Remove P[j]
+                }
+                else
+                {
+                    P[i].first = {0, 0, 0, 0}; // Remove P[i]
+                    break;
+                }
+            }
+        }
+    }
 
     for (auto &w : windows)
     {
@@ -629,7 +639,7 @@ vector<window *> FaceDetector::process(int **&img, int ***&color_img, int M, int
         t.join();
     }
 
-    // std::cout << "P size after filtter1 : " << P.size() << endl;
+    std::cout << "P size after filtter1 : " << P.size() << endl;
     window_test2(P, img, M, N);
     std::cout << "P size after filtter2 : " << P.size() << endl;
     // drawGreenRectangles(color_img, M, N, P, 1);
@@ -646,6 +656,40 @@ vector<window *> FaceDetector::process(int **&img, int ***&color_img, int M, int
     return P;
 }
 
+void FaceDetector::rebuild()
+{
+    vector<AdaBoost *> new_cascade;
+    vector<double> new_shif;
+    int index = 0;
+    for (auto &fl : cascade)
+    {
+        new_cascade.push_back(fl);
+        new_shif.push_back(shif[index]);
+        index++;
+    }
+    cascade.clear();
+    shif.clear();
+    int *predictions = new int[max(this->train_dim.first, get<0>(this->val_dim))];
+
+    for (int i = 0; i < new_cascade.size(); i++)
+    {
+        cascade.push_back(new_cascade[i]);
+        shif.push_back(new_shif[i]);
+        auto mat = this->evaluate_single_layer(cascade[i], predictions, shif[i]);
+        double Y = mat.false_positive_rate, B = mat.false_negative_rate;
+        cur_Y = cur_Y * Y;
+        cout << "layer " << i << " is trained" << endl;
+        cout << "false positive rate: " << Y << endl;
+        cout << "false negative rate: " << B << endl;
+        cout << " training size before removing: " << this->train_dim.first << endl;
+        cout << " validation size before removing: " << get<0>(this->val_dim) << endl;
+        this->remove_negative_train_data();
+        this->remove_negative_val_data();
+        cout << " training size after removing: " << this->train_dim.first << endl;
+        cout << " validation size after removing: " << get<0>(this->val_dim) << endl;
+        cout << "--------------------------------------" << endl;
+    }
+}
 void FaceDetector::save(const string folder)
 {
     // Create directory if it doesn't exist

@@ -199,7 +199,7 @@ class Mouse_Controller():
 
     def process_single_frame(self):
         # load image 'viola-jons/imgs/img1.jpg'
-        frame = cv2.cvtColor(cv2.imread('./img1.jpg'),cv2.COLOR_BGR2RGB)
+        frame = cv2.cvtColor(cv2.imread('./img6.jpg'),cv2.COLOR_BGR2RGB)
         
         # Convert the frame to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)

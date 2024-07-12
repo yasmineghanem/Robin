@@ -16,7 +16,15 @@ const string HTTP = "https://";
 const string IP_ADDRESS = "192.168.1.2";
 const string URL = HTTP + IP_ADDRESS + ":4343/video";
 feature *features_info = nullptr;
+bool isVertical(Rect rect)
+{
+    return rect.height > rect.width * 1.5;
+}
 
+bool isHorizontal(Rect rect)
+{
+    return rect.width > rect.height * 1.5;
+}
 int **matTo2DArray(const cv::Mat &mat)
 {
     int **array = new int *[mat.rows];
@@ -51,10 +59,109 @@ int ***matTo3DArray(const cv::Mat &mat)
     return array;
 }
 
+bool contains(cv::Rect rect, std::vector<cv::Rect> &rects)
+{
+    for (auto &r : rects)
+    {
+        if (rect.contains(cv::Point(r.x, r.y)) && rect.contains(cv::Point(r.x + r.width, r.y + r.height)))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void extract_rect(cv::Mat &frame, vector<Rect> &verticalRectangles,
+                  vector<Rect> &horizontalRectangles)
+{
+
+    // Convert to grayscale
+    Mat gray;
+    cvtColor(frame, gray, COLOR_BGR2GRAY);
+
+    // Apply edge detection
+    Mat edges;
+    Canny(gray, edges, 50, 150);
+
+    // Find contours
+    vector<vector<Point>> contours;
+    vector<Vec4i> hierarchy;
+    findContours(edges, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+    // Filter contours to identify rectangles
+    vector<Rect> rectangles;
+    for (size_t i = 0; i < contours.size(); i++)
+    {
+        Rect rect = boundingRect(contours[i]);
+        double aspectRatio = (double)rect.width / rect.height;
+        // Assume rectangles with aspect ratio in range [0.5, 2] are valid
+        if (aspectRatio >= 0.5 && aspectRatio <= 2)
+        {
+            rectangles.push_back(rect);
+        }
+    }
+
+    // Separate vertical and horizontal rectangles
+    for (const Rect &rect : rectangles)
+    {
+        if (isVertical(rect))
+        {
+            verticalRectangles.push_back(rect);
+        }
+        else if (isHorizontal(rect))
+        {
+            horizontalRectangles.push_back(rect);
+        }
+    }
+
+    // Draw rectangles on the image
+    Mat output = frame.clone();
+    for (const Rect &rect : verticalRectangles)
+    {
+        rectangle(output, rect, Scalar(0, 255, 0), 2); // Green for vertical rectangles
+    }
+    for (const Rect &rect : horizontalRectangles)
+    {
+        rectangle(output, rect, Scalar(255, 0, 0), 2); // Blue for horizontal rectangles
+    }
+
+    // Show the result
+    // namedWindow("Detected Rectangles", WINDOW_AUTOSIZE);
+    // imshow("Detected Rectangles", output);
+    // waitKey(0);
+}
+
+void resizeToMaxDimension(Mat &image, int maxDim)
+{
+    // Get the original dimensions
+    int originalWidth = image.cols;
+    int originalHeight = image.rows;
+
+    // Calculate aspect ratio
+    double aspectRatio = static_cast<double>(originalWidth) / originalHeight;
+
+    // Calculate new dimensions
+    int newWidth, newHeight;
+    if (originalWidth > originalHeight)
+    {
+        newWidth = maxDim;
+        newHeight = static_cast<int>(maxDim / aspectRatio);
+    }
+    else
+    {
+        newHeight = maxDim;
+        newWidth = static_cast<int>(maxDim * aspectRatio);
+    }
+
+    // Resize the image
+    resize(image, image, Size(newWidth, newHeight));
+}
+
 int main()
 {
+    
+    const char *filename = "img8.jpg";
     fill_features_info();
-
     MouseController mouse_controller;
     // int x = 500, y = 500;
     // while (true)
@@ -75,7 +182,7 @@ int main()
 
     // Load the cascade and landmark model
     FaceDetector face_cascade;
-    face_cascade.load("face7");
+    face_cascade.load("face4");
 
     // cv::CascadeClassifier classifier;
     Landmark landmark_extractor;
@@ -101,15 +208,16 @@ int main()
         //
         // cv::Mat frame;
         // cv::flip(fliped, frame, 1);
-        cv::Mat frame = cv::imread("img7.jpg", IMREAD_COLOR);
+        cv::Mat frame = cv::imread(filename, IMREAD_COLOR);
 
         if (frame.empty())
         {
             break;
         }
+        resizeToMaxDimension(frame, 400);
         // Convert to grayscale
-        cv::Mat gray;
-        cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
+        // cv::Mat gray;
+        // cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
         cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
         // Detect faces
         // std::vector<cv::Rect> faces;
@@ -120,32 +228,22 @@ int main()
         int N = frame.cols;
         // load_image("img1.jpg", colorArray, grayArray, M, N);
         // Get the dimensions
-
         // Call the process function
-        double c = 1.5; // Example parameter
+        double c = 1.1;
         auto faces = face_cascade.process(grayArray, colorArray, M, N, c);
-        sort(faces.begin(), faces.end(), [](window *a, window *b)
-             { 
-                int y1=a->y;
-                int y2=b->y;
-                int x1=a->x;
-                int x2=b->x;
-                int w1=a->w;
-                int w2=b->w;
-                if (y1 != y2)
-                    return y1 < y2;
-                if (x1 != x2)
-                    return x1 < x2;
-                return w1 < w2; });
         int maxi = -1;
+        int n = 0;
         for (int i = 0; i < faces.size(); i++)
         {
+            n++;
             maxi = max(maxi, faces[i]->w);
         }
-        for (size_t i = 0; i < std::min<size_t>(100000, faces.size()); i++)
+        cout << n << endl;
+        for (size_t i = 0; i < n; i++)
         {
-            if (faces[i]->w < maxi / 2)
+            if (faces[i]->w != maxi)
                 continue;
+            // cout << faces[i]->x << " " << faces[i]->y << " " << faces[i]->w << endl;
             cv::Rect rect(faces[i]->y, faces[i]->x, faces[i]->w, faces[i]->w);
             // std::cout << "Face " << i + 1 << ": x=" << faces[i]->y << ", y=" << faces[i]->x
             //           << ", width=" << faces[i]->w << ", height=" << rect.height << std::endl;
