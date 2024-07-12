@@ -26386,10 +26386,13 @@ const declareVariable = () => {
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
-            let s = await editor.edit((editBuilder) => {
-                editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareVariable(args.name, args.type, args.value));
-            });
-            console.log("ay haga");
+            // let s = await editor.edit((editBuilder) => {
+            //   editBuilder.insert(
+            //     getCurrentPosition(editor),
+            let s = codeGenerator.declareVariable(args.name, args.type, args.value);
+            //   );
+            // });
+            // console.log("ay haga");
             if (!s) {
                 return handleFailure(code_1.VARIABLE_FAILURE);
             }
@@ -26414,9 +26417,13 @@ const assignVariable = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.assignVariable(args.name, args.value, args.type));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.assignVariable(args.name, args.value, args.type);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.ASSIGNMENT_FAILURE);
                 }
@@ -26447,9 +26454,13 @@ const declareConstant = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareConstant(args.name, args.value));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.declareConstant(args.name, args.value);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.VARIABLE_FAILURE);
                 }
@@ -26494,10 +26505,10 @@ const declareFunction = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                const code = codeGenerator.declareFunction(args.name, args.parameters ?? [], args?.body);
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), code);
-                });
+                let s = codeGenerator.declareFunction(args.name, args.parameters ?? [], args?.body);
+                // let s = await editor.edit((editBuilder) => {
+                //   editBuilder.insert(getCurrentPosition(editor), code);
+                // });
                 if (!s) {
                     return handleFailure(code_1.FUNCTION_FAILURE);
                 }
@@ -26565,9 +26576,13 @@ const functionCall = () => {
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
-            let s = await editor.edit((editBuilder) => {
-                editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateFunctionCall(args.name, args.args));
-            });
+            let s = 
+            //  await editor.edit((editBuilder) => {
+            //   editBuilder.insert(
+            //     getCurrentPosition(editor),
+            codeGenerator.generateFunctionCall(args.name, args.args);
+            //   );
+            // });
             if (!s) {
                 return handleFailure(code_1.FUNCTION_CALL_FAILURE);
             }
@@ -26581,9 +26596,13 @@ const addWhiteSpace = () => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             let codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
-            let s = await editor.edit((editBuilder) => {
-                editBuilder.insert(getCurrentPosition(editor), codeGenerator.addWhiteSpace(args.type, args?.count));
-            });
+            let s = 
+            // await editor.edit((editBuilder) => {
+            //   editBuilder.insert(
+            //     getCurrentPosition(editor),
+            codeGenerator.addWhiteSpace(args.type, args?.count);
+            //   );
+            // });
             if (!s) {
                 return handleFailure(code_1.WHITE_SPACE_FAILURE);
             }
@@ -26619,9 +26638,13 @@ const forLoop = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateForLoop(args.type, args));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateForLoop(args.type, args);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.LOOP_FAILURE);
                 }
@@ -26653,9 +26676,12 @@ const whileLoop = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateWhileLoop(args.condition, args?.body));
-                });
+                // let s = await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                const s = codeGenerator.generateWhileLoop(args.condition, args?.body);
+                // );
+                // });
                 if (!s) {
                     return handleFailure(code_1.LOOP_FAILURE);
                 }
@@ -26688,9 +26714,13 @@ const operation = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateOperation(args.left, args.operator, args.right));
-                });
+                let s = 
+                //  await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateOperation(args.left, args.operator, args.right);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -26723,9 +26753,13 @@ const tryExcept = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateTryExcept(args.tryBody, args.exception, args.exceptionInstance, args.exceptBody));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateTryExcept(args.tryBody, args.exception, args.exceptionInstance, args.exceptBody);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.TRY_EXCEPT_FAILURE);
                 }
@@ -26758,9 +26792,13 @@ const conditional = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateConditional(args));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateConditional(args);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -26793,9 +26831,13 @@ const importLibrary = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateImportLibrary(args.library));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateImportLibrary(args.library);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.IMPORT_FAILURE);
                 }
@@ -26828,9 +26870,13 @@ const importModule = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateImportModule(args.library, args?.modules));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateImportModule(args.library, args?.modules);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.IMPORT_FAILURE);
                 }
@@ -26863,9 +26909,13 @@ const assertion = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateAssertion(args.variable, args.value, args.type));
-                });
+                let s = 
+                //  await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateAssertion(args.variable, args.value, args.type);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.ASSERTION_FAILURE);
                 }
@@ -26898,9 +26948,13 @@ const typeCasting = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateCasting(args.variable, args.type));
-                });
+                let s = 
+                //  await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateCasting(args.variable, args.type);
+                // );
+                // });
                 if (!s) {
                     return handleFailure(code_1.CASTING_FAILURE);
                 }
@@ -26933,9 +26987,13 @@ const arrayOperations = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateOperation(args.left, args.operator, args.right));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateOperation(args.left, args.operator, args.right);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -26968,9 +27026,13 @@ const userInput = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateUserInput(args.variable, args.message));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateUserInput(args.variable, args.message);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.USER_INPUT_FAILURE);
                 }
@@ -27003,9 +27065,13 @@ const printConsole = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generatePrint(args.variable, args.type));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generatePrint(args.variable, args.type);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.PRINT_FAILURE);
                 }
@@ -27038,9 +27104,13 @@ const lineComment = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateLineComment(args.content));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateLineComment(args.content);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.LINE_COMMENT_FAILURE);
                 }
@@ -27073,9 +27143,13 @@ const blockComment = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateBlockComment(args.content));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateBlockComment(args.content);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.BLOCK_COMMENT_FAILURE);
                 }
@@ -27108,9 +27182,13 @@ const readFile = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateReadFile(args.path, args.variable));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateReadFile(args.path, args.variable);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.READ_FILE_FAILURE);
                 }
@@ -27143,9 +27221,13 @@ const writeFile = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateWriteFile(args.path, args.content));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateWriteFile(args.path, args.content);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.WRITE_FILE_FAILURE);
                 }
@@ -27206,9 +27288,13 @@ const declareClass = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareClass(args?.name, args?.properties, args?.methods));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.declareClass(args?.name, args?.properties, args?.methods);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.CLASS_SUCCESS);
                 }
@@ -27239,9 +27325,13 @@ const exitScope = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.exitScope());
-                });
+                let s = 
+                //  await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.exitScope();
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.EXIT_SCOPE_SUCCESS);
                 }
@@ -27301,6 +27391,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PythonCodeGenerator = void 0;
+const vscode_1 = __importDefault(__webpack_require__(1));
 const codeEnums_1 = __webpack_require__(176);
 const codeGenerator_1 = __webpack_require__(177);
 const pythonReserved_json_1 = __importDefault(__webpack_require__(178));
@@ -27372,17 +27463,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         const tabs = Math.floor(indentationLevel / this.tabSize);
         return tabs;
     }
-    // check if the cursor position is in the same level as the indentation level
-    checkCursorPosition(indentationLevel) {
-        // let currentLine = this.editor.document.lineAt(
-        //   this.editor.selection.active.line
-        // ).text;
-        let currentIndentationLevel = this.handleIndentationLevel(false);
-        if (currentIndentationLevel === indentationLevel) {
-            return true;
-        }
-        return false;
-    }
     /**
      * wrap code in a code block with '`' character
      **/
@@ -27408,18 +27488,22 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid variable name: ${name}`);
         }
-        const indentation = this.tabString.repeat(this.handleIndentationLevel(true)); // previous line
+        let code = "";
         if (type) {
             let mappedType = this.typeMappings[type.toLowerCase()];
             if (initialValue) {
-                return `${name}: ${mappedType} = ${initialValue}\n${indentation}`;
+                code = `${name}: ${mappedType} = ${initialValue}`;
             }
-            return `${name}: ${mappedType}\n${indentation}`;
+            code = `${name}: ${mappedType}`;
         }
-        if (initialValue) {
-            return `${name} = ${initialValue}\n${indentation}`;
+        else if (initialValue) {
+            code = `${name} = ${initialValue}`;
         }
-        return `${name}\n${indentation}`;
+        else {
+            code = `${name}`;
+        }
+        this.handleScope(code);
+        return code;
     }
     /**
      * Declare constants
@@ -27428,8 +27512,9 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!this.isValidConstantName(name.toUpperCase())) {
             throw new Error(`Invalid constant name: ${name}`);
         }
-        return (`${name.toUpperCase()} = ${value}\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        const code = `${name.toUpperCase()} = ${value}`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Assign variables
@@ -27440,49 +27525,9 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!Object.values(codeEnums_1.AssignmentOperators).includes(type)) {
             throw new Error(`Invalid assignment type: ${type}`);
         }
-        switch (type) {
-            case codeEnums_1.AssignmentOperators.Equals:
-                return (`${name} = ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.PlusEquals:
-                return (`${name} += ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.MinusEquals:
-                return (`${name} -= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.MultiplyEquals:
-                return (`${name} *= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.DivideEquals:
-                return (`${name} /= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.FloorDivideEquals:
-                return (`${name} //= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.ModulusEquals:
-                return (`${name} %= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.ExponentEquals:
-                return (`${name} **= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.AndEquals:
-                return (`${name} &= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.OrEquals:
-                return (`${name} |= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.XorEquals:
-                return (`${name} ^= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.LeftShiftEquals:
-                return (`${name} <<= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssignmentOperators.RightShiftEquals:
-                return (`${name} >>= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            default:
-                throw new Error(`Invalid assignment type: ${type}`);
-        }
+        let code = `${name} ${type} ${value}`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Declare function
@@ -27504,20 +27549,28 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
             : ""}`)
             .join(", ");
-        const f = `def ${name}(${params}):\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true) + 1);
+        const f = `def ${name}(${params}):`;
+        // `def ${name}(${params}):\n` +
+        // this.tabString.repeat(this.handleIndentationLevel(true) + 1);
+        this.handleScope(f);
         return f;
     }
     generateFunctionCall(name, args) {
         const params = args
             .map((p) => (p.name ? `${p.name} = ${p.value}` : `${p.value}`))
             .join(", ");
-        return (`${name}(${params}) \n` +
-            this.tabString.repeat(this.handleIndentationLevel()));
+        const code = `${name}(${params})`;
+        this.handleScope(code);
+        return code;
     }
     generateReturn(value) {
-        return (`return ${value ?? ""} ` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        // return (
+        //   `return ${value ?? ""} ` +
+        //   this.tabString.repeat(this.handleIndentationLevel(true))
+        // );
+        const code = `return ${value ?? ""}`;
+        this.handleScope(code);
+        return code;
     }
     declareClass(name, properties, methods) {
         if (!this.isValidVariableName(name)) {
@@ -27534,13 +27587,16 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         let code = "";
         // add class name, capitalize first letter and swap spaces with underScores
         let className = name.charAt(0).toUpperCase() + name.slice(1).replace(/ /g, "_");
-        let firstIndentationLevel = this.handleIndentationLevel();
-        code += `${this.tabString.repeat(firstIndentationLevel)}class ${className}: \n`;
+        // let firstIndentationLevel = this.handleIndentationLevel();
+        code = `class ${className}:`;
+        this.handleScope(code);
         // add constructor
-        code += `${this.tabString.repeat(firstIndentationLevel + 1)}${this.tabString}def __init__(self, ${properties ? properties.map((p) => p.name).join(", ") : ""}): \n`;
+        code = `def __init__(self, ${properties ? properties.map((p) => p.name).join(", ") : ""}):`;
+        this.handleScope(code);
         // add properties
         properties?.forEach((p) => {
-            code += `${this.tabString}${this.tabString}self.${p.name} = ${p.name}\n`;
+            code = `self.${p.name} = ${p.name}`;
+            this.handleScope(code);
         });
         // add methods
         methods?.forEach((m) => {
@@ -27551,35 +27607,40 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
                 : ""}`)
                 .join(", ");
-            // code += "\n";
-            code += `\n${this.tabString}def ${m.name}(self, ${params}):\n${this.tabString}`;
-            code += this.wrapInCodeBlock(m.body ?? ["pass\n"]);
+            code = `def ${m.name}(self, ${params}):`;
+            this.handleScope(code);
         });
-        return code + "\n" + this.tabString.repeat(firstIndentationLevel + 3);
+        return code;
     }
     /**
      * Import modules
      **/
     generateImportModule(library, modules) {
-        return (`from ${library} import ${modules.join(", ")}\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        let code = `from ${library} import ${modules.join(", ")}`;
+        this.handleScope(code);
+        return code;
     }
     generateImportLibrary(library) {
-        return `import ${library}\n`;
+        let code = `import ${library}`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Conditional statements
      * if, if-else
      **/
     generateIf(condition, body) {
-        return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
+        // return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
+        const ifCode = `if ${condition}:`;
+        this.handleScope(ifCode);
+        return ifCode;
     }
     generateIfElse(condition, ifBody, elseBody) {
-        const ifCode = `if ${condition}: \n${this.wrapInCodeBlock(ifBody)} `;
-        const elseCode = elseBody
-            ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} `
-            : "";
-        return `${ifCode}${elseCode} `;
+        // const ifCode = `if ${condition}:} `;
+        // const elseCode = elseBody
+        //   ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} `
+        //   : "";
+        return ``;
     }
     /**
      * Loop statements
@@ -27590,19 +27651,27 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     //     return loopCode;
     // }
     generateForLoop(type, params, body) {
+        let code = "";
         switch (type) {
             case codeEnums_1.ForLoop.Range:
-                return this.generateRangeLoop(params);
+                code = this.generateRangeLoop(params);
+                break;
             case codeEnums_1.ForLoop.Iterable:
-                return this.generateIterableLoop(params);
+                code = this.generateIterableLoop(params);
+                break;
             case codeEnums_1.ForLoop.Enumerate:
-                return this.generateEnumerateLoop(params);
+                code = this.generateEnumerateLoop(params);
+                break;
             default:
-                return `for `;
+                code = `for `;
+                break;
         }
+        this.handleScope(code);
+        return code;
     }
     generateIterableLoop(params, body) {
-        const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}: \n${this.wrapInCodeBlock(body ?? [""])} `;
+        const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}:`;
+        // this.handleScope(loopCode);
         return loopCode;
     }
     generateRangeLoop(params
@@ -27613,29 +27682,29 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         let actualStart = start ?? 0;
         let actualEnd = end ?? 0;
         let actualStep = step ?? 1;
-        let currentIndentationLevel = this.handleIndentationLevel(false);
-        forLoop += this.tabString.repeat(currentIndentationLevel);
         if (actualStart < actualEnd) {
-            forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${actualStep}): \n`;
+            forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${actualStep}):`;
         }
         else {
-            forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${-actualStep}): \n`;
+            forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${-actualStep}):`;
         }
-        return forLoop + this.tabString.repeat(currentIndentationLevel + 1);
+        // this.handleScope(forLoop);
+        return forLoop;
     }
     generateEnumerateLoop(params, body) {
         const { iterators, iterable, start } = params;
-        let currentIndentationLevel = this.handleIndentationLevel();
+        // let currentIndentationLevel = this.handleIndentationLevel();
         // this.tabString.repeat(currentIndentationLevel);
-        return (`${this.tabString.repeat(currentIndentationLevel)}for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ""}): \n` +
-            this.tabString.repeat(currentIndentationLevel + 1));
+        let code = `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ""}):`;
+        // this.handleScope(code);
+        return code;
     }
     generateWhileLoop(condition, body) {
         const conditionCode = condition
             .map((c) => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`)
             .join(" ");
-        let currentIndentationLevel = this.handleIndentationLevel();
-        const loopCode = `${this.tabString.repeat(currentIndentationLevel)}while ${conditionCode}: \n${this.tabString.repeat(currentIndentationLevel + 1)}`;
+        let loopCode = `while ${conditionCode}:`;
+        this.handleScope(loopCode);
         return loopCode;
     }
     /**
@@ -27719,22 +27788,9 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!Object.values(codeEnums_1.AssertionOperators).includes(type)) {
             throw new Error(`Invalid assertion type: ${type}`);
         }
-        switch (type) {
-            case codeEnums_1.AssertionOperators.Equal:
-                return (`assert ${variable} == ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssertionOperators.NotEqual:
-                return (`assert ${variable} != ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssertionOperators.GreaterThanOrEqual:
-                return (`assert ${variable} >= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssertionOperators.LessThanOrEqual:
-                return (`assert ${variable} <= ${value}\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            default:
-                throw new Error(`Invalid assertion type: ${type}`);
-        }
+        let code = `assert ${variable} == ${value}`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Generate Casting
@@ -27744,46 +27800,50 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!Object.keys(this.typeMappings).includes(type.toLowerCase())) {
             throw new Error(`Invalid casting type: ${type}`);
         }
-        return (`${variable} = ${this.typeMappings[type]}(${variable})\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        let code = `${variable} = ${this.typeMappings[type]}(${variable})`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Generate User Input
      **/
     generateUserInput(variable, message) {
-        return (`${variable} = input('${message ? message : ""}')\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        let code = `${variable} = input('${message ? message : ""}')`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Generate Print
      **/
     generatePrint(value, type) {
+        let code = "";
         switch (type) {
             case "string":
-                return (`print("${value}")\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
+                code = `print("${value}")`;
             case "variable":
-                return (`print(${value})\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
+                code = `print(${value})`;
             default:
-                return (`print(${value})\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
+                code = `print(${value})`;
         }
+        this.handleScope(code);
+        return code;
     }
     /**
      * Read file
      **/
     //TODO: add options to read line, read all file, read character
     generateReadFile(path, variable) {
-        return (`${variable} = open("${path}", 'r').read()\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        let code = `${variable} = open("${path}", 'r').read()`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Write file
      **/
     generateWriteFile(path, content) {
-        return (`open("${path}", 'w').write("${content}")\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        let code = `open("${path}", 'w').write("${content}")`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * White spaces
@@ -27803,7 +27863,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             default:
                 ws = " ";
         }
-        return ws.repeat(count ?? 1);
+        this.insertCode(ws.repeat(count ?? 1));
+        return "alo";
     }
     /**
      * Comments
@@ -27811,32 +27872,51 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Multi line comments
      **/
     generateLineComment(content) {
-        return (`# ${content}\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        let code = `# ${content}`;
+        this.handleScope(code);
+        return code;
     }
     generateBlockComment(content) {
-        return (`''' ${content.join("\n")} '''\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        return `''' ${content.join("\n")} '''\n`;
     }
     generateOperation(left, operator, right) {
-        return (`${left} ${operator} ${right} \n` + this.handleIndentationLevel(true));
+        let code = `${left} ${operator} ${right}`;
+        this.handleScope(code);
+        return code;
     }
-    generateConditional(conditions) {
+    async generateConditional(conditions) {
         let code = "";
-        conditions.forEach((c) => {
+        // conditions.forEach((c) => {
+        //   if (c.keyword === "if" || c.keyword === "elif") {
+        //     code = `${c.keyword} ${c.condition
+        //       ?.map(
+        //         (cond) =>
+        //           `${cond.logicalOperator ?? ""} ${cond.left} ${
+        //             cond?.operator ?? "=="
+        //           } ${cond.right}`
+        //       )
+        //       .join(" ")}:`;
+        //     this.handleScope(code);
+        //   } else {
+        //     code = `else:`;
+        //     this.handleScope(code);
+        //   }
+        // });
+        for (let c of conditions) {
             if (c.keyword === "if" || c.keyword === "elif") {
-                code += `${c.keyword} ${c.condition
+                code = `${c.keyword} ${c.condition
                     ?.map((cond) => `${cond.logicalOperator ?? ""} ${cond.left} ${cond?.operator ?? "=="} ${cond.right}`)
-                    .join(" ")}: \n`;
+                    .join(" ")}:`;
+                // this.handleScope(code);
             }
             else {
-                code += `\nelse: \n`;
-                // body
-                // if (c.body) {
-                //     code += `${this.wrapInCodeBlock(c.body)} `;
-                // }
+                code = `else:`;
             }
-        });
+            if (c.keyword === "elif" || c.keyword === "else") {
+                await this.exitScope();
+            }
+            await this.handleScope(code);
+        }
         return code;
     }
     generateArrayOperation(name, operation) {
@@ -27844,8 +27924,41 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return "";
     }
     exitScope() {
-        let indentationLevel = this.handleIndentationLevel(false);
-        return `\n${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, Math.max(indentationLevel - 1, 0))}`.repeat(2);
+        // let indentationLevel = this.handleIndentationLevel(false);
+        // return `\n${this.addWhiteSpace(
+        //   Whitespace.Tab,
+        //   Math.max(indentationLevel - 1, 0)
+        // )}`.repeat(2);
+        // outdent
+        return new Promise((resolve, reject) => {
+            vscode_1.default.commands.executeCommand("outdent").then(() => {
+                resolve();
+            }, (err) => {
+                reject(err);
+            });
+        });
+    }
+    handleScope(code) {
+        return new Promise((resolve, reject) => {
+            // vscode.commands
+            //   .executeCommand("editor.action.insertLineAfter")
+            //   .then(() => {
+            this.insertCode(code).then(() => {
+                vscode_1.default.commands.executeCommand("editor.action.insertLineAfter").then(() => {
+                    resolve();
+                }, (err) => {
+                    reject(err);
+                });
+            });
+        });
+        // });
+    }
+    insertCode(code) {
+        return this.editor.edit((editBuilder) => {
+            editBuilder.insert(this.editor.selection.active, code);
+        }
+        // { undoStopBefore: true, undoStopAfter: false }
+        );
     }
 }
 exports.PythonCodeGenerator = PythonCodeGenerator;
