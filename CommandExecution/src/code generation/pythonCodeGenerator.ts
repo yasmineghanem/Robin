@@ -441,6 +441,9 @@ export class PythonCodeGenerator extends CodeGenerator {
     let actualEnd = end ?? 0;
     let actualStep = step ?? 1;
 
+    let currentIndentationLevel = this.handleIndentationLevel();
+    forLoop += this.tabString.repeat(currentIndentationLevel);
+
     if (actualStart < actualEnd) {
       forLoop = `for ${iterators.join(
         ", "
@@ -451,7 +454,7 @@ export class PythonCodeGenerator extends CodeGenerator {
       )} in range(${actualStart}, ${actualEnd}, ${-actualStep}): \n`;
     }
 
-    return forLoop + this.tabString.repeat(this.handleIndentationLevel() + 1);
+    return forLoop + this.tabString.repeat(currentIndentationLevel + 1);
   }
 
   generateEnumerateLoop(

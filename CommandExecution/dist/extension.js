@@ -27541,7 +27541,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             code += `\n${this.tabString}def ${m.name}(self, ${params}):\n${this.tabString}`;
             code += this.wrapInCodeBlock(m.body ?? ["pass\n"]);
         });
-        return code + "\n" + this.tabString.repeat(firstIndentationLevel + 2);
+        return code + "\n" + this.tabString.repeat(firstIndentationLevel + 3);
     }
     /**
      * Import modules
@@ -27599,13 +27599,15 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         let actualStart = start ?? 0;
         let actualEnd = end ?? 0;
         let actualStep = step ?? 1;
+        let currentIndentationLevel = this.handleIndentationLevel();
+        forLoop += this.tabString.repeat(currentIndentationLevel);
         if (actualStart < actualEnd) {
             forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${actualStep}): \n`;
         }
         else {
             forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${-actualStep}): \n`;
         }
-        return forLoop + this.tabString.repeat(this.handleIndentationLevel() + 1);
+        return forLoop + this.tabString.repeat(currentIndentationLevel + 1);
     }
     generateEnumerateLoop(params, body) {
         const { iterators, iterable, start } = params;
