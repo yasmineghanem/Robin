@@ -106,7 +106,7 @@ void FaceDetector::remove_negative_val_data()
 void FaceDetector::train(double Yo, double Yl, double Bl, bool restric)
 {
     // double cur_Y = 1;
-    int l = 0;
+    int l = cascade.size();
     int *predictions = new int[max(this->train_dim.first, get<0>(this->val_dim))];
     int last = 0;
     while (cur_Y > Yo)
