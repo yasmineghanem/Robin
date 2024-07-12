@@ -87,14 +87,14 @@ export enum ForLoop {
 }
 
 export enum CastingTypes {
-    Integer = 'int',
+    Integer = 'integer',
     Float = 'float',
-    String = 'str',
-    Boolean = 'bool',
+    String = 'string',
+    Boolean = 'boolean',
     List = 'list',
     Tuple = 'tuple',
     Set = 'set',
-    Dictionary = 'dict'
+    Dictionary = 'dictionary'
 }
 
 
