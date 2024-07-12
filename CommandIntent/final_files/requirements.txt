@@ -1,0 +1,11 @@
+api==0.0.7
+docopt==0.6.2
+keras==3.4.1
+numpy==1.24.3
+pandas==2.0.1
+scikit_learn==1.2.2
+tensorflow==2.16.1
+tensorflow_intel==2.16.1
+torch==2.2.2+cu118
+TorchCRF==1.1.0
+TorchCRF==1.1.0

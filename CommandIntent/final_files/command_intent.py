@@ -22,7 +22,10 @@ class CommandIntent:
         # load the ner model
         self.ner_model = NERModel(vocab_size=self.ner_data.vocab_size, index_to_tag=self.ner_data.index_to_tag)
         state_dict = torch.load(self.ner_model_path)
-        self.ner_model.load_state_dict(state_dict)
+        self.ner_model.load_state_dict(state_dict, strict=False)
+
+        # print model keys
+        print(self.ner_model.state_dict().keys())
 
         self.post_processor = PostProcessor(self.ner_data.intent_to_tags)
 
