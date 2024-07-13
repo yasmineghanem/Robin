@@ -7,10 +7,8 @@ import tensorflow as tf
 class IntentDetection(keras.Model):
     def __init__(self, num_classes, max_seq_len, vocab_size, embedding_dim=128, lstm_units=64, dropout_rate=0.4):
         super(IntentDetection, self).__init__()
-        self.embedding = keras.layers.Embedding(
-            input_dim=vocab_size, output_dim=embedding_dim),
-        self.lstm = keras.layers.Bidirectional(
-            keras.layers.LSTM(lstm_units, dropout=0.2)),
+        self.embedding = keras.layers.Embedding(input_dim=vocab_size, output_dim=embedding_dim),
+        self.lstm = keras.layers.Bidirectional(keras.layers.LSTM(lstm_units, dropout=0.2)),
         self.dense_1 = keras.layers.Dense(lstm_units, activation='relu'),
         self.dropout = keras.layers.Dropout(dropout_rate),
         self.dense_2 = keras.layers.Dense(num_classes, activation='softmax')
