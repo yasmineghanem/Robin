@@ -1,18 +1,22 @@
+import subprocess
+import threading
+
 import customtkinter as tk
 import tkinterDnD
-import threading
+
 from speech import *
+from stoppable_thread import *
 from subprocess_thread import *
 from wake_word import *
-import threading
-from stoppable_thread import *
-
-import subprocess
 
 
 class GUI:
 
     def __init__(self,):
+
+        # read config file
+        with open('./config.json') as f:
+            self.__config = json.load(f)
 
         # Voice Recognition Model
         self.sr = None
@@ -98,7 +102,7 @@ class GUI:
         # run mouse subprocess on thread
         if self.mouse_switch_state.get() == 1:
             self.mouse_thread = SubprocessThread(
-                './MouseControlling.exe')
+                self.__config['mouse_execution_path'])
             self.mouse_thread.start()
 
         else:
