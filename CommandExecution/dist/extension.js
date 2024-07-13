@@ -24989,7 +24989,7 @@ router.get("/push", (req, res) => {
         res.end(JSON.stringify(err));
     });
 });
-// git fetch & pull 
+// git fetch & pull
 router.get("/pull", (req, res) => {
     vscode.commands.executeCommand(GIT_1.GIT_PULL, req.query).then((response) => {
         if (response.success) {
@@ -25052,6 +25052,97 @@ router.get("/stash", (req, res) => {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify(err));
     });
+});
+// {
+//     "action" : "ay haga",
+//     "message" : "nnnn"
+// }
+router.post("/", (req, res) => {
+    // depending on action
+    // call the right function
+    const body = req.body;
+    const action = body.action;
+    const message = body.message;
+    switch (action) {
+        case "push":
+            vscode.commands.executeCommand(GIT_1.GIT_PUSH, message).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git push done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            }, (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            });
+            break;
+        case "pull":
+            vscode.commands.executeCommand(GIT_1.GIT_PULL, message).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git pull done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            }, (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            });
+            break;
+        case "discard":
+            vscode.commands.executeCommand(GIT_1.GIT_DISCARD, message).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git discard done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            }, (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            });
+            break;
+        case "stage":
+            vscode.commands
+                .executeCommand(GIT_1.GIT_STAGE, message)
+                .then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git stage done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            });
+            break;
+        case "stash":
+            vscode.commands.executeCommand(GIT_1.GIT_STASH, message).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git stash done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            }, (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            });
+            break;
+        default:
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Invalid action" }));
+            break;
+    }
 });
 exports["default"] = router;
 
@@ -26063,8 +26154,8 @@ const hasRepository = (api) => {
     return true;
 };
 // push to git
-const gitPush = async () => vscode.commands.registerCommand("robin.gitPush", async (args) => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+const gitPush = async () => vscode.commands.registerCommand(GIT_1.GIT_PUSH, async (args) => {
+    const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
     if (gitExtension) {
         try {
             const api = await gitExtension.getAPI(1);
@@ -26072,7 +26163,7 @@ const gitPush = async () => vscode.commands.registerCommand("robin.gitPush", asy
             if (!hasRepository(api)) {
                 return {
                     success: false,
-                    message: GIT_1.NO_GIT_REPO
+                    message: GIT_1.NO_GIT_REPO,
                 };
             }
             const repo = api.repositories[0];
@@ -26080,44 +26171,44 @@ const gitPush = async () => vscode.commands.registerCommand("robin.gitPush", asy
             const changes = await repo.diffWithHEAD();
             // if no changes
             if (changes.length === 0) {
-                vscode.window.showInformationMessage('No changes to push.');
+                vscode.window.showInformationMessage("No changes to push.");
                 return {
                     success: true,
-                    message: 'No changes to push.'
+                    message: "No changes to push.",
                 };
             }
             // stage changes
             await repo.add([]);
             // Commit changes
-            await repo.commit(args?.message ?? 'Robin commit');
+            await repo.commit(args?.message ?? "Robin commit");
             // Push changes
             await repo.push();
-            vscode.window.showInformationMessage('Changes pushed successfully.');
+            vscode.window.showInformationMessage("Changes pushed successfully.");
             return {
                 success: true,
-                message: 'Changes pushed successfully.'
+                message: "Changes pushed successfully.",
             };
         }
         catch (err) {
-            vscode.window.showErrorMessage('Error pushing changes.');
+            vscode.window.showErrorMessage("Error pushing changes.");
             console.log("ROBIN GIT", err);
             return {
                 success: false,
-                message: 'Error pushing changes.'
+                message: "Error pushing changes.",
             };
         }
     }
     else {
-        vscode.window.showErrorMessage('Git extension not found.');
+        vscode.window.showErrorMessage("Git extension not found.");
         return {
             success: false,
-            message: 'Git extension not found.'
+            message: "Git extension not found.",
         };
     }
 });
 // pull
-const gitPull = async () => vscode.commands.registerCommand("robin.gitPull", async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+const gitPull = async () => vscode.commands.registerCommand(GIT_1.GIT_PULL, async () => {
+    const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
     if (gitExtension) {
         try {
             const api = gitExtension.getAPI(1);
@@ -26125,38 +26216,38 @@ const gitPull = async () => vscode.commands.registerCommand("robin.gitPull", asy
             if (!hasRepository(api)) {
                 return {
                     success: false,
-                    message: GIT_1.NO_GIT_REPO
+                    message: GIT_1.NO_GIT_REPO,
                 };
             }
             const repo = api.repositories[0];
             // Pull changes
             await repo.pull();
-            vscode.window.showInformationMessage('Changes pulled successfully.');
+            vscode.window.showInformationMessage("Changes pulled successfully.");
             return {
                 success: true,
-                message: 'Changes pulled successfully.'
+                message: "Changes pulled successfully.",
             };
         }
         catch (err) {
-            vscode.window.showErrorMessage('Error pulling changes.');
+            vscode.window.showErrorMessage("Error pulling changes.");
             console.log("ROBIN GIT", err);
             return {
                 success: false,
-                message: 'Error pulling changes.'
+                message: "Error pulling changes.",
             };
         }
     }
     else {
-        vscode.window.showErrorMessage('Git extension not found.');
+        vscode.window.showErrorMessage("Git extension not found.");
         return {
             success: false,
-            message: 'Git extension not found.'
+            message: "Git extension not found.",
         };
     }
 });
 //stage changes
 const gitStage = async () => vscode.commands.registerCommand(GIT_1.GIT_STAGE, async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
     if (gitExtension) {
         try {
             const api = gitExtension.getAPI(1);
@@ -26164,7 +26255,7 @@ const gitStage = async () => vscode.commands.registerCommand(GIT_1.GIT_STAGE, as
             if (!hasRepository(api)) {
                 return {
                     success: false,
-                    message: GIT_1.NO_GIT_REPO
+                    message: GIT_1.NO_GIT_REPO,
                 };
             }
             const repo = api.repositories[0];
@@ -26172,40 +26263,40 @@ const gitStage = async () => vscode.commands.registerCommand(GIT_1.GIT_STAGE, as
             const changes = await repo.diffWithHEAD();
             // if no changes
             if (changes.length === 0) {
-                vscode.window.showInformationMessage('No present changes.');
+                vscode.window.showInformationMessage("No present changes.");
                 return {
                     success: true,
-                    message: 'No present changes .'
+                    message: "No present changes .",
                 };
             }
             // stage changes
             await repo.add([]);
-            vscode.window.showInformationMessage('Changes staged successfully.');
+            vscode.window.showInformationMessage("Changes staged successfully.");
             return {
                 success: true,
-                message: 'Changes staged successfully.'
+                message: "Changes staged successfully.",
             };
         }
         catch (err) {
-            vscode.window.showErrorMessage('Error staging changes.');
+            vscode.window.showErrorMessage("Error staging changes.");
             console.log("ROBIN GIT", err);
             return {
                 success: false,
-                message: 'Error staging changes.'
+                message: "Error staging changes.",
             };
         }
     }
     else {
-        vscode.window.showErrorMessage('Git extension not found.');
+        vscode.window.showErrorMessage("Git extension not found.");
         return {
             success: false,
-            message: 'Git extension not found.'
+            message: "Git extension not found.",
         };
     }
 });
 //stash changes
 const gitStash = async () => vscode.commands.registerCommand(GIT_1.GIT_STASH, async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
     if (gitExtension) {
         try {
             const api = gitExtension.getAPI(1);
@@ -26213,40 +26304,53 @@ const gitStash = async () => vscode.commands.registerCommand(GIT_1.GIT_STASH, as
             if (!hasRepository(api)) {
                 return {
                     success: false,
-                    message: GIT_1.NO_GIT_REPO
+                    message: GIT_1.NO_GIT_REPO,
                 };
             }
             const repo = api.repositories[0];
+            // if no changes
+            //Get all changes for first repository in list
+            const changes = await repo.diffWithHEAD();
+            if (changes.length === 0) {
+                vscode.window.showInformationMessage("No present changes.");
+                return {
+                    success: true,
+                    message: "No present changes .",
+                };
+            }
             // stash changes
             // await repo.createStash();
-            await repo.clean(repo.diffWithHEAD(), { cleanAfter: true, force: true });
+            await repo.clean(repo.diffWithHEAD(), {
+                cleanAfter: true,
+                force: true,
+            });
             // await repo.stash();
-            vscode.window.showInformationMessage('Changes stashed successfully.');
+            vscode.window.showInformationMessage("Changes stashed successfully.");
             return {
                 success: true,
-                message: 'Changes stashed successfully.'
+                message: "Changes stashed successfully.",
             };
         }
         catch (err) {
-            vscode.window.showErrorMessage('Error stashing changes.');
+            vscode.window.showErrorMessage("Error stashing changes.");
             console.log("ROBIN GIT", err);
             return {
                 success: false,
-                message: 'Error stashing changes.'
+                message: "Error stashing changes.",
             };
         }
     }
     else {
-        vscode.window.showErrorMessage('Git extension not found.');
+        vscode.window.showErrorMessage("Git extension not found.");
         return {
             success: false,
-            message: 'Git extension not found.'
+            message: "Git extension not found.",
         };
     }
 });
 //discard changes
 const gitDiscard = async () => vscode.commands.registerCommand(GIT_1.GIT_DISCARD, async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
     if (gitExtension) {
         try {
             const api = gitExtension.getAPI(1);
@@ -26254,7 +26358,7 @@ const gitDiscard = async () => vscode.commands.registerCommand(GIT_1.GIT_DISCARD
             if (!hasRepository(api)) {
                 return {
                     success: false,
-                    message: GIT_1.NO_GIT_REPO
+                    message: GIT_1.NO_GIT_REPO,
                 };
             }
             const repo = api.repositories[0];
@@ -26262,47 +26366,41 @@ const gitDiscard = async () => vscode.commands.registerCommand(GIT_1.GIT_DISCARD
             const changes = await repo.diffWithHEAD();
             // if no changes
             if (changes.length === 0) {
-                vscode.window.showInformationMessage('No present changes.');
+                vscode.window.showInformationMessage("No present changes.");
                 return {
                     success: true,
-                    message: 'No present changes.'
+                    message: "No present changes.",
                 };
             }
             //checkout .
             await repo.checkout(".");
-            vscode.window.showInformationMessage('Changes discarded successfully.');
+            vscode.window.showInformationMessage("Changes discarded successfully.");
             return {
                 success: true,
-                message: 'Changes discarded successfully.'
+                message: "Changes discarded successfully.",
             };
         }
         catch (err) {
-            vscode.window.showErrorMessage('Error discarding changes.');
+            vscode.window.showErrorMessage("Error discarding changes.");
             console.log("ROBIN GIT", err);
             return {
                 success: false,
-                message: 'Error discarding changes.'
+                message: "Error discarding changes.",
             };
         }
     }
     else {
-        vscode.window.showErrorMessage('Git extension not found.');
+        vscode.window.showErrorMessage("Git extension not found.");
         return {
             success: false,
-            message: 'Git extension not found.'
+            message: "Git extension not found.",
         };
     }
 });
 // register commands
 const registerGITCommands = () => {
-    const commands = [
-        gitPull,
-        gitPush,
-        gitStage,
-        gitStash,
-        gitDiscard
-    ];
-    commands.forEach(command => command());
+    const commands = [gitPull, gitPush, gitStage, gitStash, gitDiscard];
+    commands.forEach((command) => command());
 };
 exports["default"] = registerGITCommands;
 
@@ -26338,15 +26436,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
-const code_1 = __webpack_require__(162);
 const pythonCodeGenerator_1 = __webpack_require__(175);
 const utilities_1 = __webpack_require__(163);
+const code_1 = __webpack_require__(162);
 const constants_1 = __webpack_require__(179);
 // utilities
-const getCurrentPosition = (editor) => {
-    const position = editor.selection.active;
-    return position;
-};
 const getFileExtension = (editor) => {
     return editor.document.fileName.split(".").pop();
 };
@@ -26376,6 +26470,9 @@ const declareVariable = () => {
             // check for extension
             const ext = getFileExtension(editor);
             let codeGenerator;
+            const uri = editor.document.uri;
+            const diagnostics = vscode.languages.getDiagnostics(uri);
+            console.log("aaaa", diagnostics);
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
                     codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
@@ -26386,13 +26483,7 @@ const declareVariable = () => {
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
-            // let s = await editor.edit((editBuilder) => {
-            //   editBuilder.insert(
-            //     getCurrentPosition(editor),
             let s = codeGenerator.declareVariable(args.name, args.type, args.value);
-            //   );
-            // });
-            // console.log("ay haga");
             if (!s) {
                 return handleFailure(code_1.VARIABLE_FAILURE);
             }
@@ -26417,13 +26508,7 @@ const assignVariable = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.assignVariable(args.name, args.value, args.type);
-                //   );
-                // });
+                let s = codeGenerator.assignVariable(args.name, args.value, args.type);
                 if (!s) {
                     return handleFailure(code_1.ASSIGNMENT_FAILURE);
                 }
@@ -26454,13 +26539,7 @@ const declareConstant = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.declareConstant(args.name, args.value);
-                //   );
-                // });
+                let s = codeGenerator.declareConstant(args.name, args.value);
                 if (!s) {
                     return handleFailure(code_1.VARIABLE_FAILURE);
                 }
@@ -26506,9 +26585,6 @@ const declareFunction = () => {
             }
             try {
                 let s = codeGenerator.declareFunction(args.name, args.parameters ?? [], args?.body);
-                // let s = await editor.edit((editBuilder) => {
-                //   editBuilder.insert(getCurrentPosition(editor), code);
-                // });
                 if (!s) {
                     return handleFailure(code_1.FUNCTION_FAILURE);
                 }
@@ -26576,13 +26652,7 @@ const functionCall = () => {
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
-            let s = 
-            //  await editor.edit((editBuilder) => {
-            //   editBuilder.insert(
-            //     getCurrentPosition(editor),
-            codeGenerator.generateFunctionCall(args.name, args.args);
-            //   );
-            // });
+            let s = codeGenerator.generateFunctionCall(args.name, args.args);
             if (!s) {
                 return handleFailure(code_1.FUNCTION_CALL_FAILURE);
             }
@@ -26638,13 +26708,7 @@ const forLoop = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateForLoop(args.type, args);
-                //   );
-                // });
+                let s = codeGenerator.generateForLoop(args.type, args);
                 if (!s) {
                     return handleFailure(code_1.LOOP_FAILURE);
                 }
@@ -26676,12 +26740,7 @@ const whileLoop = () => {
             }
             // try catch
             try {
-                // let s = await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
                 const s = codeGenerator.generateWhileLoop(args.condition, args?.body);
-                // );
-                // });
                 if (!s) {
                     return handleFailure(code_1.LOOP_FAILURE);
                 }
@@ -26714,13 +26773,7 @@ const operation = () => {
             }
             // try catch
             try {
-                let s = 
-                //  await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateOperation(args.left, args.operator, args.right);
-                //   );
-                // });
+                let s = codeGenerator.generateOperation(args.left, args.operator, args.right);
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -26753,13 +26806,7 @@ const tryExcept = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateTryExcept(args.tryBody, args.exception, args.exceptionInstance, args.exceptBody);
-                //   );
-                // });
+                let s = codeGenerator.generateTryExcept(args.tryBody, args.exception, args.exceptionInstance, args.exceptBody);
                 if (!s) {
                     return handleFailure(code_1.TRY_EXCEPT_FAILURE);
                 }
@@ -26792,13 +26839,7 @@ const conditional = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateConditional(args);
-                //   );
-                // });
+                let s = codeGenerator.generateConditional(args);
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -26831,13 +26872,7 @@ const importLibrary = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateImportLibrary(args.library);
-                //   );
-                // });
+                let s = codeGenerator.generateImportLibrary(args.library);
                 if (!s) {
                     return handleFailure(code_1.IMPORT_FAILURE);
                 }
@@ -26870,13 +26905,7 @@ const importModule = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateImportModule(args.library, args?.modules);
-                //   );
-                // });
+                let s = codeGenerator.generateImportModule(args.library, args?.modules);
                 if (!s) {
                     return handleFailure(code_1.IMPORT_FAILURE);
                 }
@@ -26909,13 +26938,7 @@ const assertion = () => {
             }
             // try catch
             try {
-                let s = 
-                //  await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateAssertion(args.variable, args.value, args.type);
-                //   );
-                // });
+                let s = codeGenerator.generateAssertion(args.variable, args.value, args.type);
                 if (!s) {
                     return handleFailure(code_1.ASSERTION_FAILURE);
                 }
@@ -26948,13 +26971,7 @@ const typeCasting = () => {
             }
             // try catch
             try {
-                let s = 
-                //  await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateCasting(args.variable, args.type);
-                // );
-                // });
+                let s = codeGenerator.generateCasting(args.variable, args.type);
                 if (!s) {
                     return handleFailure(code_1.CASTING_FAILURE);
                 }
@@ -26987,13 +27004,7 @@ const arrayOperations = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateOperation(args.left, args.operator, args.right);
-                //   );
-                // });
+                let s = codeGenerator.generateOperation(args.left, args.operator, args.right);
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -27026,13 +27037,7 @@ const userInput = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateUserInput(args.variable, args.message);
-                //   );
-                // });
+                let s = codeGenerator.generateUserInput(args.variable, args.message);
                 if (!s) {
                     return handleFailure(code_1.USER_INPUT_FAILURE);
                 }
@@ -27065,13 +27070,7 @@ const printConsole = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generatePrint(args.variable, args.type);
-                //   );
-                // });
+                let s = codeGenerator.generatePrint(args.variable, args.type);
                 if (!s) {
                     return handleFailure(code_1.PRINT_FAILURE);
                 }
@@ -27104,13 +27103,7 @@ const lineComment = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateLineComment(args.content);
-                //   );
-                // });
+                let s = codeGenerator.generateLineComment(args.content);
                 if (!s) {
                     return handleFailure(code_1.LINE_COMMENT_FAILURE);
                 }
@@ -27143,13 +27136,7 @@ const blockComment = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateBlockComment(args.content);
-                //   );
-                // });
+                let s = codeGenerator.generateBlockComment(args.content);
                 if (!s) {
                     return handleFailure(code_1.BLOCK_COMMENT_FAILURE);
                 }
@@ -27182,13 +27169,7 @@ const readFile = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateReadFile(args.path, args.variable);
-                //   );
-                // });
+                let s = codeGenerator.generateReadFile(args.path, args.variable);
                 if (!s) {
                     return handleFailure(code_1.READ_FILE_FAILURE);
                 }
@@ -27221,13 +27202,7 @@ const writeFile = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateWriteFile(args.path, args.content);
-                //   );
-                // });
+                let s = codeGenerator.generateWriteFile(args.path, args.content);
                 if (!s) {
                     return handleFailure(code_1.WRITE_FILE_FAILURE);
                 }
@@ -27288,13 +27263,7 @@ const declareClass = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.declareClass(args?.name, args?.properties, args?.methods);
-                //   );
-                // });
+                let s = codeGenerator.declareClass(args?.name, args?.properties, args?.methods);
                 if (!s) {
                     return handleFailure(code_1.CLASS_SUCCESS);
                 }
@@ -27325,13 +27294,7 @@ const exitScope = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = 
-                //  await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.exitScope();
-                //   );
-                // });
+                let s = codeGenerator.exitScope();
                 if (!s) {
                     return handleFailure(code_1.EXIT_SCOPE_SUCCESS);
                 }
