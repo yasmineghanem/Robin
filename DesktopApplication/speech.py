@@ -96,7 +96,10 @@ class SpeechRecognition:
                         print(r)
 
                         # process the command
-                        self.command_intent.process_command(r)
+                        try:
+                            self.command_intent.process_command(r)
+                        except Exception as e:
+                            print(f"Error in processing command: {e}")
                     except sr.UnknownValueError:
                         print("Google Speech Recognition could not understand audio")
                     except sr.RequestError as e:

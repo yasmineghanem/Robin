@@ -25,7 +25,7 @@ def wake_word_detection(args, gui):
         owwModel = Model(inference_framework=args.inference_framework)
 
     n_models = len(owwModel.models.keys())
-
+    # print('alooo')
     while True:
         global last_detection_time
 
