@@ -8,7 +8,13 @@ from api import *
 import os
 import sys
 import json
+import tensorflow as tf
+import torch
+import numpy as np
 
+np.random.seed(42)
+tf.random.set_seed(42)
+torch.manual_seed(1)
 
 # Add the DesktopApplication directory to the Python path
 desktop_application_path = os.path.abspath('.')
@@ -30,18 +36,14 @@ CommandIntent = command_intent.CommandIntent
 
 # Correctly resolve paths relative to the script's location
 intent_model_path = os.path.abspath(
-    '../CommandIntent/models/intent_detection_model.h5')
-ner_model_path = os.path.abspath('../CommandIntent/models/full_ner_model.pth')
+    '../CommandIntent/models/intent_detection_model_2.h5')
+ner_model_path = os.path.abspath(
+    '../CommandIntent/models/constrained_ner_model_2.pth')
 
 
 class SpeechRecognition:
     def __init__(self, gui):
-        # self.recognizer = sr.Recognizer()
-        # self.microphone = sr.Microphone()
         self.gui = gui
-        # self.command_intent = CommandIntent('../CommandIntent/models/intent_detection_model.keras',
-        # '../CommandIntent/models/ner_model2.pth')
-
         self.command_intent = CommandIntent(intent_model_path, ner_model_path)
         self.api = APIController()
 
@@ -92,8 +94,9 @@ class SpeechRecognition:
                     try:
                         r = self.recognizer.recognize_google(audio)
                         print(r)
-                        # return r
 
+                        # process the command
+                        self.command_intent.process_command(r)
                     except sr.UnknownValueError:
                         print("Google Speech Recognition could not understand audio")
                     except sr.RequestError as e:
