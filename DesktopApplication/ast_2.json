@@ -13,7 +13,7 @@
                         "children": [
                             {
                                 "type": "identifier",
-                                "name": "requests"
+                                "name": "sklearn"
                             }
                         ]
                     }
@@ -41,15 +41,6 @@
                 "children": [
                     {
                         "type": "from"
-                    },
-                    {
-                        "type": "dotted_name",
-                        "children": [
-                            {
-                                "type": "identifier",
-                                "name": "constants"
-                            }
-                        ]
                     },
                     {
                         "type": "import"

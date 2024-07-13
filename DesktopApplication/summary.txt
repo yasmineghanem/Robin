@@ -1,9 +1,114 @@
 Summary of the code:
 
-An expression statement: 
-	x = ['[', '1', '2', '3', '4', '5', ']']
+Imported library sklearn
 
-A for loop:
-	print(, index, element, )
+Imported library json
+
+Class Named: APIController
+	Method Named: __init__ with parameters ()
+
+	Method Named: get with parameters (endpoint, params)
+
+	Method Named: post with parameters (endpoint, data)
+
+	Method Named: create_file with parameters (fileName, extension, content)
+
+	Method Named: create_directory with parameters (name)
+
+	Method Named: copy_file with parameters (source, destination)
+
+	Method Named: copy_directory with parameters (source, destination)
+
+	Method Named: delete with parameters (source)
+
+	Method Named: rename with parameters (source, destination)
+
+	Method Named: save with parameters ()
+
+	Method Named: get_files with parameters ()
+
+	Method Named: go_to_line with parameters (line, character)
+
+	Method Named: go_to_file with parameters (path)
+
+	Method Named: focus_terminal with parameters ()
+
+	Method Named: undo with parameters ()
+
+	Method Named: new_terminal with parameters ()
+
+	Method Named: kill_terminal with parameters ()
+
+	Method Named: cut with parameters ()
+
+	Method Named: copy with parameters ()
+
+	Method Named: paste with parameters ()
+
+	Method Named: redo with parameters ()
+
+	Method Named: select with parameters (line)
+
+	Method Named: find with parameters (line)
+
+	Method Named: run_notebook with parameters ()
+
+	Method Named: run_python_file with parameters (path)
+
+	Method Named: run_notebook_cell with parameters (data)
+
+	Method Named: select_kernel with parameters (data)
+
+	Method Named: discard with parameters ()
+
+	Method Named: pull with parameters ()
+
+	Method Named: stage with parameters ()
+
+	Method Named: stash with parameters ()
+
+	Method Named: try_except with parameters (tryBody, exception, exceptionInstance, exceptBody)
+
+	Method Named: declare_constant with parameters (name, value)
+
+	Method Named: declare_variable with parameters (variable_name, variable_value, variable_type)
+
+	Method Named: write_file with parameters (path, content)
+
+	Method Named: read_file with parameters (path, variable)
+
+	Method Named: block_comment with parameters (content)
+
+	Method Named: line_comment with parameters (content)
+
+	Method Named: print_code with parameters (variable, type)
+
+	Method Named: user_input with parameters (variable, message)
+
+	Method Named: type_casting with parameters (variable, type)
+
+	Method Named: assertion with parameters (variable, type, value)
+
+	Method Named: import_library with parameters (library)
+
+	Method Named: import_module with parameters (library, modules)
+
+	Method Named: declare_class with parameters (name, properties, methods)
+
+	Method Named: conditional with parameters (keyword, conditions)
+
+	Method Named: add_whitespace with parameters (type, count)
+
+	Method Named: declare_function with parameters (name, parameters)
+
+	Method Named: function_call with parameters (names, args)
+
+	Method Named: operation with parameters (right, operator, left)
+
+	Method Named: for_loop with parameters (type, iterators, iterable)
+
+	Method Named: while_loop with parameters (condition)
+
+	Method Named: assign_variable with parameters (name, type, value)
 
 End of code

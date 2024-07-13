@@ -97,6 +97,7 @@ const handleSuccess = (message: string): any => {
 // }
 // declare variable
 const declareVariable = () => {
+  
   vscode.commands.registerCommand(DECLARE_VARIABLE, async (args) => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
@@ -104,7 +105,10 @@ const declareVariable = () => {
       const ext = getFileExtension(editor);
 
       let codeGenerator;
-
+      
+      const uri = editor.document.uri;
+      const diagnostics = vscode.languages.getDiagnostics(uri);
+      console.log("aaaa",diagnostics);
       switch (ext) {
         case EXTENSIONS.PYTHON:
           codeGenerator = new PythonCodeGenerator(editor);
@@ -117,6 +121,7 @@ const declareVariable = () => {
       }
 
       let s = codeGenerator.declareVariable(args.name, args.type, args.value);
+      
       if (!s) {
         return handleFailure(VARIABLE_FAILURE);
       }

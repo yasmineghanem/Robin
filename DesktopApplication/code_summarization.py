@@ -41,8 +41,8 @@ class ASTProcessor:
     def process_ast(self):
         import_nodes, constant_nodes, code_nodes = self.extract_import_nodes()
         summary = []
-        summary.append(import_nodes)
-        summary.append(constant_nodes)
+        summary += import_nodes
+        summary += constant_nodes
         for node in code_nodes:
             if node['type'] == "class_definition":
                 info = self.process_class_node(node, class_info={})
@@ -78,9 +78,30 @@ class ASTProcessor:
 
             if 'type' in node:
                 node_type = node['type']
+                # print(node)
+                # break
+                if 'import_statement' in node_type:
+                    lib_name = None
+                    for child in node['children']:
+                        if child['type'] == 'dotted_name':
+                            lib_name = '.'.join([c['name'] for c in child['children'] if c['type'] == 'identifier'])
+                    if lib_name:
+                        import_nodes.append({'type': 'import', 'library': lib_name})
 
-                if 'import' in node_type:
-                    import_nodes.append(node)
+                elif 'import_from_statement' in node_type:
+                    lib_name = None
+                    modules = []
+                    for child in node['children']:
+                        if child['type'] == 'dotted_name':
+                            lib_name = '.'.join([c['name'] for c in child['children'] if c['type'] == 'identifier'])
+                        if child['type'] == 'wildcard_import':
+                            modules.append('*')
+                        if child['type'] == 'dotted_name' and 'children' in child:
+                            modules.extend([c['name'] for c in child['children'] if c['type'] == 'identifier'])
+                    if lib_name:
+                        import_nodes.append({'type': 'import_from', 'library': lib_name, 'modules': modules})
+
+
 
                 elif "expression_statement" in node_type:
                     # check for constants
@@ -390,8 +411,14 @@ class ASTProcessor:
         summary_text_to_speech = "Summary of the code:\n\n"
         for item in ast_summary:
             if item['type'] == 'import':
-                summary_text_to_speech+= f"Imported: {item['library']}\n\n"
-
+                summary_text_to_speech+= f"Imported library {item['library']}\n\n"
+            
+            elif item['type'] == 'import_from':
+                if item['modules'] == '*':
+                    summary_text_to_speech+= f"Imported library {item['library']} with all modules\n\n"
+                else:
+                    summary_text_to_speech+= f"Imported library {item['library']} with modules {', '.join(item['modules'])}\n\n"
+            
             elif item['type'] == 'class_definition':
                 summary_text_to_speech += f"Class Named: {item['class_name']}\n"
 
@@ -447,15 +474,16 @@ class ASTProcessor:
 
 
 # Load the AST from the JSON file
-with open('./ast_3.json', 'r') as file:
-
+with open('./ast_2.json', 'r') as file:
     ast = json.load(file)
 
 ast_processor = ASTProcessor(ast['ast'])
 summary = ast_processor.process_ast()
 final = ast_processor.get_summary(summary)
 # write into file
-# with open('summary.json', 'w') as file:
-    # json.dump(summary, file, indent=4)
+with open('summary.json', 'w') as file:
+    json.dump(summary, file, indent=4)
+with open('summary.txt', 'w') as file:
+    file.write(final)
 # print(summary)
 
