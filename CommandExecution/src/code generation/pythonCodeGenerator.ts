@@ -78,7 +78,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     let code = "";
     if (type) {
       let mappedType: string =
-        this.typeMappings[type.toLowerCase() as keyof typeof this.typeMappings];
+        this.typeMappings[type as keyof typeof this.typeMappings];
 
       if (initialValue) {
         code = `${name}: ${mappedType} = ${initialValue}`;
@@ -113,7 +113,7 @@ export class PythonCodeGenerator extends CodeGenerator {
   assignVariable(name: string, value: any, type: string): string {
     //Check before if RHS is same type as LHS
     ///////// we need function to check the type of the variable /////////
-    if (!Object.values(this.operatorMappings).includes(type)) {
+    if (!Object.keys(this.operatorMappings).includes(type)) {
       throw new Error(`Invalid assignment type: ${type}`);
     }
 
@@ -181,7 +181,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     return code;
   }
 
-  declareClass(
+  async declareClass(
     name: string,
     properties?: { name: string; type?: string }[],
     methods?: {
@@ -189,7 +189,7 @@ export class PythonCodeGenerator extends CodeGenerator {
       parameters: { name: string; value?: any }[];
       body?: string[];
     }[]
-  ): string {
+  ): Promise<string> {
     if (!this.isValidVariableName(name)) {
       throw new Error(`Invalid class name: ${name} `);
     }
@@ -212,22 +212,22 @@ export class PythonCodeGenerator extends CodeGenerator {
     // let firstIndentationLevel = this.handleIndentationLevel();
 
     code = `class ${className}:`;
-    this.handleScope(code);
+    await this.handleScope(code);
 
     // add constructor
     code = `def __init__(self, ${
       properties ? properties.map((p) => p.name).join(", ") : ""
     }):`;
-    this.handleScope(code);
+    await this.handleScope(code);
 
     // add properties
-    properties?.forEach((p) => {
+    properties?.forEach(async (p) => {
       code = `self.${p.name} = ${p.name}`;
-      this.handleScope(code);
+      await this.handleScope(code);
     });
 
     // add methods
-    methods?.forEach((m) => {
+    methods?.forEach(async (m) => {
       // sort the parameters so that the one's without value come first
       m.parameters.sort((a, b) => (a.value === undefined ? -1 : 1));
       const params = m.parameters
@@ -242,7 +242,7 @@ export class PythonCodeGenerator extends CodeGenerator {
         .join(", ");
 
       code = `def ${m.name}(self, ${params}):`;
-      this.handleScope(code);
+      await this.handleScope(code);
     });
 
     return code;
@@ -365,11 +365,9 @@ export class PythonCodeGenerator extends CodeGenerator {
         (c) =>
           `${
             c.logicalOperator
-              ? `${this.operatorMappings[c.logicalOperator.toLowerCase()]} `
+              ? `${this.operatorMappings[c.logicalOperator] ?? "=="} `
               : ""
-          } ${c.left} ${this.operatorMappings[c.operator.toLowerCase()]} ${
-            c.right
-          }`
+          } ${c.left} ${this.operatorMappings[c.operator]?? "=="} ${c.right}`
       )
       .join(" ");
 
@@ -395,12 +393,10 @@ export class PythonCodeGenerator extends CodeGenerator {
   }
 
   generateAssertion(variable: string, value: any, type: string): string {
-    if (!Object.values(this.operatorMappings).includes(type)) {
+    if (!Object.keys(this.operatorMappings).includes(type)) {
       throw new Error(`Invalid assertion type: ${type}`);
     }
-    let code = `assert ${variable} ${
-      this.operatorMappings[type.toLowerCase()]
-    } ${value}`;
+    let code = `assert ${variable} ${this.operatorMappings[type]} ${value}`;
     this.handleScope(code);
     return code;
   }
@@ -410,16 +406,10 @@ export class PythonCodeGenerator extends CodeGenerator {
    **/
   generateCasting(variable: any, type: string): string {
     // this.typemappings
-    if (
-      !Object.keys(this.operatorMappings).includes(
-        type.toLowerCase() as CastingTypes
-      )
-    ) {
+    if (!Object.keys(this.operatorMappings).includes(type as CastingTypes)) {
       throw new Error(`Invalid casting type: ${type}`);
     }
-    let code = `${variable} = ${
-      this.operatorMappings[type.toLowerCase()]
-    }(${variable})`;
+    let code = `${variable} = ${this.operatorMappings[type]}(${variable})`;
     this.handleScope(code);
     return code;
   }
@@ -511,9 +501,7 @@ export class PythonCodeGenerator extends CodeGenerator {
   }
 
   generateOperation(left: string, operator: string, right: string): string {
-    let code = `${left} ${
-      this.operatorMappings[operator.toLowerCase()]
-    } ${right}`;
+    let code = `${left} ${this.operatorMappings[operator] ?? "=="} ${right}`;
     this.handleScope(code);
     return code;
   }
@@ -534,11 +522,11 @@ export class PythonCodeGenerator extends CodeGenerator {
             (cond) =>
               `${
                 cond.logicalOperator
-                  ? `${
-                      this.operatorMappings[cond.logicalOperator.toLowerCase()]
-                    } `
-                  : "=="
-              } ${cond.right}`
+                  ? `${this.operatorMappings[cond.logicalOperator] ?? "=="} `
+                  : ""
+              } ${cond.left} ${this.operatorMappings[cond.operator] ?? "=="} ${
+                cond.right
+              }`
           )
           .join(" ")}:`;
       } else {
