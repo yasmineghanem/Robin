@@ -39,6 +39,9 @@ class SpeechRecognition:
         # self.recognizer = sr.Recognizer()
         # self.microphone = sr.Microphone()
         self.gui = gui
+        # self.command_intent = CommandIntent('../CommandIntent/models/intent_detection_model.keras',
+        # '../CommandIntent/models/ner_model2.pth')
+
         self.command_intent = CommandIntent(intent_model_path, ner_model_path)
         self.api = APIController()
 

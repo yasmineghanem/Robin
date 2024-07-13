@@ -1,20 +1,15 @@
+import vscode from "vscode";
 import {
-  ArithmeticOperators,
   AssertionOperators,
   AssignmentOperators,
-  BitwiseOperators,
   CastingTypes,
-  ComparisonOperators,
   ForLoop,
-  IdentityOperators,
   LogicalOperators,
-  MembershipOperators,
   Operator,
   Whitespace,
 } from "../constants/enums/codeEnums";
-import vscode from "vscode";
 import { CodeGenerator } from "./codeGenerator";
-import pythonReservedKeywords from "./language specifics/pythonReserved.json";
+import pythonSpecifics from "./language specifics/pythonReserved.json";
 
 interface Condition {
   logicalOperator?: LogicalOperators;
@@ -28,13 +23,15 @@ export class PythonCodeGenerator extends CodeGenerator {
    **/
   private tabString: string = "    ";
   private editor: vscode.TextEditor;
+  protected typeMappings: { [key: string]: string };
   protected reservedKeywords: Array<string>;
   protected tabSize: number;
 
   // constructor
   constructor(editor: vscode.TextEditor) {
     super();
-    this.reservedKeywords = pythonReservedKeywords.reservedKeywords;
+    this.reservedKeywords = pythonSpecifics.reservedKeywords;
+    this.typeMappings = pythonSpecifics.typeMappings;
     // TODO read tab size from .env
     this.tabSize = 4;
     this.editor = editor;
@@ -45,6 +42,9 @@ export class PythonCodeGenerator extends CodeGenerator {
    * Check if the variable name is valid and not a reserved keyword
    **/
   private isValidVariableName(name: string): boolean {
+    // swap spaces with underscores
+    name = name.replace(/ /g, "_");
+
     const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
     if (!pattern.test(name)) {
       return false;
@@ -53,6 +53,8 @@ export class PythonCodeGenerator extends CodeGenerator {
   }
 
   private isValidConstantName(name: string): boolean {
+    // swap spaces with underscores
+    name = name.replace(/ /g, "_");
     const pattern = /^[A-Z_][A-Z0-9_]*$/;
     if (!pattern.test(name)) {
       return false;
@@ -60,15 +62,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     return !this.reservedKeywords.includes(name);
   }
 
-  private isValidFunctionName(name: string): boolean {
-    return this.isValidVariableName(name);
-  }
-
-  private isValidClassName(name: string): boolean {
-    return this.isValidVariableName(name);
-  }
-
-  private handleIndentationLevel(previous: boolean = false): number {
+  private handleIndentationLevel(previous: boolean = true): number {
     let currentLine;
     if (previous) {
       currentLine = this.editor.document.lineAt(
@@ -128,23 +122,24 @@ export class PythonCodeGenerator extends CodeGenerator {
     if (!this.isValidVariableName(name)) {
       throw new Error(`Invalid variable name: ${name}`);
     }
-
-    const indentation = this.tabString.repeat(
-      this.handleIndentationLevel(true)
-    ); // previous line
+    let code = "";
     if (type) {
+      let mappedType: string =
+        this.typeMappings[type.toLowerCase() as keyof typeof this.typeMappings];
+
       if (initialValue) {
-        return `${name}: ${type} = ${initialValue}\n${indentation}`;
+        code = `${name}: ${mappedType} = ${initialValue}`;
       }
 
-      return `${name}: ${type}\n${indentation}`;
+      code = `${name}: ${mappedType}`;
+    } else if (initialValue) {
+      code = `${name} = ${initialValue}`;
+    } else {
+      code = `${name}`;
     }
 
-    if (initialValue) {
-      return `${name} = ${initialValue}\n${indentation}`;
-    }
-
-    return `${name}\n${indentation}`;
+    this.handleScope(code);
+    return code;
   }
 
   /**
@@ -154,9 +149,9 @@ export class PythonCodeGenerator extends CodeGenerator {
     if (!this.isValidConstantName(name.toUpperCase())) {
       throw new Error(`Invalid constant name: ${name}`);
     }
-    return (
-      `${name.toUpperCase()} = ${value}\n` + this.handleIndentationLevel(true)
-    );
+    const code = `${name.toUpperCase()} = ${value}`;
+    this.handleScope(code);
+    return code;
   }
 
   /**
@@ -170,36 +165,10 @@ export class PythonCodeGenerator extends CodeGenerator {
     ) {
       throw new Error(`Invalid assignment type: ${type}`);
     }
-    switch (type) {
-      case AssignmentOperators.Equals:
-        return `${name} = ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.PlusEquals:
-        return `${name} += ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.MinusEquals:
-        return `${name} -= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.MultiplyEquals:
-        return `${name} *= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.DivideEquals:
-        return `${name} /= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.FloorDivideEquals:
-        return `${name} //= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.ModulusEquals:
-        return `${name} %= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.ExponentEquals:
-        return `${name} **= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.AndEquals:
-        return `${name} &= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.OrEquals:
-        return `${name} |= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.XorEquals:
-        return `${name} ^= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.LeftShiftEquals:
-        return `${name} <<= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      case AssignmentOperators.RightShiftEquals:
-        return `${name} >>= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-      default:
-        throw new Error(`Invalid assignment type: ${type}`);
-    }
+
+    let code = `${name} ${type} ${value}`;
+    this.handleScope(code);
+    return code;
   }
 
   /**
@@ -213,7 +182,7 @@ export class PythonCodeGenerator extends CodeGenerator {
     body?: string[],
     returnType?: string
   ): string {
-    if (!this.isValidFunctionName(name)) {
+    if (!this.isValidVariableName(name)) {
       throw new Error(`Invalid function name: ${name}`);
     }
 
@@ -235,9 +204,11 @@ export class PythonCodeGenerator extends CodeGenerator {
           }`
       )
       .join(", ");
-    const f =
-      `def ${name}(${params}):\n` +
-      this.tabString.repeat(this.handleIndentationLevel(true) + 1);
+    const f = `def ${name}(${params}):`;
+    // `def ${name}(${params}):\n` +
+    // this.tabString.repeat(this.handleIndentationLevel(true) + 1);
+
+    this.handleScope(f);
 
     return f;
   }
@@ -249,58 +220,70 @@ export class PythonCodeGenerator extends CodeGenerator {
     const params = args
       .map((p) => (p.name ? `${p.name} = ${p.value}` : `${p.value}`))
       .join(", ");
-    return (
-      `${name}(${params}) \n` +
-      this.tabString.repeat(this.handleIndentationLevel())
-    );
+    const code = `${name}(${params})`;
+
+    this.handleScope(code);
+    return code;
   }
 
   generateReturn(value?: string): string {
-    return (
-      `return ${value ?? ""} ` +
-      this.tabString.repeat(this.handleIndentationLevel(true))
-    );
+    // return (
+    //   `return ${value ?? ""} ` +
+    //   this.tabString.repeat(this.handleIndentationLevel(true))
+    // );
+
+    const code = `return ${value ?? ""}`;
+    this.handleScope(code);
+    return code;
   }
 
   declareClass(
     name: string,
-    properties: { name: string; type?: string }[],
-    methods: {
+    properties?: { name: string; type?: string }[],
+    methods?: {
       name: string;
       parameters: { name: string; value?: any }[];
       body?: string[];
     }[]
   ): string {
-    if (!this.isValidClassName(name)) {
+    if (!this.isValidVariableName(name)) {
       throw new Error(`Invalid class name: ${name} `);
     }
 
     // check if valid properties names
-    if (properties.some((p) => !this.isValidVariableName(p.name))) {
+    if (properties?.some((p) => !this.isValidVariableName(p.name))) {
       throw new Error(`Invalid property name`);
     }
 
     // check if valid method names
-    if (methods.some((m) => !this.isValidFunctionName(m.name))) {
+    if (methods?.some((m) => !this.isValidVariableName(m.name))) {
       throw new Error(`Invalid method name`);
     }
 
     let code = "";
-    // add class name, capitalize first letter
-    code += `class ${name.charAt(0).toUpperCase() + name.slice(1)}: \n`;
+    // add class name, capitalize first letter and swap spaces with underScores
+
+    let className: string =
+      name.charAt(0).toUpperCase() + name.slice(1).replace(/ /g, "_");
+    // let firstIndentationLevel = this.handleIndentationLevel();
+
+    code = `class ${className}:`;
+    this.handleScope(code);
 
     // add constructor
-    code += `${this.tabString}def __init__(self, ${properties
-      .map((p) => p.name)
-      .join(", ")}): \n`;
+    code = `def __init__(self, ${
+      properties ? properties.map((p) => p.name).join(", ") : ""
+    }):`;
+    this.handleScope(code);
 
     // add properties
-    properties.forEach((p) => {
-      code += `${this.tabString}${this.tabString}self.${p.name} = ${p.name}\n`;
+    properties?.forEach((p) => {
+      code = `self.${p.name} = ${p.name}`;
+      this.handleScope(code);
     });
 
     // add methods
-    methods.forEach((m) => {
+    methods?.forEach((m) => {
       // sort the parameters so that the one's without value come first
       m.parameters.sort((a, b) => (a.value === undefined ? -1 : 1));
       const params = m.parameters
@@ -313,9 +296,9 @@ export class PythonCodeGenerator extends CodeGenerator {
             }`
         )
         .join(", ");
-      // code += "\n";
-      code += `\n${this.tabString}def ${m.name}(self, ${params}):\n${this.tabString}`;
-      code += this.wrapInCodeBlock(m.body ?? ["pass\n"]);
+
+      code = `def ${m.name}(self, ${params}):`;
+      this.handleScope(code);
     });
 
     return code;
@@ -325,11 +308,17 @@ export class PythonCodeGenerator extends CodeGenerator {
    * Import modules
    **/
   generateImportModule(library: string, modules: string[]): string {
-    return `from ${library} import ${modules.join(", ")}\n`;
+    let code = `from ${library} import ${modules.join(", ")}`;
+    this.handleScope(code);
+
+    return code;
   }
 
   generateImportLibrary(library: string): string {
-    return `import ${library}\n`;
+    let code = `import ${library}`;
+    this.handleScope(code);
+
+    return code;
   }
 
   /**
@@ -337,18 +326,22 @@ export class PythonCodeGenerator extends CodeGenerator {
    * if, if-else
    **/
   generateIf(condition: string, body: string[]): string {
-    return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
+    // return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
+    const ifCode = `if ${condition}:`;
+    this.handleScope(ifCode);
+
+    return ifCode;
   }
   generateIfElse(
     condition: string,
     ifBody: string[],
     elseBody?: string[]
   ): string {
-    const ifCode = `if ${condition}: \n${this.wrapInCodeBlock(ifBody)} `;
-    const elseCode = elseBody
-      ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} `
-      : "";
-    return `${ifCode}${elseCode} `;
+    // const ifCode = `if ${condition}:} `;
+    // const elseCode = elseBody
+    //   ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} `
+    //   : "";
+    return ``;
   }
 
   /**
@@ -360,16 +353,24 @@ export class PythonCodeGenerator extends CodeGenerator {
   //     return loopCode;
   // }
   generateForLoop(type: ForLoop, params: any, body?: string[]): string {
+    let code = "";
     switch (type) {
       case ForLoop.Range:
-        return this.generateRangeLoop(params);
+        code = this.generateRangeLoop(params);
+        break;
       case ForLoop.Iterable:
-        return this.generateIterableLoop(params);
+        code = this.generateIterableLoop(params);
+        break;
       case ForLoop.Enumerate:
-        return this.generateEnumerateLoop(params);
+        code = this.generateEnumerateLoop(params);
+        break;
       default:
-        return `for `;
+        code = `for `;
+        break;
     }
+
+    this.handleScope(code);
+    return code;
   }
 
   generateIterableLoop(
@@ -378,7 +379,9 @@ export class PythonCodeGenerator extends CodeGenerator {
   ): string {
     const loopCode = `for ${params.iterators.join(", ")} in ${
       params.iterable
-    }: \n${this.wrapInCodeBlock(body ?? [""])} `;
+    }:`;
+    // this.handleScope(loopCode);
+
     return loopCode;
   }
 
@@ -396,14 +399,15 @@ export class PythonCodeGenerator extends CodeGenerator {
     if (actualStart < actualEnd) {
       forLoop = `for ${iterators.join(
         ", "
-      )} in range(${actualStart}, ${actualEnd}, ${actualStep}): \n`;
+      )} in range(${actualStart}, ${actualEnd}, ${actualStep}):`;
     } else {
       forLoop = `for ${iterators.join(
         ", "
-      )} in range(${actualStart}, ${actualEnd}, ${-actualStep}): \n`;
+      )} in range(${actualStart}, ${actualEnd}, ${-actualStep}):`;
     }
 
-    return forLoop + this.tabString.repeat(this.handleIndentationLevel() + 1);
+    // this.handleScope(forLoop);
+    return forLoop;
   }
 
   generateEnumerateLoop(
@@ -411,11 +415,15 @@ export class PythonCodeGenerator extends CodeGenerator {
     body?: string[]
   ): string {
     const { iterators, iterable, start } = params;
-    return (
-      `for ${iterators.join(", ")} in enumerate(${iterable}${
-        start ? ` ,${start}` : ""
-      }): \n` + this.tabString.repeat(this.handleIndentationLevel(true) + 1)
-    );
+    // let currentIndentationLevel = this.handleIndentationLevel();
+    // this.tabString.repeat(currentIndentationLevel);
+
+    let code = `for ${iterators.join(", ")} in enumerate(${iterable}${
+      start ? ` ,${start}` : ""
+    }):`;
+    // this.handleScope(code);
+
+    return code;
   }
 
   generateWhileLoop(condition: Condition[], body?: string[]): string {
@@ -424,9 +432,9 @@ export class PythonCodeGenerator extends CodeGenerator {
         (c) => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`
       )
       .join(" ");
-    const loopCode = `while ${conditionCode}: \n${this.wrapInCodeBlock(
-      body ?? [""]
-    )} `;
+
+    let loopCode = `while ${conditionCode}:`;
+    this.handleScope(loopCode);
     return loopCode;
   }
 
@@ -527,100 +535,55 @@ export class PythonCodeGenerator extends CodeGenerator {
     ) {
       throw new Error(`Invalid assertion type: ${type}`);
     }
-    switch (type) {
-      case AssertionOperators.Equal:
-        return (
-          `assert ${variable} == ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case AssertionOperators.NotEqual:
-        return (
-          `assert ${variable} != ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case AssertionOperators.GreaterThanOrEqual:
-        return (
-          `assert ${variable} >= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case AssertionOperators.LessThanOrEqual:
-        return (
-          `assert ${variable} <= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      default:
-        throw new Error(`Invalid assertion type: ${type}`);
-    }
+    let code = `assert ${variable} == ${value}`;
+    this.handleScope(code);
+    return code;
   }
 
   /**
    * Generate Casting
    **/
   generateCasting(variable: any, type: string): string {
-    if (!Object.values(CastingTypes).includes(type as CastingTypes)) {
+    // this.typemappings
+    if (
+      !Object.keys(this.typeMappings).includes(
+        type.toLowerCase() as CastingTypes
+      )
+    ) {
       throw new Error(`Invalid casting type: ${type}`);
     }
-    switch (type) {
-      case CastingTypes.Integer:
-        return (
-          `${variable} = int(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.Float:
-        return (
-          `${variable} = float(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.String:
-        return (
-          `${variable} = str(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.Boolean:
-        return (
-          `${variable} = bool(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.List:
-        return (
-          `${variable} = list(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.Tuple:
-        return (
-          `${variable} = tuple(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.Set:
-        return (
-          `${variable} = set(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      case CastingTypes.Dictionary:
-        return (
-          `${variable} = dict(${variable})\n` +
-          this.tabString.repeat(this.handleIndentationLevel(true))
-        );
-      default:
-        throw new Error(`Invalid casting type: ${type}`);
-    }
+    let code = `${variable} = ${this.typeMappings[type]}(${variable})`;
+    this.handleScope(code);
+    return code;
   }
 
   /**
    * Generate User Input
    **/
   generateUserInput(variable: string, message?: string | undefined): string {
-    return (
-      `${variable} = input('${message ? message : ""}')\n` +
-      this.tabString.repeat(this.handleIndentationLevel(true))
-    );
+    let code = `${variable} = input('${message ? message : ""}')`;
+    this.handleScope(code);
+    return code;
   }
 
   /**
    * Generate Print
    **/
   generatePrint(value: any, type?: string): string {
+    let code = "";
     switch (type) {
       case "string":
-        return `print("${value}")\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+        code = `print("${value}")`;
+
       case "variable":
-        return `print(${value})\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+        code = `print(${value})`;
+
       default:
-        return `print(${value})\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+        code = `print(${value})`;
     }
+
+    this.handleScope(code);
+    return code;
   }
 
   /**
@@ -628,20 +591,18 @@ export class PythonCodeGenerator extends CodeGenerator {
    **/
   //TODO: add options to read line, read all file, read character
   generateReadFile(path: string, variable: any): string {
-    return (
-      `${variable} = open("${path}", 'r').read()\n` +
-      this.tabString.repeat(this.handleIndentationLevel(true))
-    );
+    let code = `${variable} = open("${path}", 'r').read()`;
+    this.handleScope(code);
+    return code;
   }
 
   /**
    * Write file
    **/
   generateWriteFile(path: string, content: any): string {
-    return (
-      `open("${path}", 'w').write("${content}")\n` +
-      this.tabString.repeat(this.handleIndentationLevel(true))
-    );
+    let code = `open("${path}", 'w').write("${content}")`;
+    this.handleScope(code);
+    return code;
   }
 
   /**
@@ -662,7 +623,9 @@ export class PythonCodeGenerator extends CodeGenerator {
       default:
         ws = " ";
     }
-    return ws.repeat(count ?? 1);
+    this.insertCode(ws.repeat(count ?? 1));
+
+    return "alo";
   }
 
   /**
@@ -671,47 +634,66 @@ export class PythonCodeGenerator extends CodeGenerator {
    * Multi line comments
    **/
   generateLineComment(content: string): string {
-    return `# ${content}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+    let code = `# ${content}`;
+    this.handleScope(code);
+    return code;
   }
 
   generateBlockComment(content: string[]): string {
-    return (
-      `''' ${content.join("\n")} '''\n` +this.tabString.repeat(this.handleIndentationLevel(true))
-    );
+    return `''' ${content.join("\n")} '''\n`;
   }
 
   generateOperation(left: string, operator: Operator, right: string): string {
-    return (
-      `${left} ${operator} ${right} \n` + this.handleIndentationLevel(true)
-    );
+    let code = `${left} ${operator} ${right}`;
+    this.handleScope(code);
+    return code;
   }
 
-  generateConditional(
+  async generateConditional(
     conditions: {
       keyword: "if" | "else" | "elif";
       condition?: Condition[];
       body?: string[];
     }[]
-  ): string {
+  ): Promise<string> {
     let code = "";
-    conditions.forEach((c) => {
+    // conditions.forEach((c) => {
+    //   if (c.keyword === "if" || c.keyword === "elif") {
+    //     code = `${c.keyword} ${c.condition
+    //       ?.map(
+    //         (cond) =>
+    //           `${cond.logicalOperator ?? ""} ${cond.left} ${
+    //             cond?.operator ?? "=="
+    //           } ${cond.right}`
+    //       )
+    //       .join(" ")}:`;
+    //     this.handleScope(code);
+    //   } else {
+    //     code = `else:`;
+    //     this.handleScope(code);
+    //   }
+    // });
+
+    for (let c of conditions) {
       if (c.keyword === "if" || c.keyword === "elif") {
-        code += `${c.keyword} ${c.condition
+        code = `${c.keyword} ${c.condition
           ?.map(
             (cond) =>
-              `${cond.logicalOperator ?? ""} ${cond.left} ${cond.operator} ${
-                cond.right
-              }`
+              `${cond.logicalOperator ?? ""} ${cond.left} ${
+                cond?.operator ?? "=="
+              } ${cond.right}`
           )
-          .join(" ")}: \n`;
+          .join(" ")}:`;
+        // this.handleScope(code);
       } else {
-        code += `\nelse: \n`;
-        // body
-        // if (c.body) {
-        //     code += `${this.wrapInCodeBlock(c.body)} `;
-        // }
+        code = `else:`;
       }
-    });
+      if (c.keyword === "elif" || c.keyword === "else") {
+        await this.exitScope();
+      }
+      await this.handleScope(code);
+    }
+
     return code;
   }
 
@@ -720,11 +702,51 @@ export class PythonCodeGenerator extends CodeGenerator {
     return "";
   }
 
-  exitScope(): string {
-    let indentationLevel = this.handleIndentationLevel();
-    return `\n${this.addWhiteSpace(
-      Whitespace.Tab,
-      Math.max(indentationLevel - 1, 0)
-    )}`.repeat(2);
+  exitScope() {
+    // let indentationLevel = this.handleIndentationLevel(false);
+    // return `\n${this.addWhiteSpace(
+    //   Whitespace.Tab,
+    //   Math.max(indentationLevel - 1, 0)
+    // )}`.repeat(2);
+
+    // outdent
+    return new Promise<void>((resolve, reject) => {
+      vscode.commands.executeCommand("outdent").then(
+        () => {
+          resolve();
+        },
+        (err) => {
+          reject(err);
+        }
+      );
+    });
+  }
+
+  handleScope(code: string) {
+    return new Promise<void>((resolve, reject) => {
+      // vscode.commands
+      //   .executeCommand("editor.action.insertLineAfter")
+      //   .then(() => {
+      this.insertCode(code).then(() => {
+        vscode.commands.executeCommand("editor.action.insertLineAfter").then(
+          () => {
+            resolve();
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+      });
+    });
+    // });
+  }
+
+  insertCode(code: string) {
+    return this.editor.edit(
+      (editBuilder) => {
+        editBuilder.insert(this.editor.selection.active, code);
+      }
+      // { undoStopBefore: true, undoStopAfter: false }
+    );
   }
 }

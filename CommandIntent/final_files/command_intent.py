@@ -20,12 +20,12 @@ class CommandIntent:
         self.intent_model = load_model(self.intent_model_path)
         
         # load the ner model
-        self.ner_model = NERModel(vocab_size=self.ner_data.vocab_size, index_to_tag=self.ner_data.index_to_tag)
+        self.ner_model = NERModel(vocab_size=self.ner_data.vocab_size, word_embedding_dim=100, intent_embedding_dim=100, index_to_tag=self.ner_data.index_to_tag)
         state_dict = torch.load(self.ner_model_path)
         self.ner_model.load_state_dict(state_dict, strict=False)
 
         # print model keys
-        print(self.ner_model.state_dict().keys())
+        # print(self.ner_model.state_dict().keys())
 
         self.post_processor = PostProcessor(self.ner_data.intent_to_tags)
 
@@ -89,6 +89,7 @@ class CommandIntent:
         # get the intent of the command
         intent = self.__get_intent(command)
         print(intent)
+        # intent = 'ide operation'
         # get the entities of the command
         entities = self.__get_entities(command, intent)
         print(entities)
