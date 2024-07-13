@@ -28,6 +28,8 @@ private:
     float smallest_box = 1.0 / 1000;
     int min_confidence = 3;
 
+    double cur_Y = 1;
+
 public:
     FaceDetector(int **&X_train, int *&y_train, int ***&X_val, int *&y_val, pair<int, int> train_dim, tuple<int, int, int> val_dim, string save_folder);
     FaceDetector();
@@ -35,7 +37,7 @@ public:
     // yo : desired overall false positive rate
     // yl : desired targeted layer false positive
     // Bl : desired targeted layer false negative , 1-Bl detection rate
-    void train(double Yo, double Yl, double Bl);
+    void train(double Yo, double Yl, double Bl, bool restric = false);
     matrices evaluate_single_layer(AdaBoost *fl, int *&predictions, double sl);
     void remove_negative_train_data();
     void remove_negative_val_data();
@@ -44,7 +46,7 @@ public:
     void load(const string folder);
     // M is the number of rows "height"
     // N is the number of columns "width"
-    vector<window *> process(int **&img, int ***&color_img, int M, int N, double c = 1.5);
+    vector<window *> process(int **&img, int ***&color_img, int M, int N, double c = 1.1);
     // test on the variance of the window, test on the prediction of the model on the window
     bool window_test1(window *win, int **II, long long **IIsq);
 
@@ -52,6 +54,7 @@ public:
     // the min number of connected windws in the connected componnet to pretect there is face in this commponent
     void window_test2(vector<window *> &windows, int **&img, int M, int N);
     void window_test3(vector<window *> &windows, int **&img, int M, int N);
+    void rebuild();
 };
 
 #endif

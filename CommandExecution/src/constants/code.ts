@@ -5,7 +5,7 @@ export const DECLARE_VARIABLE = "robin.declareVariable";
 export const DECLARE_FUNCTION = "robin.declareFunction";
 export const GET_AST = "robin.getAST";
 export const FUNCTION_CALL = "robin.functionCall";
-export const DECLARE_CONSTANT = "robin.declareConstant"
+export const DECLARE_CONSTANT = "robin.declareConstant";
 export const ADD_WHITESPACE = "robin.addWhitespace";
 export const ASSIGN_VARIABLE = "robin.assignVariable";
 export const IMPORT_LIBRARY = "robin.importLibrary";
@@ -127,3 +127,8 @@ export const OPERATION_FAILURE = "Failed to create operation!";
 // exit scope
 export const EXIT_SCOPE_SUCCESS = "Scope exited successfully!";
 export const EXIT_SCOPE_FAILURE = "Failed to exit scope!";
+
+
+// class
+export const CLASS_SUCCESS = "Class created successfully!";
+export const CLASS_FAILURE = "Failed to create class!";

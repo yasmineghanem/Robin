@@ -1,48 +1,76 @@
-from keras.models import Sequential
-from keras.models import load_model
-from keras.layers import Convolution2D, MaxPooling2D, Dropout
-from keras.layers import Flatten, Dense
-from keras.optimizers import SGD, RMSprop, Adagrad, Adadelta, Adam, Adamax, Nadam
+import pandas as pd
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dropout, Flatten, Dense
 
-def get_my_CNN_model_architecture():
-    '''
-    The network should accept a 96x96 grayscale image as input, and it should output a vector with 30 entries,
-    corresponding to the predicted (horizontal and vertical) locations of 15 facial keypoints.
-    '''
-    model = Sequential()
-    model.add(Convolution2D(32, (5, 5), input_shape=(96,96,1), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+# Paths to the CSV files
+train_path = '/kaggle/working/training.csv'
+test_path = '/kaggle/working/test.csv'
+lookid_path = '/kaggle/input/facial-keypoints-detection/IdLookupTable.csv'
 
-    model.add(Convolution2D(64, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.1))
+# Read the CSV files
+train_data = pd.read_csv(train_path)
+test_data = pd.read_csv(test_path)
+lookid_data = pd.read_csv(lookid_path)
 
-    model.add(Convolution2D(128, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.2))
+# Columns for Y_train
+y_columns = [
+    'nose_tip_x', 'nose_tip_y',
+    'mouth_left_corner_x', 'mouth_left_corner_y',
+    'mouth_right_corner_x', 'mouth_right_corner_y',
+    'mouth_center_top_lip_x', 'mouth_center_top_lip_y',
+    'mouth_center_bottom_lip_x', 'mouth_center_bottom_lip_y'
+]
 
-    model.add(Convolution2D(30, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.3))
+# Select the Image column for X_train
+X_train = train_data['Image']
 
-    model.add(Flatten())
+# Select the specified columns for Y_train
+Y_train = train_data[y_columns]
 
-    model.add(Dense(64, activation='relu'))
-    model.add(Dense(128, activation='relu'))
-    model.add(Dense(256, activation='relu'))
-    model.add(Dense(64, activation='relu'))
-    model.add(Dense(30))
+# Concatenate X_train and Y_train to discard rows with missing values
+combined_data = pd.concat([X_train, Y_train], axis=1)
 
-    return model
+# Drop rows with any missing values
+combined_data = combined_data.dropna()
 
-def compile_my_CNN_model(model, optimizer, loss, metrics):
-    model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
+# Split the combined data back into X_train and Y_train
+X_train = combined_data['Image']
+Y_train = combined_data[y_columns]
 
-def train_my_CNN_model(model, X_train, y_train):
-    return model.fit(X_train, y_train, epochs=100, batch_size=200, verbose=1, validation_split=0.2)
+# Convert X_train to numpy array and reshape
+X_train = np.array([np.fromstring(image, sep=' ').reshape(96, 96, 1) for image in X_train])
+X_train = X_train.astype('float32') / 255.0  # Normalize pixel values
 
-def save_my_CNN_model(model, fileName):
-    model.save(fileName + '.h5')
+# Convert Y_train to numpy array
+Y_train = np.array(Y_train)
 
-def load_my_CNN_model(fileName):
-    return load_model(fileName + '.h5')
+# Define the model
+model = Sequential()
+model.add(Conv2D(32, (5, 5), input_shape=(96, 96, 1), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.1))
+model.add(Conv2D(128, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.2))
+model.add(Conv2D(30, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.3))
+model.add(Flatten())
+model.add(Dense(64, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(256, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(10))
+
+# Compile the model
+model.compile(optimizer='adam', loss='mse')
+
+# Train the model
+history = model.fit(X_train, Y_train, epochs=350, batch_size=32, validation_split=0.2)
+
+# Save the model
+# model.save('path/to/your/model')

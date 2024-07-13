@@ -34,7 +34,7 @@ feature *features_info = nullptr;
 
 // void train_ADA_BOOST(const char *file, int layers = 1, int num = -1);
 // void test_ADA_BOOST(const char *file, int num = -1);
-void train_face_detector(const char *folder, int num, double Yo = 0.0, double Yl = 0.0, double Bl = 0.0);
+void train_face_detector(const char *folder, int num, double Yo = 0.0, double Yl = 0.0, double Bl = 0.0, bool load_prev = false, bool restric = false);
 
 void test_face_detector(const char *folder, int num);
 
@@ -106,7 +106,7 @@ void test_face_detector(const char *folder, int num);
 //     cout << "False negative rate: " << mat.false_negative_rate << endl;
 // }
 
-void train_face_detector(const char *folder, int num, double Yo, double Yl, double Bl)
+void train_face_detector(const char *folder, int num, double Yo, double Yl, double Bl, bool load_prev, bool restric)
 {
     auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -140,10 +140,14 @@ void train_face_detector(const char *folder, int num, double Yo, double Yl, doub
     std::cout << "time for loading data is : " << duration.count() << " s\n";
     std::string save_folder(folder);
     FaceDetector classifier(X_train, Y_train, X_val, Y_val, trian_dim, val_dim, save_folder);
-
+    if (load_prev)
+    {
+        classifier.load(save_folder);
+        classifier.rebuild();
+    }
     std::cout << ".... Training Face Detector ....\n";
     start_time = std::chrono::high_resolution_clock::now();
-    classifier.train(Yo, Yl, Bl);
+    classifier.train(Yo, Yl, Bl, restric);
     end_time = std::chrono::high_resolution_clock::now();
     std::cout << "Classifier trained!\n";
     duration = end_time - start_time;
@@ -331,9 +335,9 @@ void process_local_frame(const char *file)
 
 int main()
 {
-    // freopen("log.txt", "w", stdout);
+    // freopen("log2.txt", "w", stdout);
     fill_features_info();
-    mode current_mode = PROCESS_LOCAL_FRAME;
+    mode current_mode = TEST_FACE_DETECTION;
     if (current_mode == TRAIN_ADABOOST)
     {
         // train_ADA_BOOST("model2.txt", 10, 1000);
@@ -348,7 +352,7 @@ int main()
     {
         // The targeted false positive and false negative rate for each layer
         // were set to 0.5 and 0.995
-        train_face_detector("face1", -1, 0.7, 0.7, 0.5);
+        train_face_detector("face1", -1, 0.05, 0.3, 0.01, 1, 1);
         test_face_detector_threads("face1", -1);
         return 0;
     }

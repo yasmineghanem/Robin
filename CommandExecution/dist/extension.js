@@ -24535,7 +24535,7 @@ exports["default"] = router;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.EXIT_SCOPE = exports.TRY_EXCEPT = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
-exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = void 0;
+exports.CLASS_FAILURE = exports.CLASS_SUCCESS = exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = void 0;
 /**
  * Commands
  */
@@ -24644,6 +24644,9 @@ exports.OPERATION_FAILURE = "Failed to create operation!";
 // exit scope
 exports.EXIT_SCOPE_SUCCESS = "Scope exited successfully!";
 exports.EXIT_SCOPE_FAILURE = "Failed to exit scope!";
+// class
+exports.CLASS_SUCCESS = "Class created successfully!";
+exports.CLASS_FAILURE = "Failed to create class!";
 
 
 /***/ }),
@@ -26383,10 +26386,13 @@ const declareVariable = () => {
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
-            let s = await editor.edit((editBuilder) => {
-                editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareVariable(args.name, args.type, args.value));
-            });
-            console.log("ay haga");
+            // let s = await editor.edit((editBuilder) => {
+            //   editBuilder.insert(
+            //     getCurrentPosition(editor),
+            let s = codeGenerator.declareVariable(args.name, args.type, args.value);
+            //   );
+            // });
+            // console.log("ay haga");
             if (!s) {
                 return handleFailure(code_1.VARIABLE_FAILURE);
             }
@@ -26411,9 +26417,13 @@ const assignVariable = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.assignVariable(args.name, args.value, args.type));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.assignVariable(args.name, args.value, args.type);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.ASSIGNMENT_FAILURE);
                 }
@@ -26444,9 +26454,13 @@ const declareConstant = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareConstant(args.name, args.value));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.declareConstant(args.name, args.value);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.VARIABLE_FAILURE);
                 }
@@ -26491,10 +26505,10 @@ const declareFunction = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                const code = codeGenerator.declareFunction(args.name, args.parameters ?? [], args?.body);
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), code);
-                });
+                let s = codeGenerator.declareFunction(args.name, args.parameters ?? [], args?.body);
+                // let s = await editor.edit((editBuilder) => {
+                //   editBuilder.insert(getCurrentPosition(editor), code);
+                // });
                 if (!s) {
                     return handleFailure(code_1.FUNCTION_FAILURE);
                 }
@@ -26562,9 +26576,13 @@ const functionCall = () => {
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
-            let s = await editor.edit((editBuilder) => {
-                editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateFunctionCall(args.name, args.args));
-            });
+            let s = 
+            //  await editor.edit((editBuilder) => {
+            //   editBuilder.insert(
+            //     getCurrentPosition(editor),
+            codeGenerator.generateFunctionCall(args.name, args.args);
+            //   );
+            // });
             if (!s) {
                 return handleFailure(code_1.FUNCTION_CALL_FAILURE);
             }
@@ -26578,9 +26596,13 @@ const addWhiteSpace = () => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
             let codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);
-            let s = await editor.edit((editBuilder) => {
-                editBuilder.insert(getCurrentPosition(editor), codeGenerator.addWhiteSpace(args.type, args?.count));
-            });
+            let s = 
+            // await editor.edit((editBuilder) => {
+            //   editBuilder.insert(
+            //     getCurrentPosition(editor),
+            codeGenerator.addWhiteSpace(args.type, args?.count);
+            //   );
+            // });
             if (!s) {
                 return handleFailure(code_1.WHITE_SPACE_FAILURE);
             }
@@ -26616,9 +26638,13 @@ const forLoop = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateForLoop(args.type, args));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateForLoop(args.type, args);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.LOOP_FAILURE);
                 }
@@ -26650,9 +26676,12 @@ const whileLoop = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateWhileLoop(args.condition, args?.body));
-                });
+                // let s = await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                const s = codeGenerator.generateWhileLoop(args.condition, args?.body);
+                // );
+                // });
                 if (!s) {
                     return handleFailure(code_1.LOOP_FAILURE);
                 }
@@ -26685,9 +26714,13 @@ const operation = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateOperation(args.left, args.operator, args.right));
-                });
+                let s = 
+                //  await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateOperation(args.left, args.operator, args.right);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -26720,9 +26753,13 @@ const tryExcept = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateTryExcept(args.tryBody, args.exception, args.exceptionInstance, args.exceptBody));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateTryExcept(args.tryBody, args.exception, args.exceptionInstance, args.exceptBody);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.TRY_EXCEPT_FAILURE);
                 }
@@ -26755,9 +26792,13 @@ const conditional = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateConditional(args));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateConditional(args);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -26790,9 +26831,13 @@ const importLibrary = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateImportLibrary(args.library));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateImportLibrary(args.library);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.IMPORT_FAILURE);
                 }
@@ -26825,9 +26870,13 @@ const importModule = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateImportModule(args.library, args?.modules));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateImportModule(args.library, args?.modules);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.IMPORT_FAILURE);
                 }
@@ -26860,9 +26909,13 @@ const assertion = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateAssertion(args.variable, args.value, args.type));
-                });
+                let s = 
+                //  await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateAssertion(args.variable, args.value, args.type);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.ASSERTION_FAILURE);
                 }
@@ -26895,9 +26948,13 @@ const typeCasting = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateCasting(args.variable, args.type));
-                });
+                let s = 
+                //  await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateCasting(args.variable, args.type);
+                // );
+                // });
                 if (!s) {
                     return handleFailure(code_1.CASTING_FAILURE);
                 }
@@ -26930,9 +26987,13 @@ const arrayOperations = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateOperation(args.left, args.operator, args.right));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateOperation(args.left, args.operator, args.right);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -26965,9 +27026,13 @@ const userInput = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateUserInput(args.variable, args.message));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateUserInput(args.variable, args.message);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.USER_INPUT_FAILURE);
                 }
@@ -27000,9 +27065,13 @@ const printConsole = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generatePrint(args.variable, args.type));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generatePrint(args.variable, args.type);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.PRINT_FAILURE);
                 }
@@ -27035,9 +27104,13 @@ const lineComment = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateLineComment(args.content));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateLineComment(args.content);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.LINE_COMMENT_FAILURE);
                 }
@@ -27070,9 +27143,13 @@ const blockComment = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateBlockComment(args.content));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateBlockComment(args.content);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.BLOCK_COMMENT_FAILURE);
                 }
@@ -27105,9 +27182,13 @@ const readFile = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateReadFile(args.path, args.variable));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateReadFile(args.path, args.variable);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.READ_FILE_FAILURE);
                 }
@@ -27140,9 +27221,13 @@ const writeFile = () => {
             }
             // try catch
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.generateWriteFile(args.path, args.content));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.generateWriteFile(args.path, args.content);
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.WRITE_FILE_FAILURE);
                 }
@@ -27203,17 +27288,21 @@ const declareClass = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.declareClass(args?.name, args?.properties, args?.methods));
-                });
+                let s = 
+                // await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.declareClass(args?.name, args?.properties, args?.methods);
+                //   );
+                // });
                 if (!s) {
-                    return handleFailure(code_1.FUNCTION_FAILURE);
+                    return handleFailure(code_1.CLASS_SUCCESS);
                 }
             }
             catch (e) {
-                return handleFailure(code_1.FUNCTION_FAILURE);
+                return handleFailure(code_1.CLASS_FAILURE);
             }
-            return handleSuccess(code_1.FUNCTION_SUCCESS);
+            return handleSuccess(code_1.CLASS_SUCCESS);
         }
         return handleFailure(code_1.NO_ACTIVE_TEXT_EDITOR);
     });
@@ -27236,9 +27325,13 @@ const exitScope = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = await editor.edit((editBuilder) => {
-                    editBuilder.insert(getCurrentPosition(editor), codeGenerator.exitScope());
-                });
+                let s = 
+                //  await editor.edit((editBuilder) => {
+                //   editBuilder.insert(
+                //     getCurrentPosition(editor),
+                codeGenerator.exitScope();
+                //   );
+                // });
                 if (!s) {
                     return handleFailure(code_1.EXIT_SCOPE_SUCCESS);
                 }
@@ -27298,6 +27391,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PythonCodeGenerator = void 0;
+const vscode_1 = __importDefault(__webpack_require__(1));
 const codeEnums_1 = __webpack_require__(176);
 const codeGenerator_1 = __webpack_require__(177);
 const pythonReserved_json_1 = __importDefault(__webpack_require__(178));
@@ -27307,12 +27401,14 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      **/
     tabString = "    ";
     editor;
+    typeMappings;
     reservedKeywords;
     tabSize;
     // constructor
     constructor(editor) {
         super();
         this.reservedKeywords = pythonReserved_json_1.default.reservedKeywords;
+        this.typeMappings = pythonReserved_json_1.default.typeMappings;
         // TODO read tab size from .env
         this.tabSize = 4;
         this.editor = editor;
@@ -27322,6 +27418,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Check if the variable name is valid and not a reserved keyword
      **/
     isValidVariableName(name) {
+        // swap spaces with underscores
+        name = name.replace(/ /g, "_");
         const pattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
         if (!pattern.test(name)) {
             return false;
@@ -27329,19 +27427,15 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return !this.reservedKeywords.includes(name);
     }
     isValidConstantName(name) {
+        // swap spaces with underscores
+        name = name.replace(/ /g, "_");
         const pattern = /^[A-Z_][A-Z0-9_]*$/;
         if (!pattern.test(name)) {
             return false;
         }
         return !this.reservedKeywords.includes(name);
     }
-    isValidFunctionName(name) {
-        return this.isValidVariableName(name);
-    }
-    isValidClassName(name) {
-        return this.isValidVariableName(name);
-    }
-    handleIndentationLevel(previous = false) {
+    handleIndentationLevel(previous = true) {
         let currentLine;
         if (previous) {
             currentLine = this.editor.document.lineAt(Math.max(this.editor.selection.active.line - 1, 0)).text;
@@ -27394,17 +27488,22 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid variable name: ${name}`);
         }
-        const indentation = this.tabString.repeat(this.handleIndentationLevel(true)); // previous line
+        let code = "";
         if (type) {
+            let mappedType = this.typeMappings[type.toLowerCase()];
             if (initialValue) {
-                return `${name}: ${type} = ${initialValue}\n${indentation}`;
+                code = `${name}: ${mappedType} = ${initialValue}`;
             }
-            return `${name}: ${type}\n${indentation}`;
+            code = `${name}: ${mappedType}`;
         }
-        if (initialValue) {
-            return `${name} = ${initialValue}\n${indentation}`;
+        else if (initialValue) {
+            code = `${name} = ${initialValue}`;
         }
-        return `${name}\n${indentation}`;
+        else {
+            code = `${name}`;
+        }
+        this.handleScope(code);
+        return code;
     }
     /**
      * Declare constants
@@ -27413,7 +27512,9 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!this.isValidConstantName(name.toUpperCase())) {
             throw new Error(`Invalid constant name: ${name}`);
         }
-        return (`${name.toUpperCase()} = ${value}\n` + this.handleIndentationLevel(true));
+        const code = `${name.toUpperCase()} = ${value}`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Assign variables
@@ -27424,36 +27525,9 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!Object.values(codeEnums_1.AssignmentOperators).includes(type)) {
             throw new Error(`Invalid assignment type: ${type}`);
         }
-        switch (type) {
-            case codeEnums_1.AssignmentOperators.Equals:
-                return `${name} = ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.PlusEquals:
-                return `${name} += ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.MinusEquals:
-                return `${name} -= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.MultiplyEquals:
-                return `${name} *= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.DivideEquals:
-                return `${name} /= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.FloorDivideEquals:
-                return `${name} //= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.ModulusEquals:
-                return `${name} %= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.ExponentEquals:
-                return `${name} **= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.AndEquals:
-                return `${name} &= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.OrEquals:
-                return `${name} |= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.XorEquals:
-                return `${name} ^= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.LeftShiftEquals:
-                return `${name} <<= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            case codeEnums_1.AssignmentOperators.RightShiftEquals:
-                return `${name} >>= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
-            default:
-                throw new Error(`Invalid assignment type: ${type}`);
-        }
+        let code = `${name} ${type} ${value}`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Declare function
@@ -27461,7 +27535,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Return statement
      **/
     declareFunction(name, parameters, body, returnType) {
-        if (!this.isValidFunctionName(name)) {
+        if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid function name: ${name}`);
         }
         // check if valid parameters names
@@ -27475,46 +27549,57 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
             : ""}`)
             .join(", ");
-        const f = `def ${name}(${params}):\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true) + 1);
+        const f = `def ${name}(${params}):`;
+        // `def ${name}(${params}):\n` +
+        // this.tabString.repeat(this.handleIndentationLevel(true) + 1);
+        this.handleScope(f);
         return f;
     }
     generateFunctionCall(name, args) {
         const params = args
             .map((p) => (p.name ? `${p.name} = ${p.value}` : `${p.value}`))
             .join(", ");
-        return (`${name}(${params}) \n` +
-            this.tabString.repeat(this.handleIndentationLevel()));
+        const code = `${name}(${params})`;
+        this.handleScope(code);
+        return code;
     }
     generateReturn(value) {
-        return (`return ${value ?? ""} ` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        // return (
+        //   `return ${value ?? ""} ` +
+        //   this.tabString.repeat(this.handleIndentationLevel(true))
+        // );
+        const code = `return ${value ?? ""}`;
+        this.handleScope(code);
+        return code;
     }
     declareClass(name, properties, methods) {
-        if (!this.isValidClassName(name)) {
+        if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid class name: ${name} `);
         }
         // check if valid properties names
-        if (properties.some((p) => !this.isValidVariableName(p.name))) {
+        if (properties?.some((p) => !this.isValidVariableName(p.name))) {
             throw new Error(`Invalid property name`);
         }
         // check if valid method names
-        if (methods.some((m) => !this.isValidFunctionName(m.name))) {
+        if (methods?.some((m) => !this.isValidVariableName(m.name))) {
             throw new Error(`Invalid method name`);
         }
         let code = "";
-        // add class name, capitalize first letter
-        code += `class ${name.charAt(0).toUpperCase() + name.slice(1)}: \n`;
+        // add class name, capitalize first letter and swap spaces with underScores
+        let className = name.charAt(0).toUpperCase() + name.slice(1).replace(/ /g, "_");
+        // let firstIndentationLevel = this.handleIndentationLevel();
+        code = `class ${className}:`;
+        this.handleScope(code);
         // add constructor
-        code += `${this.tabString}def __init__(self, ${properties
-            .map((p) => p.name)
-            .join(", ")}): \n`;
+        code = `def __init__(self, ${properties ? properties.map((p) => p.name).join(", ") : ""}):`;
+        this.handleScope(code);
         // add properties
-        properties.forEach((p) => {
-            code += `${this.tabString}${this.tabString}self.${p.name} = ${p.name}\n`;
+        properties?.forEach((p) => {
+            code = `self.${p.name} = ${p.name}`;
+            this.handleScope(code);
         });
         // add methods
-        methods.forEach((m) => {
+        methods?.forEach((m) => {
             // sort the parameters so that the one's without value come first
             m.parameters.sort((a, b) => (a.value === undefined ? -1 : 1));
             const params = m.parameters
@@ -27522,9 +27607,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 ? ` = ${typeof p.value === "string" ? `"${p.value}"` : p.value}`
                 : ""}`)
                 .join(", ");
-            // code += "\n";
-            code += `\n${this.tabString}def ${m.name}(self, ${params}):\n${this.tabString}`;
-            code += this.wrapInCodeBlock(m.body ?? ["pass\n"]);
+            code = `def ${m.name}(self, ${params}):`;
+            this.handleScope(code);
         });
         return code;
     }
@@ -27532,24 +27616,31 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Import modules
      **/
     generateImportModule(library, modules) {
-        return `from ${library} import ${modules.join(", ")}\n`;
+        let code = `from ${library} import ${modules.join(", ")}`;
+        this.handleScope(code);
+        return code;
     }
     generateImportLibrary(library) {
-        return `import ${library}\n`;
+        let code = `import ${library}`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Conditional statements
      * if, if-else
      **/
     generateIf(condition, body) {
-        return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
+        // return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
+        const ifCode = `if ${condition}:`;
+        this.handleScope(ifCode);
+        return ifCode;
     }
     generateIfElse(condition, ifBody, elseBody) {
-        const ifCode = `if ${condition}: \n${this.wrapInCodeBlock(ifBody)} `;
-        const elseCode = elseBody
-            ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} `
-            : "";
-        return `${ifCode}${elseCode} `;
+        // const ifCode = `if ${condition}:} `;
+        // const elseCode = elseBody
+        //   ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} `
+        //   : "";
+        return ``;
     }
     /**
      * Loop statements
@@ -27560,19 +27651,27 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     //     return loopCode;
     // }
     generateForLoop(type, params, body) {
+        let code = "";
         switch (type) {
             case codeEnums_1.ForLoop.Range:
-                return this.generateRangeLoop(params);
+                code = this.generateRangeLoop(params);
+                break;
             case codeEnums_1.ForLoop.Iterable:
-                return this.generateIterableLoop(params);
+                code = this.generateIterableLoop(params);
+                break;
             case codeEnums_1.ForLoop.Enumerate:
-                return this.generateEnumerateLoop(params);
+                code = this.generateEnumerateLoop(params);
+                break;
             default:
-                return `for `;
+                code = `for `;
+                break;
         }
+        this.handleScope(code);
+        return code;
     }
     generateIterableLoop(params, body) {
-        const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}: \n${this.wrapInCodeBlock(body ?? [""])} `;
+        const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}:`;
+        // this.handleScope(loopCode);
         return loopCode;
     }
     generateRangeLoop(params
@@ -27584,22 +27683,28 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         let actualEnd = end ?? 0;
         let actualStep = step ?? 1;
         if (actualStart < actualEnd) {
-            forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${actualStep}): \n`;
+            forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${actualStep}):`;
         }
         else {
-            forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${-actualStep}): \n`;
+            forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${-actualStep}):`;
         }
-        return forLoop + this.tabString.repeat(this.handleIndentationLevel() + 1);
+        // this.handleScope(forLoop);
+        return forLoop;
     }
     generateEnumerateLoop(params, body) {
         const { iterators, iterable, start } = params;
-        return (`for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ""}): \n` + this.tabString.repeat(this.handleIndentationLevel(true) + 1));
+        // let currentIndentationLevel = this.handleIndentationLevel();
+        // this.tabString.repeat(currentIndentationLevel);
+        let code = `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ""}):`;
+        // this.handleScope(code);
+        return code;
     }
     generateWhileLoop(condition, body) {
         const conditionCode = condition
             .map((c) => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`)
             .join(" ");
-        const loopCode = `while ${conditionCode}: \n${this.wrapInCodeBlock(body ?? [""])} `;
+        let loopCode = `while ${conditionCode}:`;
+        this.handleScope(loopCode);
         return loopCode;
     }
     /**
@@ -27683,86 +27788,62 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         if (!Object.values(codeEnums_1.AssertionOperators).includes(type)) {
             throw new Error(`Invalid assertion type: ${type}`);
         }
-        switch (type) {
-            case codeEnums_1.AssertionOperators.Equal:
-                return (`assert ${variable} == ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssertionOperators.NotEqual:
-                return (`assert ${variable} != ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssertionOperators.GreaterThanOrEqual:
-                return (`assert ${variable} >= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.AssertionOperators.LessThanOrEqual:
-                return (`assert ${variable} <= ${value}\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
-            default:
-                throw new Error(`Invalid assertion type: ${type}`);
-        }
+        let code = `assert ${variable} == ${value}`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Generate Casting
      **/
     generateCasting(variable, type) {
-        if (!Object.values(codeEnums_1.CastingTypes).includes(type)) {
+        // this.typemappings
+        if (!Object.keys(this.typeMappings).includes(type.toLowerCase())) {
             throw new Error(`Invalid casting type: ${type}`);
         }
-        switch (type) {
-            case codeEnums_1.CastingTypes.Integer:
-                return (`${variable} = int(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.CastingTypes.Float:
-                return (`${variable} = float(${variable})\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.CastingTypes.String:
-                return (`${variable} = str(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.CastingTypes.Boolean:
-                return (`${variable} = bool(${variable})\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.CastingTypes.List:
-                return (`${variable} = list(${variable})\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.CastingTypes.Tuple:
-                return (`${variable} = tuple(${variable})\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.CastingTypes.Set:
-                return (`${variable} = set(${variable})\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
-            case codeEnums_1.CastingTypes.Dictionary:
-                return (`${variable} = dict(${variable})\n` +
-                    this.tabString.repeat(this.handleIndentationLevel(true)));
-            default:
-                throw new Error(`Invalid casting type: ${type}`);
-        }
+        let code = `${variable} = ${this.typeMappings[type]}(${variable})`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Generate User Input
      **/
     generateUserInput(variable, message) {
-        return (`${variable} = input('${message ? message : ""}')\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        let code = `${variable} = input('${message ? message : ""}')`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Generate Print
      **/
     generatePrint(value, type) {
+        let code = "";
         switch (type) {
             case "string":
-                return `print("${value}")\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                code = `print("${value}")`;
             case "variable":
-                return `print(${value})\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                code = `print(${value})`;
             default:
-                return `print(${value})\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+                code = `print(${value})`;
         }
+        this.handleScope(code);
+        return code;
     }
     /**
      * Read file
      **/
     //TODO: add options to read line, read all file, read character
     generateReadFile(path, variable) {
-        return (`${variable} = open("${path}", 'r').read()\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        let code = `${variable} = open("${path}", 'r').read()`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * Write file
      **/
     generateWriteFile(path, content) {
-        return (`open("${path}", 'w').write("${content}")\n` +
-            this.tabString.repeat(this.handleIndentationLevel(true)));
+        let code = `open("${path}", 'w').write("${content}")`;
+        this.handleScope(code);
+        return code;
     }
     /**
      * White spaces
@@ -27782,7 +27863,8 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             default:
                 ws = " ";
         }
-        return ws.repeat(count ?? 1);
+        this.insertCode(ws.repeat(count ?? 1));
+        return "alo";
     }
     /**
      * Comments
@@ -27790,30 +27872,51 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * Multi line comments
      **/
     generateLineComment(content) {
-        return `# ${content}\n` + this.tabString.repeat(this.handleIndentationLevel(true));
+        let code = `# ${content}`;
+        this.handleScope(code);
+        return code;
     }
     generateBlockComment(content) {
-        return (`''' ${content.join("\n")} '''\n` + this.tabString.repeat(this.handleIndentationLevel(true)));
+        return `''' ${content.join("\n")} '''\n`;
     }
     generateOperation(left, operator, right) {
-        return (`${left} ${operator} ${right} \n` + this.handleIndentationLevel(true));
+        let code = `${left} ${operator} ${right}`;
+        this.handleScope(code);
+        return code;
     }
-    generateConditional(conditions) {
+    async generateConditional(conditions) {
         let code = "";
-        conditions.forEach((c) => {
+        // conditions.forEach((c) => {
+        //   if (c.keyword === "if" || c.keyword === "elif") {
+        //     code = `${c.keyword} ${c.condition
+        //       ?.map(
+        //         (cond) =>
+        //           `${cond.logicalOperator ?? ""} ${cond.left} ${
+        //             cond?.operator ?? "=="
+        //           } ${cond.right}`
+        //       )
+        //       .join(" ")}:`;
+        //     this.handleScope(code);
+        //   } else {
+        //     code = `else:`;
+        //     this.handleScope(code);
+        //   }
+        // });
+        for (let c of conditions) {
             if (c.keyword === "if" || c.keyword === "elif") {
-                code += `${c.keyword} ${c.condition
-                    ?.map((cond) => `${cond.logicalOperator ?? ""} ${cond.left} ${cond.operator} ${cond.right}`)
-                    .join(" ")}: \n`;
+                code = `${c.keyword} ${c.condition
+                    ?.map((cond) => `${cond.logicalOperator ?? ""} ${cond.left} ${cond?.operator ?? "=="} ${cond.right}`)
+                    .join(" ")}:`;
+                // this.handleScope(code);
             }
             else {
-                code += `\nelse: \n`;
-                // body
-                // if (c.body) {
-                //     code += `${this.wrapInCodeBlock(c.body)} `;
-                // }
+                code = `else:`;
             }
-        });
+            if (c.keyword === "elif" || c.keyword === "else") {
+                await this.exitScope();
+            }
+            await this.handleScope(code);
+        }
         return code;
     }
     generateArrayOperation(name, operation) {
@@ -27821,8 +27924,41 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return "";
     }
     exitScope() {
-        let indentationLevel = this.handleIndentationLevel();
-        return `\n${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, Math.max(indentationLevel - 1, 0))}`.repeat(2);
+        // let indentationLevel = this.handleIndentationLevel(false);
+        // return `\n${this.addWhiteSpace(
+        //   Whitespace.Tab,
+        //   Math.max(indentationLevel - 1, 0)
+        // )}`.repeat(2);
+        // outdent
+        return new Promise((resolve, reject) => {
+            vscode_1.default.commands.executeCommand("outdent").then(() => {
+                resolve();
+            }, (err) => {
+                reject(err);
+            });
+        });
+    }
+    handleScope(code) {
+        return new Promise((resolve, reject) => {
+            // vscode.commands
+            //   .executeCommand("editor.action.insertLineAfter")
+            //   .then(() => {
+            this.insertCode(code).then(() => {
+                vscode_1.default.commands.executeCommand("editor.action.insertLineAfter").then(() => {
+                    resolve();
+                }, (err) => {
+                    reject(err);
+                });
+            });
+        });
+        // });
+    }
+    insertCode(code) {
+        return this.editor.edit((editBuilder) => {
+            editBuilder.insert(this.editor.selection.active, code);
+        }
+        // { undoStopBefore: true, undoStopAfter: false }
+        );
     }
 }
 exports.PythonCodeGenerator = PythonCodeGenerator;
@@ -27923,14 +28059,14 @@ var ForLoop;
 })(ForLoop || (exports.ForLoop = ForLoop = {}));
 var CastingTypes;
 (function (CastingTypes) {
-    CastingTypes["Integer"] = "int";
+    CastingTypes["Integer"] = "integer";
     CastingTypes["Float"] = "float";
-    CastingTypes["String"] = "str";
-    CastingTypes["Boolean"] = "bool";
+    CastingTypes["String"] = "string";
+    CastingTypes["Boolean"] = "boolean";
     CastingTypes["List"] = "list";
     CastingTypes["Tuple"] = "tuple";
     CastingTypes["Set"] = "set";
-    CastingTypes["Dictionary"] = "dict";
+    CastingTypes["Dictionary"] = "dictionary";
 })(CastingTypes || (exports.CastingTypes = CastingTypes = {}));
 
 
@@ -27957,7 +28093,7 @@ exports.CodeGenerator = CodeGenerator;
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"]}');
+module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"],"typeMappings":{"string":"str","integer":"int","float":"float","boolean":"bool","list":"list","tuple":"tuple","dictionary":"dict"}}');
 
 /***/ }),
 /* 179 */
@@ -27966,11 +28102,21 @@ module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","T
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXTENSIONS = void 0;
+exports.GENERIC_TYPES = exports.EXTENSIONS = void 0;
 exports.EXTENSIONS = {
     PYTHON: "py",
-    JUPYTER: "ipynb"
+    JUPYTER: "ipynb",
 };
+var GENERIC_TYPES;
+(function (GENERIC_TYPES) {
+    GENERIC_TYPES["STRING"] = "string";
+    GENERIC_TYPES["INTEGER"] = "integer";
+    GENERIC_TYPES["FLOAT"] = "float";
+    GENERIC_TYPES["BOOLEAN"] = "boolean";
+    GENERIC_TYPES["LIST"] = "list";
+    GENERIC_TYPES["TUPLE"] = "tuple";
+    GENERIC_TYPES["DICTIONARY"] = "dictionary";
+})(GENERIC_TYPES || (exports.GENERIC_TYPES = GENERIC_TYPES = {}));
 
 
 /***/ }),

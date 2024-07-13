@@ -4,3 +4,7 @@ node_modules
 .vscode
 voice_recognition_models
 Desktop Application/Assets/vosk_2.zip
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
