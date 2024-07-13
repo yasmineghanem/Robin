@@ -24973,90 +24973,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const GIT_1 = __webpack_require__(167);
 const router = (__webpack_require__(6).Router)();
-// git commit and push
-router.get("/push", (req, res) => {
-    vscode.commands.executeCommand(GIT_1.GIT_PUSH, req.query).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Git push done!" }));
-        }
-        else {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: response.message }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(err));
-    });
-});
-// git fetch & pull
-router.get("/pull", (req, res) => {
-    vscode.commands.executeCommand(GIT_1.GIT_PULL, req.query).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Git pull done!" }));
-        }
-        else {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: response.message }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(err));
-    });
-});
-// git discard
-router.get("/discard", (req, res) => {
-    vscode.commands.executeCommand(GIT_1.GIT_DISCARD, req.query).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Git discard done!" }));
-        }
-        else {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: response.message }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(err));
-    });
-});
-// git stage
-router.get("/stage", (req, res) => {
-    vscode.commands.executeCommand(GIT_1.GIT_STAGE, req.query).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Git stage done!" }));
-        }
-        else {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: response.message }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(err));
-    });
-});
-// git stash
-router.get("/stash", (req, res) => {
-    vscode.commands.executeCommand(GIT_1.GIT_STASH, req.query).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Git stash done!" }));
-        }
-        else {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: response.message }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(err));
-    });
-});
-// {
-//     "action" : "ay haga",
-//     "message" : "nnnn"
-// }
 router.post("/", (req, res) => {
     // depending on action
     // call the right function
@@ -25065,6 +24981,21 @@ router.post("/", (req, res) => {
     const message = body.message;
     switch (action) {
         case "push":
+            vscode.commands.executeCommand(GIT_1.GIT_PUSH, message).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git push done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            }, (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            });
+            break;
+        case "commit":
             vscode.commands.executeCommand(GIT_1.GIT_PUSH, message).then((response) => {
                 if (response.success) {
                     res.writeHead(200, { "Content-Type": "application/json" });
@@ -27362,18 +27293,16 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Declare reserved keywords for each programming language
      **/
-    tabString = "    ";
     editor;
     typeMappings;
+    operatorMappings;
     reservedKeywords;
-    tabSize;
     // constructor
     constructor(editor) {
         super();
         this.reservedKeywords = pythonReserved_json_1.default.reservedKeywords;
         this.typeMappings = pythonReserved_json_1.default.typeMappings;
-        // TODO read tab size from .env
-        this.tabSize = 4;
+        this.operatorMappings = pythonReserved_json_1.default.operatorMappings;
         this.editor = editor;
     }
     //**********************Utility functions**********************//
@@ -27398,50 +27327,11 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         return !this.reservedKeywords.includes(name);
     }
-    handleIndentationLevel(previous = true) {
-        let currentLine;
-        if (previous) {
-            currentLine = this.editor.document.lineAt(Math.max(this.editor.selection.active.line - 1, 0)).text;
-        }
-        else {
-            currentLine = this.editor.document.lineAt(this.editor.selection.active.line).text;
-        }
-        // find the number of white spaces in the beginning of the line,
-        // and calculate the number of tabs
-        let indentationLevel = 0;
-        for (let i = 0; i < currentLine.length; i++) {
-            if (currentLine[i] === " ") {
-                indentationLevel++;
-            }
-            else {
-                break;
-            }
-        }
-        // check if first word in line is a scope
-        currentLine = currentLine.trim();
-        if (currentLine.endsWith(":")) {
-            indentationLevel += this.tabSize;
-        }
-        // calculate the number of tabs
-        const tabs = Math.floor(indentationLevel / this.tabSize);
-        return tabs;
-    }
     /**
      * wrap code in a code block with '`' character
      **/
     wrapInCodeBlock(lines) {
         return lines.map((line) => `    ${line}`).join("\n");
-    }
-    /**
-     * Add Indentation to the code
-     * 4 spaces before each line (if multiline)
-     **/
-    addIndentation(code) {
-        // with tab_size
-        return code
-            .split("\n")
-            .map((line) => `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, this.tabSize)}${line}`)
-            .join("\n");
     }
     //********************************************//
     /**
@@ -27453,7 +27343,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         let code = "";
         if (type) {
-            let mappedType = this.typeMappings[type.toLowerCase()];
+            let mappedType = this.typeMappings[type];
             if (initialValue) {
                 code = `${name}: ${mappedType} = ${initialValue}`;
             }
@@ -27485,10 +27375,10 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     assignVariable(name, value, type) {
         //Check before if RHS is same type as LHS
         ///////// we need function to check the type of the variable /////////
-        if (!Object.values(codeEnums_1.AssignmentOperators).includes(type)) {
+        if (!Object.keys(this.operatorMappings).includes(type)) {
             throw new Error(`Invalid assignment type: ${type}`);
         }
-        let code = `${name} ${type} ${value}`;
+        let code = `${name} ${this.operatorMappings[type]} ${value}`;
         this.handleScope(code);
         return code;
     }
@@ -27513,8 +27403,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             : ""}`)
             .join(", ");
         const f = `def ${name}(${params}):`;
-        // `def ${name}(${params}):\n` +
-        // this.tabString.repeat(this.handleIndentationLevel(true) + 1);
         this.handleScope(f);
         return f;
     }
@@ -27527,15 +27415,11 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return code;
     }
     generateReturn(value) {
-        // return (
-        //   `return ${value ?? ""} ` +
-        //   this.tabString.repeat(this.handleIndentationLevel(true))
-        // );
         const code = `return ${value ?? ""}`;
         this.handleScope(code);
         return code;
     }
-    declareClass(name, properties, methods) {
+    async declareClass(name, properties, methods) {
         if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid class name: ${name} `);
         }
@@ -27552,17 +27436,17 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         let className = name.charAt(0).toUpperCase() + name.slice(1).replace(/ /g, "_");
         // let firstIndentationLevel = this.handleIndentationLevel();
         code = `class ${className}:`;
-        this.handleScope(code);
+        await this.handleScope(code);
         // add constructor
         code = `def __init__(self, ${properties ? properties.map((p) => p.name).join(", ") : ""}):`;
-        this.handleScope(code);
+        await this.handleScope(code);
         // add properties
-        properties?.forEach((p) => {
+        properties?.forEach(async (p) => {
             code = `self.${p.name} = ${p.name}`;
-            this.handleScope(code);
+            await this.handleScope(code);
         });
         // add methods
-        methods?.forEach((m) => {
+        methods?.forEach(async (m) => {
             // sort the parameters so that the one's without value come first
             m.parameters.sort((a, b) => (a.value === undefined ? -1 : 1));
             const params = m.parameters
@@ -27571,7 +27455,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 : ""}`)
                 .join(", ");
             code = `def ${m.name}(self, ${params}):`;
-            this.handleScope(code);
+            await this.handleScope(code);
         });
         return code;
     }
@@ -27593,26 +27477,17 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * if, if-else
      **/
     generateIf(condition, body) {
-        // return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
         const ifCode = `if ${condition}:`;
         this.handleScope(ifCode);
         return ifCode;
     }
     generateIfElse(condition, ifBody, elseBody) {
-        // const ifCode = `if ${condition}:} `;
-        // const elseCode = elseBody
-        //   ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} `
-        //   : "";
         return ``;
     }
     /**
      * Loop statements
      * for, while, do-while
      **/
-    // generateForLoop(variable: string, iterable: string, body: string[]): string {
-    //     const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
-    //     return loopCode;
-    // }
     generateForLoop(type, params, body) {
         let code = "";
         switch (type) {
@@ -27626,7 +27501,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 code = this.generateEnumerateLoop(params);
                 break;
             default:
-                code = `for `;
+                code = `for :`;
                 break;
         }
         this.handleScope(code);
@@ -27634,7 +27509,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     generateIterableLoop(params, body) {
         const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}:`;
-        // this.handleScope(loopCode);
         return loopCode;
     }
     generateRangeLoop(params
@@ -27651,7 +27525,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         else {
             forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${-actualStep}):`;
         }
-        // this.handleScope(forLoop);
         return forLoop;
     }
     generateEnumerateLoop(params, body) {
@@ -27659,12 +27532,13 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         // let currentIndentationLevel = this.handleIndentationLevel();
         // this.tabString.repeat(currentIndentationLevel);
         let code = `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ""}):`;
-        // this.handleScope(code);
         return code;
     }
     generateWhileLoop(condition, body) {
         const conditionCode = condition
-            .map((c) => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`)
+            .map((c) => `${c.logicalOperator
+            ? `${this.operatorMappings[c.logicalOperator] ?? "=="} `
+            : ""} ${c.left} ${this.operatorMappings[c.operator] ?? "=="} ${c.right}`)
             .join(" ");
         let loopCode = `while ${conditionCode}:`;
         this.handleScope(loopCode);
@@ -27678,80 +27552,11 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         const exceptCode = `except ${exception} as ${exceptionInstance}: \n${this.wrapInCodeBlock(exceptBody ?? [""])} `;
         return `${tryCode} \n${exceptCode} `;
     }
-    // /**
-    //  * Identity operators
-    //  * is, is not
-    //  **/
-    // generateIdentityOperation(
-    //   left: string,
-    //   operator: IdentityOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    // /**
-    //  * Membership operation
-    //  * in, not in
-    //  **/
-    // generateMembershipOperation(
-    //   left: string,
-    //   operator: MembershipOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    // /**
-    //  * Logical operators
-    //  * and, or, not
-    //  **/
-    // generateLogicalOperation(
-    //   left: string,
-    //   operator: LogicalOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    // /**
-    //  * Comparison operators
-    //  * <, >, <=, >=, ==, !=
-    //  **/
-    // generateComparisonOperation(
-    //   left: string,
-    //   operator: ComparisonOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    // /**
-    //  * Arithmetic operators
-    //  * +, -, *, /, %, // , **
-    //  **/
-    // generateArithmeticOperation(
-    //   left: string,
-    //   operator: ArithmeticOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    // /**
-    //  * Bitwise operators
-    //  * &, |, ^, ~, <<, >>
-    //  **/
-    // generateBitwiseOperation(
-    //   left: string,
-    //   operator: BitwiseOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    /**
-     * Assertion
-     **/
     generateAssertion(variable, value, type) {
-        if (!Object.values(codeEnums_1.AssertionOperators).includes(type)) {
+        if (!Object.keys(this.operatorMappings).includes(type)) {
             throw new Error(`Invalid assertion type: ${type}`);
         }
-        let code = `assert ${variable} == ${value}`;
+        let code = `assert ${variable} ${this.operatorMappings[type]} ${value}`;
         this.handleScope(code);
         return code;
     }
@@ -27760,10 +27565,10 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      **/
     generateCasting(variable, type) {
         // this.typemappings
-        if (!Object.keys(this.typeMappings).includes(type.toLowerCase())) {
+        if (!Object.keys(this.operatorMappings).includes(type)) {
             throw new Error(`Invalid casting type: ${type}`);
         }
-        let code = `${variable} = ${this.typeMappings[type]}(${variable})`;
+        let code = `${variable} = ${this.operatorMappings[type]}(${variable})`;
         this.handleScope(code);
         return code;
     }
@@ -27843,34 +27648,19 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return `''' ${content.join("\n")} '''\n`;
     }
     generateOperation(left, operator, right) {
-        let code = `${left} ${operator} ${right}`;
+        let code = `${left} ${this.operatorMappings[operator] ?? "=="} ${right}`;
         this.handleScope(code);
         return code;
     }
     async generateConditional(conditions) {
         let code = "";
-        // conditions.forEach((c) => {
-        //   if (c.keyword === "if" || c.keyword === "elif") {
-        //     code = `${c.keyword} ${c.condition
-        //       ?.map(
-        //         (cond) =>
-        //           `${cond.logicalOperator ?? ""} ${cond.left} ${
-        //             cond?.operator ?? "=="
-        //           } ${cond.right}`
-        //       )
-        //       .join(" ")}:`;
-        //     this.handleScope(code);
-        //   } else {
-        //     code = `else:`;
-        //     this.handleScope(code);
-        //   }
-        // });
         for (let c of conditions) {
             if (c.keyword === "if" || c.keyword === "elif") {
                 code = `${c.keyword} ${c.condition
-                    ?.map((cond) => `${cond.logicalOperator ?? ""} ${cond.left} ${cond?.operator ?? "=="} ${cond.right}`)
+                    ?.map((cond) => `${cond.logicalOperator
+                    ? `${this.operatorMappings[cond.logicalOperator] ?? "=="} `
+                    : ""} ${cond.left} ${this.operatorMappings[cond.operator] ?? "=="} ${cond.right}`)
                     .join(" ")}:`;
-                // this.handleScope(code);
             }
             else {
                 code = `else:`;
@@ -27882,16 +27672,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         return code;
     }
-    generateArrayOperation(name, operation) {
-        // pack, uno
-        return "";
-    }
     exitScope() {
-        // let indentationLevel = this.handleIndentationLevel(false);
-        // return `\n${this.addWhiteSpace(
-        //   Whitespace.Tab,
-        //   Math.max(indentationLevel - 1, 0)
-        // )}`.repeat(2);
         // outdent
         return new Promise((resolve, reject) => {
             vscode_1.default.commands.executeCommand("outdent").then(() => {
@@ -27903,9 +27684,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     handleScope(code) {
         return new Promise((resolve, reject) => {
-            // vscode.commands
-            //   .executeCommand("editor.action.insertLineAfter")
-            //   .then(() => {
             this.insertCode(code).then(() => {
                 vscode_1.default.commands.executeCommand("editor.action.insertLineAfter").then(() => {
                     resolve();
@@ -27914,7 +27692,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 });
             });
         });
-        // });
     }
     insertCode(code) {
         return this.editor.edit((editBuilder) => {
@@ -28056,7 +27833,7 @@ exports.CodeGenerator = CodeGenerator;
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"],"typeMappings":{"string":"str","integer":"int","float":"float","boolean":"bool","list":"list","tuple":"tuple","dictionary":"dict"}}');
+module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"],"typeMappings":{"string":"str","integer":"int","float":"float","boolean":"bool","list":"list","tuple":"tuple","dictionary":"dict"},"operatorMappings":{"addition":"+","subtraction":"-","multiplication":"*","division":"/","modulus":"%","exponentiation":"**","assignment":"=","equal":"==","notEqual":"!=","greaterThan":">","greaterThanOrEqual":">=","lessThan":"<","lessThanOrEqual":"<=","and":"and","or":"or","not":"not","increment":"+=","decrement":"-=","multiply":"*=","divide":"/=","modulusAssign":"%=","exponentAssign":"**="}}');
 
 /***/ }),
 /* 179 */
