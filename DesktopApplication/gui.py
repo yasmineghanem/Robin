@@ -33,7 +33,7 @@ class GUI:
 
         self.app = tk.CTk()
 
-        self.app.geometry("400x200")
+        self.app.geometry("200x100")
 
         self.app.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.app.title("Robin")
@@ -82,8 +82,6 @@ class GUI:
             self.handle_voice_recognition()
             return True
         return False
-
-    # def handle_activate_robin(self):
 
     def handle_voice_recognition(self):
 
