@@ -1,1 +1,90 @@
-{"type":"module","children":[{"type":"return_statement","children":[{"type":"return"}]}]}
+{
+    "type": "module",
+    "children": [
+        {
+            "type": "function_definition",
+            "children": [
+                {
+                    "type": "def"
+                },
+                {
+                    "type": "identifier",
+                    "name": "test"
+                },
+                {
+                    "type": "parameters",
+                    "children": [
+                        {
+                            "type": "(",
+                            "name": "("
+                        },
+                        {
+                            "type": ")",
+                            "name": ")"
+                        }
+                    ]
+                },
+                {
+                    "type": ":"
+                },
+                {
+                    "type": "block",
+                    "children": [
+                        {
+                            "type": "return_statement",
+                            "children": [
+                                {
+                                    "type": "return"
+                                },
+                                {
+                                    "type": "integer",
+                                    "name": "1"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "expression_statement",
+            "children": [
+                {
+                    "type": "assignment",
+                    "children": [
+                        {
+                            "type": "identifier",
+                            "name": "x"
+                        },
+                        {
+                            "type": "=",
+                            "name": "="
+                        },
+                        {
+                            "type": "call",
+                            "children": [
+                                {
+                                    "type": "identifier",
+                                    "name": "em"
+                                },
+                                {
+                                    "type": "argument_list",
+                                    "children": [
+                                        {
+                                            "type": "(",
+                                            "name": "("
+                                        },
+                                        {
+                                            "type": ")",
+                                            "name": ")"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
