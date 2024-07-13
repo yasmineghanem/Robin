@@ -2,16 +2,24 @@ import customtkinter as tk
 import tkinterDnD
 import threading
 from speech import *
+from subprocess_thread import *
+from wake_word import *
+import threading
+from stoppable_thread import *
+
+import subprocess
 
 
 class GUI:
 
-    def __init__(self):
-        
-        self.sr = SpeechRecognition(self)
-        
-        self.sr_thread = threading.Thread(target=self.sr.recognize)
-        self.sr_thread.daemon = True
+    def __init__(self,):
+
+        # Voice Recognition Model
+        self.sr = None
+        self.sr_thread = None
+
+        # Mouse tracking thread
+        self.mouse_thread = None
 
         tk.set_ctk_parent_class(tkinterDnD.Tk)
 
@@ -35,7 +43,7 @@ class GUI:
                                           text="Active",
                                           font=(
                                               "Arial", 20, "bold"),
-                                          #  command=self.active_switch_state_changed,
+                                          command=self.handle_robin,
                                           variable=self.active_switch_state,
                                           onvalue=1,
                                           offvalue=0
@@ -47,57 +55,54 @@ class GUI:
         self.mouse_switch_state = tk.IntVar(value=0)
         self.mouse_switch = tk.CTkSwitch(master=self.frame_1,
                                          text="Mouse",
-
                                          font=(
                                              "Arial", 20, "bold"),
-                                         #  command=self.active_switch_state_changed,
                                          variable=self.mouse_switch_state,
                                          onvalue=1,
-                                         offvalue=0
+                                         offvalue=0,
+                                         command=self.handle_mouse_tracking
                                          )
 
         self.mouse_switch.pack(pady=10, padx=10)
 
-        # # button to toggle switch
-
-        # self.toggle_button = tk.CTkButton(
-
-        #     master=self.frame_1, text="Toggle", command=self.toggle)
-
-        # self.toggle_button.pack(pady=10, padx=10)
-
         self.app.attributes('-topmost', True)
 
-    def active_switch_state_changed(self):
-
-        # change the variable's value
-        self.active_switch_state.set(not self.active_switch_state.get())
-
-    def toggle(self):
-
-        if self.active_switch_state.get() == 1:
-            self.active_switch.deselect()
-        else:
-            self.active_switch.select()
+    def handle_robin(self):
+        if self.active_switch_state.get() == 0:
+            self.sr_thread.stop_event.set()
 
     def activate_robin(self):
         if self.active_switch_state.get() == 0:
             self.active_switch.select()
-            # s = SpeechRecognition()
-            # start speech recognition on different thread
-            # t = threading.Thread(target=self.sr.recognize)
-            # t.daemon = True
-            self.sr_thread.start()
+            self.handle_voice_recognition()
             return True
         return False
-    
-    # def stop_voice_recognition(self):
-    #     # self.sr.deactivate()
-    #     print('aho')
-    #     self.sr_thread.join()
-        
-        
-    
+
+    # def handle_activate_robin(self):
+
+    def handle_voice_recognition(self):
+
+        if self.active_switch_state.get() == 1:
+            self.sr = SpeechRecognition(self)
+            self.sr_thread = threading.Thread(
+                target=self.sr.recognize, args=())
+            self.sr_thread.stop_event = threading.Event()
+            self.sr_thread.daemon = True
+            self.sr_thread.start()
+        else:
+            self.sr_thread.stop_event.set()
+
+    def handle_mouse_tracking(self):
+
+        # run mouse subprocess on thread
+        if self.mouse_switch_state.get() == 1:
+            self.mouse_thread = SubprocessThread(
+                './MouseControlling.exe')
+            self.mouse_thread.start()
+
+        else:
+            self.mouse_thread.stop()
+
     def deactivate_robin(self):
         if self.active_switch_state.get() == 1:
             self.active_switch.deselect()

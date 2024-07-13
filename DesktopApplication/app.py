@@ -4,6 +4,7 @@ import threading
 import openwakeword
 from gui import *
 from wake_word import *
+import threading
 
 
 if __name__ == "__main__":
@@ -22,7 +23,7 @@ if __name__ == "__main__":
     gui = GUI()
 
     t = threading.Thread(target=wake_word_detection, args=(args, gui))
+    t.stop_event = threading.Event()
     t.daemon = True
     t.start()
     gui.run()
-    

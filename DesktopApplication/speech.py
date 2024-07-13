@@ -7,16 +7,7 @@ import importlib.util
 from api import *
 import os
 import sys
-# from CommandIntent.final_files.command_intent import CommandIntent
-
-# Add the directory containing the module to the Python path
-# sys.path.append(os.path.abspath('../CommandIntent/final_files'))
-
-# # Now you can import your module
-# import command_intent
-
-# # Use the module's functionality
-# module.some_function()
+import json
 
 
 # Add the DesktopApplication directory to the Python path
@@ -38,8 +29,10 @@ spec.loader.exec_module(command_intent)
 CommandIntent = command_intent.CommandIntent
 
 # Correctly resolve paths relative to the script's location
-intent_model_path = os.path.abspath('../CommandIntent/models/intent_detection_model.h5')
+intent_model_path = os.path.abspath(
+    '../CommandIntent/models/intent_detection_model.h5')
 ner_model_path = os.path.abspath('../CommandIntent/models/full_ner_model.pth')
+
 
 class SpeechRecognition:
     def __init__(self, gui):
@@ -47,70 +40,72 @@ class SpeechRecognition:
         # self.microphone = sr.Microphone()
         self.gui = gui
         self.command_intent = CommandIntent(intent_model_path, ner_model_path)
-
-        # vosk
-        self.model = Model("./Assets/voice_recognition_models/v_2")
-        self.recognizer = KaldiRecognizer(self.model, 16000)
-        self.mic = pyaudio.PyAudio()
-
-        self.stream = self.mic.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
-        self.active = True
-
         self.api = APIController()
 
-    def activate(self):
-        self.active = True
-        self.recognize()
+        # read config file
+        with open('./config.json') as f:
+            self.__config = json.load(f)
+            self.voice_recognition_tool = self.__config['voice_recognition']
+            # check voice recognition
+            if self.__config['voice_recognition'] == 'google':
+                self.initialize_google_sr()
 
-    def deactivate(self):
-        self.active = False
+            elif self.__config['voice_recognition'] == 'vosk':
+                self.initialize_vosk_sr()
+
+    def initialize_google_sr(self):
+        self.recognizer = sr.Recognizer()
+        self.microphone = sr.Microphone(
+            device_index=1, sample_rate=48000, chunk_size=2048
+        )
+        # with self.microphone as source:
+        #     self.recognizer.adjust_for_ambient_noise(source)
+        self.active = True
+        print('initialized google')
+
+    def initialize_vosk_sr(self):
+        try:
+            self.model = Model("./Assets/voice_recognition_models/" +
+                               ("v_2" if self.__config['light_weight'] == False else "v_1"))
+            self.recognizer = KaldiRecognizer(self.model, 16000)
+            self.mic = pyaudio.PyAudio()
+            self.stream = self.mic.open(
+                format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
+            self.active = True
+
+            print('initialized vosk')
+
+        except Exception as e:
+            self.initialize_google_sr()
 
     def recognize(self):
-        # vosk
-        while self.active:
-            data = self.stream.read(8192)
-            if len(data) == 0:
-                break
-            if self.recognizer.AcceptWaveform(data):
-                r = self.recognizer.Result()
+        print("recogninzing")
+        # based on the speech recognition method used
+        if self.voice_recognition_tool == 'google':
+            while self.active:
+                with self.microphone as source:
+                    self.recognizer.adjust_for_ambient_noise(source)
+                    audio = self.recognizer.listen(source)
+                    try:
+                        r = self.recognizer.recognize_google(audio)
+                        print(r)
+                        # return r
 
-                print(r)
-
-                response = self.command_intent.process_command(r['text'])
-                # response = self.command_intent.process_command('cast the variable x to integer')
-
-                
-
-                # # declare variable
-                # self.api.declare_variable('new_variable', 5)
-
-                # # declare function
-                # self.api.declare_function('new_function',  [
-                #     {
-                #         "name": "x_variable",
-                #         "value": "test"
-                #     },
-                #     {
-                #         "name": "y"
-                #     }
-                # ])
-
-                # # if condition
-                # self.api.conditional([{"keyword": 'if', "condition": [
-                #     {
-                #         "left": "x",
-                #         "operator": ">",
-                #         "right": "5"
-                #     }
-                # ]}])
-
-                # # for loop
-                # self.api.for_loop('enumerate', {"iterators": [
-                #     "i",
-                #     "x"
-                # ],
-                #     "iterable": "x"
-                # })
-
-                # # function call to print
-                # self.api.function_call('print', [{'value': 'x'}])
+                    except sr.UnknownValueError:
+                        print("Google Speech Recognition could not understand audio")
+                    except sr.RequestError as e:
+                        print(
+                            "Could not request results from Google Speech Recognition service; {0}".format(e))
+        elif self.voice_recognition_tool == 'vosk':
+            while self.active:
+                data = self.stream.read(8192)
+                if len(data) == 0:
+                    break
+                if self.recognizer.AcceptWaveform(data):
+                    print("RECOGNIZED")
+                    result = self.recognizer.Result()
+                    # if 'text' in result:
+                    print(result)
+                    # return result['text']
+                    # else:
+                    #     return None
