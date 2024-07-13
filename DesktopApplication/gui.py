@@ -31,6 +31,7 @@ class GUI:
 
         self.app.geometry("400x200")
 
+        self.app.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.app.title("Robin")
 
         self.frame_1 = tk.CTkFrame(master=self.app)
@@ -111,3 +112,12 @@ class GUI:
 
     def run(self):
         self.app.mainloop()
+
+    # on closing kill all threads
+    def on_closing(self):
+        if self.sr_thread is not None:
+            self.sr_thread.stop_event.set()
+        if self.mouse_thread is not None:
+            self.mouse_thread.stop()
+        self.app.destroy()
+        exit(0)

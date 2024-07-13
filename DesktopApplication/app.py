@@ -1,11 +1,11 @@
 
 import argparse
 import threading
+
 import openwakeword
+
 from gui import *
 from wake_word import *
-import threading
-
 
 if __name__ == "__main__":
     openwakeword.utils.download_models()
