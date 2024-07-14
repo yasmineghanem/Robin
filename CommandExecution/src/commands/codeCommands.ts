@@ -106,9 +106,6 @@ const declareVariable = () => {
 
       let codeGenerator;
       
-      const uri = editor.document.uri;
-      const diagnostics = vscode.languages.getDiagnostics(uri);
-      console.log("aaaa",diagnostics);
       switch (ext) {
         case EXTENSIONS.PYTHON:
           codeGenerator = new PythonCodeGenerator(editor);

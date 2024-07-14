@@ -6,6 +6,7 @@ const express = require("express");
 const { FunctionDefinitionNode } = require("tree-sitter-python");
 // const { Request : expressReq, Response } = require('express');
 const fs = require("fs");
+const e = require("cors");
 
 require("dotenv").config({
   path: path.resolve(__dirname, "../../../.env"),
@@ -26,12 +27,8 @@ function buildASTJson(node, code) {
     type: node.type,
     startPosition: node.startPosition,
     endPosition: node.endPosition,
-    children: [],
+    children: []
   };
-
-  if (node.type === "identifier") {
-    result.name = code.slice(node.startIndex, node.endIndex);
-  }
 
   for (let i = 0; i < node.childCount; i++) {
     result.children.push(buildASTJson(node.child(i), code));
@@ -60,7 +57,7 @@ function buildReadableASTJSON(node, code) {
       ["identifier", "integer", "float"].includes(node.type) ||
       node.type.includes("string")
     ) {
-      console.log("aahi");
+      // console.log("aahi");
       result.name = code.slice(node.startIndex, node.endIndex);
     }
   } else if (node.type.length < 3 && ![",", ".", ":",].includes(node.type)) {
@@ -100,12 +97,11 @@ function parseCode(code) {
   
 
   let ast_parsed = JSON.stringify(buildReadableASTJSON(rootNode, code));
-
   fs.writeFileSync(
     path.resolve(__dirname, "ast.json"),
     ast_parsed
   );
-  console.log(ast_parsed);
+  // console.log(ast_parsed);
   return ast_parsed;
 }
 
@@ -126,8 +122,9 @@ astServer.post("/ast", (req, res) => {
   try {
     const ast = buildReadableASTJSON(parser.parse(code).rootNode, code);
 
+
     parseCode(code);
-    // return res.status(200).json({ ast: ast.rootNode.toString() });
+
     return res.status(200).json({ ast });
   } catch (error) {
     return res.status(500).json({ error: error.message });
