@@ -27,7 +27,7 @@ class APIController:
 
         # print(response.text)
 
-        return response.json
+        return response.json()
     # File System Endpoints
 
     def create_file(self,body):

@@ -466,7 +466,12 @@ class ASTProcessor:
         return str(exp)
     
     # function to transform summary to be human readable
-    def get_summary(self, ast_summary):
+    def get_summary(self, ast_summary=None):
+        with open('./ast_2.json', 'r') as file:
+            ast = json.load(file)
+
+        ast_processor = ASTProcessor(ast['ast'])
+        ast_summary = ast_processor.process_ast()
         summary_text_to_speech = "Summary of the code:\n\n"
         # Imports
         import_list = ast_summary[0]

@@ -1,4 +1,5 @@
 
+import pyttsx3
 import speech_recognition as sr
 from vosk import Model, KaldiRecognizer
 import pyaudio
@@ -11,6 +12,7 @@ import json
 import tensorflow as tf
 import torch
 import numpy as np
+from code_summarization import ASTProcessor
 
 np.random.seed(42)
 tf.random.set_seed(42)
@@ -47,6 +49,12 @@ class SpeechRecognition:
         self.command_intent = CommandIntent(intent_model_path, ner_model_path)
         self.api = APIController()
         self.active = False
+
+        self.interactive = False
+        self.voice_engine = None
+
+        self.summarizer = None
+
         # read config file
         with open('./config.json') as f:
             self.__config = json.load(f)
@@ -84,8 +92,50 @@ class SpeechRecognition:
             self.voice_recognition_tool = 'google'
             self.initialize_google_sr()
 
+    def process_command(self, command):
+        print(f"Command: {command}")
+        # process the command
+        try:
+            intent, response = self.command_intent.process_command(command)
+            # print(self.command_intent.process_command(command))
+            print(f"Intent: {intent}")
+            print(f"Response: {response}")
+            # print(f"Response: {type(response)}")
+            intent = 'summary'
+            if intent == 'summary':
+                response['message'] = self.get_file_summary()
+
+            if self.interactive:
+                self.interactive_response(response)
+
+        except Exception as e:
+            print(f"Error in processing command: {e}")
+
+    def get_file_summary(self):
+        self.summarizer = ASTProcessor({})
+
+        s = self.summarizer.get_summary()
+        print(s)
+        return s
+
+    def activate_interactive(self,):
+        print('activated interactive')
+        self.interactive = True
+        pyttsx3.speak("Interactive mode activated")
+
+    def deactivate_interactive(self):
+
+        pyttsx3.speak("Interactive mode deactivated")
+
+        self.interactive = False
+
+    def interactive_response(self, response):
+        if 'message' in response:
+            pyttsx3.speak(response['message'])
+        else:
+            print(response)
+
     def recognize(self):
-        # print("recogninzing")
         # based on the speech recognition method used
         if self.voice_recognition_tool == 'google':
             while self.active:
@@ -93,15 +143,15 @@ class SpeechRecognition:
                     self.recognizer.adjust_for_ambient_noise(source,
                                                              duration=1)
                     audio = self.recognizer.listen(source)
-                    print(audio.sample_width)
                     try:
                         r = self.recognizer.recognize_google(audio)
 
                         print(r)
                         if (r != 'hey robin'):
-                        # process the command
+                            # process the command
                             try:
-                                self.command_intent.process_command(r)
+                                # self.command_intent.process_command(r)
+                                self.process_command(r)
                             except Exception as e:
                                 print(f"Error in processing command: {e}")
                     except sr.UnknownValueError:
@@ -123,6 +173,8 @@ class SpeechRecognition:
                         # process the command
                         print(result['text'])
                         try:
-                            self.command_intent.process_command(result['text'])
+                            self.process_command(r)
+
+                            # self.command_intent.process_command(result['text'])
                         except Exception as e:
                             print(f"Error in processing command: {e}")

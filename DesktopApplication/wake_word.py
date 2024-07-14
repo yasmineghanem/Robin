@@ -29,7 +29,6 @@ def wake_word_detection(args, ro):
         owwModel = Model(inference_framework=args.inference_framework)
 
     n_models = len(owwModel.models.keys())
-    # print('alooo')
     while True:
         global last_detection_time
 
@@ -37,7 +36,7 @@ def wake_word_detection(args, ro):
         prediction = owwModel.predict(audio_data)
 
         current_time = datetime.now()
-        print((current_time - last_detection_time).total_seconds())
+        # print((current_time - last_detection_time).total_seconds())
 
         if prediction['hey_robin_2'] > 0.7 and ((current_time - last_detection_time).total_seconds() > DEBOUNCE_TIME):
             # flush buffer
@@ -45,9 +44,7 @@ def wake_word_detection(args, ro):
             print("Wake word detected!")
             try:
                 # check if it's not activated
-                # if first_time:
-                #     first_time = False
-                # ro.activate_robin()
+      
                 t = threading.Thread(
                     target=ro.activate_robin, args=())
                 t.daemon = True
@@ -55,18 +52,26 @@ def wake_word_detection(args, ro):
                 last_detection_time = current_time
 
                 # activate it
-                engine = pyttsx3.init()
+                # engine = pyttsx3.init()
 
-                # getting details of current voice
-                voices = engine.getProperty("voices")
+                # # # getting details of current voice
+                # voices = engine.getProperty("voices")
 
-                engine.setProperty(
-                    "voice", voices[1].id
-                )  # changing index, changes voices. 1 for female
+                # engine.setProperty(
+                #     "voice", voices[1].id
+                # )  # changing index, changes voices. 1 for female
 
-                # random response
-                engine.say(responses[np.random.randint(0, len(responses))])
-                engine.runAndWait()
+                # # # random response
+                # engine.say(responses[np.random.randint(0, len(responses))])
+                # engine.runAndWait()
+                
+                # kill engnie
+                # engine.stop()
+                
+                
+                pyttsx3.speak(responses[np.random.randint(0, len(responses))])
+                
+                # pyttsx3.
 
             except Exception as e:
                 print(f"Error in app.after: {e}")

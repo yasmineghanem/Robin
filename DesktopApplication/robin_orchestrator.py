@@ -5,10 +5,8 @@ import customtkinter as tk
 import tkinterDnD
 
 from speech import *
-from stoppable_thread import *
 from subprocess_thread import *
-from wake_word import *
-
+import json
 from PIL import Image
 
 
@@ -35,7 +33,7 @@ class RobinOrchestrator:
 
         self.app = tk.CTk()
 
-        self.app.geometry("180x300")
+        self.app.geometry("250x300")
         # self.app.resizable(False, False)
 
         # icon
@@ -54,7 +52,7 @@ class RobinOrchestrator:
                                size=(150, 150))
 
         my_label = tk.CTkLabel(self.frame_1, text="", image=my_image)
-        my_label.pack(pady=10)
+        my_label.pack(pady=0)
 
         self.active_switch_state = tk.IntVar(value=0)
 
@@ -92,7 +90,7 @@ class RobinOrchestrator:
                                                variable=self.interactive_switch_state,
                                                onvalue=1,
                                                offvalue=0,
-                                               command=self.handle_interavtive
+                                               command=self.handle_interactive
                                                )
 
         self.interactive_switch.pack(pady=10, padx=15, anchor='w')
@@ -100,7 +98,7 @@ class RobinOrchestrator:
         self.app.attributes('-topmost', True)
 
     def handle_robin(self):
-        print(self.active_switch_state.get() )
+        print(self.active_switch_state.get())
         if self.active_switch_state.get() == 0:
             self.sr_thread.stop_event.set()
         else:
@@ -146,10 +144,17 @@ class RobinOrchestrator:
             return True
         return False
 
-    def handle_interavtive(self):
+    def handle_interactive(self):
         if self.interactive_switch_state.get() == 1:
-            print("Interactive")
+            # self.sr.activate_interactive()
+            self.sr_interactive = threading.Thread(
+                target=self.sr.activate_interactive, args=())
+            self.sr_interactive.stop_event = threading.Event()
+            self.sr_interactive.daemon = True
+            self.sr_interactive.start()
         else:
+            self.sr.deactivate_interactive()
+            self.sr_interactive.stop_event.set()
             print("Non Interactive")
 
     def run(self):

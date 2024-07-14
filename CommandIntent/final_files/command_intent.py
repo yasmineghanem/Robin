@@ -98,4 +98,4 @@ class CommandIntent:
         response = self.post_processor.post_process(command, intent, entities)
 
 
-        return response
+        return intent, response
