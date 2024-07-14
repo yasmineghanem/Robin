@@ -1,4 +1,18 @@
 [
     [],
-    []
+    [],
+    {
+        "left_side": "x",
+        "right_side": "0",
+        "operation": "=",
+        "type": "expression_statement"
+    },
+    {
+        "type": "loop",
+        "keyword": "while",
+        "condition": "x > 5",
+        "body": [
+            "print( \"x is greater than 5\" )"
+        ]
+    }
 ]

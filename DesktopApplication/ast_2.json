@@ -3,36 +3,47 @@
         "type": "module",
         "children": [
             {
-                "type": "function_definition",
+                "type": "expression_statement",
                 "children": [
                     {
-                        "type": "def"
-                    },
-                    {
-                        "type": "identifier",
-                        "name": "f"
-                    },
-                    {
-                        "type": "parameters",
+                        "type": "assignment",
                         "children": [
-                            {
-                                "type": "(",
-                                "name": "("
-                            },
                             {
                                 "type": "identifier",
                                 "name": "x"
                             },
                             {
-                                "type": ","
+                                "type": "=",
+                                "name": "="
                             },
+                            {
+                                "type": "integer",
+                                "name": "0"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "while_statement",
+                "children": [
+                    {
+                        "type": "while"
+                    },
+                    {
+                        "type": "comparison_operator",
+                        "children": [
                             {
                                 "type": "identifier",
-                                "name": "y"
+                                "name": "x"
                             },
                             {
-                                "type": ")",
-                                "name": ")"
+                                "type": ">",
+                                "name": ">"
+                            },
+                            {
+                                "type": "integer",
+                                "name": "5"
                             }
                         ]
                     },
@@ -43,83 +54,33 @@
                         "type": "block",
                         "children": [
                             {
-                                "type": "return_statement",
+                                "type": "expression_statement",
                                 "children": [
                                     {
-                                        "type": "return"
-                                    },
-                                    {
-                                        "type": "integer",
-                                        "name": "1"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "type": "expression_statement",
-                "children": [
-                    {
-                        "type": "call",
-                        "children": [
-                            {
-                                "type": "identifier",
-                                "name": "print"
-                            },
-                            {
-                                "type": "argument_list",
-                                "children": [
-                                    {
-                                        "type": "(",
-                                        "name": "("
-                                    },
-                                    {
-                                        "type": "string",
-                                        "name": "\"hi\""
-                                    },
-                                    {
-                                        "type": ")",
-                                        "name": ")"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "type": "expression_statement",
-                "children": [
-                    {
-                        "type": "call",
-                        "children": [
-                            {
-                                "type": "identifier",
-                                "name": "f"
-                            },
-                            {
-                                "type": "argument_list",
-                                "children": [
-                                    {
-                                        "type": "(",
-                                        "name": "("
-                                    },
-                                    {
-                                        "type": "integer",
-                                        "name": "1"
-                                    },
-                                    {
-                                        "type": ","
-                                    },
-                                    {
-                                        "type": "integer",
-                                        "name": "2"
-                                    },
-                                    {
-                                        "type": ")",
-                                        "name": ")"
+                                        "type": "call",
+                                        "children": [
+                                            {
+                                                "type": "identifier",
+                                                "name": "print"
+                                            },
+                                            {
+                                                "type": "argument_list",
+                                                "children": [
+                                                    {
+                                                        "type": "(",
+                                                        "name": "("
+                                                    },
+                                                    {
+                                                        "type": "string",
+                                                        "name": "\"x is greater than 5\""
+                                                    },
+                                                    {
+                                                        "type": ")",
+                                                        "name": ")"
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     }
                                 ]
                             }

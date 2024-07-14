@@ -123,7 +123,7 @@ astServer.post("/ast", (req, res) => {
     const ast = buildReadableASTJSON(parser.parse(code).rootNode, code);
 
 
-    parseCode(code);
+    // parseCode(code);
 
     return res.status(200).json({ ast });
   } catch (error) {
