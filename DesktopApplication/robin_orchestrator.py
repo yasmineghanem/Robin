@@ -9,8 +9,10 @@ from stoppable_thread import *
 from subprocess_thread import *
 from wake_word import *
 
+from PIL import Image
 
-class GUI:
+
+class RobinOrchestrator:
 
     def __init__(self,):
 
@@ -33,7 +35,11 @@ class GUI:
 
         self.app = tk.CTk()
 
-        self.app.geometry("200x100")
+        self.app.geometry("180x300")
+        # self.app.resizable(False, False)
+
+        # icon
+        self.app.iconbitmap('./Assets/robin_transparent.ico')
 
         self.app.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.app.title("Robin")
@@ -41,6 +47,14 @@ class GUI:
         self.frame_1 = tk.CTkFrame(master=self.app)
 
         self.frame_1.pack(pady=0, padx=0, fill="both", expand=True)
+
+        my_image = tk.CTkImage(light_image=Image.open('assets/robin_transparent.png'),
+                               dark_image=Image.open(
+                                   './Assets/robin_transparent.png'),
+                               size=(150, 150))
+
+        my_label = tk.CTkLabel(self.frame_1, text="", image=my_image)
+        my_label.pack(pady=10)
 
         self.active_switch_state = tk.IntVar(value=0)
 
@@ -54,7 +68,7 @@ class GUI:
                                           offvalue=0
                                           )
 
-        self.active_switch.pack(pady=10, padx=10)
+        self.active_switch.pack(pady=10, padx=15, anchor='w')
 
         # mouse variable
         self.mouse_switch_state = tk.IntVar(value=0)
@@ -68,19 +82,39 @@ class GUI:
                                          command=self.handle_mouse_tracking
                                          )
 
-        self.mouse_switch.pack(pady=10, padx=10)
+        self.mouse_switch.pack(pady=10, padx=15, anchor='w')
+        # interactive mode variable
+        self.interactive_switch_state = tk.IntVar(value=0)
+        self.interactive_switch = tk.CTkSwitch(master=self.frame_1,
+                                               text="Interactive",
+                                               font=(
+                                                   "Arial", 20, "bold"),
+                                               variable=self.interactive_switch_state,
+                                               onvalue=1,
+                                               offvalue=0,
+                                               command=self.handle_interavtive
+                                               )
+
+        self.interactive_switch.pack(pady=10, padx=15, anchor='w')
 
         self.app.attributes('-topmost', True)
 
     def handle_robin(self):
+        print(self.active_switch_state.get() )
         if self.active_switch_state.get() == 0:
             self.sr_thread.stop_event.set()
+        else:
+            self.handle_voice_recognition()
 
     def activate_robin(self):
         if self.active_switch_state.get() == 0:
             self.active_switch.select()
             self.handle_voice_recognition()
             return True
+
+        # self.active_switch.deselect()
+        # self.sr_thread.stop_event.set()
+
         return False
 
     def handle_voice_recognition(self):
@@ -111,6 +145,12 @@ class GUI:
             self.active_switch.deselect()
             return True
         return False
+
+    def handle_interavtive(self):
+        if self.interactive_switch_state.get() == 1:
+            print("Interactive")
+        else:
+            print("Non Interactive")
 
     def run(self):
         self.app.mainloop()

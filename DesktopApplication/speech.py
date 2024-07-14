@@ -46,7 +46,7 @@ class SpeechRecognition:
         self.gui = gui
         self.command_intent = CommandIntent(intent_model_path, ner_model_path)
         self.api = APIController()
-
+        self.active = False
         # read config file
         with open('./config.json') as f:
             self.__config = json.load(f)
@@ -63,8 +63,7 @@ class SpeechRecognition:
         self.microphone = sr.Microphone(
             device_index=1, sample_rate=48000, chunk_size=2048
         )
-        # with self.microphone as source:
-        #     self.recognizer.adjust_for_ambient_noise(source)
+
         self.active = True
         print('initialized google')
 
@@ -81,25 +80,30 @@ class SpeechRecognition:
             print('initialized vosk')
 
         except Exception as e:
+            print(f"Error initializing Vosk: {e}")
+            self.voice_recognition_tool = 'google'
             self.initialize_google_sr()
 
     def recognize(self):
-        print("recogninzing")
+        # print("recogninzing")
         # based on the speech recognition method used
         if self.voice_recognition_tool == 'google':
             while self.active:
                 with self.microphone as source:
-                    self.recognizer.adjust_for_ambient_noise(source)
+                    self.recognizer.adjust_for_ambient_noise(source,
+                                                             duration=1)
                     audio = self.recognizer.listen(source)
+                    print(audio.sample_width)
                     try:
                         r = self.recognizer.recognize_google(audio)
-                        print(r)
 
+                        print(r)
+                        if (r != 'hey robin'):
                         # process the command
-                        try:
-                            self.command_intent.process_command(r)
-                        except Exception as e:
-                            print(f"Error in processing command: {e}")
+                            try:
+                                self.command_intent.process_command(r)
+                            except Exception as e:
+                                print(f"Error in processing command: {e}")
                     except sr.UnknownValueError:
                         print("Google Speech Recognition could not understand audio")
                     except sr.RequestError as e:
@@ -113,8 +117,12 @@ class SpeechRecognition:
                 if self.recognizer.AcceptWaveform(data):
                     print("RECOGNIZED")
                     result = self.recognizer.Result()
-                    # if 'text' in result:
-                    print(result)
-                    # return result['text']
-                    # else:
-                    #     return None
+                    result = json.loads(result)
+                    # print(result)
+                    if 'text' in result and result['text'].strip() != "" and result['text'].strip() != 'hey Robin':
+                        # process the command
+                        print(result['text'])
+                        try:
+                            self.command_intent.process_command(result['text'])
+                        except Exception as e:
+                            print(f"Error in processing command: {e}")
