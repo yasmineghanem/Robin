@@ -1,8 +1,38 @@
 Summary of the code:
 
-Assignment Operation: x = 0
+Imported libraries:  numpy  pandas 
+Imported all modules from math 
+Imported svm, datasets modules from sklearn 
 
-	while x > 5 loop:
+The constants declared are: 
+CONST_VAR equals to 10
+CONST_VAR2 equals to 20
+
+A nested expression:
+	x = (CONST_VAR + (5 / 3))
+
+Function Call:
+ 	print(x) 
+
+Assignment Operation: b = 1
+
+A nested expression:
+	a = (true and b)
+
+while x > 5 loop:
 	print( "x is greater than 5" )
+
+A for loop on i in range ( 5 ) 
+	x += i
+
+A for loop on (a, b) in enumerate ( x ) 
+	print( a b )
+
+Function defined with name: test and parameters (hi)
+
+Class defined with name: Test
+	Method Named: __init__ with parameters ()
+
+	Method Named: print_hello with parameters ()
 
 End of code

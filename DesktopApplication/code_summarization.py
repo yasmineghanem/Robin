@@ -494,13 +494,13 @@ class ASTProcessor:
         # Code
         for item in ast_summary[2:]:
             if item['type'] == 'class_definition':
-                summary_text_to_speech += f"Class Named: {item['class_name']}\n"
+                summary_text_to_speech += f"Class defined with name: {item['class_name']}\n"
 
                 for method in item['class_methods']:
                     summary_text_to_speech+= f"\tMethod Named: {method['method_name']} with parameters ({', '.join(method['parameters'])})\n\n"
 
             elif item['type'] == 'function_definition':
-                summary_text_to_speech += f"Function Named: {item['method_name']} with parameters ({', '.join(item['parameters'])})\n\n"
+                summary_text_to_speech += f"Function defined with name: {item['method_name']} and parameters ({', '.join(item['parameters'])})\n\n"
 
             elif item['type'] == 'expression_statement':
                 #  _ = _
@@ -563,7 +563,7 @@ class ASTProcessor:
                         case 'is not':
                             summary_text_to_speech+= f"Is Not Operation: {item['left_side']} is not {item['right_side']} \n\n"
                         case 'call':
-                            summary_text_to_speech+= f"Function Call: {item['function_name']}({item['arguments']}) \n\n"
+                            summary_text_to_speech+= f"Function Call:\n \t{item['function_name']}({item['arguments']}) \n\n"
 
             elif item['type'] == 'loop':
                 if (item['keyword'] == 'for'):
@@ -574,7 +574,7 @@ class ASTProcessor:
                         summary_text_to_speech+= f"{item['iterator']} in {item['iterable']} \n"
                 else:
                     # while loop
-                    summary_text_to_speech+= f"\t{item['keyword']} {item['condition']} loop:\n"
+                    summary_text_to_speech+= f"{item['keyword']} {item['condition']} loop:\n"
 
                 for statement in item['body']:
                     summary_text_to_speech+= f"\t{statement}\n\n"
