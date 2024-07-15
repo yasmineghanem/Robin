@@ -1,4 +1,121 @@
 [
-    [],
-    []
+    [
+        {
+            "type": "import",
+            "library": "numpy",
+            "alias": "np"
+        },
+        {
+            "type": "import",
+            "library": "pandas"
+        },
+        {
+            "type": "import_from",
+            "library": "math",
+            "modules": [
+                "all"
+            ]
+        },
+        {
+            "type": "import_from",
+            "library": "sklearn",
+            "modules": [
+                "svm",
+                "datasets"
+            ]
+        }
+    ],
+    [
+        {
+            "name": "CONST_VAR",
+            "value": "10"
+        },
+        {
+            "name": "CONST_VAR2",
+            "value": "20"
+        }
+    ],
+    {
+        "left_side": "x",
+        "right_side": {
+            "left_side": "CONST_VAR",
+            "operator": "+",
+            "right_side": {
+                "left_side": "5",
+                "operator": "/",
+                "right_side": "3"
+            }
+        },
+        "operation": "=",
+        "type": "expression_statement"
+    },
+    {
+        "function_name": "print",
+        "arguments": "x",
+        "operation": "call",
+        "type": "expression_statement"
+    },
+    {
+        "left_side": "b",
+        "right_side": "1",
+        "operation": "=",
+        "type": "expression_statement"
+    },
+    {
+        "left_side": "a",
+        "right_side": {
+            "left_side": "true",
+            "operator": "and",
+            "right_side": "b"
+        },
+        "operation": "=",
+        "type": "expression_statement"
+    },
+    {
+        "type": "loop",
+        "keyword": "while",
+        "condition": "x > 5",
+        "body": [
+            "print( \"x is greater than 5\" )"
+        ]
+    },
+    {
+        "type": "loop",
+        "keyword": "for",
+        "iterator": "i",
+        "iterable": "range ( 5 )",
+        "body": [
+            "x += i"
+        ]
+    },
+    {
+        "type": "loop",
+        "keyword": "for",
+        "iterator": "(a, b)",
+        "iterable": "enumerate ( x )",
+        "body": [
+            "print( a b )"
+        ]
+    },
+    {
+        "method_name": "test",
+        "parameters": [
+            "hi"
+        ],
+        "type": "function_definition"
+    },
+    {
+        "class_name": "Test",
+        "class_methods": [
+            {
+                "method_name": "__init__",
+                "parameters": []
+            },
+            {
+                "method_name": "print_hello",
+                "parameters": []
+            }
+        ],
+        "type": "class_definition"
+    }
 ]

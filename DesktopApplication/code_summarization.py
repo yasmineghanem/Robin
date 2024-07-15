@@ -102,21 +102,6 @@ class ASTProcessor:
                         else:
                             import_nodes.append({'type': 'import', 'library': lib_name})
 
-                # elif 'import_from_statement' in node_type:
-                #     lib_name = None
-                #     modules = []
-                #     alias_name = None
-                #     for child in node['children']:
-                #         if child['type'] == 'dotted_name':
-                #             lib_name = [c['name'] for c in child['children'] if c['type'] == 'identifier']
-                #         if child['type'] == 'wildcard_import':
-                #             modules.append('all')
-                #         elif child['type'] == 'dotted_name' and 'children' in child:
-                #             modules.extend([c['name'] for c in child['children'] if c['type'] == 'identifier'])
-                #         elif child['type'] == 'identifier' and 'name' in child:
-                #             alias_name = child['name']
-                #     if lib_name:
-                #         import_nodes.append({'type': 'import_from', 'library': lib_name, 'modules': modules})
                 elif 'import_from_statement' in node_type:
                     lib_name = None
                     modules = []
@@ -139,8 +124,9 @@ class ASTProcessor:
                 elif "expression_statement" in node_type:
                     # check for constants
                     inner_node = node['children'][0]
-
-                    if 'type' in inner_node and 'assignment' in inner_node['type']:
+                    if 'type' in inner_node and 'call' in inner_node['type']:
+                        code_nodes.append(node)
+                    elif 'type' in inner_node and 'assignment' in inner_node['type']:
                         for c in inner_node['children']:
                             if 'type' in c and "identifier" in c['type']:
                                 # check if the name is all uppercase
@@ -255,6 +241,8 @@ class ASTProcessor:
                 return self.process_assignment(child)
             elif child['type'] == 'augmented_assignment':
                 return self.process_augmented_assignment(child)
+            elif child['type'] == 'call':
+                return self.process_expression(child)
 
 
     def process_assignment(self, node):
@@ -324,11 +312,13 @@ class ASTProcessor:
             function_name = node['children'][0]['name']
             arguments = [self.process_expression(
                 arg) for arg in node['children'][1]['children'] if arg['type'] != '(' and arg['type'] != ')']
+            arguments = [item for item in arguments if item is not None]
             arguments_str = ", ".join(arguments)
 
             return {
                 "function_name": function_name,
-                "arguments": arguments_str
+                "arguments": arguments_str,
+                "operation": "call"
             }
 
         if node['type'] == 'list':
@@ -416,8 +406,8 @@ class ASTProcessor:
                 if 'name' in child and child['name']:
                     arguments.append(child['name'])
 
-            print("arguments")
-            print(arguments)
+            # print("arguments")
+            # print(arguments)
             if pattern:
                 return f"({', '.join(arguments)})"
             return f"{' '.join(arguments)}"
@@ -476,7 +466,12 @@ class ASTProcessor:
         return str(exp)
     
     # function to transform summary to be human readable
-    def get_summary(self, ast_summary):
+    def get_summary(self, ast_summary=None):
+        with open('./ast_2.json', 'r') as file:
+            ast = json.load(file)
+
+        ast_processor = ASTProcessor(ast['ast'])
+        ast_summary = ast_processor.process_ast()
         summary_text_to_speech = "Summary of the code:\n\n"
         # Imports
         import_list = ast_summary[0]
@@ -504,17 +499,17 @@ class ASTProcessor:
         # Code
         for item in ast_summary[2:]:
             if item['type'] == 'class_definition':
-                summary_text_to_speech += f"Class Named: {item['class_name']}\n"
+                summary_text_to_speech += f"Class defined with name: {item['class_name']}\n"
 
                 for method in item['class_methods']:
                     summary_text_to_speech+= f"\tMethod Named: {method['method_name']} with parameters ({', '.join(method['parameters'])})\n\n"
 
             elif item['type'] == 'function_definition':
-                summary_text_to_speech += f"Function Named: {item['method_name']} with parameters ({', '.join(item['parameters'])})\n\n"
+                summary_text_to_speech += f"Function defined with name: {item['method_name']} and parameters ({', '.join(item['parameters'])})\n\n"
 
             elif item['type'] == 'expression_statement':
                 #  _ = _
-                if isinstance(item['right_side'], dict):
+                if'right_side' in item and isinstance(item['right_side'], dict):
                     summary_text_to_speech+=f"A nested expression:\n"
                     left_side = item['left_side']
                     operation = item['operation']
@@ -572,16 +567,19 @@ class ASTProcessor:
                             summary_text_to_speech+= f"Is Operation: {item['left_side']} is {item['right_side']} \n\n"
                         case 'is not':
                             summary_text_to_speech+= f"Is Not Operation: {item['left_side']} is not {item['right_side']} \n\n"
-                        
+                        case 'call':
+                            summary_text_to_speech+= f"Function Call:\n \t{item['function_name']}({item['arguments']}) \n\n"
 
             elif item['type'] == 'loop':
-                summary_text_to_speech+= f"A {item['keyword']} loop:\n"
                 if (item['keyword'] == 'for'):
-                    if isinstance(item['iterable'], dict):
-                        summary_text_to_speech+= f"\t{item['keyword']} {item['iterator']} in {item['iterable']['function_name']}({item['iterable']['arguments']}) {item['condition']}:\n\n"
+                    summary_text_to_speech+= f"A {item['keyword']} loop on "
+                    if(item['iterable'] == ""):
+                        summary_text_to_speech+= f"{item['iterator']} \n"
+                    else:
+                        summary_text_to_speech+= f"{item['iterator']} in {item['iterable']} \n"
                 else:
                     # while loop
-                    summary_text_to_speech+= f"\t{item['keyword']} {item['condition']}:\n\n"
+                    summary_text_to_speech+= f"{item['keyword']} {item['condition']} loop:\n"
 
                 for statement in item['body']:
                     summary_text_to_speech+= f"\t{statement}\n\n"
@@ -604,4 +602,3 @@ final = ast_processor.get_summary(summary)
 with open('summary.txt', 'w') as file:
     file.write(final)
 # print(summary)
-

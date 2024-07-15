@@ -3,54 +3,207 @@
         "type": "module",
         "children": [
             {
-                "type": "function_definition",
+                "type": "import_statement",
                 "children": [
                     {
-                        "type": "def"
+                        "type": "import"
                     },
                     {
-                        "type": "identifier",
-                        "name": "f"
-                    },
-                    {
-                        "type": "parameters",
+                        "type": "aliased_import",
                         "children": [
                             {
-                                "type": "(",
-                                "name": "("
+                                "type": "dotted_name",
+                                "children": [
+                                    {
+                                        "type": "identifier",
+                                        "name": "numpy"
+                                    }
+                                ]
                             },
+                            {
+                                "type": "as",
+                                "name": "as"
+                            },
+                            {
+                                "type": "identifier",
+                                "name": "np"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "import_statement",
+                "children": [
+                    {
+                        "type": "import"
+                    },
+                    {
+                        "type": "dotted_name",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "pandas"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "import_from_statement",
+                "children": [
+                    {
+                        "type": "from"
+                    },
+                    {
+                        "type": "dotted_name",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "math"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "import"
+                    },
+                    {
+                        "type": "wildcard_import",
+                        "children": [
+                            {
+                                "type": "*",
+                                "name": "*"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "import_from_statement",
+                "children": [
+                    {
+                        "type": "from"
+                    },
+                    {
+                        "type": "dotted_name",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "sklearn"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "import"
+                    },
+                    {
+                        "type": "dotted_name",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "svm"
+                            }
+                        ]
+                    },
+                    {
+                        "type": ","
+                    },
+                    {
+                        "type": "dotted_name",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "datasets"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "expression_statement",
+                "children": [
+                    {
+                        "type": "assignment",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "CONST_VAR"
+                            },
+                            {
+                                "type": "=",
+                                "name": "="
+                            },
+                            {
+                                "type": "integer",
+                                "name": "10"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "expression_statement",
+                "children": [
+                    {
+                        "type": "assignment",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "CONST_VAR2"
+                            },
+                            {
+                                "type": "=",
+                                "name": "="
+                            },
+                            {
+                                "type": "integer",
+                                "name": "20"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "expression_statement",
+                "children": [
+                    {
+                        "type": "assignment",
+                        "children": [
                             {
                                 "type": "identifier",
                                 "name": "x"
                             },
                             {
-                                "type": ","
+                                "type": "=",
+                                "name": "="
                             },
                             {
-                                "type": "identifier",
-                                "name": "y"
-                            },
-                            {
-                                "type": ")",
-                                "name": ")"
-                            }
-                        ]
-                    },
-                    {
-                        "type": ":"
-                    },
-                    {
-                        "type": "block",
-                        "children": [
-                            {
-                                "type": "return_statement",
+                                "type": "binary_operator",
                                 "children": [
                                     {
-                                        "type": "return"
+                                        "type": "identifier",
+                                        "name": "CONST_VAR"
                                     },
                                     {
-                                        "type": "integer",
-                                        "name": "1"
+                                        "type": "+",
+                                        "name": "+"
+                                    },
+                                    {
+                                        "type": "binary_operator",
+                                        "children": [
+                                            {
+                                                "type": "integer",
+                                                "name": "5"
+                                            },
+                                            {
+                                                "type": "/",
+                                                "name": "/"
+                                            },
+                                            {
+                                                "type": "integer",
+                                                "name": "3"
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -76,8 +229,8 @@
                                         "name": "("
                                     },
                                     {
-                                        "type": "string",
-                                        "name": "\"hi\""
+                                        "type": "identifier",
+                                        "name": "x"
                                     },
                                     {
                                         "type": ")",
@@ -93,11 +246,141 @@
                 "type": "expression_statement",
                 "children": [
                     {
+                        "type": "assignment",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "b"
+                            },
+                            {
+                                "type": "=",
+                                "name": "="
+                            },
+                            {
+                                "type": "integer",
+                                "name": "1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "expression_statement",
+                "children": [
+                    {
+                        "type": "assignment",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "a"
+                            },
+                            {
+                                "type": "=",
+                                "name": "="
+                            },
+                            {
+                                "type": "boolean_operator",
+                                "children": [
+                                    {
+                                        "type": "true"
+                                    },
+                                    {
+                                        "type": "and"
+                                    },
+                                    {
+                                        "type": "identifier",
+                                        "name": "b"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "while_statement",
+                "children": [
+                    {
+                        "type": "while"
+                    },
+                    {
+                        "type": "comparison_operator",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "x"
+                            },
+                            {
+                                "type": ">",
+                                "name": ">"
+                            },
+                            {
+                                "type": "integer",
+                                "name": "5"
+                            }
+                        ]
+                    },
+                    {
+                        "type": ":"
+                    },
+                    {
+                        "type": "block",
+                        "children": [
+                            {
+                                "type": "expression_statement",
+                                "children": [
+                                    {
+                                        "type": "call",
+                                        "children": [
+                                            {
+                                                "type": "identifier",
+                                                "name": "print"
+                                            },
+                                            {
+                                                "type": "argument_list",
+                                                "children": [
+                                                    {
+                                                        "type": "(",
+                                                        "name": "("
+                                                    },
+                                                    {
+                                                        "type": "string",
+                                                        "name": "\"x is greater than 5\""
+                                                    },
+                                                    {
+                                                        "type": ")",
+                                                        "name": ")"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "for_statement",
+                "children": [
+                    {
+                        "type": "for"
+                    },
+                    {
+                        "type": "identifier",
+                        "name": "i"
+                    },
+                    {
+                        "type": "in",
+                        "name": "in"
+                    },
+                    {
                         "type": "call",
                         "children": [
                             {
                                 "type": "identifier",
-                                "name": "f"
+                                "name": "range"
                             },
                             {
                                 "type": "argument_list",
@@ -108,18 +391,365 @@
                                     },
                                     {
                                         "type": "integer",
-                                        "name": "1"
-                                    },
-                                    {
-                                        "type": ","
-                                    },
-                                    {
-                                        "type": "integer",
-                                        "name": "2"
+                                        "name": "5"
                                     },
                                     {
                                         "type": ")",
                                         "name": ")"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": ":"
+                    },
+                    {
+                        "type": "block",
+                        "children": [
+                            {
+                                "type": "expression_statement",
+                                "children": [
+                                    {
+                                        "type": "augmented_assignment",
+                                        "children": [
+                                            {
+                                                "type": "identifier",
+                                                "name": "x"
+                                            },
+                                            {
+                                                "type": "+=",
+                                                "name": "+="
+                                            },
+                                            {
+                                                "type": "identifier",
+                                                "name": "i"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "for_statement",
+                "children": [
+                    {
+                        "type": "for"
+                    },
+                    {
+                        "type": "pattern_list",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "a"
+                            },
+                            {
+                                "type": ","
+                            },
+                            {
+                                "type": "identifier",
+                                "name": "b"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "in",
+                        "name": "in"
+                    },
+                    {
+                        "type": "call",
+                        "children": [
+                            {
+                                "type": "identifier",
+                                "name": "enumerate"
+                            },
+                            {
+                                "type": "argument_list",
+                                "children": [
+                                    {
+                                        "type": "(",
+                                        "name": "("
+                                    },
+                                    {
+                                        "type": "identifier",
+                                        "name": "x"
+                                    },
+                                    {
+                                        "type": ")",
+                                        "name": ")"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": ":"
+                    },
+                    {
+                        "type": "block",
+                        "children": [
+                            {
+                                "type": "expression_statement",
+                                "children": [
+                                    {
+                                        "type": "call",
+                                        "children": [
+                                            {
+                                                "type": "identifier",
+                                                "name": "print"
+                                            },
+                                            {
+                                                "type": "argument_list",
+                                                "children": [
+                                                    {
+                                                        "type": "(",
+                                                        "name": "("
+                                                    },
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "a"
+                                                    },
+                                                    {
+                                                        "type": ","
+                                                    },
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "b"
+                                                    },
+                                                    {
+                                                        "type": ")",
+                                                        "name": ")"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "function_definition",
+                "children": [
+                    {
+                        "type": "def"
+                    },
+                    {
+                        "type": "identifier",
+                        "name": "test"
+                    },
+                    {
+                        "type": "parameters",
+                        "children": [
+                            {
+                                "type": "(",
+                                "name": "("
+                            },
+                            {
+                                "type": "identifier",
+                                "name": "hi"
+                            },
+                            {
+                                "type": ")",
+                                "name": ")"
+                            }
+                        ]
+                    },
+                    {
+                        "type": ":"
+                    },
+                    {
+                        "type": "block",
+                        "children": [
+                            {
+                                "type": "expression_statement",
+                                "children": [
+                                    {
+                                        "type": "call",
+                                        "children": [
+                                            {
+                                                "type": "identifier",
+                                                "name": "print"
+                                            },
+                                            {
+                                                "type": "argument_list",
+                                                "children": [
+                                                    {
+                                                        "type": "(",
+                                                        "name": "("
+                                                    },
+                                                    {
+                                                        "type": "identifier",
+                                                        "name": "hi"
+                                                    },
+                                                    {
+                                                        "type": ")",
+                                                        "name": ")"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "class_definition",
+                "children": [
+                    {
+                        "type": "class"
+                    },
+                    {
+                        "type": "identifier",
+                        "name": "Test"
+                    },
+                    {
+                        "type": ":"
+                    },
+                    {
+                        "type": "block",
+                        "children": [
+                            {
+                                "type": "function_definition",
+                                "children": [
+                                    {
+                                        "type": "def"
+                                    },
+                                    {
+                                        "type": "identifier",
+                                        "name": "__init__"
+                                    },
+                                    {
+                                        "type": "parameters",
+                                        "children": [
+                                            {
+                                                "type": "(",
+                                                "name": "("
+                                            },
+                                            {
+                                                "type": "identifier",
+                                                "name": "self"
+                                            },
+                                            {
+                                                "type": ")",
+                                                "name": ")"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": ":"
+                                    },
+                                    {
+                                        "type": "block",
+                                        "children": [
+                                            {
+                                                "type": "expression_statement",
+                                                "children": [
+                                                    {
+                                                        "type": "call",
+                                                        "children": [
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "print"
+                                                            },
+                                                            {
+                                                                "type": "argument_list",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "(",
+                                                                        "name": "("
+                                                                    },
+                                                                    {
+                                                                        "type": "string",
+                                                                        "name": "\"Object created\""
+                                                                    },
+                                                                    {
+                                                                        "type": ")",
+                                                                        "name": ")"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "function_definition",
+                                "children": [
+                                    {
+                                        "type": "def"
+                                    },
+                                    {
+                                        "type": "identifier",
+                                        "name": "print_hello"
+                                    },
+                                    {
+                                        "type": "parameters",
+                                        "children": [
+                                            {
+                                                "type": "(",
+                                                "name": "("
+                                            },
+                                            {
+                                                "type": "identifier",
+                                                "name": "self"
+                                            },
+                                            {
+                                                "type": ")",
+                                                "name": ")"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": ":"
+                                    },
+                                    {
+                                        "type": "block",
+                                        "children": [
+                                            {
+                                                "type": "expression_statement",
+                                                "children": [
+                                                    {
+                                                        "type": "call",
+                                                        "children": [
+                                                            {
+                                                                "type": "identifier",
+                                                                "name": "print"
+                                                            },
+                                                            {
+                                                                "type": "argument_list",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "(",
+                                                                        "name": "("
+                                                                    },
+                                                                    {
+                                                                        "type": "string",
+                                                                        "name": "\"Hello\""
+                                                                    },
+                                                                    {
+                                                                        "type": ")",
+                                                                        "name": ")"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     }
                                 ]
                             }

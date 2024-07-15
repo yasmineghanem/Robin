@@ -24524,6 +24524,27 @@ router.post("/try-except", (req, res) => {
 router.get("/exit-scope", (req, res) => {
     (0, utilities_1.executeCommand)(code_1.EXIT_SCOPE, {}, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// get errors
+router.get("/errors", (req, res) => {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const uri = editor.document.uri;
+        const errors = vscode.languages.getDiagnostics(uri);
+        /**
+         *  [{"severity":"Error","message":"Parsing failed: 'invalid syntax (<unknown>, line 35)'","range":[{"line":34,"character":17},{"line":34,"character":17}],"source":"Pylint","code":{"value":"E0001:syntax-error","target":{"$mid":1,"path":"/en/latest/user_guide/messages/error/syntax-error.html","scheme":"https","authority":"pylint.readthedocs.io"}}},{"severity":"Error","message":"SyntaxError: invalid syntax (file:///c%3A/Users/77/OneDrive/Desktop/New%20folder/robin.py, line 35)","range":[{"line":34,"character":16},{"line":34,"character":17}],"source":"compile"},{"severity":"Information","message":"\"alsarsora\": Unknown word.","range":[{"line":34,"character":7},{"line":34,"character":16}],"source":"cSpell"},{"severity":"Information","message":"\"sarsora\": Unknown word.","range":[{"line":35,"character":0},{"line":35,"character":7}],"source":"cSpell"}]
+         */
+        // return error type and line number
+        const errorList = errors.map((error) => {
+            return {
+                severity: error.severity,
+                message: error.message,
+                range: error.range.start.line,
+                source: error.source,
+            };
+        });
+        res.send(errorList);
+    }
+});
 exports["default"] = router;
 
 
@@ -24534,8 +24555,8 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.EXIT_SCOPE = exports.TRY_EXCEPT = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
-exports.CLASS_FAILURE = exports.CLASS_SUCCESS = exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = void 0;
+exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.GET_ERRORS = exports.EXIT_SCOPE = exports.TRY_EXCEPT = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.CLASS_FAILURE = exports.CLASS_SUCCESS = exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = exports.READ_FILE_FAILURE = void 0;
 /**
  * Commands
  */
@@ -24564,6 +24585,7 @@ exports.WRITE_FILE = "robin.writeFile";
 exports.DECLARE_CLASS = "robin.declareClass";
 exports.TRY_EXCEPT = "robin.tryExcept";
 exports.EXIT_SCOPE = 'robin.exitScope';
+exports.GET_ERRORS = 'robin.getErrors';
 /**
  * Variable declaration messages
  */
@@ -26401,9 +26423,6 @@ const declareVariable = () => {
             // check for extension
             const ext = getFileExtension(editor);
             let codeGenerator;
-            const uri = editor.document.uri;
-            const diagnostics = vscode.languages.getDiagnostics(uri);
-            console.log("aaaa", diagnostics);
             switch (ext) {
                 case constants_1.EXTENSIONS.PYTHON:
                     codeGenerator = new pythonCodeGenerator_1.PythonCodeGenerator(editor);

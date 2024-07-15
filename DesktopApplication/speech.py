@@ -1,4 +1,5 @@
 
+import pyttsx3
 import speech_recognition as sr
 from vosk import Model, KaldiRecognizer
 import pyaudio
@@ -12,6 +13,7 @@ import tensorflow as tf
 import torch
 import numpy as np
 import pyttsx3
+from code_summarization import ASTProcessor
 
 np.random.seed(42)
 tf.random.set_seed(42)
@@ -49,6 +51,12 @@ class SpeechRecognition:
         self.api = APIController()
         self.interactive = False
         self.voice_engine = None
+        self.active = False
+
+        self.interactive = False
+        self.voice_engine = None
+
+        self.summarizer = None
 
         # read config file
         with open('./config.json') as f:
@@ -66,8 +74,7 @@ class SpeechRecognition:
         self.microphone = sr.Microphone(
             device_index=1, sample_rate=48000, chunk_size=2048
         )
-        # with self.microphone as source:
-        #     self.recognizer.adjust_for_ambient_noise(source)
+
         self.active = True
         print('initialized google')
 
@@ -84,6 +91,8 @@ class SpeechRecognition:
             print('initialized vosk')
 
         except Exception as e:
+            print(f"Error initializing Vosk: {e}")
+            self.voice_recognition_tool = 'google'
             self.initialize_google_sr()
 
     def process_command(self, command):
@@ -116,24 +125,64 @@ class SpeechRecognition:
         else:
             print(response)
             
+            intent, response = self.command_intent.process_command(command)
+            # print(self.command_intent.process_command(command))
+            print(f"Intent: {intent}")
+            print(f"Response: {response}")
+            # print(f"Response: {type(response)}")
+            intent = 'summary'
+            if intent == 'summary':
+                response['message'] = self.get_file_summary()
+
+            if self.interactive:
+                self.interactive_response(response)
+
+        except Exception as e:
+            print(f"Error in processing command: {e}")
+
+    def get_file_summary(self):
+        self.summarizer = ASTProcessor({})
+
+        s = self.summarizer.get_summary()
+        print(s)
+        return s
+
+    def activate_interactive(self,):
+        print('activated interactive')
+        self.interactive = True
+        pyttsx3.speak("Interactive mode activated")
+
+    def deactivate_interactive(self):
+
+        pyttsx3.speak("Interactive mode deactivated")
+
+        self.interactive = False
+
+    def interactive_response(self, response):
+        if 'message' in response:
+            pyttsx3.speak(response['message'])
+        else:
+            print(response)
 
     def recognize(self):
-        print("recogninzing")
         # based on the speech recognition method used
         if self.voice_recognition_tool == 'google':
             while self.active:
                 with self.microphone as source:
-                    self.recognizer.adjust_for_ambient_noise(source)
+                    self.recognizer.adjust_for_ambient_noise(source,
+                                                             duration=1)
                     audio = self.recognizer.listen(source)
                     try:
                         r = self.recognizer.recognize_google(audio)
-                        print(r)
 
-                        # process the command
-                        try:
-                            self.command_intent.process_command(r)
-                        except Exception as e:
-                            print(f"Error in processing command: {e}")
+                        print(r)
+                        if (r != 'hey robin'):
+                            # process the command
+                            try:
+                                # self.command_intent.process_command(r)
+                                self.process_command(r)
+                            except Exception as e:
+                                print(f"Error in processing command: {e}")
                     except sr.UnknownValueError:
                         print("Google Speech Recognition could not understand audio")
                     except sr.RequestError as e:
@@ -147,9 +196,14 @@ class SpeechRecognition:
                 if self.recognizer.AcceptWaveform(data):
                     print("RECOGNIZED")
                     result = self.recognizer.Result()
-                    if 'text' in result and result['text']:
-                        print(result)
+                    result = json.loads(result)
+                    # print(result)
+                    if 'text' in result and result['text'].strip() != "" and result['text'].strip() != 'hey Robin':
+                        # process the command
+                        print(result['text'])
                         try:
-                            self.command_intent.process_command(result['text'])
+                            self.process_command(r)
+
+                            # self.command_intent.process_command(result['text'])
                         except Exception as e:
                             print(f"Error in processing command: {e}")
