@@ -111,10 +111,11 @@ ACTIONS = {
     }
 }
 
-FALLBACK_ENTITIES = [
+FALLBACK_INTENTS = [
     'mouse click',
     'activate interactive',
     'activate mouse',
+    'exit block'
 ]
 
 NO_ENTITIES = [

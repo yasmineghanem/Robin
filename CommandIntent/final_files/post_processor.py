@@ -155,7 +155,7 @@ class PostProcessor:
             case 'ide operation':
                 final_parameters = self.post_process_ide_operation(
                     parameters, fallback=fallback)
-                
+
                 response = self.api.ide_operation(final_parameters)
 
             case 'array operation':
@@ -164,8 +164,7 @@ class PostProcessor:
                 # response = self.api.operation(final_parameters)
 
             case 'activate interactive':
-                final_parameters = self.post_process_fallback(
-                    parameters, intent)
+                final_parameters = self.post_process_fallback(parameters, intent)
                 # response = self.api.interactive_commands(final_parameters)
 
             case 'activate mouse':
@@ -179,8 +178,8 @@ class PostProcessor:
                 # response = self.api.interactive_commands(final_parameters)
 
             case 'exit block':
-                final_parameters = self.post_process_fallback(
-                    parameters, intent)
+                # final_parameters = self.post_process_fallback(
+                #     parameters, intent)
                 response = self.api.exit_scope()
         print("Final parameters: ", final_parameters)
 
