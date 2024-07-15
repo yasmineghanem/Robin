@@ -24949,7 +24949,7 @@ router.post("/", (req, res) => {
                 res.end(JSON.stringify({ error: err }));
             });
             break;
-        case "copy":
+        case "copy-file":
             if (!data["name"] && !data["source"]) {
                 res.writeHead(400, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ message: "Name is required" }));
@@ -24962,6 +24962,25 @@ router.post("/", (req, res) => {
                 else {
                     res.writeHead(404, { "Content-Type": "application/json" });
                     res.end(JSON.stringify({ message: "File not found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "copy-directory":
+            if (!data["name"] && !data["source"]) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Name is required" }));
+            }
+            vscode.commands.executeCommand(fileSystem_1.COPY_DIRECTORY, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Directory copied successfully!" }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Directory not found" }));
                 }
             }, (err) => {
                 res.writeHead(500, { "Content-Type": "application/json" });
@@ -25671,60 +25690,55 @@ const createDirectory = () => vscode.commands.registerCommand(fileSystem_1.CREAT
  */
 const copyFileCommand = () => {
     vscode.commands.registerCommand(fileSystem_1.COPY_FILE, (args) => {
-        const source = args.source ?? args.name ?? "";
-        const destination = args.destination;
+        const source = args?.source ?? args?.name ?? "";
+        const destination = args?.destination;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
         const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
         let path = "";
         // check if the source file doesn't have an extension, get the first the file the matches the source
         if (source.split(".").pop() === source) {
-            const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || "");
-            const file = files.find((file) => file.split(".")[0] === source);
-            const stats = fs_1.default.statSync(`${vscode.workspace.rootPath}\\${file}`);
-            if (stats.isFile()) {
-                if (file) {
-                    const content = fs_1.default.readFileSync(`${vscode.workspace.rootPath}\\${file}`, "utf-8");
-                    if (destination) {
-                        path = destinationPath;
-                        fs_1.default.writeFileSync(destinationPath, content);
-                    }
-                    else {
-                        // add copy before extenstion
-                        path = `${vscode.workspace.rootPath}\\${source}-copy.${file
-                            .split(".")
-                            .pop()}`;
-                        fs_1.default.writeFileSync(path, content);
-                    }
-                    return {
-                        success: true,
-                        path,
-                    };
+            let files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || "");
+            files = files.filter(
+            // make sure ut doesn't start with .
+            (f) => f[0] !== ".");
+            // get files only and exclude directories
+            files = files.filter((f) => fs_1.default.lstatSync(`${vscode.workspace.rootPath}\\${f}`).isFile());
+            const file = files.find((f) => f.split(".")[0] === source);
+            if (file) {
+                const content = fs_1.default.readFileSync(`${vscode.workspace.rootPath}\\${file}`, "utf-8");
+                if (destination) {
+                    path = destinationPath;
+                    fs_1.default.writeFileSync(destinationPath, content);
                 }
-            }
-            else {
-                if (fs_1.default.existsSync(sourcePath)) {
-                    const content = fs_1.default.readFileSync(sourcePath, "utf-8");
-                    if (destination) {
-                        fs_1.default.writeFileSync(destinationPath, content);
-                    }
-                    else {
-                        // add copy before extension
-                        path = `${vscode.workspace.rootPath}\\${source.split(".")[0]}-copy.${source.split(".").pop()}`;
-                        fs_1.default.writeFileSync(path, content);
-                    }
-                    return {
-                        success: true,
-                        path,
-                    };
+                else {
+                    // add copy before extenstion
+                    path = `${vscode.workspace.rootPath}\\${source}-copy.${file
+                        .split(".")
+                        .pop()}`;
+                    fs_1.default.writeFileSync(path, content);
                 }
+                return {
+                    success: true,
+                    path,
+                };
             }
         }
         else {
-            vscode.commands.executeCommand(fileSystem_1.COPY_DIRECTORY, {
-                source,
-                destination,
-                overwrite: args.overwrite,
-            });
+            if (fs_1.default.existsSync(sourcePath)) {
+                const content = fs_1.default.readFileSync(sourcePath, "utf-8");
+                if (destination) {
+                    fs_1.default.writeFileSync(destinationPath, content);
+                }
+                else {
+                    // add copy before extension
+                    path = `${vscode.workspace.rootPath}\\${source.split(".")[0]}-copy.${source.split(".").pop()}`;
+                    fs_1.default.writeFileSync(path, content);
+                }
+                return {
+                    success: true,
+                    path,
+                };
+            }
         }
         return {
             success: false,
@@ -25734,7 +25748,7 @@ const copyFileCommand = () => {
 };
 const copyDirectory = () => {
     vscode.commands.registerCommand(fileSystem_1.COPY_DIRECTORY, (args) => {
-        const source = args.source;
+        const source = args.source ?? args.name ?? "";
         const destination = args.destination;
         const overwrite = args.overwrite ?? false;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;

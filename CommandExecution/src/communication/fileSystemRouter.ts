@@ -209,7 +209,7 @@ router.post("/", (req: any, res: any) => {
         }
       );
       break;
-    case "copy":
+    case "copy-file":
       if (!data["name"] && !data["source"]) {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Name is required" }));
@@ -222,6 +222,30 @@ router.post("/", (req: any, res: any) => {
           } else {
             res.writeHead(404, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ message: "File not found" }));
+          }
+        },
+        (err) => {
+          res.writeHead(500, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: err }));
+        }
+      );
+      break;
+
+    case "copy-directory":
+      if (!data["name"] && !data["source"]) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Name is required" }));
+      }
+      vscode.commands.executeCommand(COPY_DIRECTORY, data).then(
+        (response: any) => {
+          if (response.success) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(
+              JSON.stringify({ message: "Directory copied successfully!" })
+            );
+          } else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Directory not found" }));
           }
         },
         (err) => {

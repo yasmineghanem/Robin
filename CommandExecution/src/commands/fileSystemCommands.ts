@@ -117,9 +117,107 @@ const createDirectory = () =>
  * if it is, create a new file with the source file's content, and the destination's name
  * if it's not, create a new file with the source file's content and the name would be source file - copy
  */
-const copyFileCommand = () => {};
+const copyFileCommand = () => {
+  vscode.commands.registerCommand(COPY_FILE, (args) => {
+    const source = args?.source ?? args?.name ?? "";
+    const destination = args?.destination;
+    const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+    const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
+    let path = "";
 
-const copyDirectory = () => {};
+    // check if the source file doesn't have an extension, get the first the file the matches the source
+    if (source.split(".").pop() === source) {
+      let files = fs.readdirSync(vscode.workspace.rootPath?.toString() || "");
+      files = files.filter(
+        // make sure ut doesn't start with .
+
+        (f) => f[0] !== "."
+      );
+
+      // get files only and exclude directories
+      files = files.filter((f) =>
+        fs.lstatSync(`${vscode.workspace.rootPath}\\${f}`).isFile()
+      );
+
+      const file = files.find((f) => f.split(".")[0] === source);
+      if (file) {
+        const content = fs.readFileSync(
+          `${vscode.workspace.rootPath}\\${file}`,
+          "utf-8"
+        );
+        if (destination) {
+          path = destinationPath;
+          fs.writeFileSync(destinationPath, content);
+        } else {
+          // add copy before extenstion
+          path = `${vscode.workspace.rootPath}\\${source}-copy.${file
+            .split(".")
+            .pop()}`;
+          fs.writeFileSync(path, content);
+        }
+
+        return {
+          success: true,
+          path,
+        };
+      }
+    } else {
+      if (fs.existsSync(sourcePath)) {
+        const content = fs.readFileSync(sourcePath, "utf-8");
+        if (destination) {
+          fs.writeFileSync(destinationPath, content);
+        } else {
+          // add copy before extension
+          path = `${vscode.workspace.rootPath}\\${
+            source.split(".")[0]
+          }-copy.${source.split(".").pop()}`;
+          fs.writeFileSync(path, content);
+        }
+
+        return {
+          success: true,
+          path,
+        };
+      }
+    }
+
+    return {
+      success: false,
+      message: "Source file not found",
+    };
+  });
+};
+
+const copyDirectory = () => {
+  vscode.commands.registerCommand(COPY_DIRECTORY, (args) => {
+    const source = args.source ?? args.name ?? "";
+    const destination = args.destination;
+    const overwrite = args.overwrite ?? false;
+
+    const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
+
+    if (fs.existsSync(sourcePath)) {
+      if (destination) {
+        vscode.workspace.fs.copy(
+          vscode.Uri.file(sourcePath),
+          vscode.Uri.file(`${vscode.workspace.rootPath}\\${destination}`)
+        );
+      } else {
+        vscode.workspace.fs.copy(
+          vscode.Uri.file(sourcePath),
+          vscode.Uri.file(`${vscode.workspace.rootPath}\\${source} copy`)
+        );
+      }
+      return {
+        success: true,
+      };
+    }
+    return {
+      success: false,
+      message: "Source directory not found",
+    };
+  });
+};
 
 // delete file or directory
 const deleteFile = () => {
