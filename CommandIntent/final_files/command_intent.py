@@ -118,9 +118,10 @@ class CommandIntent:
             if fallback_entities:
                 print(fallback_entities)
                 fallback = True
-                response = self.post_processor.post_process(command, intent, fallback_entities, fallback=fallback)
+                response = self.post_processor.post_process(
+                    command, intent, fallback_entities, fallback=fallback)
 
-                return response
+                return intent, response
 
             print('ahlan tany')
             if intent in ['mouse click', 'activate mouse', 'activate interactive']:
@@ -134,12 +135,12 @@ class CommandIntent:
             response = self.post_processor.post_process(
                 command, intent, entities)
 
-            return response
+            return intent, response
 
         elif intent in command_constants.FALLBACK_ENTITIES:
             entities = self.fallback_ner.get_entities(command, intent)
             response = self.post_processor.post_process_fallback(
                 command, intent, entities)
-            return response
+            return intent, response
 
         return intent
