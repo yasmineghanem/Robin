@@ -28,11 +28,8 @@ A for loop on i in range ( 5 )
 A for loop on (a, b) in enumerate ( x ) 
 	print( a b )
 
-Function defined with name: test and parameters (hi)
-
+Function defined with name: test ,and parameters (hi)
 Class defined with name: Test
-	Method Named: __init__ with parameters ()
-
-	Method Named: print_hello with parameters ()
-
+	Method Named: __init__
+	Method Named: print_hello
 End of code

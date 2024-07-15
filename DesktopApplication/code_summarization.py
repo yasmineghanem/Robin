@@ -471,7 +471,7 @@ class ASTProcessor:
         #     ast = json.load(file)
 
         # ast_processor = ASTProcessor(ast_summary['ast'])
-        ast_summary = ast_processor.process_ast()
+        # ast_summary = ast_processor.process_ast()
         summary_text_to_speech = "Summary of the code:\n\n"
         # Imports
         import_list = ast_summary[0]
@@ -503,7 +503,7 @@ class ASTProcessor:
 
                 for method in item['class_methods']:
                     summary_text_to_speech+= f"\tMethod Named: {method['method_name']}"
-                    if method['paramaters']:
+                    if method['parameters']:
                         summary_text_to_speech+= f", with parameters ({', '.join(method['parameters'])})\n"
                     else:
                         summary_text_to_speech+= f"\n"
@@ -595,16 +595,19 @@ class ASTProcessor:
 
 
 # # Load the AST from the JSON file
-# with open('./ast_2.json', 'r') as file:
-#     ast = json.load(file)
+with open('./ast_2.json', 'r') as file:
+    ast = json.load(file)
 
-# ast_processor = ASTProcessor(ast['ast'])
-# summary = ast_processor.process_ast()
-# with open('summary.json', 'w') as file:
-#     json.dump(summary, file, indent=4)
+ast_processor = ASTProcessor(ast['ast'])
+summary = ast_processor.process_ast()
+final_summary = ast_processor.get_summary(summary)
 
 
-# final = ast_processor.get_summary(summary)
-# with open('summary.txt', 'w') as file:
-#     file.write(final)
-# # print(summary)
+with open('summary.json', 'w') as file:
+    json.dump(summary, file, indent=4)
+
+
+
+with open('summary.txt', 'w') as file:
+    file.write(final_summary)
+# print(summary)
