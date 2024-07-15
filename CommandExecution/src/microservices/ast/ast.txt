@@ -1,9 +1,0 @@
-module
-  expression_statement
-    assignment
-      Identifier: s
-      =
-      String: "yasmin"
-        string_start
-        string_content
-        string_end
