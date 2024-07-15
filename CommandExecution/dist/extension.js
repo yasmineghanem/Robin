@@ -24524,6 +24524,27 @@ router.post("/try-except", (req, res) => {
 router.get("/exit-scope", (req, res) => {
     (0, utilities_1.executeCommand)(code_1.EXIT_SCOPE, {}, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
+// get errors
+router.get("/errors", (req, res) => {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const uri = editor.document.uri;
+        const errors = vscode.languages.getDiagnostics(uri);
+        /**
+         *  [{"severity":"Error","message":"Parsing failed: 'invalid syntax (<unknown>, line 35)'","range":[{"line":34,"character":17},{"line":34,"character":17}],"source":"Pylint","code":{"value":"E0001:syntax-error","target":{"$mid":1,"path":"/en/latest/user_guide/messages/error/syntax-error.html","scheme":"https","authority":"pylint.readthedocs.io"}}},{"severity":"Error","message":"SyntaxError: invalid syntax (file:///c%3A/Users/77/OneDrive/Desktop/New%20folder/robin.py, line 35)","range":[{"line":34,"character":16},{"line":34,"character":17}],"source":"compile"},{"severity":"Information","message":"\"alsarsora\": Unknown word.","range":[{"line":34,"character":7},{"line":34,"character":16}],"source":"cSpell"},{"severity":"Information","message":"\"sarsora\": Unknown word.","range":[{"line":35,"character":0},{"line":35,"character":7}],"source":"cSpell"}]
+         */
+        // return error type and line number
+        const errorList = errors.map((error) => {
+            return {
+                severity: error.severity,
+                message: error.message,
+                range: error.range.start.line,
+                source: error.source,
+            };
+        });
+        res.send(errorList);
+    }
+});
 exports["default"] = router;
 
 
@@ -24534,8 +24555,8 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.EXIT_SCOPE = exports.TRY_EXCEPT = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
-exports.CLASS_FAILURE = exports.CLASS_SUCCESS = exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = void 0;
+exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.GET_ERRORS = exports.EXIT_SCOPE = exports.TRY_EXCEPT = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.CLASS_FAILURE = exports.CLASS_SUCCESS = exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = exports.READ_FILE_FAILURE = void 0;
 /**
  * Commands
  */
@@ -24564,6 +24585,7 @@ exports.WRITE_FILE = "robin.writeFile";
 exports.DECLARE_CLASS = "robin.declareClass";
 exports.TRY_EXCEPT = "robin.tryExcept";
 exports.EXIT_SCOPE = 'robin.exitScope';
+exports.GET_ERRORS = 'robin.getErrors';
 /**
  * Variable declaration messages
  */
@@ -24679,11 +24701,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.showError = exports.showMessage = exports.executeCommand = exports.errorHandler = exports.successHandler = void 0;
+exports.createFieldChecker = exports.showError = exports.showMessage = exports.executeCommand = exports.errorHandler = exports.successHandler = void 0;
 const vscode = __importStar(__webpack_require__(1));
 const successHandler = (response, res) => {
     if (response.success) {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, { "Content-Type": "application/json" });
         if (response) {
             res.end(JSON.stringify(response));
         }
@@ -24692,13 +24714,13 @@ const successHandler = (response, res) => {
         }
     }
     else {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: response.message }));
     }
 };
 exports.successHandler = successHandler;
 const errorHandler = (err, res) => {
-    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify(err));
 };
 exports.errorHandler = errorHandler;
@@ -24714,6 +24736,19 @@ const showError = (message) => {
     vscode.window.showErrorMessage(message);
 };
 exports.showError = showError;
+const createFieldChecker = (requiredFields) => {
+    return function (req, res, next) {
+        const body = req.body;
+        const missingFields = requiredFields.filter((field) => !body[field]);
+        if (missingFields.length > 0) {
+            return res.status(400).json({
+                error: `Missing required fields: ${missingFields.join(", ")}`,
+            });
+        }
+        next();
+    };
+};
+exports.createFieldChecker = createFieldChecker;
 
 
 /***/ }),
@@ -24853,29 +24888,6 @@ router.post("/rename", (req, res) => {
         res.end(JSON.stringify({ error: err }));
     });
 });
-// copy to clipboard
-// router.post(
-//   "/copy-clipboard",
-//   (req: any, res: any) => {
-//     const data = req.body;
-//     vscode.commands.executeCommand("robin.copyFileClipboard", data).then(
-//       (response: any) => {
-//         if (response.success) {
-//           res.writeHead(200, { "Content-Type": "application/json" });
-//           res.end(JSON.stringify({ message: "File copied to clipboard!" }));
-//         }
-//         else {
-//           res.writeHead(404, { "Content-Type": "application/json" });
-//           res.end(JSON.stringify({ message: "File not found" }));
-//         }
-//       },
-//       (err) => {
-//         res.writeHead(500, { "Content-Type": "application/json" });
-//         res.end(JSON.stringify({ error: err }));
-//       }
-//     );
-//   }
-// );
 // save
 router.post("/save", (req, res) => {
     const data = req.body;
@@ -24899,7 +24911,10 @@ router.post("/get-files", (req, res) => {
     vscode.commands.executeCommand(fileSystem_1.GET_FILES).then((response) => {
         if (response.success) {
             res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Retrieved all files successfully in the workspace!", files: response.files }));
+            res.end(JSON.stringify({
+                message: "Retrieved all files successfully in the workspace!",
+                files: response.files,
+            }));
         }
         else {
             res.writeHead(404, { "Content-Type": "application/json" });
@@ -24909,6 +24924,123 @@ router.post("/get-files", (req, res) => {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: err }));
     });
+});
+// general handling
+router.post("/", (req, res) => {
+    const data = req.body;
+    const action = data["action"];
+    switch (action) {
+        case "create":
+            if (!data["name"] && !data["fileName"]) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Name is required" }));
+            }
+            vscode.commands.executeCommand(fileSystem_1.CREATE_FILE, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+                else {
+                    res.writeHead(409, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Already exists!" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "copy-file":
+            if (!data["name"] && !data["source"]) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Name is required" }));
+            }
+            vscode.commands.executeCommand(fileSystem_1.COPY_FILE, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "File copied successfully!" }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "File not found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "copy-directory":
+            if (!data["name"] && !data["source"]) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Name is required" }));
+            }
+            vscode.commands.executeCommand(fileSystem_1.COPY_DIRECTORY, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Directory copied successfully!" }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Directory not found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "delete":
+            vscode.commands.executeCommand(fileSystem_1.DELETE_FILE, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({
+                        message: "File/Directory deleted successfully!",
+                    }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "File/Directory not found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "rename":
+            vscode.commands.executeCommand(fileSystem_1.RENAME, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({
+                        message: "File/Directory renamed successfully!",
+                    }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "File/Directory not found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "save":
+            vscode.commands.executeCommand(fileSystem_1.SAVE, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "File saved successfully!" }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "No active files found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        default:
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Invalid action" }));
+            break;
+    }
 });
 exports["default"] = router;
 
@@ -24973,85 +25105,107 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
 const GIT_1 = __webpack_require__(167);
 const router = (__webpack_require__(6).Router)();
-// git commit and push
-router.get("/push", (req, res) => {
-    vscode.commands.executeCommand(GIT_1.GIT_PUSH, req.query).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Git push done!" }));
-        }
-        else {
+router.post("/", (req, res) => {
+    // depending on action
+    // call the right function
+    const body = req.body;
+    const action = body.action;
+    const message = body.message;
+    switch (action) {
+        case "push":
+            vscode.commands.executeCommand(GIT_1.GIT_PUSH, message).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git push done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            }, (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            });
+            break;
+        case "commit":
+            vscode.commands.executeCommand(GIT_1.GIT_PUSH, message).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git push done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            }, (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            });
+            break;
+        case "pull":
+            vscode.commands.executeCommand(GIT_1.GIT_PULL, message).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git pull done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            }, (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            });
+            break;
+        case "discard":
+            vscode.commands.executeCommand(GIT_1.GIT_DISCARD, message).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git discard done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            }, (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            });
+            break;
+        case "stage":
+            vscode.commands
+                .executeCommand(GIT_1.GIT_STAGE, message)
+                .then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git stage done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            });
+            break;
+        case "stash":
+            vscode.commands.executeCommand(GIT_1.GIT_STASH, message).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Git stash done!" }));
+                }
+                else {
+                    res.writeHead(400, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+            }, (err) => {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify(err));
+            });
+            break;
+        default:
             res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: response.message }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(err));
-    });
-});
-// git fetch & pull 
-router.get("/pull", (req, res) => {
-    vscode.commands.executeCommand(GIT_1.GIT_PULL, req.query).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Git pull done!" }));
-        }
-        else {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: response.message }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(err));
-    });
-});
-// git discard
-router.get("/discard", (req, res) => {
-    vscode.commands.executeCommand(GIT_1.GIT_DISCARD, req.query).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Git discard done!" }));
-        }
-        else {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: response.message }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(err));
-    });
-});
-// git stage
-router.get("/stage", (req, res) => {
-    vscode.commands.executeCommand(GIT_1.GIT_STAGE, req.query).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Git stage done!" }));
-        }
-        else {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: response.message }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(err));
-    });
-});
-// git stash
-router.get("/stash", (req, res) => {
-    vscode.commands.executeCommand(GIT_1.GIT_STASH, req.query).then((response) => {
-        if (response.success) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Git stash done!" }));
-        }
-        else {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: response.message }));
-        }
-    }, (err) => {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(err));
-    });
+            res.end(JSON.stringify({ message: "Invalid action" }));
+            break;
+    }
 });
 exports["default"] = router;
 
@@ -25176,7 +25330,7 @@ router.get("/kill-terminal", (req, res) => {
 });
 // copy
 router.get("/copy", (req, res) => {
-    vscode.commands.executeCommand('copy').then(() => {
+    vscode.commands.executeCommand("copy").then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Copied!" }));
     }, (err) => {
@@ -25185,7 +25339,7 @@ router.get("/copy", (req, res) => {
     });
 });
 router.get("/paste", (req, res) => {
-    vscode.commands.executeCommand('paste').then(() => {
+    vscode.commands.executeCommand(IDE_1.PASTE).then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Pasted!" }));
     }, (err) => {
@@ -25194,7 +25348,7 @@ router.get("/paste", (req, res) => {
     });
 });
 router.get("/cut", (req, res) => {
-    vscode.commands.executeCommand('cut').then(() => {
+    vscode.commands.executeCommand("cut").then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Cut!" }));
     }, (err) => {
@@ -25204,7 +25358,7 @@ router.get("/cut", (req, res) => {
 });
 //UNDO
 router.get("/undo", (req, res) => {
-    vscode.commands.executeCommand('undo').then(() => {
+    vscode.commands.executeCommand(IDE_1.UNDO).then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Undo Done!" }));
     }, (err) => {
@@ -25214,7 +25368,7 @@ router.get("/undo", (req, res) => {
 });
 //REDO
 router.get("/redo", (req, res) => {
-    vscode.commands.executeCommand('redo').then(() => {
+    vscode.commands.executeCommand(IDE_1.REDO).then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Redo Done!" }));
     }, (err) => {
@@ -25446,8 +25600,8 @@ const fileExists = (path) => {
     if (fs_1.default.existsSync(path)) {
         return true;
     }
-    const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || '');
-    const file = files.find(file => file.split('.')[0] === path);
+    const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || "");
+    const file = files.find((file) => file.split(".")[0] === path);
     if (file) {
         return true;
     }
@@ -25456,15 +25610,15 @@ const fileExists = (path) => {
 // get list of all files in workspace directory
 const getFiles = () => {
     vscode.commands.registerCommand(fileSystem_1.GET_FILES, () => {
-        const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || '');
+        const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || "");
         return {
             files,
-            success: true
+            success: true,
         };
     });
 };
 // create new file
-// sample input => 
+// sample input =>
 // {
 //     "fileName": "new file",
 //     "extension": "/py",
@@ -25473,25 +25627,28 @@ const getFiles = () => {
 const createFile = () => vscode.commands.registerCommand(fileSystem_1.CREATE_FILE, (args) => {
     // const editor = vscode.window.activeTextEditor;
     // if (editor) {
-    const fileName = args.fileName;
-    const extension = args.extension;
-    const content = args.content;
+    const fileName = args.fileName ?? args.name ?? "robin_new";
+    const extension = args.extension ?? "";
+    const content = args.content ?? "";
     const path = `${vscode.workspace.rootPath}\\${fileName}${extension}`;
     // check if it already exists
     if (!fs_1.default.existsSync(path)) {
-        fs_1.default.writeFileSync(path, content);
+        if (extension) {
+            fs_1.default.writeFileSync(path, content);
+        }
+        else {
+            // create new directory
+            fs_1.default.mkdirSync(path);
+        }
         return {
             // path,
-            success: true
+            success: true,
+            message: `${extension ? "File" : "Directory"} created successfully`,
         };
     }
     return {
-        // path,
-        success: false
+        success: false,
     };
-    // } else {
-    //     vscode.window.showErrorMessage('No active text editor.');
-    // }
 });
 // create new directory
 // {
@@ -25507,12 +25664,12 @@ const createDirectory = () => vscode.commands.registerCommand(fileSystem_1.CREAT
         fs_1.default.mkdirSync(path);
         return {
             path,
-            success: true
+            success: true,
         };
     }
     return {
         path,
-        success: false
+        success: false,
     };
     // } else {
     //     vscode.window.showErrorMessage('No active text editor.');
@@ -25533,58 +25690,65 @@ const createDirectory = () => vscode.commands.registerCommand(fileSystem_1.CREAT
  */
 const copyFileCommand = () => {
     vscode.commands.registerCommand(fileSystem_1.COPY_FILE, (args) => {
-        const source = args.source;
-        const destination = args.destination;
+        const source = args?.source ?? args?.name ?? "";
+        const destination = args?.destination;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
         const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
         let path = "";
         // check if the source file doesn't have an extension, get the first the file the matches the source
-        if (source.split('.').pop() === source) {
-            const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || '');
-            const file = files.find(file => file.split('.')[0] === source);
+        if (source.split(".").pop() === source) {
+            let files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || "");
+            files = files.filter(
+            // make sure ut doesn't start with .
+            (f) => f[0] !== ".");
+            // get files only and exclude directories
+            files = files.filter((f) => fs_1.default.lstatSync(`${vscode.workspace.rootPath}\\${f}`).isFile());
+            const file = files.find((f) => f.split(".")[0] === source);
             if (file) {
-                const content = fs_1.default.readFileSync(`${vscode.workspace.rootPath}\\${file}`, 'utf-8');
+                const content = fs_1.default.readFileSync(`${vscode.workspace.rootPath}\\${file}`, "utf-8");
                 if (destination) {
                     path = destinationPath;
                     fs_1.default.writeFileSync(destinationPath, content);
                 }
                 else {
                     // add copy before extenstion
-                    path = `${vscode.workspace.rootPath}\\${source}-copy.${file.split('.').pop()}`;
+                    path = `${vscode.workspace.rootPath}\\${source}-copy.${file
+                        .split(".")
+                        .pop()}`;
                     fs_1.default.writeFileSync(path, content);
                 }
                 return {
                     success: true,
-                    path
+                    path,
                 };
             }
         }
         else {
             if (fs_1.default.existsSync(sourcePath)) {
-                const content = fs_1.default.readFileSync(sourcePath, 'utf-8');
+                const content = fs_1.default.readFileSync(sourcePath, "utf-8");
                 if (destination) {
                     fs_1.default.writeFileSync(destinationPath, content);
                 }
                 else {
                     // add copy before extension
-                    path = `${vscode.workspace.rootPath}\\${source.split('.')[0]}-copy.${source.split('.').pop()}`;
+                    path = `${vscode.workspace.rootPath}\\${source.split(".")[0]}-copy.${source.split(".").pop()}`;
                     fs_1.default.writeFileSync(path, content);
                 }
                 return {
                     success: true,
-                    path
+                    path,
                 };
             }
         }
         return {
             success: false,
-            message: "Source file not found"
+            message: "Source file not found",
         };
     });
 };
 const copyDirectory = () => {
     vscode.commands.registerCommand(fileSystem_1.COPY_DIRECTORY, (args) => {
-        const source = args.source;
+        const source = args.source ?? args.name ?? "";
         const destination = args.destination;
         const overwrite = args.overwrite ?? false;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
@@ -25596,12 +25760,12 @@ const copyDirectory = () => {
                 vscode.workspace.fs.copy(vscode.Uri.file(sourcePath), vscode.Uri.file(`${vscode.workspace.rootPath}\\${source} copy`));
             }
             return {
-                success: true
+                success: true,
             };
         }
         return {
             success: false,
-            message: "Source directory not found"
+            message: "Source directory not found",
         };
     });
 };
@@ -25611,14 +25775,16 @@ const deleteFile = () => {
         const source = args.source;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
         if (fileExists(sourcePath)) {
-            vscode.workspace.fs.delete(vscode.Uri.file(sourcePath), { recursive: true });
+            vscode.workspace.fs.delete(vscode.Uri.file(sourcePath), {
+                recursive: true,
+            });
             return {
-                success: true
+                success: true,
             };
         }
         return {
             success: false,
-            message: "File not found"
+            message: "File not found",
         };
     });
 };
@@ -25667,14 +25833,16 @@ const rename = () => {
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
         const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
         if (fileExists(sourcePath)) {
-            vscode.workspace.fs.rename(vscode.Uri.file(sourcePath), vscode.Uri.file(destinationPath));
+            vscode.workspace.fs.rename(vscode.Uri.file(sourcePath), vscode.Uri.file(destinationPath)
+            // { overwrite }
+            );
             return {
                 success: true,
             };
         }
         return {
             success: false,
-            message: "File not found"
+            message: "File not found",
         };
     });
 };
@@ -25695,10 +25863,9 @@ const saveFile = () => {
                 //     success: true
                 // };
             }
-            ;
         }
         return {
-            success: true
+            success: true,
         };
     });
 };
@@ -25714,7 +25881,7 @@ const registerFileSystemCommands = () => {
         getFiles,
         // copyFileClipboard,
     ];
-    commands.forEach(command => command());
+    commands.forEach((command) => command());
 };
 exports["default"] = registerFileSystemCommands;
 
@@ -26063,8 +26230,8 @@ const hasRepository = (api) => {
     return true;
 };
 // push to git
-const gitPush = async () => vscode.commands.registerCommand("robin.gitPush", async (args) => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+const gitPush = async () => vscode.commands.registerCommand(GIT_1.GIT_PUSH, async (args) => {
+    const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
     if (gitExtension) {
         try {
             const api = await gitExtension.getAPI(1);
@@ -26072,7 +26239,7 @@ const gitPush = async () => vscode.commands.registerCommand("robin.gitPush", asy
             if (!hasRepository(api)) {
                 return {
                     success: false,
-                    message: GIT_1.NO_GIT_REPO
+                    message: GIT_1.NO_GIT_REPO,
                 };
             }
             const repo = api.repositories[0];
@@ -26080,44 +26247,44 @@ const gitPush = async () => vscode.commands.registerCommand("robin.gitPush", asy
             const changes = await repo.diffWithHEAD();
             // if no changes
             if (changes.length === 0) {
-                vscode.window.showInformationMessage('No changes to push.');
+                vscode.window.showInformationMessage("No changes to push.");
                 return {
                     success: true,
-                    message: 'No changes to push.'
+                    message: "No changes to push.",
                 };
             }
             // stage changes
             await repo.add([]);
             // Commit changes
-            await repo.commit(args?.message ?? 'Robin commit');
+            await repo.commit(args?.message ?? "Robin commit");
             // Push changes
             await repo.push();
-            vscode.window.showInformationMessage('Changes pushed successfully.');
+            vscode.window.showInformationMessage("Changes pushed successfully.");
             return {
                 success: true,
-                message: 'Changes pushed successfully.'
+                message: "Changes pushed successfully.",
             };
         }
         catch (err) {
-            vscode.window.showErrorMessage('Error pushing changes.');
+            vscode.window.showErrorMessage("Error pushing changes.");
             console.log("ROBIN GIT", err);
             return {
                 success: false,
-                message: 'Error pushing changes.'
+                message: "Error pushing changes.",
             };
         }
     }
     else {
-        vscode.window.showErrorMessage('Git extension not found.');
+        vscode.window.showErrorMessage("Git extension not found.");
         return {
             success: false,
-            message: 'Git extension not found.'
+            message: "Git extension not found.",
         };
     }
 });
 // pull
-const gitPull = async () => vscode.commands.registerCommand("robin.gitPull", async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+const gitPull = async () => vscode.commands.registerCommand(GIT_1.GIT_PULL, async () => {
+    const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
     if (gitExtension) {
         try {
             const api = gitExtension.getAPI(1);
@@ -26125,38 +26292,38 @@ const gitPull = async () => vscode.commands.registerCommand("robin.gitPull", asy
             if (!hasRepository(api)) {
                 return {
                     success: false,
-                    message: GIT_1.NO_GIT_REPO
+                    message: GIT_1.NO_GIT_REPO,
                 };
             }
             const repo = api.repositories[0];
             // Pull changes
             await repo.pull();
-            vscode.window.showInformationMessage('Changes pulled successfully.');
+            vscode.window.showInformationMessage("Changes pulled successfully.");
             return {
                 success: true,
-                message: 'Changes pulled successfully.'
+                message: "Changes pulled successfully.",
             };
         }
         catch (err) {
-            vscode.window.showErrorMessage('Error pulling changes.');
+            vscode.window.showErrorMessage("Error pulling changes.");
             console.log("ROBIN GIT", err);
             return {
                 success: false,
-                message: 'Error pulling changes.'
+                message: "Error pulling changes.",
             };
         }
     }
     else {
-        vscode.window.showErrorMessage('Git extension not found.');
+        vscode.window.showErrorMessage("Git extension not found.");
         return {
             success: false,
-            message: 'Git extension not found.'
+            message: "Git extension not found.",
         };
     }
 });
 //stage changes
 const gitStage = async () => vscode.commands.registerCommand(GIT_1.GIT_STAGE, async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
     if (gitExtension) {
         try {
             const api = gitExtension.getAPI(1);
@@ -26164,7 +26331,7 @@ const gitStage = async () => vscode.commands.registerCommand(GIT_1.GIT_STAGE, as
             if (!hasRepository(api)) {
                 return {
                     success: false,
-                    message: GIT_1.NO_GIT_REPO
+                    message: GIT_1.NO_GIT_REPO,
                 };
             }
             const repo = api.repositories[0];
@@ -26172,40 +26339,40 @@ const gitStage = async () => vscode.commands.registerCommand(GIT_1.GIT_STAGE, as
             const changes = await repo.diffWithHEAD();
             // if no changes
             if (changes.length === 0) {
-                vscode.window.showInformationMessage('No present changes.');
+                vscode.window.showInformationMessage("No present changes.");
                 return {
                     success: true,
-                    message: 'No present changes .'
+                    message: "No present changes .",
                 };
             }
             // stage changes
             await repo.add([]);
-            vscode.window.showInformationMessage('Changes staged successfully.');
+            vscode.window.showInformationMessage("Changes staged successfully.");
             return {
                 success: true,
-                message: 'Changes staged successfully.'
+                message: "Changes staged successfully.",
             };
         }
         catch (err) {
-            vscode.window.showErrorMessage('Error staging changes.');
+            vscode.window.showErrorMessage("Error staging changes.");
             console.log("ROBIN GIT", err);
             return {
                 success: false,
-                message: 'Error staging changes.'
+                message: "Error staging changes.",
             };
         }
     }
     else {
-        vscode.window.showErrorMessage('Git extension not found.');
+        vscode.window.showErrorMessage("Git extension not found.");
         return {
             success: false,
-            message: 'Git extension not found.'
+            message: "Git extension not found.",
         };
     }
 });
 //stash changes
 const gitStash = async () => vscode.commands.registerCommand(GIT_1.GIT_STASH, async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
     if (gitExtension) {
         try {
             const api = gitExtension.getAPI(1);
@@ -26213,40 +26380,53 @@ const gitStash = async () => vscode.commands.registerCommand(GIT_1.GIT_STASH, as
             if (!hasRepository(api)) {
                 return {
                     success: false,
-                    message: GIT_1.NO_GIT_REPO
+                    message: GIT_1.NO_GIT_REPO,
                 };
             }
             const repo = api.repositories[0];
+            // if no changes
+            //Get all changes for first repository in list
+            const changes = await repo.diffWithHEAD();
+            if (changes.length === 0) {
+                vscode.window.showInformationMessage("No present changes.");
+                return {
+                    success: true,
+                    message: "No present changes .",
+                };
+            }
             // stash changes
             // await repo.createStash();
-            await repo.clean(repo.diffWithHEAD(), { cleanAfter: true, force: true });
+            await repo.clean(repo.diffWithHEAD(), {
+                cleanAfter: true,
+                force: true,
+            });
             // await repo.stash();
-            vscode.window.showInformationMessage('Changes stashed successfully.');
+            vscode.window.showInformationMessage("Changes stashed successfully.");
             return {
                 success: true,
-                message: 'Changes stashed successfully.'
+                message: "Changes stashed successfully.",
             };
         }
         catch (err) {
-            vscode.window.showErrorMessage('Error stashing changes.');
+            vscode.window.showErrorMessage("Error stashing changes.");
             console.log("ROBIN GIT", err);
             return {
                 success: false,
-                message: 'Error stashing changes.'
+                message: "Error stashing changes.",
             };
         }
     }
     else {
-        vscode.window.showErrorMessage('Git extension not found.');
+        vscode.window.showErrorMessage("Git extension not found.");
         return {
             success: false,
-            message: 'Git extension not found.'
+            message: "Git extension not found.",
         };
     }
 });
 //discard changes
 const gitDiscard = async () => vscode.commands.registerCommand(GIT_1.GIT_DISCARD, async () => {
-    const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+    const gitExtension = vscode.extensions.getExtension("vscode.git")?.exports;
     if (gitExtension) {
         try {
             const api = gitExtension.getAPI(1);
@@ -26254,7 +26434,7 @@ const gitDiscard = async () => vscode.commands.registerCommand(GIT_1.GIT_DISCARD
             if (!hasRepository(api)) {
                 return {
                     success: false,
-                    message: GIT_1.NO_GIT_REPO
+                    message: GIT_1.NO_GIT_REPO,
                 };
             }
             const repo = api.repositories[0];
@@ -26262,47 +26442,41 @@ const gitDiscard = async () => vscode.commands.registerCommand(GIT_1.GIT_DISCARD
             const changes = await repo.diffWithHEAD();
             // if no changes
             if (changes.length === 0) {
-                vscode.window.showInformationMessage('No present changes.');
+                vscode.window.showInformationMessage("No present changes.");
                 return {
                     success: true,
-                    message: 'No present changes.'
+                    message: "No present changes.",
                 };
             }
             //checkout .
             await repo.checkout(".");
-            vscode.window.showInformationMessage('Changes discarded successfully.');
+            vscode.window.showInformationMessage("Changes discarded successfully.");
             return {
                 success: true,
-                message: 'Changes discarded successfully.'
+                message: "Changes discarded successfully.",
             };
         }
         catch (err) {
-            vscode.window.showErrorMessage('Error discarding changes.');
+            vscode.window.showErrorMessage("Error discarding changes.");
             console.log("ROBIN GIT", err);
             return {
                 success: false,
-                message: 'Error discarding changes.'
+                message: "Error discarding changes.",
             };
         }
     }
     else {
-        vscode.window.showErrorMessage('Git extension not found.');
+        vscode.window.showErrorMessage("Git extension not found.");
         return {
             success: false,
-            message: 'Git extension not found.'
+            message: "Git extension not found.",
         };
     }
 });
 // register commands
 const registerGITCommands = () => {
-    const commands = [
-        gitPull,
-        gitPush,
-        gitStage,
-        gitStash,
-        gitDiscard
-    ];
-    commands.forEach(command => command());
+    const commands = [gitPull, gitPush, gitStage, gitStash, gitDiscard];
+    commands.forEach((command) => command());
 };
 exports["default"] = registerGITCommands;
 
@@ -26338,15 +26512,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const vscode = __importStar(__webpack_require__(1));
-const code_1 = __webpack_require__(162);
 const pythonCodeGenerator_1 = __webpack_require__(175);
 const utilities_1 = __webpack_require__(163);
+const code_1 = __webpack_require__(162);
 const constants_1 = __webpack_require__(179);
 // utilities
-const getCurrentPosition = (editor) => {
-    const position = editor.selection.active;
-    return position;
-};
 const getFileExtension = (editor) => {
     return editor.document.fileName.split(".").pop();
 };
@@ -26386,13 +26556,7 @@ const declareVariable = () => {
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
-            // let s = await editor.edit((editBuilder) => {
-            //   editBuilder.insert(
-            //     getCurrentPosition(editor),
             let s = codeGenerator.declareVariable(args.name, args.type, args.value);
-            //   );
-            // });
-            // console.log("ay haga");
             if (!s) {
                 return handleFailure(code_1.VARIABLE_FAILURE);
             }
@@ -26417,13 +26581,7 @@ const assignVariable = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.assignVariable(args.name, args.value, args.type);
-                //   );
-                // });
+                let s = codeGenerator.assignVariable(args.name, args.value, args.type);
                 if (!s) {
                     return handleFailure(code_1.ASSIGNMENT_FAILURE);
                 }
@@ -26454,13 +26612,7 @@ const declareConstant = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.declareConstant(args.name, args.value);
-                //   );
-                // });
+                let s = codeGenerator.declareConstant(args.name, args.value);
                 if (!s) {
                     return handleFailure(code_1.VARIABLE_FAILURE);
                 }
@@ -26506,9 +26658,6 @@ const declareFunction = () => {
             }
             try {
                 let s = codeGenerator.declareFunction(args.name, args.parameters ?? [], args?.body);
-                // let s = await editor.edit((editBuilder) => {
-                //   editBuilder.insert(getCurrentPosition(editor), code);
-                // });
                 if (!s) {
                     return handleFailure(code_1.FUNCTION_FAILURE);
                 }
@@ -26576,13 +26725,7 @@ const functionCall = () => {
                 default:
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
-            let s = 
-            //  await editor.edit((editBuilder) => {
-            //   editBuilder.insert(
-            //     getCurrentPosition(editor),
-            codeGenerator.generateFunctionCall(args.name, args.args);
-            //   );
-            // });
+            let s = codeGenerator.generateFunctionCall(args.name, args.args);
             if (!s) {
                 return handleFailure(code_1.FUNCTION_CALL_FAILURE);
             }
@@ -26638,13 +26781,7 @@ const forLoop = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateForLoop(args.type, args);
-                //   );
-                // });
+                let s = codeGenerator.generateForLoop(args.type, args);
                 if (!s) {
                     return handleFailure(code_1.LOOP_FAILURE);
                 }
@@ -26676,12 +26813,7 @@ const whileLoop = () => {
             }
             // try catch
             try {
-                // let s = await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
                 const s = codeGenerator.generateWhileLoop(args.condition, args?.body);
-                // );
-                // });
                 if (!s) {
                     return handleFailure(code_1.LOOP_FAILURE);
                 }
@@ -26714,13 +26846,7 @@ const operation = () => {
             }
             // try catch
             try {
-                let s = 
-                //  await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateOperation(args.left, args.operator, args.right);
-                //   );
-                // });
+                let s = codeGenerator.generateOperation(args.left, args.operator, args.right);
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -26753,13 +26879,7 @@ const tryExcept = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateTryExcept(args.tryBody, args.exception, args.exceptionInstance, args.exceptBody);
-                //   );
-                // });
+                let s = codeGenerator.generateTryExcept(args.tryBody, args.exception, args.exceptionInstance, args.exceptBody);
                 if (!s) {
                     return handleFailure(code_1.TRY_EXCEPT_FAILURE);
                 }
@@ -26792,13 +26912,7 @@ const conditional = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateConditional(args);
-                //   );
-                // });
+                let s = codeGenerator.generateConditional(args);
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -26831,13 +26945,7 @@ const importLibrary = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateImportLibrary(args.library);
-                //   );
-                // });
+                let s = codeGenerator.generateImportLibrary(args.library);
                 if (!s) {
                     return handleFailure(code_1.IMPORT_FAILURE);
                 }
@@ -26870,13 +26978,7 @@ const importModule = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateImportModule(args.library, args?.modules);
-                //   );
-                // });
+                let s = codeGenerator.generateImportModule(args.library, args?.modules);
                 if (!s) {
                     return handleFailure(code_1.IMPORT_FAILURE);
                 }
@@ -26909,13 +27011,7 @@ const assertion = () => {
             }
             // try catch
             try {
-                let s = 
-                //  await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateAssertion(args.variable, args.value, args.type);
-                //   );
-                // });
+                let s = codeGenerator.generateAssertion(args.variable, args.value, args.type);
                 if (!s) {
                     return handleFailure(code_1.ASSERTION_FAILURE);
                 }
@@ -26948,13 +27044,7 @@ const typeCasting = () => {
             }
             // try catch
             try {
-                let s = 
-                //  await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateCasting(args.variable, args.type);
-                // );
-                // });
+                let s = codeGenerator.generateCasting(args.variable, args.type);
                 if (!s) {
                     return handleFailure(code_1.CASTING_FAILURE);
                 }
@@ -26987,13 +27077,7 @@ const arrayOperations = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateOperation(args.left, args.operator, args.right);
-                //   );
-                // });
+                let s = codeGenerator.generateOperation(args.left, args.operator, args.right);
                 if (!s) {
                     return handleFailure(code_1.OPERATION_FAILURE);
                 }
@@ -27026,13 +27110,7 @@ const userInput = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateUserInput(args.variable, args.message);
-                //   );
-                // });
+                let s = codeGenerator.generateUserInput(args.variable, args.message);
                 if (!s) {
                     return handleFailure(code_1.USER_INPUT_FAILURE);
                 }
@@ -27065,13 +27143,7 @@ const printConsole = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generatePrint(args.variable, args.type);
-                //   );
-                // });
+                let s = codeGenerator.generatePrint(args.variable, args.type);
                 if (!s) {
                     return handleFailure(code_1.PRINT_FAILURE);
                 }
@@ -27104,13 +27176,7 @@ const lineComment = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateLineComment(args.content);
-                //   );
-                // });
+                let s = codeGenerator.generateLineComment(args.content);
                 if (!s) {
                     return handleFailure(code_1.LINE_COMMENT_FAILURE);
                 }
@@ -27143,13 +27209,7 @@ const blockComment = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateBlockComment(args.content);
-                //   );
-                // });
+                let s = codeGenerator.generateBlockComment(args.content);
                 if (!s) {
                     return handleFailure(code_1.BLOCK_COMMENT_FAILURE);
                 }
@@ -27182,13 +27242,7 @@ const readFile = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateReadFile(args.path, args.variable);
-                //   );
-                // });
+                let s = codeGenerator.generateReadFile(args.path, args.variable);
                 if (!s) {
                     return handleFailure(code_1.READ_FILE_FAILURE);
                 }
@@ -27221,13 +27275,7 @@ const writeFile = () => {
             }
             // try catch
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.generateWriteFile(args.path, args.content);
-                //   );
-                // });
+                let s = codeGenerator.generateWriteFile(args.path, args.content);
                 if (!s) {
                     return handleFailure(code_1.WRITE_FILE_FAILURE);
                 }
@@ -27288,13 +27336,7 @@ const declareClass = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = 
-                // await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.declareClass(args?.name, args?.properties, args?.methods);
-                //   );
-                // });
+                let s = codeGenerator.declareClass(args?.name, args?.properties, args?.methods);
                 if (!s) {
                     return handleFailure(code_1.CLASS_SUCCESS);
                 }
@@ -27325,13 +27367,7 @@ const exitScope = () => {
                     return handleFailure(code_1.FILE_EXT_FAILURE);
             }
             try {
-                let s = 
-                //  await editor.edit((editBuilder) => {
-                //   editBuilder.insert(
-                //     getCurrentPosition(editor),
-                codeGenerator.exitScope();
-                //   );
-                // });
+                let s = codeGenerator.exitScope();
                 if (!s) {
                     return handleFailure(code_1.EXIT_SCOPE_SUCCESS);
                 }
@@ -27399,18 +27435,16 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     /**
      * Declare reserved keywords for each programming language
      **/
-    tabString = "    ";
     editor;
     typeMappings;
+    operatorMappings;
     reservedKeywords;
-    tabSize;
     // constructor
     constructor(editor) {
         super();
         this.reservedKeywords = pythonReserved_json_1.default.reservedKeywords;
         this.typeMappings = pythonReserved_json_1.default.typeMappings;
-        // TODO read tab size from .env
-        this.tabSize = 4;
+        this.operatorMappings = pythonReserved_json_1.default.operatorMappings;
         this.editor = editor;
     }
     //**********************Utility functions**********************//
@@ -27435,50 +27469,11 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         return !this.reservedKeywords.includes(name);
     }
-    handleIndentationLevel(previous = true) {
-        let currentLine;
-        if (previous) {
-            currentLine = this.editor.document.lineAt(Math.max(this.editor.selection.active.line - 1, 0)).text;
-        }
-        else {
-            currentLine = this.editor.document.lineAt(this.editor.selection.active.line).text;
-        }
-        // find the number of white spaces in the beginning of the line,
-        // and calculate the number of tabs
-        let indentationLevel = 0;
-        for (let i = 0; i < currentLine.length; i++) {
-            if (currentLine[i] === " ") {
-                indentationLevel++;
-            }
-            else {
-                break;
-            }
-        }
-        // check if first word in line is a scope
-        currentLine = currentLine.trim();
-        if (currentLine.endsWith(":")) {
-            indentationLevel += this.tabSize;
-        }
-        // calculate the number of tabs
-        const tabs = Math.floor(indentationLevel / this.tabSize);
-        return tabs;
-    }
     /**
      * wrap code in a code block with '`' character
      **/
     wrapInCodeBlock(lines) {
         return lines.map((line) => `    ${line}`).join("\n");
-    }
-    /**
-     * Add Indentation to the code
-     * 4 spaces before each line (if multiline)
-     **/
-    addIndentation(code) {
-        // with tab_size
-        return code
-            .split("\n")
-            .map((line) => `${this.addWhiteSpace(codeEnums_1.Whitespace.Tab, this.tabSize)}${line}`)
-            .join("\n");
     }
     //********************************************//
     /**
@@ -27490,7 +27485,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         let code = "";
         if (type) {
-            let mappedType = this.typeMappings[type.toLowerCase()];
+            let mappedType = this.typeMappings[type];
             if (initialValue) {
                 code = `${name}: ${mappedType} = ${initialValue}`;
             }
@@ -27522,10 +27517,10 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     assignVariable(name, value, type) {
         //Check before if RHS is same type as LHS
         ///////// we need function to check the type of the variable /////////
-        if (!Object.values(codeEnums_1.AssignmentOperators).includes(type)) {
+        if (!Object.keys(this.operatorMappings).includes(type)) {
             throw new Error(`Invalid assignment type: ${type}`);
         }
-        let code = `${name} ${type} ${value}`;
+        let code = `${name} ${this.operatorMappings[type]} ${value}`;
         this.handleScope(code);
         return code;
     }
@@ -27550,8 +27545,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             : ""}`)
             .join(", ");
         const f = `def ${name}(${params}):`;
-        // `def ${name}(${params}):\n` +
-        // this.tabString.repeat(this.handleIndentationLevel(true) + 1);
         this.handleScope(f);
         return f;
     }
@@ -27564,15 +27557,11 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return code;
     }
     generateReturn(value) {
-        // return (
-        //   `return ${value ?? ""} ` +
-        //   this.tabString.repeat(this.handleIndentationLevel(true))
-        // );
         const code = `return ${value ?? ""}`;
         this.handleScope(code);
         return code;
     }
-    declareClass(name, properties, methods) {
+    async declareClass(name, properties, methods) {
         if (!this.isValidVariableName(name)) {
             throw new Error(`Invalid class name: ${name} `);
         }
@@ -27589,17 +27578,17 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         let className = name.charAt(0).toUpperCase() + name.slice(1).replace(/ /g, "_");
         // let firstIndentationLevel = this.handleIndentationLevel();
         code = `class ${className}:`;
-        this.handleScope(code);
+        await this.handleScope(code);
         // add constructor
         code = `def __init__(self, ${properties ? properties.map((p) => p.name).join(", ") : ""}):`;
-        this.handleScope(code);
+        await this.handleScope(code);
         // add properties
-        properties?.forEach((p) => {
+        properties?.forEach(async (p) => {
             code = `self.${p.name} = ${p.name}`;
-            this.handleScope(code);
+            await this.handleScope(code);
         });
         // add methods
-        methods?.forEach((m) => {
+        methods?.forEach(async (m) => {
             // sort the parameters so that the one's without value come first
             m.parameters.sort((a, b) => (a.value === undefined ? -1 : 1));
             const params = m.parameters
@@ -27608,7 +27597,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 : ""}`)
                 .join(", ");
             code = `def ${m.name}(self, ${params}):`;
-            this.handleScope(code);
+            await this.handleScope(code);
         });
         return code;
     }
@@ -27630,26 +27619,17 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      * if, if-else
      **/
     generateIf(condition, body) {
-        // return `if ${condition}: \n${this.wrapInCodeBlock(body)} `;
         const ifCode = `if ${condition}:`;
         this.handleScope(ifCode);
         return ifCode;
     }
     generateIfElse(condition, ifBody, elseBody) {
-        // const ifCode = `if ${condition}:} `;
-        // const elseCode = elseBody
-        //   ? `\nelse: \n${this.wrapInCodeBlock(elseBody)} `
-        //   : "";
         return ``;
     }
     /**
      * Loop statements
      * for, while, do-while
      **/
-    // generateForLoop(variable: string, iterable: string, body: string[]): string {
-    //     const loopCode = `for ${variable} in ${iterable}: \n${this.wrapInCodeBlock(body)} `;
-    //     return loopCode;
-    // }
     generateForLoop(type, params, body) {
         let code = "";
         switch (type) {
@@ -27663,7 +27643,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 code = this.generateEnumerateLoop(params);
                 break;
             default:
-                code = `for `;
+                code = `for :`;
                 break;
         }
         this.handleScope(code);
@@ -27671,7 +27651,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     generateIterableLoop(params, body) {
         const loopCode = `for ${params.iterators.join(", ")} in ${params.iterable}:`;
-        // this.handleScope(loopCode);
         return loopCode;
     }
     generateRangeLoop(params
@@ -27688,7 +27667,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         else {
             forLoop = `for ${iterators.join(", ")} in range(${actualStart}, ${actualEnd}, ${-actualStep}):`;
         }
-        // this.handleScope(forLoop);
         return forLoop;
     }
     generateEnumerateLoop(params, body) {
@@ -27696,12 +27674,13 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         // let currentIndentationLevel = this.handleIndentationLevel();
         // this.tabString.repeat(currentIndentationLevel);
         let code = `for ${iterators.join(", ")} in enumerate(${iterable}${start ? ` ,${start}` : ""}):`;
-        // this.handleScope(code);
         return code;
     }
     generateWhileLoop(condition, body) {
         const conditionCode = condition
-            .map((c) => `${c.logicalOperator ?? ""} ${c.left} ${c.operator} ${c.right}`)
+            .map((c) => `${c.logicalOperator
+            ? `${this.operatorMappings[c.logicalOperator] ?? "=="} `
+            : ""} ${c.left} ${this.operatorMappings[c.operator] ?? "=="} ${c.right}`)
             .join(" ");
         let loopCode = `while ${conditionCode}:`;
         this.handleScope(loopCode);
@@ -27715,80 +27694,11 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         const exceptCode = `except ${exception} as ${exceptionInstance}: \n${this.wrapInCodeBlock(exceptBody ?? [""])} `;
         return `${tryCode} \n${exceptCode} `;
     }
-    // /**
-    //  * Identity operators
-    //  * is, is not
-    //  **/
-    // generateIdentityOperation(
-    //   left: string,
-    //   operator: IdentityOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    // /**
-    //  * Membership operation
-    //  * in, not in
-    //  **/
-    // generateMembershipOperation(
-    //   left: string,
-    //   operator: MembershipOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    // /**
-    //  * Logical operators
-    //  * and, or, not
-    //  **/
-    // generateLogicalOperation(
-    //   left: string,
-    //   operator: LogicalOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    // /**
-    //  * Comparison operators
-    //  * <, >, <=, >=, ==, !=
-    //  **/
-    // generateComparisonOperation(
-    //   left: string,
-    //   operator: ComparisonOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    // /**
-    //  * Arithmetic operators
-    //  * +, -, *, /, %, // , **
-    //  **/
-    // generateArithmeticOperation(
-    //   left: string,
-    //   operator: ArithmeticOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    // /**
-    //  * Bitwise operators
-    //  * &, |, ^, ~, <<, >>
-    //  **/
-    // generateBitwiseOperation(
-    //   left: string,
-    //   operator: BitwiseOperators,
-    //   right: string
-    // ): string {
-    //   return `${left} ${operator} ${right} `;
-    // }
-    /**
-     * Assertion
-     **/
     generateAssertion(variable, value, type) {
-        if (!Object.values(codeEnums_1.AssertionOperators).includes(type)) {
+        if (!Object.keys(this.operatorMappings).includes(type)) {
             throw new Error(`Invalid assertion type: ${type}`);
         }
-        let code = `assert ${variable} == ${value}`;
+        let code = `assert ${variable} ${this.operatorMappings[type]} ${value}`;
         this.handleScope(code);
         return code;
     }
@@ -27797,10 +27707,10 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
      **/
     generateCasting(variable, type) {
         // this.typemappings
-        if (!Object.keys(this.typeMappings).includes(type.toLowerCase())) {
+        if (!Object.keys(this.operatorMappings).includes(type)) {
             throw new Error(`Invalid casting type: ${type}`);
         }
-        let code = `${variable} = ${this.typeMappings[type]}(${variable})`;
+        let code = `${variable} = ${this.operatorMappings[type]}(${variable})`;
         this.handleScope(code);
         return code;
     }
@@ -27880,34 +27790,19 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         return `''' ${content.join("\n")} '''\n`;
     }
     generateOperation(left, operator, right) {
-        let code = `${left} ${operator} ${right}`;
+        let code = `${left} ${this.operatorMappings[operator] ?? "=="} ${right}`;
         this.handleScope(code);
         return code;
     }
     async generateConditional(conditions) {
         let code = "";
-        // conditions.forEach((c) => {
-        //   if (c.keyword === "if" || c.keyword === "elif") {
-        //     code = `${c.keyword} ${c.condition
-        //       ?.map(
-        //         (cond) =>
-        //           `${cond.logicalOperator ?? ""} ${cond.left} ${
-        //             cond?.operator ?? "=="
-        //           } ${cond.right}`
-        //       )
-        //       .join(" ")}:`;
-        //     this.handleScope(code);
-        //   } else {
-        //     code = `else:`;
-        //     this.handleScope(code);
-        //   }
-        // });
         for (let c of conditions) {
             if (c.keyword === "if" || c.keyword === "elif") {
                 code = `${c.keyword} ${c.condition
-                    ?.map((cond) => `${cond.logicalOperator ?? ""} ${cond.left} ${cond?.operator ?? "=="} ${cond.right}`)
+                    ?.map((cond) => `${cond.logicalOperator
+                    ? `${this.operatorMappings[cond.logicalOperator] ?? "=="} `
+                    : ""} ${cond.left} ${this.operatorMappings[cond.operator] ?? "=="} ${cond.right}`)
                     .join(" ")}:`;
-                // this.handleScope(code);
             }
             else {
                 code = `else:`;
@@ -27919,16 +27814,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
         }
         return code;
     }
-    generateArrayOperation(name, operation) {
-        // pack, uno
-        return "";
-    }
     exitScope() {
-        // let indentationLevel = this.handleIndentationLevel(false);
-        // return `\n${this.addWhiteSpace(
-        //   Whitespace.Tab,
-        //   Math.max(indentationLevel - 1, 0)
-        // )}`.repeat(2);
         // outdent
         return new Promise((resolve, reject) => {
             vscode_1.default.commands.executeCommand("outdent").then(() => {
@@ -27940,9 +27826,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
     }
     handleScope(code) {
         return new Promise((resolve, reject) => {
-            // vscode.commands
-            //   .executeCommand("editor.action.insertLineAfter")
-            //   .then(() => {
             this.insertCode(code).then(() => {
                 vscode_1.default.commands.executeCommand("editor.action.insertLineAfter").then(() => {
                     resolve();
@@ -27951,7 +27834,6 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
                 });
             });
         });
-        // });
     }
     insertCode(code) {
         return this.editor.edit((editBuilder) => {
@@ -28093,7 +27975,7 @@ exports.CodeGenerator = CodeGenerator;
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"],"typeMappings":{"string":"str","integer":"int","float":"float","boolean":"bool","list":"list","tuple":"tuple","dictionary":"dict"}}');
+module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"],"typeMappings":{"string":"str","integer":"int","float":"float","boolean":"bool","list":"list","tuple":"tuple","dictionary":"dict"},"operatorMappings":{"addition":"+","subtraction":"-","multiplication":"*","division":"/","modulus":"%","exponentiation":"**","assignment":"=","equal":"==","notEqual":"!=","greaterThan":">","greaterThanOrEqual":">=","lessThan":"<","lessThanOrEqual":"<=","and":"and","or":"or","not":"not","increment":"+=","decrement":"-=","multiply":"*=","divide":"/=","modulusAssign":"%=","exponentAssign":"**="}}');
 
 /***/ }),
 /* 179 */

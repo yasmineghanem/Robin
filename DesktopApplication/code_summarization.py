@@ -71,27 +71,70 @@ class ASTProcessor:
         import_nodes = []
         constant_nodes = []
         code_nodes = []
+        error_nodes = []
 
         for node in self.ast['children']:
 
             # if the type contains the word import
-
             if 'type' in node:
                 node_type = node['type']
+                # print(node)
+                # break
+                if node_type == 'ERROR':
+                    # print(f"Syntax error in code at {node.start_point}: {node.text.decode('utf-8')}")
+                    error_nodes.append(node)
 
-                if 'import' in node_type:
-                    import_nodes.append(node)
+                if 'import_statement' in node_type:
+                    lib_name = None
+                    alias_name = None
+                    for child in node['children']:
+                        if child['type'] == 'dotted_name':
+                            lib_name = '.'.join([c['name'] for c in child['children'] if c['type'] == 'identifier'])
+                        elif child['type'] == 'aliased_import':
+                            for sub_child in child['children']:
+                                if sub_child['type'] == 'dotted_name':
+                                    lib_name = '.'.join([c['name'] for c in sub_child['children'] if c['type'] == 'identifier'])
+                                elif sub_child['type'] == 'identifier':
+                                    alias_name = sub_child['name']
+                    if lib_name:
+                        if alias_name:
+                            import_nodes.append({'type': 'import', 'library': lib_name, 'alias': alias_name})
+                        else:
+                            import_nodes.append({'type': 'import', 'library': lib_name})
+
+                elif 'import_from_statement' in node_type:
+                    lib_name = None
+                    modules = []
+                    alias_name = None
+                    for child in node['children']:
+                        if child['type'] == 'from':
+                            continue
+                        if child['type'] == 'dotted_name' and not lib_name:
+                            lib_name = [c['name'] for c in child['children'] if c['type'] == 'identifier'][0]
+                        elif child['type'] == 'wildcard_import':
+                            modules.append('all')
+                        elif child['type'] == 'dotted_name' and lib_name:
+                            modules.extend([c['name'] for c in child['children'] if c['type'] == 'identifier'])
+                        elif child['type'] == 'identifier' and 'name' in child:
+                            alias_name = child['name']
+                    if lib_name:
+                        import_nodes.append({'type': 'import_from', 'library': lib_name, 'modules': modules})
+
 
                 elif "expression_statement" in node_type:
                     # check for constants
                     inner_node = node['children'][0]
-
-                    if 'type' in inner_node and 'assignment' in inner_node['type']:
+                    if 'type' in inner_node and 'call' in inner_node['type']:
+                        code_nodes.append(node)
+                    elif 'type' in inner_node and 'assignment' in inner_node['type']:
                         for c in inner_node['children']:
                             if 'type' in c and "identifier" in c['type']:
                                 # check if the name is all uppercase
                                 if c['name'].isupper():
-                                    constant_nodes.append(node)
+                                    constant_nodes.append({
+                                                            'name': c['name'],
+                                                            'value': self.process_expression(inner_node['children'][2])
+                                    })
 
                                 else:
                                     code_nodes.append(node)
@@ -100,6 +143,7 @@ class ASTProcessor:
                     code_nodes.append(node)
 
         return import_nodes, constant_nodes, code_nodes
+        # return import_nodes, constant_nodes, code_nodesو error_nodes
 
     '''
     Recursively, extract the name of the imported library or module.
@@ -197,6 +241,8 @@ class ASTProcessor:
                 return self.process_assignment(child)
             elif child['type'] == 'augmented_assignment':
                 return self.process_augmented_assignment(child)
+            elif child['type'] == 'call':
+                return self.process_expression(child)
 
 
     def process_assignment(self, node):
@@ -212,7 +258,7 @@ class ASTProcessor:
 
         if right_value:
             result["right_side"] = right_value
-
+        result["operation"] = "="
         return result
 
 
@@ -234,6 +280,8 @@ class ASTProcessor:
     def process_expression(self, node):
         if node['type'] in ['identifier', 'integer', 'string']:
             return node['name']
+        if node['type'] in ['true', 'false']:
+            return node['type']
         if node['type'] == 'binary_operator':
             left_side = node['children'][0]
             operator = node['children'][1]['type']
@@ -247,16 +295,30 @@ class ASTProcessor:
                 "operator": operator,
                 "right_side": right_value
             }
+        if node['type'] == 'boolean_operator':
+            left_side = node['children'][0]
+            operator = node['children'][1]['type']
+            right_side = node['children'][2]
+            left_value = self.process_expression(left_side)
+            right_value = self.process_expression(right_side)
+
+            return {
+                "left_side": left_value,
+                "operator": operator,
+                "right_side": right_value
+            }
+        
         if node['type'] == 'call':
             function_name = node['children'][0]['name']
             arguments = [self.process_expression(
                 arg) for arg in node['children'][1]['children'] if arg['type'] != '(' and arg['type'] != ')']
+            arguments = [item for item in arguments if item is not None]
             arguments_str = ", ".join(arguments)
 
             return {
                 "function_name": function_name,
-                "arguments": arguments_str
-
+                "arguments": arguments_str,
+                "operation": "call"
             }
 
         if node['type'] == 'list':
@@ -266,6 +328,16 @@ class ASTProcessor:
     def process_identifier(self, node):
         return node['name']
 
+    def process_boolean_operator(self, node):
+        left_side = self.process_expression(node['children'][0])
+        operator = node['children'][1]['type']
+        right_side = self.process_expression(node['children'][2])
+
+        return {
+            "left_side": left_side,
+            "operator": operator,
+            "right_side": right_side
+        }
 
     def process_loops(self, ast_node):
         loops_info = []
@@ -334,8 +406,8 @@ class ASTProcessor:
                 if 'name' in child and child['name']:
                     arguments.append(child['name'])
 
-            print("arguments")
-            print(arguments)
+            # print("arguments")
+            # print(arguments)
             if pattern:
                 return f"({', '.join(arguments)})"
             return f"{' '.join(arguments)}"
@@ -384,60 +456,130 @@ class ASTProcessor:
         # return json.dumps(loops_info, indent=2)
 
 
+    def format_nested_expression(self, exp):
+        if isinstance(exp, dict):
+            left_side = self.format_nested_expression(exp.get('left_side', ''))
+            operator = exp.get('operator', '')
+            right_side = self.format_nested_expression(exp.get('right_side', ''))
 
+            return f"({left_side} {operator} {right_side})"
+        return str(exp)
+    
     # function to transform summary to be human readable
-    def get_summary(self, ast_summary):
-        summary_text_to_speech = "Summary of the code:\n\n"
-        for item in ast_summary:
-            if item['type'] == 'import':
-                summary_text_to_speech+= f"Imported: {item['library']}\n\n"
+    def get_summary(self, ast_summary=None):
+        with open('./ast_2.json', 'r') as file:
+            ast = json.load(file)
 
-            elif item['type'] == 'class_definition':
-                summary_text_to_speech += f"Class Named: {item['class_name']}\n"
+        ast_processor = ASTProcessor(ast['ast'])
+        ast_summary = ast_processor.process_ast()
+        summary_text_to_speech = "Summary of the code:\n\n"
+        # Imports
+        import_list = ast_summary[0]
+        if import_list:
+            summary_text_to_speech+= "Imported libraries: "
+            for item in import_list:
+                if item['type'] == 'import':
+                    summary_text_to_speech+= f" {item['library']} "
+                
+            summary_text_to_speech+= "\n"
+
+            for item in import_list:
+                if item['type'] == 'import_from':
+                    summary_text_to_speech+= f"Imported {', '.join(item['modules'])} modules from {item['library']} \n"
+            summary_text_to_speech+= "\n"
+
+        # Constants
+        constant_list = ast_summary[1]
+        if constant_list:
+            summary_text_to_speech+= "The constants declared are: \n"
+            for item in constant_list:
+                summary_text_to_speech+= f"{item['name']} equals to {item['value']}\n"
+            summary_text_to_speech+= "\n"
+
+        # Code
+        for item in ast_summary[2:]:
+            if item['type'] == 'class_definition':
+                summary_text_to_speech += f"Class defined with name: {item['class_name']}\n"
 
                 for method in item['class_methods']:
                     summary_text_to_speech+= f"\tMethod Named: {method['method_name']} with parameters ({', '.join(method['parameters'])})\n\n"
 
             elif item['type'] == 'function_definition':
-                summary_text_to_speech += f"Function Named: {item['method_name']} with parameters ({', '.join(item['parameters'])})\n\n"
+                summary_text_to_speech += f"Function defined with name: {item['method_name']} and parameters ({', '.join(item['parameters'])})\n\n"
 
             elif item['type'] == 'expression_statement':
-                summary_text_to_speech += "An expression statement: \n"
-                if 'operation' in item:
+                #  _ = _
+                if'right_side' in item and isinstance(item['right_side'], dict):
+                    summary_text_to_speech+=f"A nested expression:\n"
+                    left_side = item['left_side']
+                    operation = item['operation']
+                    right_side = self.format_nested_expression(item['right_side'])
+
+                    summary_text_to_speech+= f"\t{left_side} {operation} {right_side}\n\n"
+                else:
+                # if 'operation' in item:
                     match item['operation']:
                         case '=':
-                            summary_text_to_speech+= f"\tAssignment Operation: {item['left_side']} = {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Assignment Operation: {item['left_side']} = {item['right_side']}\n\n"
                         case '+':
-                            summary_text_to_speech+= f"\tAddition Operation: {item['left_side']} + {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Addition Operation: {item['left_side']} + {item['right_side']}\n\n"
                         case '-':
-                            summary_text_to_speech+= f"\tSubtraction Operation: {item['left_side']} - {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Subtraction Operation: {item['left_side']} - {item['right_side']}\n\n"
                         case '*':
-                            summary_text_to_speech+= f"\tMultiplication Operation: {item['left_side']} * {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Multiplication Operation: {item['left_side']} * {item['right_side']}\n\n"
                         case '/':
-                            summary_text_to_speech+= f"\tDivision Operation: {item['left_side']} / {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Division Operation: {item['left_side']} / {item['right_side']}\n\n"
                         case '%':
-                            summary_text_to_speech+= f"\tModulus Operation: {item['left_side']} % {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Modulus Operation: {item['left_side']} % {item['right_side']}\n\n"
                         case '==':
-                            summary_text_to_speech+= f"\tEquality Operation: {item['left_side']} == {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Equality Operation: {item['left_side']} == {item['right_side']}\n\n"
                         case '!=':
-                            summary_text_to_speech+= f"\tInequality Operation: {item['left_side']} != {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Inequality Operation: {item['left_side']} != {item['right_side']}\n\n"
                         case '>':
-                            summary_text_to_speech+= f"\tGreater Than Operation: {item['left_side']} > {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Greater Than Operation: {item['left_side']} > {item['right_side']}\n\n"
                         case '<':
-                            summary_text_to_speech+= f"\tLess Than Operation: {item['left_side']} < {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Less Than Operation: {item['left_side']} < {item['right_side']}\n\n"
                         case '>=':
-                            summary_text_to_speech+= f"\tGreater Than or Equal Operation: {item['left_side']} >= {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Greater Than or Equal Operation: {item['left_side']} >= {item['right_side']}\n\n"
                         case '<=':
-                            summary_text_to_speech+= f"\tLess Than or Equal Operation: {item['left_side']} <= {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Less Than or Equal Operation: {item['left_side']} <= {item['right_side']}\n\n"
+                        case '+=':
+                            summary_text_to_speech+= f"Addition Operation: {item['left_side']} += {item['right_side']}\n\n"
+                        case '-=':
+                            summary_text_to_speech+= f"Subtraction Operation: {item['left_side']} -= {item['right_side']}\n\n"
+                        case '*=':
+                            summary_text_to_speech+= f"Multiplication Operation: {item['left_side']} *= {item['right_side']}\n\n"
+                        case '/=':
+                            summary_text_to_speech+= f"Division Operation: {item['left_side']} /= {item['right_side']}\n\n"
+                        case '%=':
+                            summary_text_to_speech+= f"Modulus Operation: {item['left_side']} %= {item['right_side']}\n\n"
+                        case 'and':
+                            summary_text_to_speech+= f"And Operation: {item['left_side']} and {item['right_side']} \n\n"
+                        case 'or':
+                            summary_text_to_speech+= f"Or Operation: {item['left_side']} or {item['right_side']} \n\n"
+                        case 'not':
+                            summary_text_to_speech+= f"Not Operation: not {item['right_side']} \n\n"
+                        case 'in':
+                            summary_text_to_speech+= f"In Operation: {item['left_side']} in {item['right_side']} \n\n"
+                        case 'not in':
+                            summary_text_to_speech+= f"Not In Operation: {item['left_side']} not in {item['right_side']} \n\n"
+                        case 'is':
+                            summary_text_to_speech+= f"Is Operation: {item['left_side']} is {item['right_side']} \n\n"
+                        case 'is not':
+                            summary_text_to_speech+= f"Is Not Operation: {item['left_side']} is not {item['right_side']} \n\n"
+                        case 'call':
+                            summary_text_to_speech+= f"Function Call:\n \t{item['function_name']}({item['arguments']}) \n\n"
 
             elif item['type'] == 'loop':
-                summary_text_to_speech+= f"A {item['keyword']} loop:\n"
                 if (item['keyword'] == 'for'):
-                    if isinstance(item['iterable'], dict):
-                        summary_text_to_speech+= f"\t{item['keyword']} {item['iterator']} in {item['iterable']['function_name']}({item['iterable']['arguments']}) {item['condition']}:\n\n"
+                    summary_text_to_speech+= f"A {item['keyword']} loop on "
+                    if(item['iterable'] == ""):
+                        summary_text_to_speech+= f"{item['iterator']} \n"
+                    else:
+                        summary_text_to_speech+= f"{item['iterator']} in {item['iterable']} \n"
                 else:
                     # while loop
-                    summary_text_to_speech+= f"\t{item['keyword']} {item['condition']}:\n\n"
+                    summary_text_to_speech+= f"{item['keyword']} {item['condition']} loop:\n"
 
                 for statement in item['body']:
                     summary_text_to_speech+= f"\t{statement}\n\n"
@@ -447,15 +589,16 @@ class ASTProcessor:
 
 
 # Load the AST from the JSON file
-with open('./ast_3.json', 'r') as file:
-
+with open('./ast_2.json', 'r') as file:
     ast = json.load(file)
 
 ast_processor = ASTProcessor(ast['ast'])
 summary = ast_processor.process_ast()
-final = ast_processor.get_summary(summary)
-# write into file
-# with open('summary.json', 'w') as file:
-    # json.dump(summary, file, indent=4)
-# print(summary)
+with open('summary.json', 'w') as file:
+    json.dump(summary, file, indent=4)
 
+
+final = ast_processor.get_summary(summary)
+with open('summary.txt', 'w') as file:
+    file.write(final)
+# print(summary)

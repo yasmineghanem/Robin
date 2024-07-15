@@ -44,5 +44,29 @@
     "list": "list",
     "tuple": "tuple",
     "dictionary": "dict"
+  },
+  "operatorMappings": {
+    "Addition": "+",
+    "Subtraction": "-",
+    "Multiplication": "*",
+    "Division": "/",
+    "Modulus": "%",
+    "Exponentiation": "**",
+    "Assignment": "=",
+    "Equal": "==",
+    "NotEqual": "!=",
+    "GreaterThan": ">",
+    "GreaterThanOrEqual": ">=",
+    "LessThan": "<",
+    "LessThanOrEqual": "<=",
+    "And": "and",
+    "Or": "or",
+    "Not": "not",
+    "Increment": "+=",
+    "Decrement": "-=",
+    "Multiply": "*=",
+    "Divide": "/=",
+    "ModulusAssign": "%=",
+    "ExponentAssign": "**="
   }
 }

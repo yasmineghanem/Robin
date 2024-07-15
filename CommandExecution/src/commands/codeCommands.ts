@@ -67,6 +67,7 @@ import {
   WRITE_FILE,
   WRITE_FILE_FAILURE,
   WRITE_FILE_SUCCESS,
+  GET_ERRORS,
 } from "../constants/code";
 import { EXTENSIONS } from "../constants/constants";
 
@@ -95,8 +96,10 @@ const handleSuccess = (message: string): any => {
 //     "name": "x",
 //     "value" : 0
 // }
+
 // declare variable
 const declareVariable = () => {
+  
   vscode.commands.registerCommand(DECLARE_VARIABLE, async (args) => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
@@ -104,7 +107,7 @@ const declareVariable = () => {
       const ext = getFileExtension(editor);
 
       let codeGenerator;
-
+      
       switch (ext) {
         case EXTENSIONS.PYTHON:
           codeGenerator = new PythonCodeGenerator(editor);
@@ -117,6 +120,7 @@ const declareVariable = () => {
       }
 
       let s = codeGenerator.declareVariable(args.name, args.type, args.value);
+      
       if (!s) {
         return handleFailure(VARIABLE_FAILURE);
       }
