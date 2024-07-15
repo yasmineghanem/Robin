@@ -112,9 +112,9 @@ class SpeechRecognition:
             print(f"Error in processing command: {e}")
 
     def get_file_summary(self, ast):
-        # self.summarizer = ASTProcessor(ast)
+        self.summarizer = ASTProcessor(ast)
 
-        # s = self.summarizer.get_summary()
+        s = self.summarizer.get_summary(self.summarizer.process_ast())
         print(s)
         return 's'
 
