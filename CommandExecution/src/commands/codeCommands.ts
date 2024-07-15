@@ -97,6 +97,9 @@ const handleSuccess = (message: string): any => {
 //     "value" : 0
 // }
 
+// error code list
+
+
 // declare variable
 const declareVariable = () => {
   

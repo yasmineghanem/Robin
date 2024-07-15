@@ -1,9 +1,5 @@
 {
-<<<<<<< Updated upstream
   "Variable Declaration": [
-=======
-    "Variable Declaration": [
->>>>>>> Stashed changes
     "make start time as double and initialize 0.000123",
     "declare min value as integer and value 131313",
     "define settings as boolean and value false",
@@ -570,11 +566,7 @@
     "titled as achievement define a class",
     "named as Equation declare a class"
   ],
-<<<<<<< Updated upstream
   "Assignment Operation": [
-=======
-    "Assignment Operation": [
->>>>>>> Stashed changes
     "end date equals clustering algorithms",
     "tax rate equals -161616",
     "file path equals 0.707",
@@ -1002,11 +994,7 @@
     "while environment equals False",
     "while key less than False"
   ],
-<<<<<<< Updated upstream
   "Array Operation": [
-=======
-    "Array Operation": [
->>>>>>> Stashed changes
     "place the value code review to the array quest items",
     "append the value true to the array label list",
     "include the value -262626 to the array review ratings",
@@ -1796,11 +1784,7 @@
     "make the options to a int",
     "change the environment to a integer"
   ],
-<<<<<<< Updated upstream
   "Input": [
-=======
-    "Input": [
->>>>>>> Stashed changes
     "enter from the user with message Enter a value and put it to k",
     "enter from the user with message Please enter a value and set it to username",
     "fetch from the user with message enter a value for the variable and store to loop index",
@@ -2512,11 +2496,7 @@
     "repeat the last change",
     "revoke the last change"
   ],
-<<<<<<< Updated upstream
   "Comment": [
-=======
-    "Comment": [
->>>>>>> Stashed changes
     "add a this is a log comment",
     "write a Check for errors",
     "add a this is a temporary comment",
@@ -2864,11 +2844,7 @@
     "list me the classes",
     "get me the classes"
   ],
-<<<<<<< Updated upstream
   "Git Operation": [
-=======
-    "Git Operation": [
->>>>>>> Stashed changes
     "stage",
     "stage",
     "fetch",
@@ -2975,12 +2951,8 @@
     "get out of loop",
     "get out of if",
     "get out of function",
-<<<<<<< Updated upstream
     "get out of class",
     ""
-=======
-    "get out of class"
->>>>>>> Stashed changes
   ],
   "Mouse Click": [
     "click",
@@ -2995,8 +2967,4 @@
     "click the mouse button",
     "right click the mouse button"
   ]
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes
