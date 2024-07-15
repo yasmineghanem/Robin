@@ -97,11 +97,9 @@ class SpeechRecognition:
         # process the command
         try:
             intent, response = self.command_intent.process_command(command)
-            # print(self.command_intent.process_command(command))
             print(f"Intent: {intent}")
             print(f"Response: {response}")
-            # print(f"Response: {type(response)}")
-            intent = 'summary'
+            # intent = 'summary'
             if intent == 'summary':
                 response['message'] = self.get_file_summary()
 
