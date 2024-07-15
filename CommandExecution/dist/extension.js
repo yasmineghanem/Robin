@@ -24701,11 +24701,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.showError = exports.showMessage = exports.executeCommand = exports.errorHandler = exports.successHandler = void 0;
+exports.createFieldChecker = exports.showError = exports.showMessage = exports.executeCommand = exports.errorHandler = exports.successHandler = void 0;
 const vscode = __importStar(__webpack_require__(1));
 const successHandler = (response, res) => {
     if (response.success) {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, { "Content-Type": "application/json" });
         if (response) {
             res.end(JSON.stringify(response));
         }
@@ -24714,13 +24714,13 @@ const successHandler = (response, res) => {
         }
     }
     else {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: response.message }));
     }
 };
 exports.successHandler = successHandler;
 const errorHandler = (err, res) => {
-    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify(err));
 };
 exports.errorHandler = errorHandler;
@@ -24736,6 +24736,19 @@ const showError = (message) => {
     vscode.window.showErrorMessage(message);
 };
 exports.showError = showError;
+const createFieldChecker = (requiredFields) => {
+    return function (req, res, next) {
+        const body = req.body;
+        const missingFields = requiredFields.filter((field) => !body[field]);
+        if (missingFields.length > 0) {
+            return res.status(400).json({
+                error: `Missing required fields: ${missingFields.join(", ")}`,
+            });
+        }
+        next();
+    };
+};
+exports.createFieldChecker = createFieldChecker;
 
 
 /***/ }),
@@ -24875,29 +24888,6 @@ router.post("/rename", (req, res) => {
         res.end(JSON.stringify({ error: err }));
     });
 });
-// copy to clipboard
-// router.post(
-//   "/copy-clipboard",
-//   (req: any, res: any) => {
-//     const data = req.body;
-//     vscode.commands.executeCommand("robin.copyFileClipboard", data).then(
-//       (response: any) => {
-//         if (response.success) {
-//           res.writeHead(200, { "Content-Type": "application/json" });
-//           res.end(JSON.stringify({ message: "File copied to clipboard!" }));
-//         }
-//         else {
-//           res.writeHead(404, { "Content-Type": "application/json" });
-//           res.end(JSON.stringify({ message: "File not found" }));
-//         }
-//       },
-//       (err) => {
-//         res.writeHead(500, { "Content-Type": "application/json" });
-//         res.end(JSON.stringify({ error: err }));
-//       }
-//     );
-//   }
-// );
 // save
 router.post("/save", (req, res) => {
     const data = req.body;
@@ -24921,7 +24911,10 @@ router.post("/get-files", (req, res) => {
     vscode.commands.executeCommand(fileSystem_1.GET_FILES).then((response) => {
         if (response.success) {
             res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ message: "Retrieved all files successfully in the workspace!", files: response.files }));
+            res.end(JSON.stringify({
+                message: "Retrieved all files successfully in the workspace!",
+                files: response.files,
+            }));
         }
         else {
             res.writeHead(404, { "Content-Type": "application/json" });
@@ -24931,6 +24924,123 @@ router.post("/get-files", (req, res) => {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: err }));
     });
+});
+// general handling
+router.post("/", (req, res) => {
+    const data = req.body;
+    const action = data["action"];
+    switch (action) {
+        case "create":
+            if (!data["name"] && !data["fileName"]) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Name is required" }));
+            }
+            vscode.commands.executeCommand(fileSystem_1.CREATE_FILE, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: response.message }));
+                }
+                else {
+                    res.writeHead(409, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Already exists!" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "copy-file":
+            if (!data["name"] && !data["source"]) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Name is required" }));
+            }
+            vscode.commands.executeCommand(fileSystem_1.COPY_FILE, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "File copied successfully!" }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "File not found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "copy-directory":
+            if (!data["name"] && !data["source"]) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ message: "Name is required" }));
+            }
+            vscode.commands.executeCommand(fileSystem_1.COPY_DIRECTORY, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Directory copied successfully!" }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "Directory not found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "delete":
+            vscode.commands.executeCommand(fileSystem_1.DELETE_FILE, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({
+                        message: "File/Directory deleted successfully!",
+                    }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "File/Directory not found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "rename":
+            vscode.commands.executeCommand(fileSystem_1.RENAME, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({
+                        message: "File/Directory renamed successfully!",
+                    }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "File/Directory not found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        case "save":
+            vscode.commands.executeCommand(fileSystem_1.SAVE, data).then((response) => {
+                if (response.success) {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "File saved successfully!" }));
+                }
+                else {
+                    res.writeHead(404, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({ message: "No active files found" }));
+                }
+            }, (err) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: err }));
+            });
+            break;
+        default:
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ message: "Invalid action" }));
+            break;
+    }
 });
 exports["default"] = router;
 
@@ -25220,7 +25330,7 @@ router.get("/kill-terminal", (req, res) => {
 });
 // copy
 router.get("/copy", (req, res) => {
-    vscode.commands.executeCommand('copy').then(() => {
+    vscode.commands.executeCommand("copy").then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Copied!" }));
     }, (err) => {
@@ -25229,7 +25339,7 @@ router.get("/copy", (req, res) => {
     });
 });
 router.get("/paste", (req, res) => {
-    vscode.commands.executeCommand('paste').then(() => {
+    vscode.commands.executeCommand(IDE_1.PASTE).then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Pasted!" }));
     }, (err) => {
@@ -25238,7 +25348,7 @@ router.get("/paste", (req, res) => {
     });
 });
 router.get("/cut", (req, res) => {
-    vscode.commands.executeCommand('cut').then(() => {
+    vscode.commands.executeCommand("cut").then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Cut!" }));
     }, (err) => {
@@ -25248,7 +25358,7 @@ router.get("/cut", (req, res) => {
 });
 //UNDO
 router.get("/undo", (req, res) => {
-    vscode.commands.executeCommand('undo').then(() => {
+    vscode.commands.executeCommand(IDE_1.UNDO).then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Undo Done!" }));
     }, (err) => {
@@ -25258,7 +25368,7 @@ router.get("/undo", (req, res) => {
 });
 //REDO
 router.get("/redo", (req, res) => {
-    vscode.commands.executeCommand('redo').then(() => {
+    vscode.commands.executeCommand(IDE_1.REDO).then(() => {
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Redo Done!" }));
     }, (err) => {
@@ -25490,8 +25600,8 @@ const fileExists = (path) => {
     if (fs_1.default.existsSync(path)) {
         return true;
     }
-    const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || '');
-    const file = files.find(file => file.split('.')[0] === path);
+    const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || "");
+    const file = files.find((file) => file.split(".")[0] === path);
     if (file) {
         return true;
     }
@@ -25500,15 +25610,15 @@ const fileExists = (path) => {
 // get list of all files in workspace directory
 const getFiles = () => {
     vscode.commands.registerCommand(fileSystem_1.GET_FILES, () => {
-        const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || '');
+        const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || "");
         return {
             files,
-            success: true
+            success: true,
         };
     });
 };
 // create new file
-// sample input => 
+// sample input =>
 // {
 //     "fileName": "new file",
 //     "extension": "/py",
@@ -25517,25 +25627,28 @@ const getFiles = () => {
 const createFile = () => vscode.commands.registerCommand(fileSystem_1.CREATE_FILE, (args) => {
     // const editor = vscode.window.activeTextEditor;
     // if (editor) {
-    const fileName = args.fileName;
-    const extension = args.extension;
-    const content = args.content;
+    const fileName = args.fileName ?? args.name ?? "robin_new";
+    const extension = args.extension ?? "";
+    const content = args.content ?? "";
     const path = `${vscode.workspace.rootPath}\\${fileName}${extension}`;
     // check if it already exists
     if (!fs_1.default.existsSync(path)) {
-        fs_1.default.writeFileSync(path, content);
+        if (extension) {
+            fs_1.default.writeFileSync(path, content);
+        }
+        else {
+            // create new directory
+            fs_1.default.mkdirSync(path);
+        }
         return {
             // path,
-            success: true
+            success: true,
+            message: `${extension ? "File" : "Directory"} created successfully`,
         };
     }
     return {
-        // path,
-        success: false
+        success: false,
     };
-    // } else {
-    //     vscode.window.showErrorMessage('No active text editor.');
-    // }
 });
 // create new directory
 // {
@@ -25551,12 +25664,12 @@ const createDirectory = () => vscode.commands.registerCommand(fileSystem_1.CREAT
         fs_1.default.mkdirSync(path);
         return {
             path,
-            success: true
+            success: true,
         };
     }
     return {
         path,
-        success: false
+        success: false,
     };
     // } else {
     //     vscode.window.showErrorMessage('No active text editor.');
@@ -25577,58 +25690,65 @@ const createDirectory = () => vscode.commands.registerCommand(fileSystem_1.CREAT
  */
 const copyFileCommand = () => {
     vscode.commands.registerCommand(fileSystem_1.COPY_FILE, (args) => {
-        const source = args.source;
-        const destination = args.destination;
+        const source = args?.source ?? args?.name ?? "";
+        const destination = args?.destination;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
         const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
         let path = "";
         // check if the source file doesn't have an extension, get the first the file the matches the source
-        if (source.split('.').pop() === source) {
-            const files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || '');
-            const file = files.find(file => file.split('.')[0] === source);
+        if (source.split(".").pop() === source) {
+            let files = fs_1.default.readdirSync(vscode.workspace.rootPath?.toString() || "");
+            files = files.filter(
+            // make sure ut doesn't start with .
+            (f) => f[0] !== ".");
+            // get files only and exclude directories
+            files = files.filter((f) => fs_1.default.lstatSync(`${vscode.workspace.rootPath}\\${f}`).isFile());
+            const file = files.find((f) => f.split(".")[0] === source);
             if (file) {
-                const content = fs_1.default.readFileSync(`${vscode.workspace.rootPath}\\${file}`, 'utf-8');
+                const content = fs_1.default.readFileSync(`${vscode.workspace.rootPath}\\${file}`, "utf-8");
                 if (destination) {
                     path = destinationPath;
                     fs_1.default.writeFileSync(destinationPath, content);
                 }
                 else {
                     // add copy before extenstion
-                    path = `${vscode.workspace.rootPath}\\${source}-copy.${file.split('.').pop()}`;
+                    path = `${vscode.workspace.rootPath}\\${source}-copy.${file
+                        .split(".")
+                        .pop()}`;
                     fs_1.default.writeFileSync(path, content);
                 }
                 return {
                     success: true,
-                    path
+                    path,
                 };
             }
         }
         else {
             if (fs_1.default.existsSync(sourcePath)) {
-                const content = fs_1.default.readFileSync(sourcePath, 'utf-8');
+                const content = fs_1.default.readFileSync(sourcePath, "utf-8");
                 if (destination) {
                     fs_1.default.writeFileSync(destinationPath, content);
                 }
                 else {
                     // add copy before extension
-                    path = `${vscode.workspace.rootPath}\\${source.split('.')[0]}-copy.${source.split('.').pop()}`;
+                    path = `${vscode.workspace.rootPath}\\${source.split(".")[0]}-copy.${source.split(".").pop()}`;
                     fs_1.default.writeFileSync(path, content);
                 }
                 return {
                     success: true,
-                    path
+                    path,
                 };
             }
         }
         return {
             success: false,
-            message: "Source file not found"
+            message: "Source file not found",
         };
     });
 };
 const copyDirectory = () => {
     vscode.commands.registerCommand(fileSystem_1.COPY_DIRECTORY, (args) => {
-        const source = args.source;
+        const source = args.source ?? args.name ?? "";
         const destination = args.destination;
         const overwrite = args.overwrite ?? false;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
@@ -25640,12 +25760,12 @@ const copyDirectory = () => {
                 vscode.workspace.fs.copy(vscode.Uri.file(sourcePath), vscode.Uri.file(`${vscode.workspace.rootPath}\\${source} copy`));
             }
             return {
-                success: true
+                success: true,
             };
         }
         return {
             success: false,
-            message: "Source directory not found"
+            message: "Source directory not found",
         };
     });
 };
@@ -25655,14 +25775,16 @@ const deleteFile = () => {
         const source = args.source;
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
         if (fileExists(sourcePath)) {
-            vscode.workspace.fs.delete(vscode.Uri.file(sourcePath), { recursive: true });
+            vscode.workspace.fs.delete(vscode.Uri.file(sourcePath), {
+                recursive: true,
+            });
             return {
-                success: true
+                success: true,
             };
         }
         return {
             success: false,
-            message: "File not found"
+            message: "File not found",
         };
     });
 };
@@ -25711,14 +25833,16 @@ const rename = () => {
         const sourcePath = `${vscode.workspace.rootPath}\\${source}`;
         const destinationPath = `${vscode.workspace.rootPath}\\${destination}`;
         if (fileExists(sourcePath)) {
-            vscode.workspace.fs.rename(vscode.Uri.file(sourcePath), vscode.Uri.file(destinationPath));
+            vscode.workspace.fs.rename(vscode.Uri.file(sourcePath), vscode.Uri.file(destinationPath)
+            // { overwrite }
+            );
             return {
                 success: true,
             };
         }
         return {
             success: false,
-            message: "File not found"
+            message: "File not found",
         };
     });
 };
@@ -25739,10 +25863,9 @@ const saveFile = () => {
                 //     success: true
                 // };
             }
-            ;
         }
         return {
-            success: true
+            success: true,
         };
     });
 };
@@ -25758,7 +25881,7 @@ const registerFileSystemCommands = () => {
         getFiles,
         // copyFileClipboard,
     ];
-    commands.forEach(command => command());
+    commands.forEach((command) => command());
 };
 exports["default"] = registerFileSystemCommands;
 

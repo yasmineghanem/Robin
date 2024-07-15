@@ -875,117 +875,117 @@ Sentence #, Word, Tag, Intent
 138, orders, B-ARRAY, array operation
 139, verify, O, assertion
 139, that, O, assertion
-139, data, B-VAR, assertion
+139, data, B-LHS, assertion
 139, is, O, assertion
 139, less, B-CONDITION, assertion
 139, than, I-CONDITION, assertion
 139, or, I-CONDITION, assertion
 139, equal, I-CONDITION, assertion
-139, Debugging, B-VAL, assertion
-139, Session, I-VAL, assertion
+139, Debugging, B-RHS, assertion
+139, Session, I-RHS, assertion
 140, check, O, assertion
 140, that, O, assertion
-140, total, B-VAR, assertion
-140, amount, I-VAR, assertion
+140, total, B-LHS, assertion
+140, amount, I-LHS, assertion
 140, is, O, assertion
 140, equal, B-CONDITION, assertion
-140, -606060, B-VAL, assertion
+140, -606060, B-RHS, assertion
 141, check, O, assertion
 141, that, O, assertion
-141, office, B-VAR, assertion
-141, location, I-VAR, assertion
+141, office, B-LHS, assertion
+141, location, I-LHS, assertion
 141, is, O, assertion
 141, greater, B-CONDITION, assertion
 141, than, I-CONDITION, assertion
-141, object, B-VAL, assertion
-141, oriented, I-VAL, assertion
-141, programming, I-VAL, assertion
+141, object, B-RHS, assertion
+141, oriented, I-RHS, assertion
+141, programming, I-RHS, assertion
 142, assert, O, assertion
 142, that, O, assertion
-142, emergency, B-VAR, assertion
-142, contact, I-VAR, assertion
+142, emergency, B-LHS, assertion
+142, contact, I-LHS, assertion
 142, is, O, assertion
 142, greater, B-CONDITION, assertion
 142, than, I-CONDITION, assertion
-142, -98765.4321, B-VAL, assertion
+142, -98765.4321, B-RHS, assertion
 143, validate, O, assertion
 143, that, O, assertion
-143, category, B-VAR, assertion
-143, type, I-VAR, assertion
+143, category, B-LHS, assertion
+143, type, I-LHS, assertion
 143, is, O, assertion
 143, more, B-CONDITION, assertion
 143, than, I-CONDITION, assertion
-143, Neural, B-VAL, assertion
-143, Networks, I-VAL, assertion
+143, Neural, B-RHS, assertion
+143, Networks, I-RHS, assertion
 144, check, O, assertion
 144, that, O, assertion
-144, region, B-VAR, assertion
-144, name, I-VAR, assertion
+144, region, B-LHS, assertion
+144, name, I-LHS, assertion
 144, is, O, assertion
 144, not, B-CONDITION, assertion
 144, equal, I-CONDITION, assertion
-144, 1234567, B-VAL, assertion
+144, 1234567, B-RHS, assertion
 145, validate, O, assertion
 145, that, O, assertion
-145, system, B-VAR, assertion
-145, properties, I-VAR, assertion
+145, system, B-LHS, assertion
+145, properties, I-LHS, assertion
 145, is, O, assertion
 145, less, B-CONDITION, assertion
 145, than, I-CONDITION, assertion
 145, or, I-CONDITION, assertion
 145, equal, I-CONDITION, assertion
-145, 2.2250738585072014, B-VAL, assertion
+145, 2.2250738585072014, B-RHS, assertion
 146, validate, O, assertion
 146, that, O, assertion
-146, j, B-VAR, assertion
+146, j, B-LHS, assertion
 146, is, O, assertion
 146, greater, B-CONDITION, assertion
 146, than, I-CONDITION, assertion
 146, or, I-CONDITION, assertion
 146, equal, I-CONDITION, assertion
-146, hello, B-VAL, assertion
-146, world, I-VAL, assertion
+146, hello, B-RHS, assertion
+146, world, I-RHS, assertion
 147, ensure, O, assertion
 147, that, O, assertion
-147, account, B-VAR, assertion
-147, balance, I-VAR, assertion
+147, account, B-LHS, assertion
+147, balance, I-LHS, assertion
 147, is, O, assertion
 147, not, B-CONDITION, assertion
 147, equal, I-CONDITION, assertion
-147, -1.234, B-VAL, assertion
+147, -1.234, B-RHS, assertion
 148, validate, O, assertion
 148, that, O, assertion
-148, user, B-VAR, assertion
-148, preferences, I-VAR, assertion
+148, user, B-LHS, assertion
+148, preferences, I-LHS, assertion
 148, is, O, assertion
 148, less, B-CONDITION, assertion
 148, than, I-CONDITION, assertion
 148, or, I-CONDITION, assertion
 148, equal, I-CONDITION, assertion
-148, javascript, B-VAL, assertion
-148, framework, I-VAL, assertion
+148, javascript, B-RHS, assertion
+148, framework, I-RHS, assertion
 149, validate, O, assertion
 149, that, O, assertion
-149, user, B-VAR, assertion
-149, name, I-VAR, assertion
+149, user, B-LHS, assertion
+149, name, I-LHS, assertion
 149, is, O, assertion
 149, equal, B-CONDITION, assertion
-149, clustering, B-VAL, assertion
-149, algorithms, I-VAL, assertion
+149, clustering, B-RHS, assertion
+149, algorithms, I-RHS, assertion
 150, assert, O, assertion
 150, that, O, assertion
-150, expense, B-VAR, assertion
-150, report, I-VAR, assertion
+150, expense, B-LHS, assertion
+150, report, I-LHS, assertion
 150, is, O, assertion
 150, less, B-CONDITION, assertion
 150, than, I-CONDITION, assertion
 150, or, I-CONDITION, assertion
 150, equal, I-CONDITION, assertion
-150, -6.62607015, B-VAL, assertion
+150, -6.62607015, B-RHS, assertion
 151, confirm, O, assertion
 151, that, O, assertion
-151, account, B-VAL, assertion
-151, balance, I-VAL, assertion
+151, account, B-RHS, assertion
+151, balance, I-RHS, assertion
 151, is, O, assertion
 151, less, B-CONDITION, assertion
 151, than, I-CONDITION, assertion
@@ -995,15 +995,15 @@ Sentence #, Word, Tag, Intent
 151, balance, O, assertion
 152, check, O, assertion
 152, that, O, assertion
-152, data, B-VAL, assertion
+152, data, B-RHS, assertion
 152, is, O, assertion
 152, less, B-CONDITION, assertion
 152, than, I-CONDITION, assertion
 152, data, O, assertion
 153, assert, O, assertion
 153, that, O, assertion
-153, user, B-VAL, assertion
-153, email, I-VAL, assertion
+153, user, B-RHS, assertion
+153, email, I-RHS, assertion
 153, is, O, assertion
 153, less, B-CONDITION, assertion
 153, than, I-CONDITION, assertion
@@ -1013,8 +1013,8 @@ Sentence #, Word, Tag, Intent
 153, email, O, assertion
 154, check, O, assertion
 154, that, O, assertion
-154, street, B-VAL, assertion
-154, name, I-VAL, assertion
+154, street, B-RHS, assertion
+154, name, I-RHS, assertion
 154, is, O, assertion
 154, not, B-CONDITION, assertion
 154, equal, I-CONDITION, assertion
@@ -1022,16 +1022,16 @@ Sentence #, Word, Tag, Intent
 154, name, O, assertion
 155, assert, O, assertion
 155, that, O, assertion
-155, tax, B-VAL, assertion
-155, rate, I-VAL, assertion
+155, tax, B-RHS, assertion
+155, rate, I-RHS, assertion
 155, is, O, assertion
 155, equals, B-CONDITION, assertion
 155, tax, O, assertion
 155, rate, O, assertion
 156, assert, O, assertion
 156, that, O, assertion
-156, partner, B-VAL, assertion
-156, name, I-VAL, assertion
+156, partner, B-RHS, assertion
+156, name, I-RHS, assertion
 156, is, O, assertion
 156, not, B-CONDITION, assertion
 156, equal, I-CONDITION, assertion
@@ -1039,23 +1039,23 @@ Sentence #, Word, Tag, Intent
 156, name, O, assertion
 157, assert, O, assertion
 157, that, O, assertion
-157, result, B-VAL, assertion
+157, result, B-RHS, assertion
 157, is, O, assertion
 157, not, B-CONDITION, assertion
 157, equal, I-CONDITION, assertion
 157, result, O, assertion
 158, confirm, O, assertion
 158, that, O, assertion
-158, time, B-VAL, assertion
-158, stamp, I-VAL, assertion
+158, time, B-RHS, assertion
+158, stamp, I-RHS, assertion
 158, is, O, assertion
 158, equal, B-CONDITION, assertion
 158, time, O, assertion
 158, stamp, O, assertion
 159, confirm, O, assertion
 159, that, O, assertion
-159, mentor, B-VAL, assertion
-159, id, I-VAL, assertion
+159, mentor, B-RHS, assertion
+159, id, I-RHS, assertion
 159, is, O, assertion
 159, more, B-CONDITION, assertion
 159, than, I-CONDITION, assertion
@@ -1063,23 +1063,23 @@ Sentence #, Word, Tag, Intent
 159, id, O, assertion
 160, ensure, O, assertion
 160, that, O, assertion
-160, inventory, B-VAL, assertion
-160, level, I-VAL, assertion
+160, inventory, B-RHS, assertion
+160, level, I-RHS, assertion
 160, is, O, assertion
 160, equal, B-CONDITION, assertion
 160, inventory, O, assertion
 160, level, O, assertion
 161, validate, O, assertion
 161, that, O, assertion
-161, options, B-VAR, assertion
+161, options, B-LHS, assertion
 161, is, O, assertion
 161, less, B-CONDITION, assertion
 161, than, I-CONDITION, assertion
 161, options, O, assertion
 162, verify, O, assertion
 162, that, O, assertion
-162, street, B-VAL, assertion
-162, name, I-VAL, assertion
+162, street, B-RHS, assertion
+162, name, I-RHS, assertion
 162, is, O, assertion
 162, greater, B-CONDITION, assertion
 162, than, I-CONDITION, assertion
@@ -1089,8 +1089,8 @@ Sentence #, Word, Tag, Intent
 162, name, O, assertion
 163, verify, O, assertion
 163, that, O, assertion
-163, due, B-VAL, assertion
-163, date, I-VAL, assertion
+163, due, B-RHS, assertion
+163, date, I-RHS, assertion
 163, is, O, assertion
 163, less, B-CONDITION, assertion
 163, than, I-CONDITION, assertion
@@ -1100,136 +1100,136 @@ Sentence #, Word, Tag, Intent
 163, date, O, assertion
 164, verify, O, assertion
 164, that, O, assertion
-164, index, B-VAL, assertion
+164, index, B-RHS, assertion
 164, is, O, assertion
 164, equal, B-CONDITION, assertion
 164, index, O, assertion
 165, verify, O, assertion
-165, start, B-VAR, assertion
-165, time, I-VAR, assertion
+165, start, B-LHS, assertion
+165, time, I-LHS, assertion
 165, more, B-CONDITION, assertion
 165, than, I-CONDITION, assertion
-165, -222222, B-VAL, assertion
+165, -222222, B-RHS, assertion
 166, validate, O, assertion
-166, item, B-VAR, assertion
+166, item, B-LHS, assertion
 166, not, B-CONDITION, assertion
 166, equal, I-CONDITION, assertion
-166, Python, B-VAL, assertion
-166, Programming, I-VAL, assertion
+166, Python, B-RHS, assertion
+166, Programming, I-RHS, assertion
 167, check, O, assertion
-167, partner, B-VAR, assertion
-167, name, I-VAR, assertion
+167, partner, B-LHS, assertion
+167, name, I-LHS, assertion
 167, equals, B-CONDITION, assertion
-167, 12345.6789, B-VAL, assertion
+167, 12345.6789, B-RHS, assertion
 168, check, O, assertion
-168, key, B-VAR, assertion
+168, key, B-LHS, assertion
 168, equal, B-CONDITION, assertion
-168, DATA, B-VAL, assertion
-168, ANALYSIS, I-VAL, assertion
+168, DATA, B-RHS, assertion
+168, ANALYSIS, I-RHS, assertion
 169, assert, O, assertion
-169, user, B-VAR, assertion
-169, settings, I-VAR, assertion
+169, user, B-LHS, assertion
+169, settings, I-LHS, assertion
 169, greater, B-CONDITION, assertion
 169, than, I-CONDITION, assertion
-169, Full, B-VAL, assertion
-169, Stack, I-VAL, assertion
-169, Developer, I-VAL, assertion
+169, Full, B-RHS, assertion
+169, Stack, I-RHS, assertion
+169, Developer, I-RHS, assertion
 170, assert, O, assertion
-170, is, B-VAL, assertion
-170, enabled, I-VAR, assertion
+170, is, B-RHS, assertion
+170, enabled, I-LHS, assertion
 170, equals, B-CONDITION, assertion
-170, This, I-VAL, assertion
+170, This, I-RHS, assertion
 170, is, O, assertion
-170, a, I-VAL, assertion
-170, test, I-VAL, assertion
+170, a, I-RHS, assertion
+170, test, I-RHS, assertion
 171, confirm, O, assertion
-171, is, B-VAR, assertion
-171, verified, I-VAR, assertion
+171, is, B-LHS, assertion
+171, verified, I-LHS, assertion
 171, greater, B-CONDITION, assertion
 171, than, I-CONDITION, assertion
 171, or, I-CONDITION, assertion
 171, equal, I-CONDITION, assertion
-171, deep, B-VAL, assertion
-171, learning, I-VAL, assertion
-171, models, I-VAL, assertion
+171, deep, B-RHS, assertion
+171, learning, I-RHS, assertion
+171, models, I-RHS, assertion
 172, ensure, O, assertion
-172, primary, B-VAR, assertion
-172, contact, I-VAR, assertion
+172, primary, B-LHS, assertion
+172, contact, I-LHS, assertion
 172, equals, B-CONDITION, assertion
-172, INFORMATION, B-VAL, assertion
-172, TECHNOLOGY, I-VAL, assertion
+172, INFORMATION, B-RHS, assertion
+172, TECHNOLOGY, I-RHS, assertion
 173, validate, O, assertion
-173, zip, B-VAR, assertion
-173, code, I-VAR, assertion
+173, zip, B-LHS, assertion
+173, code, I-LHS, assertion
 173, less, B-CONDITION, assertion
 173, than, I-CONDITION, assertion
 173, or, I-CONDITION, assertion
 173, equal, I-CONDITION, assertion
-173, 888888, B-VAL, assertion
+173, 888888, B-RHS, assertion
 174, ensure, O, assertion
-174, last, B-VAR, assertion
-174, updated, I-VAR, assertion
+174, last, B-LHS, assertion
+174, updated, I-LHS, assertion
 174, greater, B-CONDITION, assertion
 174, than, I-CONDITION, assertion
 174, or, I-CONDITION, assertion
 174, equal, I-CONDITION, assertion
-174, 45, B-VAL, assertion
+174, 45, B-RHS, assertion
 175, verify, O, assertion
-175, is, B-VAR, assertion
-175, visible, I-VAR, assertion
+175, is, B-LHS, assertion
+175, visible, I-LHS, assertion
 175, more, B-CONDITION, assertion
 175, than, I-CONDITION, assertion
-175, Machine, B-VAL, assertion
-175, Learning, I-VAL, assertion
+175, Machine, B-RHS, assertion
+175, Learning, I-RHS, assertion
 176, validate, O, assertion
-176, secondary, B-VAR, assertion
-176, contact, I-VAR, assertion
+176, secondary, B-LHS, assertion
+176, contact, I-LHS, assertion
 176, less, B-CONDITION, assertion
 176, than, I-CONDITION, assertion
 176, or, I-CONDITION, assertion
 176, equal, I-CONDITION, assertion
-176, software, B-VAL, assertion
-176, engineering, I-VAL, assertion
+176, software, B-RHS, assertion
+176, engineering, I-RHS, assertion
 177, check, O, assertion
-177, current, B-VAL, assertion
-177, date, I-VAL, assertion
+177, current, B-RHS, assertion
+177, date, I-RHS, assertion
 177, not, B-CONDITION, assertion
 177, equal, I-CONDITION, assertion
 177, current, O, assertion
 177, date, O, assertion
 178, validate, O, assertion
-178, gross, B-VAL, assertion
-178, income, I-VAL, assertion
+178, gross, B-RHS, assertion
+178, income, I-RHS, assertion
 178, equal, B-CONDITION, assertion
 178, gross, O, assertion
 178, income, O, assertion
 179, check, O, assertion
-179, is, B-VAL, assertion
-179, verified, I-VAL, assertion
+179, is, B-RHS, assertion
+179, verified, I-RHS, assertion
 179, more, B-CONDITION, assertion
 179, than, I-CONDITION, assertion
 179, is, O, assertion
 179, verified, O, assertion
 180, validate, O, assertion
-180, options, B-VAL, assertion
+180, options, B-RHS, assertion
 180, greater, B-CONDITION, assertion
 180, than, I-CONDITION, assertion
 180, options, O, assertion
 181, verify, O, assertion
-181, user, B-VAL, assertion
-181, preferences, I-VAL, assertion
+181, user, B-RHS, assertion
+181, preferences, I-RHS, assertion
 181, equal, B-CONDITION, assertion
 181, user, O, assertion
 181, preferences, O, assertion
 182, ensure, O, assertion
-182, default, B-VAL, assertion
-182, config, I-VAL, assertion
+182, default, B-RHS, assertion
+182, config, I-RHS, assertion
 182, equals, B-CONDITION, assertion
 182, default, O, assertion
 182, config, O, assertion
 183, verify, O, assertion
-183, last, B-VAL, assertion
-183, updated, I-VAL, assertion
+183, last, B-RHS, assertion
+183, updated, I-RHS, assertion
 183, greater, B-CONDITION, assertion
 183, than, I-CONDITION, assertion
 183, or, I-CONDITION, assertion
@@ -1237,18 +1237,18 @@ Sentence #, Word, Tag, Intent
 183, last, O, assertion
 183, updated, O, assertion
 184, ensure, O, assertion
-184, iteration, B-VAL, assertion
+184, iteration, B-RHS, assertion
 184, greater, B-CONDITION, assertion
 184, than, I-CONDITION, assertion
 184, iteration, O, assertion
 185, ensure, O, assertion
-185, count, B-VAL, assertion
+185, count, B-RHS, assertion
 185, more, B-CONDITION, assertion
 185, than, I-CONDITION, assertion
 185, count, O, assertion
 186, ensure, O, assertion
-186, geo, B-VAL, assertion
-186, coordinates, I-VAL, assertion
+186, geo, B-RHS, assertion
+186, coordinates, I-RHS, assertion
 186, less, B-CONDITION, assertion
 186, than, I-CONDITION, assertion
 186, or, I-CONDITION, assertion
@@ -1256,8 +1256,8 @@ Sentence #, Word, Tag, Intent
 186, geo, O, assertion
 186, coordinates, O, assertion
 187, confirm, O, assertion
-187, is, B-VAL, assertion
-187, enabled, I-VAL, assertion
+187, is, B-RHS, assertion
+187, enabled, I-RHS, assertion
 187, more, B-CONDITION, assertion
 187, than, I-CONDITION, assertion
 187, is, O, assertion
@@ -14771,12 +14771,12 @@ Sentence #, Word, Tag, Intent
 1998, -202020, B-OPERAND, mathematical operation
 1999, get, O, mathematical operation
 1999, the, O, mathematical operation
-1999, multiplication, O, mathematical operation
+1999, multiplication, B-OPERATOR, mathematical operation
 1999, of, O, mathematical operation
-1999, system, O, mathematical operation
-1999, properties, O, mathematical operation
+1999, system, B-OPERAND, mathematical operation
+1999, properties, I-OPERAND, mathematical operation
 1999, and, O, mathematical operation
-1999, 1.5678, O, mathematical operation
+1999, 1.5678, B-OPERAND, mathematical operation
 2000, solve, O, mathematical operation
 2000, the, O, mathematical operation
 2000, subtraction, B-OPERATOR, mathematical operation
@@ -14787,12 +14787,12 @@ Sentence #, Word, Tag, Intent
 2000, 5.0, B-OPERAND, mathematical operation
 2001, get, O, mathematical operation
 2001, the, O, mathematical operation
-2001, multiplication, O, mathematical operation
+2001, multiplication, B-OPERATOR, mathematical operation
 2001, of, O, mathematical operation
-2001, city, O, mathematical operation
-2001, name, O, mathematical operation
+2001, city, B-OPERAND, mathematical operation
+2001, name, I-OPERAND, mathematical operation
 2001, and, O, mathematical operation
-2001, 789, O, mathematical operation
+2001, 789, B-OPERAND, mathematical operation
 2002, solve, O, mathematical operation
 2002, the, O, mathematical operation
 2002, exponent, B-OPERATOR, mathematical operation
@@ -14853,11 +14853,11 @@ Sentence #, Word, Tag, Intent
 2008, visible, I-OPERAND, mathematical operation
 2009, get, O, mathematical operation
 2009, the, O, mathematical operation
-2009, exponent, O, mathematical operation
+2009, exponent, B-OPERATOR, mathematical operation
 2009, of, O, mathematical operation
-2009, value, O, mathematical operation
+2009, value, B-OPERAND, mathematical operation
 2009, and, O, mathematical operation
-2009, position, O, mathematical operation
+2009, position, B-OPERAND, mathematical operation
 2010, find, O, mathematical operation
 2010, the, O, mathematical operation
 2010, exponent, B-OPERATOR, mathematical operation
@@ -14911,11 +14911,11 @@ Sentence #, Word, Tag, Intent
 2015, product, B-OPERAND, mathematical operation
 2015, description, I-OPERAND, mathematical operation
 2016, get, O, mathematical operation
-2016, end, O, mathematical operation
-2016, date, O, mathematical operation
-2016, power, O, mathematical operation
-2016, mentor, O, mathematical operation
-2016, id, O, mathematical operation
+2016, end, B-OPERAND, mathematical operation
+2016, date, I-OPERAND, mathematical operation
+2016, power, B-OPERATOR, mathematical operation
+2016, mentor, B-OPERAND, mathematical operation
+2016, id, I-OPERAND, mathematical operation
 2017, determine, O, mathematical operation
 2017, app, B-OPERAND, mathematical operation
 2017, config, I-OPERAND, mathematical operation
@@ -15043,8 +15043,8 @@ Sentence #, Word, Tag, Intent
 2041, divided, B-OPERATOR, mathematical operation
 2041, 45, O, mathematical operation
 2042, get, O, mathematical operation
-2042, 12345.6789, O, mathematical operation
-2042, divided, O, mathematical operation
+2042, 12345.6789, B-OPERAND, mathematical operation
+2042, divided, B-OPERATOR, mathematical operation
 2042, by, O, mathematical operation
 2042, 12345.6789, O, mathematical operation
 2043, work, O, mathematical operation
@@ -16082,17 +16082,17 @@ Sentence #, Word, Tag, Intent
 2184, path, I-VAR, mathematical operation
 2185, get, O, mathematical operation
 2185, the, O, mathematical operation
-2185, exponent, O, mathematical operation
+2185, exponent, B-OPERATOR, mathematical operation
 2185, of, O, mathematical operation
-2185, user, O, mathematical operation
-2185, type, O, mathematical operation
+2185, user, B-OPERAND, mathematical operation
+2185, type, I-OPERAND, mathematical operation
 2185, and, O, mathematical operation
-2185, -262626, O, mathematical operation
+2185, -262626, B-OPERAND, mathematical operation
 2185, and, O, mathematical operation
 2185, store, O, mathematical operation
 2185, it, O, mathematical operation
-2185, city, O, mathematical operation
-2185, name, O, mathematical operation
+2185, city, B-VAR, mathematical operation
+2185, name, I-VAR, mathematical operation
 2186, find, O, mathematical operation
 2186, the, O, mathematical operation
 2186, division, B-OPERATOR, mathematical operation
@@ -16122,18 +16122,18 @@ Sentence #, Word, Tag, Intent
 2187, frame, I-VAR, mathematical operation
 2188, get, O, mathematical operation
 2188, the, O, mathematical operation
-2188, subtraction, O, mathematical operation
+2188, subtraction, B-OPERATOR, mathematical operation
 2188, of, O, mathematical operation
-2188, user, O, mathematical operation
-2188, type, O, mathematical operation
+2188, user, B-OPERAND, mathematical operation
+2188, type, I-OPERAND, mathematical operation
 2188, and, O, mathematical operation
-2188, 232323, O, mathematical operation
+2188, 232323, B-OPERAND, mathematical operation
 2188, and, O, mathematical operation
 2188, assign, O, mathematical operation
 2188, it, O, mathematical operation
 2188, in, O, mathematical operation
-2188, current, O, mathematical operation
-2188, date, O, mathematical operation
+2188, current, B-VAR, mathematical operation
+2188, date, I-VAR, mathematical operation
 2189, find, O, mathematical operation
 2189, the, O, mathematical operation
 2189, division, B-OPERATOR, mathematical operation
@@ -16231,16 +16231,16 @@ Sentence #, Word, Tag, Intent
 2195, amount, I-VAR, mathematical operation
 2196, get, O, mathematical operation
 2196, the, O, mathematical operation
-2196, subtraction, O, mathematical operation
+2196, subtraction, B-OPERATOR, mathematical operation
 2196, of, O, mathematical operation
-2196, debit, O, mathematical operation
-2196, amount, O, mathematical operation
+2196, debit, B-OPERAND, mathematical operation
+2196, amount, I-OPERAND, mathematical operation
 2196, and, O, mathematical operation
-2196, product, O, mathematical operation
-2196, id, O, mathematical operation
+2196, product, B-OPERAND, mathematical operation
+2196, id, I-OPERAND, mathematical operation
 2196, and, O, mathematical operation
 2196, assign, O, mathematical operation
-2196, element, O, mathematical operation
+2196, element, B-VAR, mathematical operation
 2197, evaluate, O, mathematical operation
 2197, the, O, mathematical operation
 2197, multiplication, B-OPERATOR, mathematical operation
@@ -16272,16 +16272,16 @@ Sentence #, Word, Tag, Intent
 2198, point, I-VAR, mathematical operation
 2199, get, O, mathematical operation
 2199, the, O, mathematical operation
-2199, division, O, mathematical operation
+2199, division, B-OPERATOR, mathematical operation
 2199, of, O, mathematical operation
-2199, zip, O, mathematical operation
-2199, code, O, mathematical operation
+2199, zip, B-OPERAND, mathematical operation
+2199, code, I-OPERAND, mathematical operation
 2199, and, O, mathematical operation
-2199, completed, O, mathematical operation
+2199, completed, B-OPERAND, mathematical operation
 2199, and, O, mathematical operation
 2199, save, O, mathematical operation
 2199, to, O, mathematical operation
-2199, result, O, mathematical operation
+2199, result, B-VAR, mathematical operation
 2200, compute, O, mathematical operation
 2200, the, O, mathematical operation
 2200, exponent, B-OPERATOR, mathematical operation
@@ -16363,15 +16363,15 @@ Sentence #, Word, Tag, Intent
 2205, is, B-VAR, mathematical operation
 2205, visible, I-VAR, mathematical operation
 2206, get, O, mathematical operation
-2206, position, O, mathematical operation
-2206, add, O, mathematical operation
-2206, time, O, mathematical operation
-2206, stamp, O, mathematical operation
+2206, position, B-OPERAND, mathematical operation
+2206, add, B-OPERATOR, mathematical operation
+2206, time, B-OPERAND, mathematical operation
+2206, stamp, I-OPERAND, mathematical operation
 2206, and, O, mathematical operation
 2206, assign, O, mathematical operation
 2206, it, O, mathematical operation
 2206, in, O, mathematical operation
-2206, count, O, mathematical operation
+2206, count, B-VAR, mathematical operation
 2207, calculate, O, mathematical operation
 2207, item, B-OPERAND, mathematical operation
 2207, array, I-OPERAND, mathematical operation
@@ -16407,25 +16407,25 @@ Sentence #, Word, Tag, Intent
 2209, in, O, mathematical operation
 2209, count, B-VAR, mathematical operation
 2210, get, O, mathematical operation
-2210, expense, O, mathematical operation
-2210, report, O, mathematical operation
-2210, added, O, mathematical operation
+2210, expense, B-OPERAND, mathematical operation
+2210, report, I-OPERAND, mathematical operation
+2210, added, B-OPERATOR, mathematical operation
 2210, to, O, mathematical operation
-2210, has, O, mathematical operation
-2210, errors, O, mathematical operation
+2210, has, B-OPERAND, mathematical operation
+2210, errors, I-OPERAND, mathematical operation
 2210, and, O, mathematical operation
 2210, save, O, mathematical operation
 2210, to, O, mathematical operation
-2210, expiry, O, mathematical operation
-2210, date, O, mathematical operation
+2210, expiry, B-VAR, mathematical operation
+2210, date, I-VAR, mathematical operation
 2211, get, O, mathematical operation
-2211, j, O, mathematical operation
-2211, sum, O, mathematical operation
-2211, step, O, mathematical operation
+2211, j, B-OPERAND, mathematical operation
+2211, sum, B-OPERATOR, mathematical operation
+2211, step, B-OPERAND, mathematical operation
 2211, and, O, mathematical operation
 2211, save, O, mathematical operation
-2211, is, O, mathematical operation
-2211, visible, O, mathematical operation
+2211, is, B-VAR, mathematical operation
+2211, visible, I-VAR, mathematical operation
 2212, determine, O, mathematical operation
 2212, category, B-OPERAND, mathematical operation
 2212, type, B-OPERAND, mathematical operation
@@ -16464,17 +16464,17 @@ Sentence #, Word, Tag, Intent
 2214, average, B-VAR, mathematical operation
 2214, score, I-VAR, mathematical operation
 2215, get, O, mathematical operation
-2215, counter, O, mathematical operation
-2215, power, O, mathematical operation
-2215, 0.999999, O, mathematical operation
+2215, counter, B-OPERAND, mathematical operation
+2215, power, B-OPERATOR, mathematical operation
+2215, 0.999999, B-OPERAND, mathematical operation
 2215, and, O, mathematical operation
 2215, set, O, mathematical operation
 2215, it, O, mathematical operation
 2215, to, O, mathematical operation
 2215, the, O, mathematical operation
 2215, variable, O, mathematical operation
-2215, geo, O, mathematical operation
-2215, coordinates, O, mathematical operation
+2215, geo, B-VAR, mathematical operation
+2215, coordinates, I-VAR, mathematical operation
 2216, compute, O, mathematical operation
 2216, default, B-OPERAND, mathematical operation
 2216, config, I-OPERAND, mathematical operation
@@ -16529,19 +16529,19 @@ Sentence #, Word, Tag, Intent
 2219, product, B-VAR, mathematical operation
 2219, id, I-VAR, mathematical operation
 2220, get, O, mathematical operation
-2220, expense, O, mathematical operation
-2220, report, O, mathematical operation
-2220, added, O, mathematical operation
+2220, expense, B-OPERAND, mathematical operation
+2220, report, I-OPERAND, mathematical operation
+2220, added, B-OPERATOR, mathematical operation
 2220, to, O, mathematical operation
-2220, -14142, O, mathematical operation
+2220, -14142, B-OPERAND, mathematical operation
 2220, and, O, mathematical operation
 2220, set, O, mathematical operation
 2220, it, O, mathematical operation
 2220, to, O, mathematical operation
 2220, the, O, mathematical operation
 2220, variable, O, mathematical operation
-2220, user, O, mathematical operation
-2220, gender, O, mathematical operation
+2220, user, B-VAR, mathematical operation
+2220, gender, I-VAR, mathematical operation
 2221, solve, O, mathematical operation
 2221, due, B-OPERAND, mathematical operation
 2221, date, B-VAR, mathematical operation
@@ -19656,7 +19656,7 @@ Sentence #, Word, Tag, Intent
 2576, initialize, O, variable declaration
 2576, it, O, variable declaration
 2576, to, O, variable declaration
-2576, @, O, variable declaration
+2576, *, O, variable declaration
 2577, make, O, variable declaration
 2577, user, B-VAR, variable declaration
 2577, age, I-VAR, variable declaration
@@ -20255,7 +20255,7 @@ Sentence #, Word, Tag, Intent
 2622, set, O, variable declaration
 2622, it, O, variable declaration
 2622, to, O, variable declaration
-2622, $, O, variable declaration
+2622, &, O, variable declaration
 2623, under, O, variable declaration
 2623, the, O, variable declaration
 2623, name, O, variable declaration
@@ -20415,7 +20415,7 @@ Sentence #, Word, Tag, Intent
 2633, variable, O, variable declaration
 2633, and, O, variable declaration
 2633, assign, O, variable declaration
-2633, &, O, variable declaration
+2633, %, O, variable declaration
 2633, to, O, variable declaration
 2633, it, O, variable declaration
 2634, with, O, variable declaration
@@ -21314,7 +21314,7 @@ Sentence #, Word, Tag, Intent
 2709, set, O, variable declaration
 2709, it, O, variable declaration
 2709, to, O, variable declaration
-2709, #, O, variable declaration
+2709, @, O, variable declaration
 2710, define, O, variable declaration
 2710, a, O, variable declaration
 2710, new, O, variable declaration
@@ -21621,7 +21621,7 @@ Sentence #, Word, Tag, Intent
 2744, and, O, variable declaration
 2744, assign, O, variable declaration
 2744, with, O, variable declaration
-2744, %, O, variable declaration
+2744, j, O, variable declaration
 2745, define, O, variable declaration
 2745, a, O, variable declaration
 2745, boolean, B-TYPE, variable declaration

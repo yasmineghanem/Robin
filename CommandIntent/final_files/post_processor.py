@@ -23,115 +23,138 @@ class PostProcessor:
         self.intent_to_tags = intent_to_tags
         self.api = APIController()
 
-    def post_process(self, sentence, intent, tags):
+    def post_process(self, sentence, intent, tags=None, fallback=False):
         '''
             post_process function is used to post process the output of the two models.
             It takes the detected intent along with the entities and maps them to the final output.
             The final output is then sent to the command execution module using the API.
             The main purpose is to send th correct values with the correct types to the command execution module.
         '''
+
+        print("fallback from post process", fallback)
+
         sentence = sentence.split()
 
-        intent_tags = self.intent_to_tags[intent]
+        # intent_tags = self.intent_to_tags[intent]
+        intent_tags = None
 
-        parameters = self.__get_parameters(intent, sentence, tags, intent_tags)
+        parameters = tags if fallback else self.__get_parameters(
+            intent, sentence, tags, intent_tags)
 
         final_parameters = None
 
+        response = None
+
         match intent:
             case 'variable declaration':
-                final_parameters = self.post_process_declaration(parameters)
-                # response = self.api.declare_variable(final_parameters['name'], final_parameters['value'], final_parameters['type'])
+
+                final_parameters = self.post_process_declaration(
+                    parameters, fallback=fallback)
+
                 response = self.api.declare_variable(final_parameters)
 
             case 'constant declaration':
-                final_parameters = self.post_process_declaration(parameters)
-                # response = self.api.declare_constant(final_parameters['name'], final_parameters['value'])
-                response = self.api.declare_constant(final_parameters)
+
+                final_parameters = self.post_process_declaration(
+                    parameters, fallback=fallback)
+
+                response = self.api.declare_variable(final_parameters)
 
             case 'function declaration':
                 final_parameters = self.post_process_function_declaration(
-                    parameters)
+                    parameters, fallback=fallback)
+
                 response = self.api.declare_function(final_parameters)
 
             case 'class declaration':
                 final_parameters = self.post_process_class_declaration(
-                    parameters)
+                    parameters, fallback=fallback)
+
                 response = self.api.declare_class(final_parameters)
 
             case 'for loop':
-                final_parameters = self.post_process_for_loop(parameters)
-                # response = self.api.for_loop(final_parameters['type'], final_parameters['iterators'], final_parameters['start'], final_parameters['end'], final_parameters['step'], final_parameters['iterable'], final_parameters['body'])
+                final_parameters = self.post_process_for_loop(
+                    parameters, fallback=fallback)
                 response = self.api.for_loop(final_parameters)
 
             case 'while loop':
-                final_parameters = self.post_process_while_loop(parameters)
+                final_parameters = self.post_process_while_loop(
+                    parameters, fallback=fallback)
                 response = self.api.while_loop(final_parameters)
 
             case 'assignment operation':
                 final_parameters = self.post_process_assignment_operation(
-                    parameters)
+                    parameters, fallback=fallback)
                 response = self.api.assign_variable(final_parameters)
 
             case 'bitwise operation':
                 final_parameters = self.post_process_operation(
-                    parameters, intent)
+                    parameters, intent, fallback=fallback)
                 response = self.api.operation(final_parameters)
 
             case 'casting':
-                final_parameters = self.post_process_casting(parameters)
-                print(final_parameters)
+                final_parameters = self.post_process_casting(
+                    parameters, fallback=fallback)
                 response = self.api.type_casting(final_parameters)
 
             case 'input':
-                final_parameters = self.post_process_input(parameters)
+                final_parameters = self.post_process_input(
+                    parameters, fallback=fallback)
                 response = self.api.user_input(final_parameters)
 
             case 'output':
-                final_parameters = self.post_process_output(parameters)
+                final_parameters = self.post_process_output(
+                    parameters, fallback=fallback)
                 response = self.api.print_code(final_parameters)
 
             case 'assertion':
-                final_parameters = self.post_process_assertion(parameters)
+                final_parameters = self.post_process_assertion(
+                    parameters, fallback=fallback)
                 response = self.api.assertion(final_parameters)
 
             case 'libraries':
-                final_parameters = self.post_process_libraries(parameters)
+                final_parameters = self.post_process_libraries(
+                    parameters, fallback=fallback)
                 response = self.api.import_library(final_parameters)
 
             case 'comment':
-                final_parameters = self.post_process_comment(parameters)
+                final_parameters = self.post_process_comment(
+                    parameters, fallback=fallback)
                 response = self.api.line_comment(final_parameters)
 
-            case 'conditional operation':
+            case 'conditional statement':
                 final_parameters = self.post_process_conditional_operation(
-                    parameters)
+                    parameters, intent, fallback=fallback)
                 response = self.api.conditional(final_parameters)
-                
+
+            case 'membership operation':
+                final_parameters = self.post_process_operation(
+                    parameters, intent, fallback=fallback)
+                response = self.api.conditional(final_parameters)
+
             case 'mathematical operation':
-                final_parameters = self.post_process_operation(parameters)
+                final_parameters = self.post_process_operation(
+                    parameters, intent, fallback=fallback)
                 response = self.api.operation(final_parameters)
 
             case 'file system':
-                final_parameters = self.post_process_file_system(parameters)
+                final_parameters = self.post_process_file_system(
+                    parameters, fallback=fallback)
                 # response = self.api.file_system(final_parameters)
 
             case 'git operation':
-                self.post_process_git_operation(parameters)
-                # response = self.api.git_operation(final_parameters)
+                final_parameters = self.post_process_git_operation(
+                    parameters, fallback=fallback)
+                # response = self.api.git(final_parameters)
 
             case 'interactive commands':
-                self.post_process_interactive_commands(parameters)
+                final_parameters = self.post_process_interactive_commands(
+                    parameters, fallback=fallback)
                 # response = self.api.interactive_commands(final_parameters)
 
-            case 'membership operation':
-                final_parameters = self.post_process_conditional_operation(
-                    parameters)
-                response = self.api.conditional(final_parameters)
-
-
             case 'ide operation':
-                final_parameters = self.post_process_ide_operation(parameters)
+                final_parameters = self.post_process_ide_operation(
+                    parameters, fallback=fallback)
                 # response = self.api.ide_operation(final_parameters)
 
             case 'array operation':
@@ -139,7 +162,23 @@ class PostProcessor:
                     parameters)
                 # response = self.api.operation(final_parameters)
 
+            case 'activate interactive':
+                final_parameters = self.post_process_fallback(
+                    parameters, intent)
+                # response = self.api.interactive_commands(final_parameters)
+
+            case 'activate mouse':
+                final_parameters = self.post_process_fallback(
+                    parameters, intent)
+                # response = self.api.interactive_commands(final_parameters)
+
+            case 'mouse click':
+                final_parameters = self.post_process_fallback(
+                    parameters, intent)
+                # response = self.api.interactive_commands(final_parameters)
+
         print("Final parameters: ", final_parameters)
+
         return response
 
     def __get_parameters(self, intent, sentence, tags, intent_tags):
@@ -149,7 +188,7 @@ class PostProcessor:
             It returns a dictionary of the parameters of the detected entities.
         '''
         intent_tags = self.intent_to_tags[intent]
-        print(f"Intent tags: {intent_tags}")
+        # print(f"Intent tags: {intent_tags}")
         parameters = {tag: None for tag in intent_tags if tag != 'O'}
 
         # if intent == 'function declaration':
@@ -173,7 +212,7 @@ class PostProcessor:
             if len(B_indices) != 0:
                 parameters[tag] = []
 
-            print(f"Tag: {tag}, B_indices: {B_indices}")
+            # print(f"Tag: {tag}, B_indices: {B_indices}")
 
             # loop from the index until the next tag that is not the current tag
             # get all the indices of the entity
@@ -189,46 +228,66 @@ class PostProcessor:
                     else:
                         break
 
-                print(f"Full entity: {full_entity}")
+                # print(f"Full entity: {full_entity}")
 
                 # if tag == 'PARAM' or tag == 'OPERAND' or tag == 'LINE':
                 parameters[tag].append(' '.join(full_entity))
                 # else:
                 #     parameters[tag] = ' '.join(full_entity)
 
-                print(f"Parameters: {parameters}")
+                # print(f"Parameters: {parameters}")
 
-        print(f"Parameters: {parameters}")
+        # print(f"Parameters: {parameters}")
         return parameters
 
-    def __map_values(self, value, var_type):
+    def __map_values(self, value, var_type=None):
         final_value = None
-        valid = False
 
         integer_regex = r'^-?\d+$'
         float_regex = r'^-?\d*\.\d+$'
-        boolean_regex = r'^([Tt]rue|[Ff]alse|0|1)$'
-
+        boolean_regex = r'^([Tt]rue|[Ff]alse)$'
+        print(var_type)
+        print(value)
         # try:
         if var_type is not None:
-            if var_type in command_constants.TYPES['int']:
-                final_value = int(value)
-            elif var_type in command_constants.TYPES['float']:
-                final_value = float(value)
-            elif var_type in command_constants.TYPES['double']:
-                final_value = float(value)
-            elif var_type in command_constants.TYPES['str']:
-                final_value = value
-            elif var_type in command_constants.TYPES['bool']:
-                final_value = bool(value)
-            elif var_type in command_constants.TYPES['list']:
-                final_value = []
-            elif var_type in command_constants.TYPES['dictionary']:
-                final_value = {}
-            elif var_type in command_constants.TYPES['tuple']:
-                final_value = tuple()
-            elif var_type in command_constants.TYPES['set']:
-                final_value = set()
+            # if var_type in command_constants.TYPES['int']:
+            #     final_value = int(value)
+            # elif var_type in command_constants.TYPES['float']:
+            #     final_value = float(value)
+            # elif var_type in command_constants.TYPES['double']:
+            #     final_value = float(value)
+            # elif var_type in command_constants.TYPES['str']:
+            #     final_value = value
+            # elif var_type in command_constants.TYPES['bool']:
+            #     final_value = bool(value)
+            # elif var_type in command_constants.TYPES['list']:
+            #     final_value = []
+            # elif var_type in command_constants.TYPES['dictionary']:
+            #     final_value = {}
+            # elif var_type in command_constants.TYPES['tuple']:
+            #     final_value = tuple()
+            # elif var_type in command_constants.TYPES['set']:
+            #     final_value = set()
+
+            for key, values in command_constants.TYPES.items():
+                if var_type in values:
+                    if key == 'Integer':
+                        final_value = int(value)
+                    elif key == 'Float':
+                        final_value = float(value)
+                    elif key == 'String':
+                        final_value = value
+                    elif key == 'Boolean':
+                        final_value = bool(value.capitalize())
+                    elif key == 'List':
+                        final_value = []
+                    elif key == 'Dictionary':
+                        final_value = {}
+                    elif key == 'Tuple':
+                        final_value = tuple()
+                    elif key == 'Set':
+                        final_value = set()
+                    break
         else:
             # if a type is not specified then check the value and map it to correct type
             # based on intuition and regex
@@ -249,33 +308,16 @@ class PostProcessor:
                 # string value
                 final_value = value
 
-        # except Exception as e:
-        #     final_value = None
-
         return final_value
 
     def __map_type(self, var_type):
 
         final_type = None
 
-        if var_type in command_constants.TYPES['int']:
-            final_type = 'integer'
-        elif var_type in command_constants.TYPES['float']:
-            final_type = 'float'
-        elif var_type in command_constants.TYPES['double']:
-            final_type = 'double'
-        elif var_type in command_constants.TYPES['str']:
-            final_type = 'string'
-        elif var_type in command_constants.TYPES['bool']:
-            final_type = 'boolean'
-        elif var_type in command_constants.TYPES['list']:
-            final_type = 'list'
-        elif var_type in command_constants.TYPES['dictionary']:
-            final_type = 'dictionary'
-        elif var_type in command_constants.TYPES['tuple']:
-            final_type = 'tuple'
-        elif var_type in command_constants.TYPES['set']:
-            final_type = 'set'
+        for key, values in command_constants.TYPES.items():
+            if var_type in values:
+                final_type = key
+                break
 
         return final_type
 
@@ -349,6 +391,8 @@ class PostProcessor:
                     # check if theres equal as well
                     if final_operator is not None:
                         for value in command_constants.CONDITIONS['==']:
+                            if value == 'is':
+                                continue
                             if value in condition:
                                 final_operator += 'OrEqual'
                                 break
@@ -361,26 +405,23 @@ class PostProcessor:
         return final_operator
 
     def __map_operator(self, operator, intent):
-        
-        print('ALOOOOO', intent, operator)
+
         operators = command_constants.OPERATORS[intent]
         final_operator = None
 
-        if intent == 'bitwise':
+        if intent in ['bitwise', 'membership', 'conditional']:
             for key, values in operators.items():
-                print(f"Key: {key}, Value: {values}")
-                # if key in operator:
-                #     final_operator = value
-                #     break
-                # for value in values:
                 if operator in values:
                     final_operator = key
                     break
 
         elif intent == 'mathematical':
-            pass
-        
-        print(final_operator)
+            for key, values in operators.items():
+                for value in values:
+                    if operator in value:
+                        final_operator = key
+                        break
+
         return final_operator
 
     def __map_actions(self, action, intent):
@@ -408,12 +449,6 @@ class PostProcessor:
 
         return final_action
 
-    def __get_file_extension(self):
-        return None
-
-    def __map_array_function(self, function):
-        pass
-
     def __map_ide_type(self, operation_type):
         final_type = None
         if 'line' in operation_type:
@@ -424,17 +459,40 @@ class PostProcessor:
             final_type = 'directory'
         return final_type
 
-    def __contains_number(string):
-        return bool(re.search(r'\d', string))
-
-    def __is_number(string):
+    def __is_number(self, string):
         return bool(re.fullmatch(r'\d+(\.\d+)?', string))
 
-    def __get_variable_name(self, values):
-        pass
+    def __get_file_extension(self):
+        return None
+
+    def __handle_conditions(self, lhs, rhs, conditions):
+        condition = {
+            'left': None,
+            'condition': None,
+            'right': None
+        }
+
+        if lhs is not None and rhs is not None:
+            condition['left'] = lhs[0]
+            condition['right'] = rhs[0]
+
+        elif lhs is not None:
+            condition['left'] = lhs[0]
+            if len(lhs) > 1:
+                condition['right'] = lhs[1]
+
+        elif rhs is not None:
+            if len(rhs) > 1:
+                condition['right'] = rhs[1]
+                condition['left'] = rhs[0]
+            else:
+                condition['left'] = rhs[0]
+
+        if conditions is not None:
+            condition['operator'] = self.__map_condition(conditions[0])
 
     # DONE: variable and constant declaration
-    def post_process_declaration(self, parameters):
+    def post_process_declaration(self, parameters, fallback=False):
         '''
             This function is used to post process the variable declaration intent to send to the execution
             we need to map the tags to the correct format.
@@ -460,20 +518,26 @@ class PostProcessor:
         # if VAL and TYPE are None then handle the error => check if VAR has more than 1 entry probably the VAL was detected as VAR
         # if VAR is None and VAL is not None check for multiple entries
 
-        # TESTS:
-        # parameters = {
-        #     'VAR': None,
-        #     'VAL': ['x', '5'],
-        #     'TYPE': ['int']
-        # }
-
-        # print(parameters)
-
         final_parameters = {
             'name': None,
             'value': None,
             'type': None
         }
+
+        print("fall back from post process declaration", fallback, parameters)
+        if fallback:
+            for key, value in parameters.items():
+                print(key, value)
+                if key == 'type':
+                    final_parameters[key] = self.__map_type(value)
+                elif key == 'value':
+                    final_parameters[key] = self.__map_values(value)
+                else:
+                    final_parameters[key] = value
+
+            print(final_parameters)
+
+            return final_parameters
 
         # case 1(ideal case): all are present
         if parameters['VAR'] is not None and parameters['VAL'] is not None and parameters['TYPE'] is not None:
@@ -524,22 +588,29 @@ class PostProcessor:
                 final_parameters['type'] = self.__map_type(
                     parameters['TYPE'][0])
 
-            if parameters['VAL'] is not None and len(parameters['VAL']) > 1:
-                # get the most likely variable name
-                parameters['VAR'] = parameters['VAL'][0]
-                parameters['VAL'] = parameters['VAL'][1:]
+            if parameters['VAL'] is not None:
+                if len(parameters['VAL']) > 1:
+                    # get the most likely variable name
+                    parameters['VAR'] = parameters['VAL'][0]
+                    parameters['VAL'] = parameters['VAL'][1:]
 
-                # set the final parameters
-                final_parameters['value'] = self.__map_values(
-                    parameters['VAL'][0], None)
-                final_parameters['name'] = parameters['VAR'][0]
+                    # set the final parameters
+                    final_parameters['value'] = self.__map_values(
+                        parameters['VAL'][0], final_parameters['type'])
+                    final_parameters['name'] = parameters['VAR']
+                else:
+                    final_parameters['value'] = self.__map_values(
+                        parameters['VAL'][0], final_parameters['type'])
+
+        final_parameters['type'] = final_parameters['type'].capitalize(
+        ) if final_parameters['type'] is not None else None
 
         print(final_parameters)
 
         return final_parameters
 
     # DONE: mapping final parameters
-    def post_process_function_declaration(self, parameters):
+    def post_process_function_declaration(self, parameters, fallback=False):
         '''
             This function is used to post process the function declaration intent.
             to get the final parameters to send to the command execution module.
@@ -581,7 +652,7 @@ class PostProcessor:
         return final_parameters
 
     # DONE: class declaration intent
-    def post_process_class_declaration(self, parameters):
+    def post_process_class_declaration(self, parameters, fallback=False):
         '''
             the tags are:
             CLASS : the class name
@@ -601,7 +672,7 @@ class PostProcessor:
         return final_parameters
 
     # DONE: for loop intent #TODO: MSH 3ARFA EH EL 7ASALAHA
-    def post_process_for_loop(self, parameters):
+    def post_process_for_loop(self, parameters, fallback=False):
         '''
             There are two types of for loops:
             1. for loop with list
@@ -643,53 +714,103 @@ class PostProcessor:
         # post processing of returned list
         print("for loop parameters")
 
-        final_parameters = {}
+        final_parameters_range = {
+            'type': 'Range',
+            'iterators': [],
+            'start': None,
+            'end': None,
+            'step': None
+        }
+        final_parameters_iterable = {
+            'type': 'Iterable',
+            'iterators': [],
+            'iterable': None,
+            'body': None
+        }
+
+        loop_type = True  # true for range and false for iterable
+
+        if fallback:
+            if 'iterable' in parameters.keys():  # iterable loop type
+                for key, value in parameters.items():
+                    if key == 'iterator':
+                        final_parameters_iterable['iterators'].append(value)
+                    else:
+                        final_parameters_iterable[key] = value
+                return final_parameters_iterable
+
+            for key, value in parameters.items():
+                print(key, value)
+                if key in ['start', 'end', 'step']:
+                    value = self.__map_values(value)
+                    final_parameters_range[key] = value
+                else:
+                    final_parameters_range['iterators'].append(value)
+            return final_parameters_range
 
         if parameters['END'] is not None:
             # check if the end is a number
             if self.__is_number(parameters['END'][0]):
-                final_parameters['end'] = parameters['END'][0]
-
-                final_parameters['type'] = 'range'
+                final_parameters_range['end'] = self.__map_values(
+                    parameters['END'][0])
 
                 if parameters['VAR'] is not None:
-                    final_parameters['iterators'] = [parameters['VAR'][0]]
+                    final_parameters_range['iterators'].append(
+                        parameters['VAR'][0])
                 else:
-                    final_parameters['iterators'] = ['i']
+                    final_parameters_range['iterators'].append('i')
 
-                if parameters['START'] is not None:
+                if parameters['START'] is not None and self.__is_number(parameters['START'][0]):
                     # the start and the step are optional
                     # check if the start is a number
-                    if self.__is_number(parameters['START'][0]):
-                        final_parameters['start'] = parameters['START'][0]
-                else:
-                    final_parameters['start'] = None
+                    final_parameters_range['start'] = self.__map_values(
+                        parameters['START'][0])
 
-                if parameters['STEP'] is not None:
-                    # check if the step is a number
-                    if self.__is_number(parameters['STEP'][0]):
-                        final_parameters['step'] = parameters['STEP'][0]
-                else:
-                    final_parameters['step'] = None
+                # check if the step is a number
+                if parameters['STEP'] is not None and self.__is_number(parameters['STEP'][0]):
+                    final_parameters_range['step'] = self.__map_values(
+                        parameters['STEP'][0])
+
+                return final_parameters_range
 
             else:
-                parameters['COLLECTION'] = parameters['END']
+                if parameters['START'] is None or parameters['STEP'] is None:
+                    parameters['COLLECTION'] = parameters['END']
+                    loop_type = False
+
+        if loop_type:  # check if start or step are not none
+            if parameters['STEP'] is not None and self.__is_number(parameters['STEP'][0]):
+                final_parameters_range['end'] = self.__map_values(
+                    parameters['STEP'][0])
+
+            elif parameters['START'] is not None and self.__is_number(parameters['START'][0]):
+                final_parameters_range['end'] = self.__map_values(
+                    parameters['START'][0])
+
+            if parameters['VAR'] is not None:
+                final_parameters_range['iterators'].append(
+                    parameters['VAR'][0])
+            else:
+                final_parameters_range['iterators'].append('i')
 
         if parameters['COLLECTION'] is not None:
-            final_parameters['type'] = 'iterable'
+            loop_type = False
+            final_parameters_iterable['type'] = 'iterable'
             if parameters['VAR'] is not None:
-                final_parameters['iterators'] = [parameters['VAR'][0]]
+                final_parameters_iterable['iterators'].append(
+                    parameters['VAR'][0])
             else:
-                final_parameters['iterators'] = ['i']
+                final_parameters_iterable['iterators'].append('i')
 
-            final_parameters['iterable'] = parameters['COLLECTION'][0]
-            final_parameters['body'] = None
+            final_parameters_iterable['iterable'] = parameters['COLLECTION'][0]
 
-        # print(final_parameters)
-        return final_parameters
+        if loop_type:
+            return final_parameters_range
+
+        return final_parameters_iterable
 
     # DONE: while loop intent
-    def post_process_while_loop(self, parameters):
+    def post_process_while_loop(self, parameters, fallback=False):
         '''
             the tags for this intent are:
             - CONDITION : the condition of the loop
@@ -725,6 +846,18 @@ class PostProcessor:
             'right': None
         }
 
+        if fallback:
+            if 'lhs' in parameters.keys():
+                condition['left'] = self.__map_values(parameters['lhs'])
+            if 'condition' in parameters.keys():
+                condition['operator'] = self.__map_condition(
+                    parameters['condition'])
+
+            condition['right'] = self.__map_values(parameters['rhs'])
+
+            final_parameters['condition'].append(condition)
+            return final_parameters
+
         if parameters['LHS'] is not None and parameters['RHS'] is not None:
             condition['left'] = parameters['LHS'][0]
             condition['right'] = parameters['RHS'][0]
@@ -735,26 +868,22 @@ class PostProcessor:
                 condition['right'] = parameters['LHS'][1]
 
         elif parameters['RHS'] is not None:
-            condition['right'] = parameters['RHS'][0]
             if len(parameters['RHS']) > 1:
-                condition['left'] = parameters['RHS'][1]
+                condition['right'] = parameters['RHS'][1]
+                condition['left'] = parameters['RHS'][0]
+            else:
+                condition['left'] = parameters['RHS'][0]
 
         if parameters['CONDITION'] is not None:
             condition['operator'] = self.__map_condition(
                 parameters['CONDITION'][0])
-
-        # if parameters['LHS'] is not None:
-        #     condition['left'] = parameters['LHS'][0]
-
-        # if parameters['RHS'] is not None:
-        #     condition['right'] = parameters['RHS'][0]
 
         final_parameters['condition'].append(condition)
 
         return final_parameters
 
     # DONE: casting intent
-    def post_process_casting(self, parameters):
+    def post_process_casting(self, parameters, fallback=False):
         '''
             the tags for casting intent are:
             - VAR : the variable name
@@ -771,6 +900,11 @@ class PostProcessor:
             'type': None
         }
 
+        if fallback:
+            final_parameters['type'] = self.__map_type(parameters['type'])
+            final_parameters['variable'] = parameters['variable']
+            return final_parameters
+
         if parameters['VAR'] is not None:
             final_parameters['variable'] = parameters['VAR'][0]
 
@@ -780,7 +914,7 @@ class PostProcessor:
         return final_parameters
 
     # DONE: assignment operation intent
-    def post_process_assignment_operation(self, parameters):
+    def post_process_assignment_operation(self, parameters, fallback=False):
         '''
             The tags for the assignment intent:
             - LHS -> always has to be a variable
@@ -800,6 +934,12 @@ class PostProcessor:
             'value': None
         }
 
+        if fallback:
+            final_parameters['name'] = parameters['lhs']
+            final_parameters['value'] = self.__map_values(parameters['rhs'])
+
+            return final_parameters
+
         if parameters['LHS'] is not None and parameters['RHS'] is not None:
             final_parameters['name'] = parameters['LHS'][0]
             final_parameters['value'] = parameters['RHS'][0]
@@ -817,7 +957,7 @@ class PostProcessor:
         return final_parameters
 
     # DONE: assertion intent
-    def post_process_assertion(self, parameters):
+    def post_process_assertion(self, parameters, fallback=False):
         '''
             The tags for assertion:
             - VAR: the name of the variable
@@ -840,13 +980,20 @@ class PostProcessor:
             'value': None
         }
 
+        if fallback:
+            final_parameters['variable'] = parameters['lhs']
+            final_parameters['type'] = self.__map_condition(
+                parameters['condition'])
+            final_parameters['value'] = self.__map_values(parameters['rhs'])
+            return final_parameters
+
         if parameters['CONDITION'] is not None:
             final_parameters['type'] = self.__map_condition(
                 parameters['CONDITION'][0])
 
         if parameters['VAR'] is not None:
             final_parameters['variable'] = parameters['VAR'][0]
-        else: 
+        else:
             # check the length of values
             if len(parameters['VAL']) > 1:
                 # parameters['VAR'] = parameters['VAL'][0]
@@ -855,18 +1002,20 @@ class PostProcessor:
                 parameters['VAL'] = parameters['VAL'][1:]
 
         if parameters['VAL'] is not None:
-            final_parameters['value'] = self.__map_values(parameters['VAL'][0], None)
+            final_parameters['value'] = self.__map_values(
+                parameters['VAL'][0], None)
         else:
             # check the length of VAR
             if len(parameters['VAR']) > 1:
                 parameters['VAL'] = parameters['VAR'][1:]
                 parameters['VAR'] = parameters['VAR'][0]
-                final_parameters['value'] = self.__map_values(parameters['VAL'][0], None)
+                final_parameters['value'] = self.__map_values(
+                    parameters['VAL'][0], None)
 
         return final_parameters
 
     # DONE: libraries intent
-    def post_process_libraries(self, parameters):
+    def post_process_libraries(self, parameters, fallback=False):
         '''
             the tags for libraries intent:
             - LIB_NAME : the name of the library
@@ -880,13 +1029,17 @@ class PostProcessor:
             'library': None
         }
 
+        if fallback:
+            final_parameters = parameters
+            return final_parameters
+
         if parameters['LIB_NAME'] is not None:
             final_parameters['library'] = parameters['LIB_NAME'][0]
 
         return final_parameters
 
-    # DONE: bitwise operation intent
-    def post_process_operation(self, parameters, intent):
+    # DONE: operations intent
+    def post_process_operation(self, parameters, intent, fallback=False):
         '''
             intent tags are:
             - VAR (not always)
@@ -901,17 +1054,27 @@ class PostProcessor:
             }
         '''
         final_parameters = {
+            'variable': None,
             'right': None,
             'operator': None,
             'left': None
         }
 
-        target_operators = command_constants.OPERATORS[intent.split()[0]]
-        print(target_operators)
+        if fallback:
+            if 'variable' in parameters.keys():
+                final_parameters['variable'] = parameters['variable']
+                pass
+            final_parameters['left'] = self.__map_values(parameters['lhs'])
+            final_parameters['right'] = self.__map_values(parameters['rhs'])
+            final_parameters['operator'] = self.__map_operator(
+                parameters['operation'], intent.split()[0])
+
+            return final_parameters
 
         if parameters['OPERAND'] is not None and parameters['OPERATOR'] is not None:
             # map the correct operator
-            final_parameters['operator'] = self.__map_operator(parameters['OPERATOR'][0], intent.split()[0])
+            final_parameters['operator'] = self.__map_operator(
+                parameters['OPERATOR'][0], intent.split()[0])
 
             # check if the operator is not
             if final_parameters['operator'] == 'Not':
@@ -926,11 +1089,17 @@ class PostProcessor:
                     final_parameters['left'] = parameters['OPERAND'][0]
                     final_parameters['right'] = parameters['OPERAND'][0]
 
+            if intent == 'mathematical operation':
+                if parameters['VAR'] is not None:
+                    final_parameters['variable'] = parameters['VAR'][0]
+                else:
+                    final_parameters['variable'] = final_parameters['left']
+
         print(final_parameters)
         return final_parameters
 
     # DONE: comment intent
-    def post_process_comment(self, parameters):
+    def post_process_comment(self, parameters, fallback=False):
         '''
             This will be the line comment 
                 tags:
@@ -947,13 +1116,17 @@ class PostProcessor:
             'content': None
         }
 
+        if fallback:
+            final_parameters['content'] = parameters['comment']
+            return final_parameters
+
         if parameters['COMMENT'] is not None:
             final_parameters['content'] = ' '.join(parameters['COMMENT'])
 
         return final_parameters
 
     # DONE: input intent
-    def post_process_input(self, parameters):
+    def post_process_input(self, parameters, fallback=False):
         '''
             The tags are:
             - VAR
@@ -971,6 +1144,14 @@ class PostProcessor:
             'message': None
         }
 
+        if fallback:
+            if 'variable' in parameters.keys():
+                final_parameters['variable'] = parameters['variable']
+            if 'message' in parameters.keys():
+                final_parameters['message'] = parameters['message']
+
+            return final_parameters
+
         if parameters['VAR'] is not None:
             final_parameters['variable'] = parameters['VAR'][0]
 
@@ -980,7 +1161,7 @@ class PostProcessor:
         return final_parameters
 
     # DONE: output intent
-    def post_process_output(self, parameters):
+    def post_process_output(self, parameters, fallback=False):
         '''
             The tags for output intent are:
             - VAR
@@ -1000,23 +1181,36 @@ class PostProcessor:
             'type': None
         }
 
+        if fallback:
+            for key, value in parameters.items():
+                final_parameters['type'] = parameters['type']
+                if key in ['variable', 'message']:
+                    final_parameters['variable'] = value
+
+                elif key in 'value':
+                    final_parameters['variable'] = self.__map_values(value)
+
+            return final_parameters
+
         if parameters['VAR'] is not None:
             final_parameters['variable'] = parameters['VAR'][0]
             final_parameters['type'] = 'variable'
 
         # TODO: idea (we can check the word before each message)
         elif parameters['MESSAGE'] is not None:
-            final_parameters['variable'] = ' '.join(parameters['MESSAGE']) if len(parameters['MESSAGE']) > 1 else parameters['MESSAGE'][0]
+            final_parameters['variable'] = ' '.join(parameters['MESSAGE']) if len(
+                parameters['MESSAGE']) > 1 else parameters['MESSAGE'][0]
             final_parameters['type'] = 'message'
 
         elif parameters['VAL'] is not None:
-            final_parameters['variable'] = self.__map_values(parameters['VAL'][0], type=None)
+            final_parameters['variable'] = self.__map_values(
+                parameters['VAL'][0], type=None)
             final_parameters['type'] = 'value'
 
         return final_parameters
 
     # TODO: needs revising gamed
-    def post_process_conditional_operation(self, parameters):
+    def post_process_conditional_operation(self, parameters, intent, fallback=False):
         '''
             tags are:
             - LHS: list of LHSs
@@ -1046,6 +1240,43 @@ class PostProcessor:
                 }
             ]
         '''
+
+        final_parameters = {
+            'keyword': 'if',
+            'condition': []
+        }
+
+        if fallback:
+            # keys = parameters.keys()
+            lhss = [value for key, value in parameters.items() if 'lhs' in key]
+            rhss = [value for key, value in parameters.items() if 'rhs' in key]
+            conditions = [value for key,
+                          value in parameters.items() if 'condition' in key]
+            operators = [value for key, value in parameters.items()
+                         if 'operator' in key]
+            print(lhss, rhss, conditions, operators)
+            for index, (lhs, rhs, condition) in enumerate(list(zip(lhss, rhss, conditions))):
+                if index == 0:
+                    final_parameters['condition'].append(
+                        {
+                            'left': lhs,
+                            'operator': self.__map_condition(condition),
+                            'right': rhs
+                        }
+                    )
+                else:
+                    final_parameters['condition'].append(
+                        {
+                            "logicalOperator": self.__map_operator(operators[index-1], intent.split()[0]),
+                            'left': lhs,
+                            'operator': self.__map_condition(condition),
+                            'right': rhs
+                        }
+                    )
+                index += 1
+
+            return final_parameters
+
         # TODO change it to OPERAND?
         if parameters['LHS'] is None:
             pass
@@ -1053,11 +1284,6 @@ class PostProcessor:
             pass
         if parameters['CONDITION'] is None:
             pass
-
-        final_parameters = {}
-        final_parameters['keyword'] = 'if'
-        final_parameters['condition'] = []
-
         # foe now they should be equal
         if len(parameters['LHS']) != len(parameters['RHS']) != len(parameters['CONDITION']):
             # do something
@@ -1076,7 +1302,7 @@ class PostProcessor:
         return final_parameters
 
     # DONE: git operation intent
-    def post_process_git_operation(self, parameters):
+    def post_process_git_operation(self, parameters, fallback=False):
         '''
             the tags for git operation are:
             - ACTION : the operation to perform
@@ -1094,20 +1320,32 @@ class PostProcessor:
             'message': None
         }
 
+        if fallback:
+            final_parameters['action'] = self.__map_actions(
+                parameters['action'], 'git')
+
+            try:
+                if final_parameters['action'] == 'push':
+                    final_parameters['message'] = parameters['message']
+            except:
+                print("Message not provided")
+            return final_parameters
+
         # TODO: map actions to the correct git commands
         if parameters['ACTION'] is not None:
-            final_parameters['action'] = self.__map_actions(parameters['ACTION'][0], 'git')
+            final_parameters['action'] = self.__map_actions(
+                parameters['ACTION'][0], 'git')
 
         if final_parameters['action'] == 'push':
             final_parameters['message'] = parameters['MESSAGE'][0]
 
-        #TODO: api call to git function not implemented yet
+        # TODO: api call to git function not implemented yet
 
         print(final_parameters)
         return final_parameters
 
     # TODO file system intent ish
-    def post_process_file_system(self, parameters):
+    def post_process_file_system(self, parameters, fallback=False):
         '''
             the tags for file system operation are:
             - ACTION : the operation to perform
@@ -1122,61 +1360,66 @@ class PostProcessor:
         '''
         final_parameters = {}
 
-        action = self.__map_actions(parameters['ACTION'], 'file')
-        final_parameters['action'] = parameters['ACTION']
+        if fallback:
+            final_parameters = parameters
+            return final_parameters
 
-        if action == 'create':  # could be file or directory
-            if parameters['FILE'] is not None:
+        if parameters['ACTION'] is not None:
+            action = self.__map_actions(parameters['ACTION'], 'file')
+            final_parameters['action'] = parameters['ACTION']
+
+            if action == 'create':  # could be file or directory
+                if parameters['FILE'] is not None:
+                    # {
+                    #     "fileName": "test file - ahmed",
+                    #     "extension": ".txt",
+                    #     "content": "n"
+                    # }
+                    final_parameters['fileName'] = parameters['FILE']
+                    if parameters['DIR'] is not None:
+                        final_parameters['directory'] = parameters['DIR']
+                    final_parameters['extension'] = self.__get_file_extension()
+                    final_parameters['content'] = None
+
+                elif parameters['DIR'] is not None:  # then create directory
+                    # final format:
+                    # {
+                    #     "name" : "new_folder/c"
+                    # }
+                    final_parameters['name'] = parameters['DIR']
+
+            elif action == 'delete':
                 # {
-                #     "fileName": "test file - ahmed",
-                #     "extension": ".txt",
-                #     "content": "n"
+                #  "source" : "aa.a"
                 # }
-                final_parameters['fileName'] = parameters['FILE']
-                if parameters['DIR'] is not None:
-                    final_parameters['directory'] = parameters['DIR']
-                final_parameters['extension'] = self.__get_file_extension()
-                final_parameters['content'] = None
-
-            elif parameters['DIR'] is not None:  # then create directory
-                # final format:
-                # {
-                #     "name" : "new_folder/c"
-                # }
-                final_parameters['name'] = parameters['DIR']
-
-        elif action == 'delete':
-            # {
-            #  "source" : "aa.a"
-            # }
-            final_parameters['source'] = parameters['FILE']
-
-        elif action == 'copy':
-            # {
-            #  "source" : "aa.b",
-            #  "destination" : "copied.py"
-            # }
-            if parameters['FILE'] is not None:
                 final_parameters['source'] = parameters['FILE']
-                final_parameters['destination'] = None
 
-            elif parameters['DIR'] is not None:  # then create directory
-                final_parameters['source'] = parameters['DIR']
-                final_parameters['destination'] = None
+            elif action == 'copy':
+                # {
+                #  "source" : "aa.b",
+                #  "destination" : "copied.py"
+                # }
+                if parameters['FILE'] is not None:
+                    final_parameters['source'] = parameters['FILE']
+                    final_parameters['destination'] = None
 
-        elif action == 'rename':
-            # final format
-            #  {
-            #     "source": "test file - ahmed.txt",
-            #     "destination": "renamed - ahmed"
-            # }
-            final_parameters['source'] = parameters['FILE']
-            final_parameters['destination'] = parameters['FILE']
+                elif parameters['DIR'] is not None:  # then create directory
+                    final_parameters['source'] = parameters['DIR']
+                    final_parameters['destination'] = None
+
+            elif action == 'rename':
+                # final format
+                #  {
+                #     "source": "test file - ahmed.txt",
+                #     "destination": "renamed - ahmed"
+                # }
+                final_parameters['source'] = parameters['FILE']
+                final_parameters['destination'] = parameters['FILE']
 
         return final_parameters
 
     # DONE: interactive commands
-    def post_process_interactive_commands(self, parameters):
+    def post_process_interactive_commands(self, parameters, fallback=False):
         '''
             tags for interactive commands:
             - action
@@ -1187,6 +1430,10 @@ class PostProcessor:
             'type': None
         }
 
+        if fallback:
+            final_parameters['type'] = parameters['type']
+            return final_parameters
+
         if parameters['TYPE'] is not None:
             final_parameters['type'] = parameters['TYPE'][0]
 
@@ -1195,7 +1442,7 @@ class PostProcessor:
         return final_parameters
 
     # DONE: ide operations
-    def post_process_ide_operation(self, parameters):
+    def post_process_ide_operation(self, parameters, fallback=False):
         '''
             the tags for the ide operation:
             - ACTION: in general : undo | redo | copy | paste | find | cut | run
@@ -1215,6 +1462,9 @@ class PostProcessor:
         # }
 
         final_parameters = {}
+
+        if fallback:
+            return parameters
 
         if parameters['ACTION'] is not None:
             action = self.__map_actions(parameters['ACTION'][0], 'ide')
@@ -1292,4 +1542,39 @@ class PostProcessor:
             final_parameters['array'] = parameters['ARRAY'][0]
 
         print(final_parameters)
+        return final_parameters
+
+    def post_process_fallback(self, parameters, intent):
+        '''
+            the fallback ner  
+        '''
+        final_parameters = {}
+        print(parameters)
+        print(intent)
+        action = None
+        match intent:
+            case 'activate interactive':
+                action = parameters['action']
+                actions = command_constants.ACTIONS['activation']
+                for key, values in actions.items():
+                    if action in values:
+                        action = key
+                        break
+            case 'activate mouse':
+                action = parameters['action']
+                actions = command_constants.ACTIONS['activation']
+                for key, values in actions.items():
+                    if action in values:
+                        action = key
+                        break
+            case 'mouse click':
+                final_parameters = parameters
+                try:
+                    action = parameters['action']
+                except:
+                    action = None
+
+        final_parameters['action'] = action
+
+        print("Final parameters from fallback:", final_parameters)
         return final_parameters

@@ -6,8 +6,8 @@
         "O"
     ],
     "assertion": [
-        "VAR",
-        "VAL",
+        "LHS",
+        "RHS",
         "CONDITION",
         "O"
     ],
@@ -120,6 +120,18 @@
         "LHS",
         "RHS",
         "CONDITION",
+        "O"
+    ],
+    "mouse click": [
+        "TYPE",
+        "O"
+    ],
+    "activate mouse": [
+        "ACTION",
+        "O"
+    ],
+    "activate interactive": [
+        "ACTION",
         "O"
     ]
 }

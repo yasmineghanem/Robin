@@ -1,0 +1,104 @@
+{
+  "Variable Declaration": [
+    "{declare} a {new} variable {named} {name} and {assign} {value}",
+    "{declare} a {new} {type} variable {named} {name} and {assign} {value}",
+    "{declare} a {new} {type} variable {named} {name} and {assign} {value}"
+  ],
+  "Constant Declaration": [
+    "{declare} a {new} constant {named} {name} and {assign} {value}",
+    "{declare} a {new} {type} constant {named} {name} and {assign} {value}",
+    "{declare} a {new} {type} constant {named} {name} and {assign} {value}"
+  ],
+  "Function Declaration": [
+    "{declare} a {new} function {named} {name}",
+    "{declare} a {new} function {named} {name} that {returns} {type}",
+    "{declare} a {new} function {named} {name} that {returns} {type} and {takes} {arguments}"
+  ],
+  "Class Declaration": ["{declare} a {new} class {named} {name}"],
+  "Assignment Operation": [
+    "{assign} {value} to {variable}",
+    "{variable} {equals} {value}"
+  ],
+  "Conditional Operation": [
+    "{check} if {lhs} {condition} {rhs}",
+    "{check} if {lhs} {condition} {rhs}",
+    "{check} if {lhs} {condition} {rhs} {operator} {lhs} {condition} {rhs}"
+  ],
+  "For Loop": [
+    "{create} {a} for loop {that} {iterates} from {start} to {end}",
+    "for {iterator} in range {end}",
+    "for {iterator} in range {start} to {end}",
+    "for {iterator} in range {start} to {end} and step {step}",
+    "for {iterator} in {iterable}",
+    "{iterate} on {iterable} using {iterator}"
+  ],
+  "While Loop": [
+    "{create} {a} while loop {that} {iterates} while {lhs} {condition} {rhs}",
+    "while {lhs} {condition} {rhs}",
+    "while {condition} {rhs}"
+  ],
+  "Bitwise Operation": [
+    "{perform} {bitwise} {operation} on {lhs} and {rhs}",
+    "{perform} {bitwise} {operation} on {lhs} and {rhs} and store in {variable}"
+  ],
+  "Mathematical Operation": [],
+  "Membership Operation": [
+    "{check} if {lhs} {operator} in {rhs}",
+    "{check} if {lhs} {operator} in {rhs} and store in {variable}"
+  ],
+  "Casting": [
+    "{cast} {variable} to {type}",
+    "{cast} {variable} to {type} and store in {variable}"
+  ],
+  "Input": [
+    "{take} user {for} input and store in {variable}",
+    "{take} user {for} input and store in {variable} with message {message}"
+  ],
+  "Output": ["{print} {message}", "{print} {variable}", "{print} {value}"],
+  "Assertion": [
+    "assert {that} {lhs} {condition} {rhs}",
+    "verify {that} {lhs} {condition} {rhs}",
+    "make sure {that} {lhs} {condition} {rhs}"
+  ],
+  "Libraries": [
+    "import {the} {library} library",
+    "include {the} {library} library",
+    "import {the} library {library}",
+    "include {the} library {library}",
+    "import {the} {library} module",
+    "include {the} {library} module",
+    "import {the} module {library}",
+    "include {the} module {library}"
+  ],
+  "File System": [
+    "{action} the file {filename}",
+    "{action} the file {filename} in folder {foldername}",
+    "{action} the file {filename} in directory {foldername}",
+    "{action} the folder {foldername}",
+    "{action} the "
+  ],
+  "IDE Operation": [
+    "{action} {the} terminal",
+    "{action} {the} line {number}",
+    "{action} {the} lines {from} {start} {to} {end}"
+  ],
+  "Comment": ["{add} the comment {comment}", "comment {comment}"],
+  "Interactive Commands": [
+    "{list} {all} files",
+    "{list} {all} folders",
+    "{list} {all} directories",
+    "{list} {all} the functions",
+    "{list} {all} the classes",
+    "{list} {the} code"
+  ],
+  "Git Operation": [
+    "{action} {the} {changes}",
+    "{action} {the} {changes} in {branch}",
+    "{action}"
+  ],
+  "Activate Mouse": ["{action} mouse {mode}"],
+  "Activate Interactive": ["{action} interactive {mode}"],
+  "Exit Block": ["exit {block}"],
+  "Mouse Click": ["{type} click", "click {type}", "click"],
+  "Array Operation": []
+}

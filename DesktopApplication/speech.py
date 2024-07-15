@@ -12,6 +12,7 @@ import json
 import tensorflow as tf
 import torch
 import numpy as np
+import pyttsx3
 from code_summarization import ASTProcessor
 
 np.random.seed(42)
@@ -48,6 +49,8 @@ class SpeechRecognition:
         self.gui = gui
         self.command_intent = CommandIntent(intent_model_path, ner_model_path)
         self.api = APIController()
+        self.interactive = False
+        self.voice_engine = None
         self.active = False
 
         self.interactive = False
@@ -96,6 +99,32 @@ class SpeechRecognition:
         print(f"Command: {command}")
         # process the command
         try:
+            self.command_intent.process_command(command)
+        except Exception as e:
+            print(f"Error in processing command: {e}")
+
+    def activate_interactive(self,):
+        self.interactive = True
+        self.voice_engine = pyttsx3.init()
+
+        # getting details of current voice
+        voices = self.voice_engine.getProperty("voices")
+
+        self.voice_engine.setProperty(
+            "voice", voices[1].id
+        )  # changing index, changes voices. 1 for female
+
+        # random response
+        # engine.say(responses[np.random.randint(0, len(responses))])
+        # engine.runAndWait()
+
+    def interactive_response(self, response):
+        if 'message' in response:
+            self.voice_engine.say(response)
+            self.voice_engine.runAndWait()
+        else:
+            print(response)
+            
             intent, response = self.command_intent.process_command(command)
             print(f"Intent: {intent}")
             print(f"Response: {response}")

@@ -1,0 +1,13 @@
+[
+    "bitwise x and y",
+    "bitwise x or y",
+    "perform bitwise and on number and 10",
+    "perform bitwise or on number and 10",
+    "shift left x by 2",
+    "shift right x by 2",
+    "shift x left by 2",
+    "shift x right by 2",
+    "xor x and y",
+    "perform bitwise xor on x and y",
+    "perform bitwise xor on x and 10"
+]

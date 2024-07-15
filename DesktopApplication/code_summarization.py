@@ -502,10 +502,16 @@ class ASTProcessor:
                 summary_text_to_speech += f"Class defined with name: {item['class_name']}\n"
 
                 for method in item['class_methods']:
-                    summary_text_to_speech+= f"\tMethod Named: {method['method_name']} with parameters ({', '.join(method['parameters'])})\n\n"
+                    summary_text_to_speech+= f"\tMethod Named: {method['method_name']}"
+                    if method['paramaters']:
+                        summary_text_to_speech+= f", with parameters ({', '.join(method['parameters'])})\n"
+                    else:
+                        summary_text_to_speech+= f"\n"
 
             elif item['type'] == 'function_definition':
-                summary_text_to_speech += f"Function defined with name: {item['method_name']} and parameters ({', '.join(item['parameters'])})\n\n"
+                summary_text_to_speech += f"Function defined with name: {item['method_name']} "
+                if item['parameters']:
+                    summary_text_to_speech+= f",and parameters ({', '.join(item['parameters'])})\n"
 
             elif item['type'] == 'expression_statement':
                 #  _ = _
@@ -526,33 +532,33 @@ class ASTProcessor:
                         case '-':
                             summary_text_to_speech+= f"Subtraction Operation: {item['left_side']} - {item['right_side']}\n\n"
                         case '*':
-                            summary_text_to_speech+= f"Multiplication Operation: {item['left_side']} * {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Multiplication Operation: {item['left_side']} multiply {item['right_side']}\n\n"
                         case '/':
-                            summary_text_to_speech+= f"Division Operation: {item['left_side']} / {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Division Operation: {item['left_side']} divide {item['right_side']}\n\n"
                         case '%':
-                            summary_text_to_speech+= f"Modulus Operation: {item['left_side']} % {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Modulus Operation: {item['left_side']} modulus {item['right_side']}\n\n"
                         case '==':
-                            summary_text_to_speech+= f"Equality Operation: {item['left_side']} == {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Equality Operation: {item['left_side']} is equal {item['right_side']}\n\n"
                         case '!=':
-                            summary_text_to_speech+= f"Inequality Operation: {item['left_side']} != {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Inequality Operation: {item['left_side']} not equal {item['right_side']}\n\n"
                         case '>':
-                            summary_text_to_speech+= f"Greater Than Operation: {item['left_side']} > {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Greater Than Operation: {item['left_side']} greater than {item['right_side']}\n\n"
                         case '<':
-                            summary_text_to_speech+= f"Less Than Operation: {item['left_side']} < {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Less Than Operation: {item['left_side']} smaller than or equal {item['right_side']}\n\n"
                         case '>=':
-                            summary_text_to_speech+= f"Greater Than or Equal Operation: {item['left_side']} >= {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Greater Than or Equal Operation: {item['left_side']} greater than or equal {item['right_side']}\n\n"
                         case '<=':
-                            summary_text_to_speech+= f"Less Than or Equal Operation: {item['left_side']} <= {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Less Than or Equal Operation: {item['left_side']} smaller than or equal {item['right_side']}\n\n"
                         case '+=':
                             summary_text_to_speech+= f"Addition Operation: {item['left_side']} += {item['right_side']}\n\n"
                         case '-=':
                             summary_text_to_speech+= f"Subtraction Operation: {item['left_side']} -= {item['right_side']}\n\n"
                         case '*=':
-                            summary_text_to_speech+= f"Multiplication Operation: {item['left_side']} *= {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Multiplication Operation: {item['left_side']} multiply equal {item['right_side']}\n\n"
                         case '/=':
-                            summary_text_to_speech+= f"Division Operation: {item['left_side']} /= {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Division Operation: {item['left_side']} divide equal {item['right_side']}\n\n"
                         case '%=':
-                            summary_text_to_speech+= f"Modulus Operation: {item['left_side']} %= {item['right_side']}\n\n"
+                            summary_text_to_speech+= f"Modulus Operation: {item['left_side']} modulus equal {item['right_side']}\n\n"
                         case 'and':
                             summary_text_to_speech+= f"And Operation: {item['left_side']} and {item['right_side']} \n\n"
                         case 'or':

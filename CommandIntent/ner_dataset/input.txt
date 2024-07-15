@@ -1,50 +1,50 @@
 enter from the user with message Enter a value and put it to k.
-enter from the user with message Please enter a value and set it to username.
-fetch from the user with message enter a value for the variable and store to loop index.
-enter from the user with message Enter a value and put it in max value.
-get from the user with message Please write a value and put it in k.
-fetch from the user with message Please input a value for the variable and set it to completed.
-input from the user with message Please enter a value and assign it to file path.
-read from the user with message provide a value and assign it to user name.
-input from the user with message Please provide a value for the variable and store it to user email.
-retrieve from the user with message Provide an input for the name and assign it to j.
-fetch from user and assign it to data.
-fetch from user and store it to step.
-fetch from user and assign to data.
-enter from user and store it in item.
-enter from user and put it to value.
-fetch from user and put it in item.
-read from user and store to min value.
-get from user and set it to file path.
-enter from user and set it to min value.
-receive from user and assign to data.
-take from user and store to order number with message lease input a value.
-retrieve from user and store it to value with message provide a value.
-retrieve from user and store it to data with message Please enter a number between 1 and 100.
-take from user and store to i with message provide a value.
-receive from user and store it in result with message Please provide a value for the variable.
-receive from user and set it to step with message Please enter a value.
-take from user and store to max value with message Please give a value.
-read from user and assign to pos with message Provide an input for the name.
-enter from user and store to is active with message lease input a value.
-enter from user and assign it to is enabled with message enter a value for the variable.
-ask user for receive using the message type a value and assign it in total amount.
-ask user for retrieve using the message enter a number betweeen 1 and 10 and store to user name.
-ask user for enter using the message fill in a value and store it to info.
-ask user for fetch using the message type a value and store it in order number.
-ask user for get using the message enter a number betweeen 1 and 10 and put it to user email.
-ask user for take using the message Please assign a value and store to info.
-ask user for get using the message Please set a value and assign it to has errors.
-ask user for enter using the message Please insert a value and store to step.
-ask user for input using the message input your age and set it to info.
-ask user for get using the message Please input a value for the variable and store it in average score.
-ask user to retrieve with message provide a value and store to user age.
-ask user to take with message Please enter a number between 1 and 100 and store to j.
-ask user to receive with message Please assign a value and store to position.
-ask user to receive with message Please insert a value and store to temp.
-ask user to input with message Please enter a number between 1 and 100 and store to average score.
-ask user to fetch with message Please assign a value and store it to iteration.
-ask user to read with message provide a value and put it in step.
-ask user to retrieve with message input your age and set it to key.
-ask user to enter with message provide a value and store it in is deleted.
-ask user to retrieve with message Please enter a number between 1 and 100 and store it to user id.
+ enter from the user with message Please enter a value and set it to username.
+ fetch from the user with message enter a value for the variable and store to loop index.
+ enter from the user with message Enter a value and put it in max value.
+ get from the user with message Please write a value and put it in k.
+ fetch from the user with message Please input a value for the variable and set it to completed.
+ input from the user with message Please enter a value and assign it to file path.
+ read from the user with message provide a value and assign it to user name.
+ input from the user with message Please provide a value for the variable and store it to user email.
+ retrieve from the user with message Provide an input for the name and assign it to j.
+ fetch from user and assign it to data.
+ fetch from user and store it to step.
+ fetch from user and assign to data.
+ enter from user and store it in item.
+ enter from user and put it to value.
+ fetch from user and put it in item.
+ read from user and store to min value.
+ get from user and set it to file path.
+ enter from user and set it to min value.
+ receive from user and assign to data.
+ take from user and store to order number with message lease input a value.
+ retrieve from user and store it to value with message provide a value.
+ retrieve from user and store it to data with message Please enter a number between 1 and 100.
+ take from user and store to i with message provide a value.
+ receive from user and store it in result with message Please provide a value for the variable.
+ receive from user and set it to step with message Please enter a value.
+ take from user and store to max value with message Please give a value.
+ read from user and assign to pos with message Provide an input for the name.
+ enter from user and store to is active with message lease input a value.
+ enter from user and assign it to is enabled with message enter a value for the variable.
+ ask user for receive using the message type a value and assign it in total amount.
+ ask user for retrieve using the message enter a number betweeen 1 and 10 and store to user name.
+ ask user for enter using the message fill in a value and store it to info.
+ ask user for fetch using the message type a value and store it in order number.
+ ask user for get using the message enter a number betweeen 1 and 10 and put it to user email.
+ ask user for take using the message Please assign a value and store to info.
+ ask user for get using the message Please set a value and assign it to has errors.
+ ask user for enter using the message Please insert a value and store to step.
+ ask user for input using the message input your age and set it to info.
+ ask user for get using the message Please input a value for the variable and store it in average score.
+ ask user to retrieve with message provide a value and store to user age.
+ ask user to take with message Please enter a number between 1 and 100 and store to j.
+ ask user to receive with message Please assign a value and store to position.
+ ask user to receive with message Please insert a value and store to temp.
+ ask user to input with message Please enter a number between 1 and 100 and store to average score.
+ ask user to fetch with message Please assign a value and store it to iteration.
+ ask user to read with message provide a value and put it in step.
+ ask user to retrieve with message input your age and set it to key.
+ ask user to enter with message provide a value and store it in is deleted.
+ ask user to retrieve with message Please enter a number between 1 and 100 and store it to user id.

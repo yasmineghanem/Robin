@@ -1,60 +1,60 @@
 cast alternate address to int.
-change step to string.
-change key to float.
-cast file path to string.
-cast item array to float.
-transform user type to integer.
-make due date to double.
-cast number list to int.
-change average score to string.
-transform start time to list.
-cast element to dictionary type.
-convert j to list type.
-cast expiry date to list type.
-transform region name to double type.
-make has access to list type.
-cast end date to array type.
-make user id to string type.
-change is deleted to integer type.
-convert user preferences to float type.
-make sibling count to float type.
-transform 5.5 to string.
-cast 0.333333 to float.
-change 5.5 to int.
-cast -1.61803398875 to integer.
-transform 1.1 to double.
-make 1234567 to double.
-convert 1e-06 to list.
-make 9.81 to dictionary.
-transform -0.666667 to double.
-make -1.0 to string.
-cast the variable index to a string.
-change the variable end time to a float.
-cast the variable user name to a array.
-convert the variable step to a dictionary.
-transform the variable expense report to a int.
-change the variable product name to a char.
-convert the variable product id to a array.
-make the variable system properties to a list.
-make the variable user id to a list.
-make the variable geo coordinates to a int.
-make the value 2023 to a double.
-transform the value 909090 to a char.
-make the value 10 to a char.
-change the value -987 to a char.
-convert the value 5.6789 to a integer.
-cast the value -0.67891 to a double.
-transform the value 45 to a integer.
-make the value -2.71828 to a char.
-convert the value 45 to a string.
-convert the value 70707 to a integer.
-transform the colleague email to a int.
-make the end date to a list.
-convert the primary contact to a integer.
-make the net profit to a set.
-transform the pos to a list.
-transform the inventory level to a double.
-cast the is verified to a set.
-convert the end time to a integer.
-make the options to a int.
-change the environment to a integer.
+ change step to string.
+ change key to float.
+ cast file path to string.
+ cast item array to float.
+ transform user type to integer.
+ make due date to double.
+ cast number list to int.
+ change average score to string.
+ transform start time to list.
+ cast element to dictionary type.
+ convert j to list type.
+ cast expiry date to list type.
+ transform region name to double type.
+ make has access to list type.
+ cast end date to array type.
+ make user id to string type.
+ change is deleted to integer type.
+ convert user preferences to float type.
+ make sibling count to float type.
+ transform 5.5 to string.
+ cast 0.333333 to float.
+ change 5.5 to int.
+ cast -1.61803398875 to integer.
+ transform 1.1 to double.
+ make 1234567 to double.
+ convert 1e-06 to list.
+ make 9.81 to dictionary.
+ transform -0.666667 to double.
+ make -1.0 to string.
+ cast the variable index to a string.
+ change the variable end time to a float.
+ cast the variable user name to a array.
+ convert the variable step to a dictionary.
+ transform the variable expense report to a int.
+ change the variable product name to a char.
+ convert the variable product id to a array.
+ make the variable system properties to a list.
+ make the variable user id to a list.
+ make the variable geo coordinates to a int.
+ make the value 2023 to a double.
+ transform the value 909090 to a char.
+ make the value 10 to a char.
+ change the value -987 to a char.
+ convert the value 5.6789 to a integer.
+ cast the value -0.67891 to a double.
+ transform the value 45 to a integer.
+ make the value -2.71828 to a char.
+ convert the value 45 to a string.
+ convert the value 70707 to a integer.
+ transform the colleague email to a int.
+ make the end date to a list.
+ convert the primary contact to a integer.
+ make the net profit to a set.
+ transform the pos to a list.
+ transform the inventory level to a double.
+ cast the is verified to a set.
+ convert the end time to a integer.
+ make the options to a int.
+ change the environment to a integer.

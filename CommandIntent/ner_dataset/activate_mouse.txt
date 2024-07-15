@@ -1,40 +1,40 @@
 exit mouse mode.
-exit mouse mode.
-exit mouse mode.
-start mouse mode.
-open mouse mode.
-exit mouse mode.
-enable mouse mode.
-go to mouse mode.
-disable mouse mode.
-disable mouse mode.
-enable the mouse mode.
-exit the mouse mode.
-activte the mouse mode.
-deactivate the mouse mode.
-start the mouse mode.
-exit the mouse mode.
-exit the mouse mode.
-activte the mouse mode.
-activte the mouse mode.
-enable the mouse mode.
-deactivate the mouse tracking mode.
-close the mouse tracking mode.
-enter the mouse tracking mode.
-deactivate the mouse tracking mode.
-disable the mouse tracking mode.
-go to the mouse tracking mode.
-begin the mouse tracking mode.
-go to the mouse tracking mode.
-disable the mouse tracking mode.
-disable the mouse tracking mode.
-go to the mouse tracker.
-activte the mouse tracker.
-disable the mouse tracker.
-open the mouse tracker.
-enter the mouse tracker.
-activte the mouse tracker.
-enter the mouse tracker.
-exit the mouse tracker.
-begin the mouse tracker.
-start the mouse tracker.
+ exit mouse mode.
+ exit mouse mode.
+ start mouse mode.
+ open mouse mode.
+ exit mouse mode.
+ enable mouse mode.
+ go to mouse mode.
+ disable mouse mode.
+ disable mouse mode.
+ enable the mouse mode.
+ exit the mouse mode.
+ activte the mouse mode.
+ deactivate the mouse mode.
+ start the mouse mode.
+ exit the mouse mode.
+ exit the mouse mode.
+ activte the mouse mode.
+ activte the mouse mode.
+ enable the mouse mode.
+ deactivate the mouse tracking mode.
+ close the mouse tracking mode.
+ enter the mouse tracking mode.
+ deactivate the mouse tracking mode.
+ disable the mouse tracking mode.
+ go to the mouse tracking mode.
+ begin the mouse tracking mode.
+ go to the mouse tracking mode.
+ disable the mouse tracking mode.
+ disable the mouse tracking mode.
+ go to the mouse tracker.
+ activte the mouse tracker.
+ disable the mouse tracker.
+ open the mouse tracker.
+ enter the mouse tracker.
+ activte the mouse tracker.
+ enter the mouse tracker.
+ exit the mouse tracker.
+ begin the mouse tracker.
+ start the mouse tracker.
