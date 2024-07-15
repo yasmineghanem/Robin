@@ -106,7 +106,8 @@
   "ide operation": [
     "(?P<action>[\\w\\s]+) (?P<type>line|lines) (from )?(?P<start>\\d+) (to|through) (?P<end>\\d+)",
     "(?P<action>[\\w\\s]+) (from )?line[s]? (?P<start>\\d+) (to|through) (line )?(?P<end>\\d+)",
-    "(?P<action>[\\w\\s]+) (?P<type>|line) (?P<number>\\d+)",
+    "(?P<action>[\\w\\s]+) (?P<type>line) (?P<number>\\d+)",
+    "(?P<action>[\\w\\s]+) (?P<type>file) (?P<filename>.+)",
     "(?P<action>[\\w\\s]+) (the )?(?P<type>terminal)",
     "(?P<action>[\\w\\s]+)"
   ],
