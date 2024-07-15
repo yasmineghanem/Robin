@@ -67,7 +67,6 @@ import {
   WRITE_FILE,
   WRITE_FILE_FAILURE,
   WRITE_FILE_SUCCESS,
-  GET_ERRORS,
 } from "../constants/code";
 import { EXTENSIONS } from "../constants/constants";
 

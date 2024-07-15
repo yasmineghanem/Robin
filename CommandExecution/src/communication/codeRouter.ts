@@ -186,27 +186,27 @@ router.get("/exit-scope", (req: Request, res: Response) => {
   executeCommand(EXIT_SCOPE, {}, successHandler, errorHandler, res);
 });
 
-// get errors
-router.get("/errors", (req: Request, res: Response) => {
-  const editor = vscode.window.activeTextEditor
-  if(editor)
-    {
-      const uri = editor.document.uri;
-      const errors = vscode.languages.getDiagnostics(uri);
-      /**
-       *  [{"severity":"Error","message":"Parsing failed: 'invalid syntax (<unknown>, line 35)'","range":[{"line":34,"character":17},{"line":34,"character":17}],"source":"Pylint","code":{"value":"E0001:syntax-error","target":{"$mid":1,"path":"/en/latest/user_guide/messages/error/syntax-error.html","scheme":"https","authority":"pylint.readthedocs.io"}}},{"severity":"Error","message":"SyntaxError: invalid syntax (file:///c%3A/Users/77/OneDrive/Desktop/New%20folder/robin.py, line 35)","range":[{"line":34,"character":16},{"line":34,"character":17}],"source":"compile"},{"severity":"Information","message":"\"alsarsora\": Unknown word.","range":[{"line":34,"character":7},{"line":34,"character":16}],"source":"cSpell"},{"severity":"Information","message":"\"sarsora\": Unknown word.","range":[{"line":35,"character":0},{"line":35,"character":7}],"source":"cSpell"}]
-       */
-      // return error type and line number
-      const errorList = errors.map((error) => {
-        return {
-          severity: error.severity,
-          message: error.message,
-          range: error.range.start.line,
-          source: error.source,
-        };
-      });
-      res.send(errorList);
-    }
-});
+// // get errors
+// router.get("/errors", (req: Request, res: Response) => {
+//   const editor = vscode.window.activeTextEditor
+//   if(editor)
+//     {
+//       const uri = editor.document.uri;
+//       const errors = vscode.languages.getDiagnostics(uri);
+//       /**
+//        *  [{"severity":"Error","message":"Parsing failed: 'invalid syntax (<unknown>, line 35)'","range":[{"line":34,"character":17},{"line":34,"character":17}],"source":"Pylint","code":{"value":"E0001:syntax-error","target":{"$mid":1,"path":"/en/latest/user_guide/messages/error/syntax-error.html","scheme":"https","authority":"pylint.readthedocs.io"}}},{"severity":"Error","message":"SyntaxError: invalid syntax (file:///c%3A/Users/77/OneDrive/Desktop/New%20folder/robin.py, line 35)","range":[{"line":34,"character":16},{"line":34,"character":17}],"source":"compile"},{"severity":"Information","message":"\"alsarsora\": Unknown word.","range":[{"line":34,"character":7},{"line":34,"character":16}],"source":"cSpell"},{"severity":"Information","message":"\"sarsora\": Unknown word.","range":[{"line":35,"character":0},{"line":35,"character":7}],"source":"cSpell"}]
+//        */
+//       // return error type and line number
+//       const errorList = errors.map((error) => {
+//         return {
+//           severity: error.severity,
+//           message: error.message,
+//           range: error.range.start.line,
+//           source: error.source,
+//         };
+//       });
+//       res.send(errorList);
+//     }
+// });
 
 export default router;

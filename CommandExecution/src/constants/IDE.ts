@@ -50,6 +50,9 @@ export const SELECT_RANGE = "robin.selectRange";
 //find
 export const FIND = "robin.find";
 
+// get error list
+export const GET_ERROR_LIST = "robin.getErrorList";
+
 /**
  * MESSAGES
  */
