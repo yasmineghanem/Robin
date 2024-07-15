@@ -145,7 +145,7 @@ class PostProcessor:
             case 'git operation':
                 final_parameters = self.post_process_git_operation(
                     parameters, fallback=fallback)
-                # response = self.api.git(final_parameters)
+                response = self.api.git(final_parameters)
 
             case 'interactive commands':
                 final_parameters = self.post_process_interactive_commands(
@@ -155,7 +155,6 @@ class PostProcessor:
             case 'ide operation':
                 final_parameters = self.post_process_ide_operation(
                     parameters, fallback=fallback)
-                
                 
                 response = self.api.ide_operation(final_parameters)
 
@@ -179,6 +178,10 @@ class PostProcessor:
                     parameters, intent)
                 # response = self.api.interactive_commands(final_parameters)
 
+            case 'exit block':
+                final_parameters = self.post_process_fallback(
+                    parameters, intent)
+                response = self.api.exit_scope()
         print("Final parameters: ", final_parameters)
 
         return response

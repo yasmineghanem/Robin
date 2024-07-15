@@ -140,8 +140,8 @@ class SpeechRecognition:
         if self.voice_recognition_tool == 'google':
             while self.active:
                 with self.microphone as source:
-                    self.recognizer.adjust_for_ambient_noise(source,
-                                                             duration=1)
+                    # self.recognizer.adjust_for_ambient_noise(source,
+                    #                                          duration=1)
                     audio = self.recognizer.listen(source)
                     try:
                         r = self.recognizer.recognize_google(audio)

@@ -131,6 +131,21 @@ class APIController:
             if action == 'goto':
                 return self.go_to_file(parameters)
 
+    def git(self, parameters):
+        return self.__post("/git", parameters)
+        # git_action = parameters.get('action')
+        # if git_action == 'discard':
+        #     return self.discard()
+        # elif git_action == 'pull':
+        #     return self.pull()
+        # elif git_action == 'stage':
+        #     return self.stage()
+        # elif git_action == 'stash':
+        #     return self.stash()
+        
+        
+    
+    
     def undo(self):
         return self.__get(IDE_UNDO)
 
