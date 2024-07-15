@@ -467,10 +467,10 @@ class ASTProcessor:
     
     # function to transform summary to be human readable
     def get_summary(self, ast_summary=None):
-        with open('./ast_2.json', 'r') as file:
-            ast = json.load(file)
+        # with open('./ast_2.json', 'r') as file:
+        #     ast = json.load(file)
 
-        ast_processor = ASTProcessor(ast['ast'])
+        # ast_processor = ASTProcessor(ast_summary['ast'])
         ast_summary = ast_processor.process_ast()
         summary_text_to_speech = "Summary of the code:\n\n"
         # Imports
@@ -594,17 +594,17 @@ class ASTProcessor:
         return summary_text_to_speech
 
 
-# Load the AST from the JSON file
-with open('./ast_2.json', 'r') as file:
-    ast = json.load(file)
+# # Load the AST from the JSON file
+# with open('./ast_2.json', 'r') as file:
+#     ast = json.load(file)
 
-ast_processor = ASTProcessor(ast['ast'])
-summary = ast_processor.process_ast()
-with open('summary.json', 'w') as file:
-    json.dump(summary, file, indent=4)
+# ast_processor = ASTProcessor(ast['ast'])
+# summary = ast_processor.process_ast()
+# with open('summary.json', 'w') as file:
+#     json.dump(summary, file, indent=4)
 
 
-final = ast_processor.get_summary(summary)
-with open('summary.txt', 'w') as file:
-    file.write(final)
-# print(summary)
+# final = ast_processor.get_summary(summary)
+# with open('summary.txt', 'w') as file:
+#     file.write(final)
+# # print(summary)

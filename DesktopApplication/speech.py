@@ -38,9 +38,9 @@ CommandIntent = command_intent.CommandIntent
 
 # Correctly resolve paths relative to the script's location
 intent_model_path = os.path.abspath(
-    '../CommandIntent/models/intent_detection_model_2.h5')
+    '../CommandIntent/models/full_intent_detection_model.keras')
 ner_model_path = os.path.abspath(
-    '../CommandIntent/models/constrained_ner_model_2.pth')
+    '../CommandIntent/models/final_constrained_ner_model.pth')
 
 
 class SpeechRecognition:
@@ -103,7 +103,7 @@ class SpeechRecognition:
             # print(f"Response: {type(response)}")
             # intent = 'summary'
             if intent == 'summary':
-                response['message'] = self.get_file_summary()
+                response['message'] = self.get_file_summary(response['data']['ast'])
 
             if self.interactive:
                 self.interactive_response(response)
@@ -111,12 +111,12 @@ class SpeechRecognition:
         except Exception as e:
             print(f"Error in processing command: {e}")
 
-    def get_file_summary(self):
-        self.summarizer = ASTProcessor({})
+    def get_file_summary(self, ast):
+        # self.summarizer = ASTProcessor(ast)
 
-        s = self.summarizer.get_summary()
+        # s = self.summarizer.get_summary()
         print(s)
-        return s
+        return 's'
 
     def activate_interactive(self,):
         print('activated interactive')
