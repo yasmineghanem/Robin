@@ -1,0 +1,192 @@
+{
+  "variable declaration": [
+    "declare a new variable called x and assign it to 10",
+    "create a variable name with type string",
+    "create a new variable called x",
+    "declare x as int"
+  ],
+  "constant declaration": [
+    "declare a new constant called x and assign it to 10",
+    "create a constant name with type string",
+    "create a new constant called x",
+    "declare constant pi and set it to 3.14"
+  ],
+  "class declaration": [
+    "create new class named person",
+    "declare a class called car",
+    "make class bus",
+    "define a class with name ay khara"
+  ],
+  "assignment operation": [
+    "assign x to y",
+    "set the value of name to yasmine",
+    "assign yasmine to name",
+    "x equals y",
+    "number is equal to 50",
+    "max is equal 323.88",
+    "assign max value to current value",
+    "update max value with value"
+  ],
+  "for loop": [
+    "create a for loop that iterates from 0 to 100 with step 2 using variable x",
+    "create a for loop that iterates from 0 to 100 with step 2",
+    "create a for loop that iterates from 0 to 100",
+    "iterate from 0 to 100 using i",
+    "loop from 0 to 100 with step 2 using iterator i",
+
+    "create a for loop from 1 to 10",
+    "write a for loop that iterates from 0 to 100",
+    "write a for loop that iterates from 0 to 100 with step 2",
+    "iterate from 0 to 10 using i",
+    "iterate from 0 to 10 and step 1 using i",
+
+    "for i in range 10",
+    "for _ in range 1 to 10",
+    "for x in range from 1 to 10 with step 2",
+
+    "for item in items",
+    "for variable example in test examples",
+    "loop over items using i"
+  ],
+  "bitwise operation": [
+    "bitwise and x and y",
+    "perform bitwise or operation on 6 and 8",
+    "bitwise shift left number and 2",
+    "shift right value by 6"
+  ],
+  "membership operation": [
+    "check if x is in numbers",
+    "check whether number is not in testinggg"
+  ],
+  "libraries": [
+    "import the library numpy",
+    "import the pandas library",
+    "include the math module",
+    "add the pytorch library"
+  ],
+  "casting": [
+    "cast the variable number to string",
+    "cast x to integer",
+    "cast x to float",
+    "change name to string",
+    "change the type of x to string",
+    "cast max value to float"
+  ],
+  "output": [
+    "output the variable number to the user",
+    "display the message hello world",
+    "print the value 700"
+  ],
+  "input": [
+    "ask the user for input and set it to x",
+    "take input from user and assign it to name with message please enter your name",
+    "ask user to input and assign it to variable in"
+  ],
+  "assertion": [
+    "assert that x equal y",
+    "assert that number is greater than 100",
+    "verify that length is less than count",
+    "make sure that size is greater than or equal 100.2398",
+    "assert that test is hujbbnj",
+    "assert test is hujbbnj"
+  ],
+  "git operation": [
+    "push the changes",
+    "commit the changes with message changed something",
+    "stage the changes",
+    "stash the changes",
+    "discard the changes",
+    "git pull",
+    "git push",
+    "git commit"
+  ],
+  "ide operation": [
+    "select lines 1 through 5",
+    "select line 9",
+    "highlight from line 3 to line 7",
+    "go to line 10",
+    "delete line 6",
+    "delete lines 2 through 4",
+    "focus terminal",
+    "kill terminal",
+    "open terminal",
+    "new terminal",
+    "undo",
+    "redo",
+    "copy",
+    "paste"
+  ],
+  "interactive commands": [
+    "list all the files in the program",
+    "summarize the code",
+    "get all the functions in the program",
+    "get all classes",
+    "list the code"
+  ],
+  "mouse click": [
+    "right mouse click",
+    "left mouse click",
+    "mouse click",
+    "double mouse click",
+    "right click",
+    "left click",
+    "click",
+    "double click",
+    "click right",
+    "click left"
+  ],
+  "comment": ["add the comment this is a comment", "write this is a comment"],
+  "activate mouse": [
+    "activate mouse tracker mode",
+    "activate mouse controller",
+    "activate mouse controller mode",
+    "enable mouse controller",
+    "enable mouse tracker mode",
+    "activate the mouse",
+    "deactivate mouse",
+    "go to mouse mode"
+  ],
+  "activate interactive": [
+    "enable interactive mode",
+    "start interactive mode",
+    "start interactive",
+    "disable interactive mode",
+    "disable interactive",
+    "activate interactive",
+    "activate the interactive",
+    "deactivate interactive",
+    "go to interactive mode"
+  ],
+  "file system": [
+    "create new file test.txt",
+    "create new file test",
+    "create file main with extension py",
+    "create python file main",
+    "delete file test",
+    "copy file test.txt",
+    "paste file main",
+    "cut file main.py"
+  ],
+  "while loop": [
+    "while x is less than 10",
+    "while not true",
+    "while x is not equal to 10",
+    "create a while loop while flag is equals false",
+    "while true"
+  ],
+  "function declaration": [],
+  "conditional operation": [
+    "create an if statement that checks if x is equal to y",
+    "check if x is equal to y",
+    "check if x is greater than y",
+    "check if x is less than y",
+    "check if x is not equal to y",
+    "check whether x is equal to y",
+    "check whether x is greater than y and z is less than y"
+  ],
+  "mathematical operation": [
+    "compute the addition of 5 and 10",
+    "calculate the division of 20 and 2",
+    "add y to x"
+  ]
+}

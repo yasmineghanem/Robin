@@ -1,120 +1,120 @@
 create a for loop from -30 to -10 with variable item.
-use a for loop from 30 to 5 with variable mentor id.
-using a for loop from -25 to 50 with variable key.
-write a for loop from -10 to -2 using variable geo coordinates.
-make a for loop from 25 to -25 using variable country code.
-create a for loop from 10 to -1 with variable average score.
-use a for loop from 500 to 300 with variable office location.
-create a for loop from 50 to -15 using variable country code.
-using a for loop from 40 to -15 with variable element.
-generate a for loop from 550 to -30 using variable i.
-create a for loop from range -20 to 6 using variable iteration.
-create a for loop from range 150 to -25 using variable feature flags.
-generate a for loop from range -5 to -4 with variable item.
-use a for loop from range 3500 to -35 using variable key.
-create a for loop from range 40 to 30 using variable options.
-make a for loop from range -45 to -4 using variable preferences.
-create a for loop from range 20 to 1000 using variable j.
-generate a for loop from range 2500 to -3 using variable sibling count.
-make a for loop from range 1 to -25 using variable street name.
-using a for loop from range 0 to 6 using variable iteration.
-create a for loop from range 200 to 550 with variable counter and step -1.
-use a for loop from range 1500 to 550 with variable guardian name and step 5000.
-use a for loop from range 25 to 3000 using variable building number and step -20.
-write a for loop from range 9 to 400 using variable default config and step -3.
-create a for loop from range -15 to 0 using variable number list and step 2000.
-use a for loop from range 20 to -30 with variable city name and step 4.
-write a for loop from range 500 to 3500 using variable user settings and step 25.
-using a for loop from range 7 to 150 with variable j and step 1000.
-create a for loop from range 5 to 1000 with variable colleague email and step 20.
-generate a for loop from range 0 to 5000 with variable value and step 2.
-for loop from 450 to -30 with colleague email.
-for loop from 40 to 5000 using options.
-for loop from -2 to 10 using primary contact.
-for loop from 3500 to -3 using delivery address.
-for loop from 3 to 2500 using office location.
-for loop from 3 to 100 with partner name.
-for loop from 3500 to 100 using value.
-for loop from 400 to 5000 using alternate address.
-for loop from 1 to 2000 with colleague email.
-for loop from 4 to 500 with total amount.
-for loop from 300 to 5 using partner name and step 300.
-for loop from 2000 to 2 using map location and step -4.
-for loop from 4000 to -25 with emergency contact and step 2.
-for loop from 20 to 5000 using user and step -25.
-for loop from 150 to 5500 using zip code and step 20.
-for loop from -5 to 5500 using element and step 9.
-for loop from -5 to 6 with region name and step -1.
-for loop from 0 to 10 with count and step -5.
-for loop from 350 to 30 with alternate address and step 25.
-for loop from 40 to 7 with element and step 5.
-for secondary contact in range from 450 to 5.
-for data in range from 150 to 3500.
-for position in range from 25 to 40.
-for number list in range from -10 to 30.
-for index in range from 25 to 0.
-for user settings in range from -25 to -45.
-for pos in range from 45 to 3500.
-for iteration in range from 400 to -45.
-for position in range from 30 to 400.
-for average score in range from 8 to 7.
-for number list in range from -35 to -30 with step 20.
-for delivery address in range from -1 to 25 with step -35.
-for total amount in range from 500 to 50 with step 400.
-for min value in range from 3500 to 200 with step -45.
-for i in range from -15 to 350 with step 500.
-for environment in range from -2 to 5 with step 5.
-for zip code in range from 6 to 30 with step 250.
-for user email in range from 5 to -3 with step 2.
-for sibling count in range from -2 to -20 with step 2.
-for country code in range from -20 to 6 with step 0.
-for country code in range 2500.
-for environment in range 450.
-for secondary contact in range 1000.
-for data in range 400.
-for sibling count in range 10.
-for geo coordinates in range 30.
-for key in range -35.
-for city name in range -15.
-for zip code in range 35.
-for colleague email in range -35.
-for mentor id in range 50 and step 6.
-for app config in range -25 and step 2500.
-for mentor id in range 5 and step 15.
-for position in range 550 and step -20.
-for number list in range 15 and step 200.
-for iteration in range 2000 and step 2000.
-for count in range -1 and step 45.
-for number list in range 15 and step -10.
-for index in range 20 and step 8.
-for system properties in range 3 and step 5500.
-for loop index in range elements.
-for max value in range usernames.
-for element in range usernames.
-for user settings in range min values.
-for count in range average scores.
-for j in range user ages.
-for temp in range user ids.
-for average score in range total amounts.
-for mentor id in range min values.
-for emergency contact in range user ages.
-write a for loop for preferences in collection.
-write a for loop for default config in collection.
-write a for loop for main address in collection.
-write a for loop for i in collection.
-using a for loop for element in collection.
-generate a for loop for mentor id in collection.
-use a for loop for step in collection.
-create a for loop for result in collection.
-make a for loop for item in collection.
-use a for loop for app config in collection.
-iterate form 0 to 2000 using a for loop.
-iterate form 35 to -2 using a for loop.
-iterate form 150 to 1 using a for loop.
-loop form 5000 to 30 using a for loop.
-iterate form 4000 to 0 using a for loop.
-iterate form 45 to 0 using a for loop.
-iterate form -3 to 35 using a for loop.
-loop form 7 to 40 using a for loop.
-iterate form 1500 to 15 using a for loop.
-loop form 5000 to 150 using a for loop.
+ use a for loop from 30 to 5 with variable mentor id.
+ using a for loop from -25 to 50 with variable key.
+ write a for loop from -10 to -2 using variable geo coordinates.
+ make a for loop from 25 to -25 using variable country code.
+ create a for loop from 10 to -1 with variable average score.
+ use a for loop from 500 to 300 with variable office location.
+ create a for loop from 50 to -15 using variable country code.
+ using a for loop from 40 to -15 with variable element.
+ generate a for loop from 550 to -30 using variable i.
+ create a for loop from range -20 to 6 using variable iteration.
+ create a for loop from range 150 to -25 using variable feature flags.
+ generate a for loop from range -5 to -4 with variable item.
+ use a for loop from range 3500 to -35 using variable key.
+ create a for loop from range 40 to 30 using variable options.
+ make a for loop from range -45 to -4 using variable preferences.
+ create a for loop from range 20 to 1000 using variable j.
+ generate a for loop from range 2500 to -3 using variable sibling count.
+ make a for loop from range 1 to -25 using variable street name.
+ using a for loop from range 0 to 6 using variable iteration.
+ create a for loop from range 200 to 550 with variable counter and step -1.
+ use a for loop from range 1500 to 550 with variable guardian name and step 5000.
+ use a for loop from range 25 to 3000 using variable building number and step -20.
+ write a for loop from range 9 to 400 using variable default config and step -3.
+ create a for loop from range -15 to 0 using variable number list and step 2000.
+ use a for loop from range 20 to -30 with variable city name and step 4.
+ write a for loop from range 500 to 3500 using variable user settings and step 25.
+ using a for loop from range 7 to 150 with variable j and step 1000.
+ create a for loop from range 5 to 1000 with variable colleague email and step 20.
+ generate a for loop from range 0 to 5000 with variable value and step 2.
+ for loop from 450 to -30 with colleague email.
+ for loop from 40 to 5000 using options.
+ for loop from -2 to 10 using primary contact.
+ for loop from 3500 to -3 using delivery address.
+ for loop from 3 to 2500 using office location.
+ for loop from 3 to 100 with partner name.
+ for loop from 3500 to 100 using value.
+ for loop from 400 to 5000 using alternate address.
+ for loop from 1 to 2000 with colleague email.
+ for loop from 4 to 500 with total amount.
+ for loop from 300 to 5 using partner name and step 300.
+ for loop from 2000 to 2 using map location and step -4.
+ for loop from 4000 to -25 with emergency contact and step 2.
+ for loop from 20 to 5000 using user and step -25.
+ for loop from 150 to 5500 using zip code and step 20.
+ for loop from -5 to 5500 using element and step 9.
+ for loop from -5 to 6 with region name and step -1.
+ for loop from 0 to 10 with count and step -5.
+ for loop from 350 to 30 with alternate address and step 25.
+ for loop from 40 to 7 with element and step 5.
+ for secondary contact in range from 450 to 5.
+ for data in range from 150 to 3500.
+ for position in range from 25 to 40.
+ for number list in range from -10 to 30.
+ for index in range from 25 to 0.
+ for user settings in range from -25 to -45.
+ for pos in range from 45 to 3500.
+ for iteration in range from 400 to -45.
+ for position in range from 30 to 400.
+ for average score in range from 8 to 7.
+ for number list in range from -35 to -30 with step 20.
+ for delivery address in range from -1 to 25 with step -35.
+ for total amount in range from 500 to 50 with step 400.
+ for min value in range from 3500 to 200 with step -45.
+ for i in range from -15 to 350 with step 500.
+ for environment in range from -2 to 5 with step 5.
+ for zip code in range from 6 to 30 with step 250.
+ for user email in range from 5 to -3 with step 2.
+ for sibling count in range from -2 to -20 with step 2.
+ for country code in range from -20 to 6 with step 0.
+ for country code in range 2500.
+ for environment in range 450.
+ for secondary contact in range 1000.
+ for data in range 400.
+ for sibling count in range 10.
+ for geo coordinates in range 30.
+ for key in range -35.
+ for city name in range -15.
+ for zip code in range 35.
+ for colleague email in range -35.
+ for mentor id in range 50 and step 6.
+ for app config in range -25 and step 2500.
+ for mentor id in range 5 and step 15.
+ for position in range 550 and step -20.
+ for number list in range 15 and step 200.
+ for iteration in range 2000 and step 2000.
+ for count in range -1 and step 45.
+ for number list in range 15 and step -10.
+ for index in range 20 and step 8.
+ for system properties in range 3 and step 5500.
+ for loop index in range elements.
+ for max value in range usernames.
+ for element in range usernames.
+ for user settings in range min values.
+ for count in range average scores.
+ for j in range user ages.
+ for temp in range user ids.
+ for average score in range total amounts.
+ for mentor id in range min values.
+ for emergency contact in range user ages.
+ write a for loop for preferences in collection.
+ write a for loop for default config in collection.
+ write a for loop for main address in collection.
+ write a for loop for i in collection.
+ using a for loop for element in collection.
+ generate a for loop for mentor id in collection.
+ use a for loop for step in collection.
+ create a for loop for result in collection.
+ make a for loop for item in collection.
+ use a for loop for app config in collection.
+ iterate form 0 to 2000 using a for loop.
+ iterate form 35 to -2 using a for loop.
+ iterate form 150 to 1 using a for loop.
+ loop form 5000 to 30 using a for loop.
+ iterate form 4000 to 0 using a for loop.
+ iterate form 45 to 0 using a for loop.
+ iterate form -3 to 35 using a for loop.
+ loop form 7 to 40 using a for loop.
+ iterate form 1500 to 15 using a for loop.
+ loop form 5000 to 150 using a for loop.

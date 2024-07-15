@@ -1,160 +1,160 @@
 check if temp is in list payments.
-check if guardian name is in array biases.
-check whether product price is in set loan details.
-check whether file path is in set config settings.
-check if app config is in collection text fields.
-check whether result is in list requests.
-check if region name is in dictionary measurement data.
-check whether country code is in map dropdowns.
-check if employee record is in collection layout components.
-check if current date is in list measurement data.
-check whether colleague email is in the js functions.
-check if product price is in the observations.
-check whether user location is in the character stats.
-check if temp is in the vector list.
-check whether data frame is in the loan details.
-check if time elapsed is in the dns records.
-check if settings is in the routes.
-check if index is in the attributes.
-check if debit amount is in the packets.
-check whether data frame is in the cookies.
-if time elapsed is in batches.
-if k is in reviews.
-if budget allocation is in view templates.
-if result table is in variables.
-if main address is in data points.
-if schedule time is in methods.
-if user id is in packet list.
-whether account balance is in sample sets.
-whether tax rate is in variable array.
-whether end time is in wishlists.
-if order number is in the list user profiles.
-if geo coordinates is in the array leaderboard ranks.
-if counter is in the map feature vectors.
-whether tax rate is in the map sessions.
-if is visible is in the set review ratings.
-if is verified is in the list menus.
-if is enabled is in the set styles.
-whether element is in the dictionary skill tree.
-whether delivery address is in the collection header fields.
-if credit limit is in the dictionary tax records.
-check if employee record is not in array responses.
-check whether budget allocation is not in list instances.
-check if building number is not in array packets.
-check whether user preferences is not in dictionary skills.
-check whether completed is not in array items.
-check whether feature flags is not in dictionary skills.
-check if stock quantity is not in collection addresses.
-check whether product set is not in map cities.
-check whether value is not in set functions.
-check if end date is not in dictionary order details.
-check if product price is not in the samples.
-check whether user age is not in the cookies.
-check whether step is not in the game levels.
-check whether schedule time is not in the window components.
-check whether product description is not in the object list.
-check if info is not in the response list.
-check whether index is not in the order items.
-check whether current date is not in the element list.
-check whether user preferences is not in the sample sets.
-check if min value is not in the accounts.
-if user email is not in entry set.
-whether zip code is not in results.
-whether user type is not in endpoints.
-whether colleague email is not in session variables.
-whether current date is not in text fields.
-whether is logged in is not in api endpoints.
-if iteration is not in css classes.
-if account balance is not in categories.
-if order queue is not in training data.
-if step is not in observations.
-whether user list is not in the list invoice list.
-if has errors is not in the map templates.
-whether default config is not in the list error logs.
-if system properties is not in the list payment records.
-whether order queue is not in the map info array.
-whether product set is not in the dictionary responses.
-whether supplier name is not in the set statistical data.
-whether end time is not in the list budgets.
-if schedule time is not in the array leaderboard ranks.
-if transaction amount is not in the map shipment details.
-check if data is in dictionary windows.
-check whether discount rate is in map points.
-check whether geo coordinates is in dictionary routes.
-check whether is active is in dictionary templates.
-check whether has access is in dictionary session data.
-check whether start time is in array inventories.
-check if info is in map payments.
-check if sibling count is in collection orders.
-check if guardian name is in map training data.
-check if count is in list request queue.
-check if DATA VISUALIZATION is in the expenses.
-check if Back End Development is in the character stats.
-check whether -40404 is in the weight matrix.
-check whether SOFTWARE ENGINEERING is in the review ratings.
-check whether Code Review is in the number series.
-check whether data analysis is in the points.
-check if DATA ANALYSIS is in the leaderboards.
-check whether 0.000123 is in the menu items.
-check if data mining is in the endpoints.
-check if user experience is in the menus.
-whether System Architecture is in user profiles.
-whether 101010 is in quest items.
-if -999999 is in loan details.
-if 0.333333 is in players.
-if DATA STRUCTURES is in headers.
-if System Architecture is in classes.
-whether natural language processing is in attributes.
-whether CLUSTERING ALGORITHMS is in radioButtons.
-whether user experience is in menus.
-whether Algorithm Design is in enemy types.
-if -2020202 is in the set header fields.
-whether 2.2250738585072014 is in the dictionary styles.
-if 252525 is in the list user profiles.
-if 0.707 is in the collection sliders.
-whether Front End Development is in the array requests.
-if 1.234 is in the dictionary names.
-if debugging session is in the set view templates.
-if data science is in the map countries.
-whether -1.234 is in the dictionary bias values.
-if -0.666667 is in the list cookies.
-check if -14142 is not in collection network nodes.
-check if user interface is not in collection connection pool.
-check if unsupervised learning is not in map sample sets.
-check whether -202020 is not in map epochs.
-check whether DATA MINING is not in array menus.
-check whether 5.5 is not in map events.
-check whether 12345 is not in collection countries.
-check if 6.02214076 is not in map character stats.
-check whether -202020 is not in map entries.
-check if 6.02214076 is not in set coefficients.
-check whether -1e-07 is not in the objects.
-check whether 0.000123 is not in the leaderboard ranks.
-check if system architecture is not in the cookies.
-check whether unsupervised learning is not in the loss values.
-check if 7.7777 is not in the wishlist items.
-check whether code review is not in the label list.
-check if 30303 is not in the header fields.
-check if DATA VISUALIZATION is not in the times.
-check whether -9.87654321 is not in the data.
-check whether -161616 is not in the predictions.
-whether Python Programming is not in layers.
-whether -14142 is not in enemies.
-whether 0.000123 is not in coefficients.
-if FUNCTIONAL PROGRAMMING is not in invoices.
-if JAVASCRIPT FRAMEWORK is not in routes.
-if -4.4444 is not in batches.
-whether Artificial Intelligence is not in discounts.
-whether -161616 is not in weapons.
-if 888888 is not in sessions.
-if hello world is not in headers.
-if debugging session is not in the dictionary enemies.
-whether OBJECT ORIENTED PROGRAMMING is not in the set test data.
-if 171717 is not in the map classes.
-whether Full Stack Developer is not in the array menus.
-if back end development is not in the list dates.
-if 151515 is not in the array customer orders.
-if OpenAI GPT-4 is not in the list requests.
-whether -1010101 is not in the list message queue.
-if hypertext markup language is not in the dictionary dialogs.
-whether -6.789 is not in the list sessions.
+ check if guardian name is in array biases.
+ check whether product price is in set loan details.
+ check whether file path is in set config settings.
+ check if app config is in collection text fields.
+ check whether result is in list requests.
+ check if region name is in dictionary measurement data.
+ check whether country code is in map dropdowns.
+ check if employee record is in collection layout components.
+ check if current date is in list measurement data.
+ check whether colleague email is in the js functions.
+ check if product price is in the observations.
+ check whether user location is in the character stats.
+ check if temp is in the vector list.
+ check whether data frame is in the loan details.
+ check if time elapsed is in the dns records.
+ check if settings is in the routes.
+ check if index is in the attributes.
+ check if debit amount is in the packets.
+ check whether data frame is in the cookies.
+ if time elapsed is in batches.
+ if k is in reviews.
+ if budget allocation is in view templates.
+ if result table is in variables.
+ if main address is in data points.
+ if schedule time is in methods.
+ if user id is in packet list.
+ whether account balance is in sample sets.
+ whether tax rate is in variable array.
+ whether end time is in wishlists.
+ if order number is in the list user profiles.
+ if geo coordinates is in the array leaderboard ranks.
+ if counter is in the map feature vectors.
+ whether tax rate is in the map sessions.
+ if is visible is in the set review ratings.
+ if is verified is in the list menus.
+ if is enabled is in the set styles.
+ whether element is in the dictionary skill tree.
+ whether delivery address is in the collection header fields.
+ if credit limit is in the dictionary tax records.
+ check if employee record is not in array responses.
+ check whether budget allocation is not in list instances.
+ check if building number is not in array packets.
+ check whether user preferences is not in dictionary skills.
+ check whether completed is not in array items.
+ check whether feature flags is not in dictionary skills.
+ check if stock quantity is not in collection addresses.
+ check whether product set is not in map cities.
+ check whether value is not in set functions.
+ check if end date is not in dictionary order details.
+ check if product price is not in the samples.
+ check whether user age is not in the cookies.
+ check whether step is not in the game levels.
+ check whether schedule time is not in the window components.
+ check whether product description is not in the object list.
+ check if info is not in the response list.
+ check whether index is not in the order items.
+ check whether current date is not in the element list.
+ check whether user preferences is not in the sample sets.
+ check if min value is not in the accounts.
+ if user email is not in entry set.
+ whether zip code is not in results.
+ whether user type is not in endpoints.
+ whether colleague email is not in session variables.
+ whether current date is not in text fields.
+ whether is logged in is not in api endpoints.
+ if iteration is not in css classes.
+ if account balance is not in categories.
+ if order queue is not in training data.
+ if step is not in observations.
+ whether user list is not in the list invoice list.
+ if has errors is not in the map templates.
+ whether default config is not in the list error logs.
+ if system properties is not in the list payment records.
+ whether order queue is not in the map info array.
+ whether product set is not in the dictionary responses.
+ whether supplier name is not in the set statistical data.
+ whether end time is not in the list budgets.
+ if schedule time is not in the array leaderboard ranks.
+ if transaction amount is not in the map shipment details.
+ check if data is in dictionary windows.
+ check whether discount rate is in map points.
+ check whether geo coordinates is in dictionary routes.
+ check whether is active is in dictionary templates.
+ check whether has access is in dictionary session data.
+ check whether start time is in array inventories.
+ check if info is in map payments.
+ check if sibling count is in collection orders.
+ check if guardian name is in map training data.
+ check if count is in list request queue.
+ check if DATA VISUALIZATION is in the expenses.
+ check if Back End Development is in the character stats.
+ check whether -40404 is in the weight matrix.
+ check whether SOFTWARE ENGINEERING is in the review ratings.
+ check whether Code Review is in the number series.
+ check whether data analysis is in the points.
+ check if DATA ANALYSIS is in the leaderboards.
+ check whether 0.000123 is in the menu items.
+ check if data mining is in the endpoints.
+ check if user experience is in the menus.
+ whether System Architecture is in user profiles.
+ whether 101010 is in quest items.
+ if -999999 is in loan details.
+ if 0.333333 is in players.
+ if DATA STRUCTURES is in headers.
+ if System Architecture is in classes.
+ whether natural language processing is in attributes.
+ whether CLUSTERING ALGORITHMS is in radioButtons.
+ whether user experience is in menus.
+ whether Algorithm Design is in enemy types.
+ if -2020202 is in the set header fields.
+ whether 2.2250738585072014 is in the dictionary styles.
+ if 252525 is in the list user profiles.
+ if 0.707 is in the collection sliders.
+ whether Front End Development is in the array requests.
+ if 1.234 is in the dictionary names.
+ if debugging session is in the set view templates.
+ if data science is in the map countries.
+ whether -1.234 is in the dictionary bias values.
+ if -0.666667 is in the list cookies.
+ check if -14142 is not in collection network nodes.
+ check if user interface is not in collection connection pool.
+ check if unsupervised learning is not in map sample sets.
+ check whether -202020 is not in map epochs.
+ check whether DATA MINING is not in array menus.
+ check whether 5.5 is not in map events.
+ check whether 12345 is not in collection countries.
+ check if 6.02214076 is not in map character stats.
+ check whether -202020 is not in map entries.
+ check if 6.02214076 is not in set coefficients.
+ check whether -1e-07 is not in the objects.
+ check whether 0.000123 is not in the leaderboard ranks.
+ check if system architecture is not in the cookies.
+ check whether unsupervised learning is not in the loss values.
+ check if 7.7777 is not in the wishlist items.
+ check whether code review is not in the label list.
+ check if 30303 is not in the header fields.
+ check if DATA VISUALIZATION is not in the times.
+ check whether -9.87654321 is not in the data.
+ check whether -161616 is not in the predictions.
+ whether Python Programming is not in layers.
+ whether -14142 is not in enemies.
+ whether 0.000123 is not in coefficients.
+ if FUNCTIONAL PROGRAMMING is not in invoices.
+ if JAVASCRIPT FRAMEWORK is not in routes.
+ if -4.4444 is not in batches.
+ whether Artificial Intelligence is not in discounts.
+ whether -161616 is not in weapons.
+ if 888888 is not in sessions.
+ if hello world is not in headers.
+ if debugging session is not in the dictionary enemies.
+ whether OBJECT ORIENTED PROGRAMMING is not in the set test data.
+ if 171717 is not in the map classes.
+ whether Full Stack Developer is not in the array menus.
+ if back end development is not in the list dates.
+ if 151515 is not in the array customer orders.
+ if OpenAI GPT-4 is not in the list requests.
+ whether -1010101 is not in the list message queue.
+ if hypertext markup language is not in the dictionary dialogs.
+ whether -6.789 is not in the list sessions.

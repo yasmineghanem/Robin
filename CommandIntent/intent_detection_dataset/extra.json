@@ -19,10 +19,28 @@
   "File System": [],
   "IDE Operation": [],
   "Comment": [],
-  "Activate Mouse": [],
-  "Activate Interactive": [],
   "Interactive Commands": [],
   "Git Operation": [],
-  "Exit Block": [],
-  "Mouse Click": []
+  "Activate Mouse": [],
+  "Activate Interactive": [],
+  "Exit Block": [
+    "exit block",
+    "exit scope",
+    "exit for",
+    "exit while",
+    "exit loop",
+    "exit if",
+    "exit function",
+    "exit class",
+    "exit"
+  ],
+  "Mouse Click": [
+    "click",
+    "mouse click",
+    "click mouse",
+    "left click",
+    "right click",
+    "click left",
+    "click right"
+  ]
 }

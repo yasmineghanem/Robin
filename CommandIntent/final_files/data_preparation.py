@@ -317,7 +317,9 @@ class NERData:
     def prepare_input_for_prediction(self, input, intent):
         word_indices = [self.word_to_index.get(word, self.word_to_index['<UNK>']) for word in input.split()]
         word_indices_tensor = torch.tensor(word_indices, dtype=torch.long)
+        # print("msh hamoot hena")
         intent_index = self.intent_to_index[intent]
+        # print("hamoot hena")
         intent_index_tensor = torch.tensor(intent_index, dtype=torch.long)
         
         intent_mask = self.create_intent_mask(intent)

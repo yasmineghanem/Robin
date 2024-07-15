@@ -1,160 +1,160 @@
 whether j less than -2020202.
-if start date is equal Natural Language Processing.
-if settings not equal -9876.
-whether budget allocation less than regression models.
-whether user age equals 1.5678.
-if app config is more than FUNCTIONAL PROGRAMMING.
-whether options is greater than Database Management.
-if secondary contact is greater than or equal JAVASCRIPT FRAMEWORK.
-whether reorder point is not equal -1010101.
-whether customer map more than Python Programming.
-whether position is not equal info.
-whether position more than config path.
-if feature flags is less than step.
-whether settings equal element.
-if is visible is equal office location.
-if user list equals value.
-whether loop index not equal index.
-whether value is not equal index.
-if end date less than completed.
-whether debit amount is not equal expense report.
-check whether supplier name is less than or equal 171717.
-check whether has errors is more than Software Development.
-check whether expense report is more than REGRESSION MODELS.
-check if product description greater than 505050.
-check if max value greater than or equal -1.602176634.
-check if category type is less than Version Control System.
-check whether last updated is greater than -555555.
-check if map location greater than or equal -0.000123.
-check if partner name less than or equal -4.4444.
-check whether primary contact greater than or equal 5.0.
-check whether user email is not equal item.
-check whether is approved is more than index.
-check whether number list more than app config.
-check if is enabled not equal budget allocation.
-check if data greater than or equal gross income.
-check whether mentor id greater than or equal is verified.
-check whether user email not equal user profile.
-check if budget allocation is greater than or equal total revenue.
-check if account balance not equal feature flags.
-check if i is less than j.
-if user id and category type are the same.
-if user name and has errors are the same.
-whether item and reorder point are the same.
-whether street name and default config are the same.
-if position and loop index are the same.
-if street name and config path are the same.
-whether app config and main address are the same.
-if user gender and supplier name are the same.
-whether category type and min value are the same.
-whether j and is approved are the same.
-whether min value and 0 are the same.
-if string buffer and -0.666667 are the same.
-if main address and CLUSTERING ALGORITHMS are the same.
-if feature flags and 232323 are the same.
-whether environment and -121212 are the same.
-whether order queue and 27182 are the same.
-if building number and 0.000123 are the same.
-whether end date and -1010101 are the same.
-if guardian name and Technical Documentation are the same.
-if app config and -40404 are the same.
-if due date and 1.7976931348623157 are equal.
-if main address and -777777 are equal.
-whether primary contact and speech recognition are equal.
-whether element and -8.8888 are equal.
-if app config and DATA ANALYSIS are equal.
-whether start date and statistical methods are equal.
-if alternate address and speech recognition are equal.
-whether net profit and Data Science are equal.
-if employee record and user interface are equal.
-if total amount and 45 are equal.
-check if zip code is 0.000123.
-check whether total amount is 123.
-check if zip code is neural networks.
-check if due date is UNSUPERVISED LEARNING.
-check whether counter is 2.99792458.
-check if city name is -1011.
-check if key is -121212.
-check if supplier name is 9.3456.
-check whether transaction amount is -181818.
-check whether number list is cascading style sheets.
-whether value less than or equal 42.0 or stock quantity less than or equal 42.0.
-whether office location less than or equal 2.99792458 and order number less than or equal 2.99792458.
-if feature flags is equal true and string buffer is equal true.
-whether total revenue more than INFORMATION TECHNOLOGY and user gender more than INFORMATION TECHNOLOGY.
-whether item array is greater than HYPERTEXT MARKUP LANGUAGE and is visible is greater than HYPERTEXT MARKUP LANGUAGE.
-whether user id is less than or equal -14142 or mentor id is less than or equal -14142.
-if last updated more than Data Science and zip code more than Data Science.
-if loop index is greater than or equal 789 or is deleted is greater than or equal 789.
-whether value equals continuous integration or emergency contact equals continuous integration.
-whether last updated is less than or equal Software Development and step is less than or equal Software Development.
-whether supplier name is greater than user gender or supplier name is greater than Software Development.
-whether is deleted is less than or equal total amount or is deleted is less than or equal 70707.
-whether customer map less than or equal transaction amount and customer map less than or equal -9.87654321.
-if gross income more than is visible or gross income more than 1.234.
-if has errors more than index or has errors more than -1010101.
-whether city name is less than inventory level and city name is less than 232323.
-if data greater than or equal product price or data greater than or equal 272727.
-if supplier name is less than or equal order number and supplier name is less than or equal -1e-07.
-whether guardian name is not equal is logged in and guardian name is not equal 909090.
-whether last updated more than app config and last updated more than CLUSTERING ALGORITHMS.
-check if end date equals -999999 or equals user id.
-check if region name is equal back end development or is equal temp.
-check if delivery address equals -1e-07 and equals user email.
-check whether budget allocation is less than or equal data mining or is less than or equal region name.
-check whether app config greater than or equal technical support or greater than or equal preferences.
-check if order number equal -777777 and equal min value.
-check whether app config less than 1.7976931348623157 and less than order number.
-check whether temp is less than 5.5 and is less than account balance.
-check if number list not equal 252525 or not equal user preferences.
-check whether stock quantity greater than or equal 789 and greater than or equal info.
-check whether options is equal user location and user location is equal 0.
-check whether employee record equal account balance or account balance equal 272727.
-check if category type is not equal tax rate or tax rate is not equal javascript framework.
-check whether user status is equal user status or user status is equal data structures.
-check if guardian name more than data frame or data frame more than Full Stack Developer.
-check if product price is less than number list or number list is less than user interface.
-check if data frame equals default config and default config equals 30303.
-check if city name is equal colleague email or colleague email is equal 90.
-check if min value less than alternate address and alternate address less than -1.61803398875.
-check whether region name greater than or equal employee record and employee record greater than or equal -0.999999.
-whether default config and element are the same and default config and -1.0 are the same.
-whether mentor id and current date are the same or mentor id and 0.31415 are the same.
-whether count and employee record are the same and count and 42.0 are the same.
-if counter and supplier name are the same or counter and unit testing are the same.
-if element and product description are the same or element and CASCADING STYLE SHEETS are the same.
-if k and string buffer are the same or k and -1.234 are the same.
-if is visible and file path are the same or is visible and 252525 are the same.
-whether region name and k are the same or region name and full stack developer are the same.
-whether user email and building number are the same or user email and -222222 are the same.
-whether info and building number are the same and info and Neural Networks are the same.
-if time elapsed and 191919 are the same or time elapsed and category type are the same.
-whether city name and 1.0 are the same or city name and user status are the same.
-whether is verified and -40404 are the same or is verified and iteration are the same.
-whether expiry date and Python Programming are the same and expiry date and item are the same.
-if order queue and 7.7777 are the same and order queue and data are the same.
-if data and command line interface are the same or data and gross income are the same.
-if discount rate and DATA VISUALIZATION are the same or discount rate and is approved are the same.
-if user role and Back End Development are the same and user role and environment are the same.
-whether default config and 212121 are the same or default config and user login are the same.
-whether user list and code review are the same and user list and start date are the same.
-whether pos and 232323 are equal and pos and total amount are equal.
-whether index and NETWORK SECURITY are equal or index and category type are equal.
-whether item and clustering algorithms are equal and item and index are equal.
-if user settings and -456 are equal and user settings and i are equal.
-whether reorder point and 272727 are equal or reorder point and has errors are equal.
-if budget allocation and -2020202 are equal and budget allocation and end date are equal.
-if user settings and 171717 are equal and user settings and region name are equal.
-whether total revenue and 90 are equal or total revenue and item are equal.
-if feature flags and REINFORCEMENT LEARNING are equal or feature flags and iteration are equal.
-whether category type and -2020202 are equal and category type and app config are equal.
-check whether city name is CASCADING STYLE SHEETS and city name is index.
-check if start date is -6.789 and start date is is approved.
-check whether item is DATA MINING and item is end date.
-check whether colleague email is -1.602176634 and colleague email is index.
-check if is active is -0.27182 or is active is inventory level.
-check whether customer map is version control system or customer map is supplier name.
-check whether settings is 7.7777 or settings is gross income.
-check whether user preferences is 444444 and user preferences is settings.
-check if user login is 151515 or user login is product set.
-check whether is approved is 9.81 or is approved is order queue.
+ if start date is equal Natural Language Processing.
+ if settings not equal -9876.
+ whether budget allocation less than regression models.
+ whether user age equals 1.5678.
+ if app config is more than FUNCTIONAL PROGRAMMING.
+ whether options is greater than Database Management.
+ if secondary contact is greater than or equal JAVASCRIPT FRAMEWORK.
+ whether reorder point is not equal -1010101.
+ whether customer map more than Python Programming.
+ whether position is not equal info.
+ whether position more than config path.
+ if feature flags is less than step.
+ whether settings equal element.
+ if is visible is equal office location.
+ if user list equals value.
+ whether loop index not equal index.
+ whether value is not equal index.
+ if end date less than completed.
+ whether debit amount is not equal expense report.
+ check whether supplier name is less than or equal 171717.
+ check whether has errors is more than Software Development.
+ check whether expense report is more than REGRESSION MODELS.
+ check if product description greater than 505050.
+ check if max value greater than or equal -1.602176634.
+ check if category type is less than Version Control System.
+ check whether last updated is greater than -555555.
+ check if map location greater than or equal -0.000123.
+ check if partner name less than or equal -4.4444.
+ check whether primary contact greater than or equal 5.0.
+ check whether user email is not equal item.
+ check whether is approved is more than index.
+ check whether number list more than app config.
+ check if is enabled not equal budget allocation.
+ check if data greater than or equal gross income.
+ check whether mentor id greater than or equal is verified.
+ check whether user email not equal user profile.
+ check if budget allocation is greater than or equal total revenue.
+ check if account balance not equal feature flags.
+ check if i is less than j.
+ if user id and category type are the same.
+ if user name and has errors are the same.
+ whether item and reorder point are the same.
+ whether street name and default config are the same.
+ if position and loop index are the same.
+ if street name and config path are the same.
+ whether app config and main address are the same.
+ if user gender and supplier name are the same.
+ whether category type and min value are the same.
+ whether j and is approved are the same.
+ whether min value and 0 are the same.
+ if string buffer and -0.666667 are the same.
+ if main address and CLUSTERING ALGORITHMS are the same.
+ if feature flags and 232323 are the same.
+ whether environment and -121212 are the same.
+ whether order queue and 27182 are the same.
+ if building number and 0.000123 are the same.
+ whether end date and -1010101 are the same.
+ if guardian name and Technical Documentation are the same.
+ if app config and -40404 are the same.
+ if due date and 1.7976931348623157 are equal.
+ if main address and -777777 are equal.
+ whether primary contact and speech recognition are equal.
+ whether element and -8.8888 are equal.
+ if app config and DATA ANALYSIS are equal.
+ whether start date and statistical methods are equal.
+ if alternate address and speech recognition are equal.
+ whether net profit and Data Science are equal.
+ if employee record and user interface are equal.
+ if total amount and 45 are equal.
+ check if zip code is 0.000123.
+ check whether total amount is 123.
+ check if zip code is neural networks.
+ check if due date is UNSUPERVISED LEARNING.
+ check whether counter is 2.99792458.
+ check if city name is -1011.
+ check if key is -121212.
+ check if supplier name is 9.3456.
+ check whether transaction amount is -181818.
+ check whether number list is cascading style sheets.
+ whether value less than or equal 42.0 or stock quantity less than or equal 42.0.
+ whether office location less than or equal 2.99792458 and order number less than or equal 2.99792458.
+ if feature flags is equal true and string buffer is equal true.
+ whether total revenue more than INFORMATION TECHNOLOGY and user gender more than INFORMATION TECHNOLOGY.
+ whether item array is greater than HYPERTEXT MARKUP LANGUAGE and is visible is greater than HYPERTEXT MARKUP LANGUAGE.
+ whether user id is less than or equal -14142 or mentor id is less than or equal -14142.
+ if last updated more than Data Science and zip code more than Data Science.
+ if loop index is greater than or equal 789 or is deleted is greater than or equal 789.
+ whether value equals continuous integration or emergency contact equals continuous integration.
+ whether last updated is less than or equal Software Development and step is less than or equal Software Development.
+ whether supplier name is greater than user gender or supplier name is greater than Software Development.
+ whether is deleted is less than or equal total amount or is deleted is less than or equal 70707.
+ whether customer map less than or equal transaction amount and customer map less than or equal -9.87654321.
+ if gross income more than is visible or gross income more than 1.234.
+ if has errors more than index or has errors more than -1010101.
+ whether city name is less than inventory level and city name is less than 232323.
+ if data greater than or equal product price or data greater than or equal 272727.
+ if supplier name is less than or equal order number and supplier name is less than or equal -1e-07.
+ whether guardian name is not equal is logged in and guardian name is not equal 909090.
+ whether last updated more than app config and last updated more than CLUSTERING ALGORITHMS.
+ check if end date equals -999999 or equals user id.
+ check if region name is equal back end development or is equal temp.
+ check if delivery address equals -1e-07 and equals user email.
+ check whether budget allocation is less than or equal data mining or is less than or equal region name.
+ check whether app config greater than or equal technical support or greater than or equal preferences.
+ check if order number equal -777777 and equal min value.
+ check whether app config less than 1.7976931348623157 and less than order number.
+ check whether temp is less than 5.5 and is less than account balance.
+ check if number list not equal 252525 or not equal user preferences.
+ check whether stock quantity greater than or equal 789 and greater than or equal info.
+ check whether options is equal user location and user location is equal 0.
+ check whether employee record equal account balance or account balance equal 272727.
+ check if category type is not equal tax rate or tax rate is not equal javascript framework.
+ check whether user status is equal user status or user status is equal data structures.
+ check if guardian name more than data frame or data frame more than Full Stack Developer.
+ check if product price is less than number list or number list is less than user interface.
+ check if data frame equals default config and default config equals 30303.
+ check if city name is equal colleague email or colleague email is equal 90.
+ check if min value less than alternate address and alternate address less than -1.61803398875.
+ check whether region name greater than or equal employee record and employee record greater than or equal -0.999999.
+ whether default config and element are the same and default config and -1.0 are the same.
+ whether mentor id and current date are the same or mentor id and 0.31415 are the same.
+ whether count and employee record are the same and count and 42.0 are the same.
+ if counter and supplier name are the same or counter and unit testing are the same.
+ if element and product description are the same or element and CASCADING STYLE SHEETS are the same.
+ if k and string buffer are the same or k and -1.234 are the same.
+ if is visible and file path are the same or is visible and 252525 are the same.
+ whether region name and k are the same or region name and full stack developer are the same.
+ whether user email and building number are the same or user email and -222222 are the same.
+ whether info and building number are the same and info and Neural Networks are the same.
+ if time elapsed and 191919 are the same or time elapsed and category type are the same.
+ whether city name and 1.0 are the same or city name and user status are the same.
+ whether is verified and -40404 are the same or is verified and iteration are the same.
+ whether expiry date and Python Programming are the same and expiry date and item are the same.
+ if order queue and 7.7777 are the same and order queue and data are the same.
+ if data and command line interface are the same or data and gross income are the same.
+ if discount rate and DATA VISUALIZATION are the same or discount rate and is approved are the same.
+ if user role and Back End Development are the same and user role and environment are the same.
+ whether default config and 212121 are the same or default config and user login are the same.
+ whether user list and code review are the same and user list and start date are the same.
+ whether pos and 232323 are equal and pos and total amount are equal.
+ whether index and NETWORK SECURITY are equal or index and category type are equal.
+ whether item and clustering algorithms are equal and item and index are equal.
+ if user settings and -456 are equal and user settings and i are equal.
+ whether reorder point and 272727 are equal or reorder point and has errors are equal.
+ if budget allocation and -2020202 are equal and budget allocation and end date are equal.
+ if user settings and 171717 are equal and user settings and region name are equal.
+ whether total revenue and 90 are equal or total revenue and item are equal.
+ if feature flags and REINFORCEMENT LEARNING are equal or feature flags and iteration are equal.
+ whether category type and -2020202 are equal and category type and app config are equal.
+ check whether city name is CASCADING STYLE SHEETS and city name is index.
+ check if start date is -6.789 and start date is is approved.
+ check whether item is DATA MINING and item is end date.
+ check whether colleague email is -1.602176634 and colleague email is index.
+ check if is active is -0.27182 or is active is inventory level.
+ check whether customer map is version control system or customer map is supplier name.
+ check whether settings is 7.7777 or settings is gross income.
+ check whether user preferences is 444444 and user preferences is settings.
+ check if user login is 151515 or user login is product set.
+ check whether is approved is 9.81 or is approved is order queue.

@@ -1,0 +1,8 @@
+[
+  "assert that number is greater than 900",
+  "verify that x is equal to 0",
+  "assert that y is less than 10",
+  "assert that size is not equal to 0",
+  "verify that testset greater than or equal 10000",
+  "assert that x is less than or equal 10"
+]

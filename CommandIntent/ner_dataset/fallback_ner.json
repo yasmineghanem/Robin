@@ -1,0 +1,180 @@
+{
+  "variable declaration": [
+    "(declare|create|define|make) (a[n]? )?(new )?(variable )?(named|called|with name) (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?(variable )?(named|called|with name) (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) (variable )?(named|called|with name) (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) (variable )? (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) variable (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) (variable )?(named|called|with name) (?P<name>[\\w\\s]+)",
+    "(declare|create|define|make) (a[n]? )?(new )?variable (?P<name>[\\w\\s]+) and (assign|set|value) (it to )?(?P<value>.+) (and|with) (type|datatype) (?P<type>\\w+)",
+    "(declare|create|define|make) (a[n]? )?(new )?variable (?P<name>[\\w\\s]+) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?variable (?P<name>[\\w\\s]+) (with type|as) (?P<type>\\w+)",
+    "(declare|create|define|make) (?P<name>[\\w\\s]+) (with type|as) (?P<type>\\w+)"
+  ],
+  "constant declaration": [
+    "(declare|create|define|make) (a[n]? )?(new )?constant (named|called|with name) (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?constant (named|called|with name) (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) constant (named|called|with name) (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) constant  (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) constant (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) constant (named|called|with name) (?P<name>[\\w\\s]+)",
+    "(declare|create|define|make) (a[n]? )?(new )?constant (?P<name>[\\w\\s]+) and (assign|set|value) (it to )?(?P<value>.+) (and|with) (type|datatype) (?P<type>\\w+)",
+    "(declare|create|define|make) (a[n]? )?(new )?constant (?P<name>[\\w\\s]+) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?constant (?P<name>[\\w\\s]+) (with type|as) (?P<type>\\w+)"
+  ],
+  "class declaration": [
+    "(declare|create|define|make) (a )?(new )?class (named|called|with name|and name it) (?P<name>[\\w\\s]+)",
+    "(declare|create|define|make) (a )?(new )?class (?P<name>[\\w\\s]+)"
+  ],
+  "assignment operation": [
+    "(assign|set|update) (the value of )?(?P<lhs>[\\w\\s]+) (to|with) (?P<rhs>.+)",
+    "(?P<lhs>[\\w\\s]+) is (equals|assigned|equal|equal|set) (to )?(?P<rhs>.+)",
+    "(?P<lhs>[\\w\\s]+) (equals|assigned|is equal|equal|set) (to )?(?P<rhs>.+)"
+  ],
+  "for loop": [
+    "(create|declare|define|write|make) (a )?(new )?for loop (that )?(iterates |runs )?(from )?(?P<start>\\d+) (to )?(?P<end>\\d+) (and|with|using) step (?P<step>\\d+) (and|using|with) (variable |iterator )?(?P<iterator>[\\w\\s]+)",
+    "(create|declare|define|write|make) (a )?(new )?for loop (that )?(iterates |runs )?(from )?(?P<start>\\d+) (to )?(?P<end>\\d+) (and|with|using) step (?P<step>\\d+)",
+    "(create|declare|define|write|make) (a )?(new )?for loop (that )?(iterates |runs )?(from )?(?P<start>\\d+) (to )?(?P<end>\\d+) (and|using|with) (variable |iterator )?(?P<iterator>[\\w\\s]+)",
+    "(create|declare|define|write|make) (a )?(new )?for loop (that )?(iterates |runs )?(from )?(?P<start>\\d+) (to )?(?P<end>\\d+)",
+    "(iterate|loop) from (?P<start>\\d+) to (?P<end>\\d+) (and|with) step (?P<step>\\d+) (and|using|with) (variable |iterator )?(?P<iterator>[\\w\\s]+)",
+    "(iterate|loop) from (?P<start>\\d+) to (?P<end>\\d+) (and|using|with) (variable |iterator )?(?P<iterator>[\\w\\s]+)",
+    "(iterate|loop) (to|until) (?P<end>\\d+) (and|with) step (?P<step>\\d+) (and|using|with) (variable |iterator )?(?P<iterator>[\\w\\s]+)",
+    "(iterate|loop) (to|until) (?P<end>\\d+) (and|using|with) (variable |iterator )?(?P<iterator>[\\w\\s]+)",
+    "(iterate|loop) from (?P<start>\\d+) to (?P<end>\\d+) (and|with) step (?P<step>\\d+)",
+    "(iterate|loop) from (?P<start>\\d+) to (?P<end>\\d+) (and|with)",
+    "(iterate|loop) (to|until) (?P<end>\\d+) (and|with) step (?P<step>\\d+)",
+    "(iterate|loop) (to|until) (?P<end>\\d+)",
+
+    "for (variable |iterator )?(?P<iterator>[\\w\\s]+) in range (from )?(?P<start>\\d+) to (?P<end>\\d+) (and|with) step (?P<step>\\d+)",
+    "for (variable |iterator )?(?P<iterator>[\\w\\s]+) in range (from )?(?P<start>\\d+) to (?P<end>\\d+)",
+    "for (variable |iterator )?(?P<iterator>[\\w\\s]+) in range (from )?(?P<end>\\d+)",
+
+    "for (variable |iterator )?(?P<iterator>[\\w\\s]+) in (?P<iterable>[\\w\\s]+)",
+    "(iterate|loop) (on|over) (?P<iterable>[\\w\\s]+) using (variable |iterator )?(?P<iterator>[\\w\\s]+)"
+  ],
+  "bitwise operation": [
+    "(perform |do )?bitwise (?P<operation>[\\w\\s]+) operation (on )?(?P<lhs>[\\w]+) and (?P<rhs>[\\w]+)",
+    "(perform |do )?bitwise (?P<operation>and|or|xor|shift left| shift right|not|right shift|left shift|xor) (on )?(?P<lhs>[\\w]+) and (?P<rhs>[\\w]+)",
+    "(perform |do )?bitwise (?P<operation>[\\w\\s]+) on (?P<lhs>[\\w]+) and (?P<rhs>[\\w]+)",
+    "(perform |do )?bitwise (?P<operation>[\\w\\s]+) operation (on )?(?P<rhs>[\\w]+)",
+    "(perform |do )?bitwise (?P<operation>[\\w\\s]+) on (?P<rhs>[\\w]+)",
+    "(perform |do )?(?P<operation>[\\w\\s]+) (?P<lhs>[\\w]+) by (?P<rhs>[\\w]+)",
+    "(?P<lhs>[\\w]+) (?P<operation>[\\w\\s]+) (?P<rhs>[\\w]+)"
+  ],
+  "membership operation": [
+    "(check |make sure )?(if|whether) (?P<lhs>[\\w\\s]+) is (?P<operation>not in|in) (?P<rhs>[\\w\\s]+)"
+  ],
+  "libraries": [
+    "(import|include|add) the (?P<library>[\\w\\s]+) (library|module)",
+    "(import|include|add) the (library|module) (?P<library>[\\w\\s]+)",
+    "(import|include|add) (?P<library>[\\w\\s]+)"
+  ],
+  "casting": [
+    "(cast|convert|change) (the )?(type of )?(variable )?(?P<variable>[\\w\\s]+) to (?P<type>[\\w\\s]+) and (store|put|assign) (it )?(in|to) (?P<final_variable>[\\w\\s]+)",
+    "(cast|convert|change) (the )?(type of )?(variable )?(?P<variable>[\\w\\s]+) to (?P<type>[\\w\\s]+)"
+  ],
+  "output": [
+    "(print|display|show|output) the (?P<type>message) (?P<message>.+) to the (user|program|code|screen)",
+    "(print|display|show|output) the (?P<type>variable) (?P<variable>.+) to the (user|program|code|screen)",
+    "(print|display|show|output) the (?P<type>value) (?P<value>.+) to the (user|program|code|screen)",
+    "(print|display|show|output) the (?P<type>message) (?P<message>.+)",
+    "(print|display|show|output) the (?P<type>variable) (?P<variable>.+)",
+    "(print|display|show|output) the (?P<type>value) (?P<value>.+)"
+  ],
+  "input": [
+    "(take |get )?input from (the )?user and (store|put|assign|set) (it )?(in|to) (the )?(variable )?(?P<variable>.+) (with|and|using|displaying|showing) (the )?message (?P<message>.+)",
+    "(take|get) (the )?user input and (store|put|assign|set) (it )?(in|to) (the )?(variable )?(?P<variable>.+) (with|and|using|displaying|showing) (the )?message (?P<message>.+)",
+    "(take|get )?input from (the )?user and (store|put|assign|set) (it )?(in|to) (the )?(variable )?(?P<variable>.+)",
+    "(take|get) (the )?user input and (store|put|assign|set) (it )?(in|to) (the )?(variable )?(?P<variable>.+)",
+    "ask (the )?user (for|to) (the )?input and (store|put|assign|set) (it )?(in|to) (the )?(variable )?(?P<variable>.+) (with|and|using|displaying|showing) (the )?message (?P<message>.+)",
+    "ask (the )?user (for|to) (the )?input and (store|put|assign|set) (it )?(in|to) (the )?(variable )?(?P<variable>.+)"
+  ],
+  "assertion": [
+    "(assert|verify|make sure) (that )?(?P<lhs>[\\w\\s]+) is (?P<condition>[\\w\\s]+) (?P<rhs>.+)",
+    "(assert|verify|make sure) (that )?(?P<lhs>[\\w\\s]+) (?P<condition>[\\w\\s]+) (?P<rhs>.+)",
+    "(assert|verify|make sure) (?P<lhs>[\\w\\s]+) (?P<condition>[\\w\\s]+) (?P<rhs>.+)"
+  ],
+  "git operation": [
+    "(?P<action>push|pull|commit|discard|stash|stage) (the )?(changes )?in branch with message (?P<message>.+)",
+    "(?P<action>push|pull|commit|discard|stash|stage) (the )?(changes )?with message (?P<message>.+)",
+    "(?P<action>push|pull|commit|discard|stash|stage) (the )?changes with message (?P<message>.+)",
+    "(?P<action>push|pull|commit|discard|stash|stage) (the )?(changes )?in branch (?P<branch>.+)",
+    "(?P<action>push|pull|commit|discard|stash|stage) (the )?(changes )?",
+    "git (?P<action>push|pull|commit|discard|stash|stage)",
+    "(?P<action>push|pull|commit|discard|stash|stage)"
+  ],
+  "ide operation": [
+    "(?P<action>[\\w\\s]+) (?P<type>line|lines) (from )?(?P<start>\\d+) (to|through) (?P<end>\\d+)",
+    "(?P<action>[\\w\\s]+) (from )?line[s]? (?P<start>\\d+) (to|through) (line )?(?P<end>\\d+)",
+    "(?P<action>[\\w\\s]+) (?P<type>|line) (?P<number>\\d+)",
+    "(?P<action>[\\w\\s]+) (the )?(?P<type>terminal)",
+    "(?P<action>[\\w\\s]+)"
+  ],
+  "interactive commands": [
+    "(?P<action>\\w+) (all )?(the )?(?P<type>files|folder[s]?|director(ies|y)|function[s]?|class[es]?|code|program)"
+  ],
+  "mouse click": [
+    "(?P<action>click|double click) the (?P<button>left|right) mouse button",
+    "(?P<button>left|right) mouse (?P<action>click|double click)",
+    "(?P<action>click|double click) the mouse",
+    "(?P<button>left|right) click (the )?(mouse)?",
+    "(?P<button>left|right) click",
+    "click (?P<button>left|right)",
+    "mouse (?P<action>click|double click)",
+    "(?P<action>click|double click)"
+  ],
+  "comment": ["(add |write |comment )?(the )?(comment )?(?P<comment>.+)"],
+  "activate mouse": [
+    "(?P<action>[\\w\\s]+) the mouse( tracking | controller | controlling | tracker )?(mode)?",
+    "(?P<action>[\\w\\s]+) mouse( tracking | controller | controlling | tracker )?(mode)?"
+  ],
+  "activate interactive": [
+    "(?P<action>[\\w\\s]+) the interactive( mode)?",
+    "(?P<action>[\\w\\s]+) interactive( mode)?"
+  ],
+  "file system": [
+    "(?P<action>\\w+) (a )?(new )?file (?P<filename>.+) with extension (?P<extension>.+)",
+    "(?P<action>\\w+) (a )?(new )?(?P<extension>.+) file (named|called|with name) (?P<filename>.+)",
+    "(?P<action>\\w+) (a )?(new )?file (?P<filename>.+)",
+    "(?P<action>\\w+) (a )?(new )?(?P<extension>.+) file (?P<filename>.+)",
+    "(?P<action>\\w+) (the )?file (?P<filename>.+)",
+    "(?P<action>\\w+) (the )?folder (?P<foldername>.+)"
+  ],
+  "while loop": [
+    "(create|declare|define|write|make) (a )?(new )?while loop (that )?(iterates |runs |repeats )?(while|until) (?P<lhs>[\\w\\s]+) is (?P<condition>[\\w\\s]+) (?P<rhs>[\\w\\s]+)",
+    "(create|declare|define|write|make) (a )?(new )?while loop (that )?(iterates |runs |repeats )?(?P<rhs>forever|infinitely|infinite|indefinately)",
+    "(create|declare|define|write|make) (a )?(new )?while loop (that )?(iterates |runs |repeats )?(while|until) (?P<condition>[\\w\\s]+) (?P<rhs>[\\w\\s]+)",
+    "while (?P<lhs>[\\w\\s]+) is (?P<condition>[\\w\\s]+) (?P<rhs>[\\w\\s]+)",
+    "while (?P<condition>[\\w\\s]+) (?P<rhs>[\\w\\s]+)",
+    "while (?P<rhs>[\\w\\s]+)"
+  ],
+  "function declaration": [
+    "(create|declare|define|write|make) (a )?(new )?(function|method|procedure) (named |called |with name )?(?P<name>[\\w\\s]+) that takes (parameters |arguments )?(?P<arguments>[\\w\\s]+) (with|that|and) (returns|return type) (?P<type>\\w+)",
+    "(create|declare|define|write|make) (a )?(new )?(function|method|procedure) (named |called |with name )?(?P<name>[\\w\\s]+) that takes (parameters |arguments )?(?P<arguments>[\\w\\s]+)",
+    "(create|declare|define|write|make) (a )?(new )?(function|method|procedure) (named |called |with name )?(?P<name>[\\w\\s]+) (with|that) (returns|return type) (?P<type>\\w+)",
+    "(create|declare|define|write|make) (a )?(new )?(function|method|procedure) (named |called |with name )?(?P<name>[\\w\\s]+)",
+    "(create|declare|define|write|make) (a )?(new )?(function|method|procedure) (?P<name>[\\w\\s]+)"
+  ],
+  "conditional statement": [
+    "(check )?(if|whether) (?P<lhs1>[\\w\\s]+) is (?P<condition1>[\\w\\s]+) (?P<rhs1>[\\w\\s]+) (?P<operator1>and|or) (?P<lhs2>[\\w\\s]+) is (?P<condition2>[\\w\\s]+) (?P<rhs2>[\\w\\s]+) (?P<operator2>and|or) (?P<lhs3>[\\w\\s]+) is (?P<condition3>[\\w\\s]+) (?P<rhs3>[\\w\\s]+)",
+    "(check )?(if|whether) (?P<lhs1>[\\w\\s]+) is (?P<condition1>[\\w\\s]+) (?P<rhs1>[\\w\\s]+) (?P<operator1>and|or) (?P<lhs2>[\\w\\s]+) is (?P<condition2>[\\w\\s]+) (?P<rhs2>[\\w\\s]+)",
+    "(check )?(if|whether) (?P<lhs1>[\\w\\s]+) is (?P<condition1>[\\w\\s]+) (?P<rhs1>[\\w\\s]+)",
+    "(check )?(if|whether) (?P<condition1>[\\w\\s]+) (?P<rhs1>[\\w\\s]+)",
+    "(create|make|write|declare) (a[n]? )?(new )?(if) statement (that )?(checks|evaluates) (if|whether) (?P<lhs1>[\\w\\s]+) is (?P<condition1>[\\w\\s]+) (?P<rhs1>[\\w\\s]+) (?P<operator1>and|or) (?P<lhs2>[\\w\\s]+) is (?P<condition2>[\\w\\s]+) (?P<rhs2>[\\w\\s]+) (?P<operator2>and|or) (?P<lhs>[\\w\\s]+) is (?P<condition3>[\\w\\s]+) (?P<rhs>[\\w\\s]+)",
+    "(create|make|write|declare) (a[n]? )?(new )?(if) statement (that )?(checks|evaluates) (if|whether) (?P<lhs1>[\\w\\s]+) is (?P<condition1>[\\w\\s]+) (?P<rhs1>[\\w\\s]+) (?P<operator1>and|or) (?P<lhs2>[\\w\\s]+) is (?P<condition2>[\\w\\s]+) (?P<rhs2>[\\w\\s]+) ",
+    "(create|make|write|declare) (a[n]? )?(new )?(if) statement (that )?(checks|evaluates) (if|whether) (?P<lhs1>[\\w\\s]+) is (?P<condition1>[\\w\\s]+) (?P<rhs1>[\\w\\s]+)"
+  ],
+  "mathematical operation": [
+    "(calculate|compute|work out|solve|get the) the (?P<operation>\\w+) of (?P<lhs>[\\w\\s]+) (and|times|plus|minus|divide|power) (?P<rhs>[\\w\\s]+) and (assign|store|save) it to (?P<variable>[\\w\\s]+)",
+    "(calculate|compute|work out|solve|get the) the (?P<operation>\\w+) of (?P<lhs>[\\w\\s]+) (and|times|plus|minus|divide|power) (?P<rhs>[\\w\\s]+)",
+    "(calculate|compute|work out|solve|get the) the (?P<operation>\\w+) of (?P<lhs>[\\w\\s]+)",
+    "(calculate|compute|work out|solve|get the) (?P<lhs>[\\w\\s]+) (?P<operation>\\w+) (?P<rhs>[\\w\\s]+) and (assign|store|save) it to (?P<variable>[\\w\\s]+)",
+    "(calculate|compute|work out|solve|get the) (?P<lhs>[\\w\\s]+) (?P<operation>\\w+) (?P<rhs>[\\w\\s]+)",
+    "(?P<operation>\\w+) (?P<lhs>[\\w\\s]+) (and|times|plus|minus|divide|power) (?P<rhs>[\\w\\s]+) and (assign|store|save) it to (?P<variable>[\\w\\s]+)",
+    "(?P<operation>\\w+) (?P<lhs>[\\w\\s]+) (and|times|plus|minus|divide|power) (?P<rhs>[\\w\\s]+)",
+    "(?P<operation>\\w+) (?P<lhs>[\\w\\s]+) (to|from) (?P<rhs>[\\w\\s]+)",
+    "(?P<lsh>[\\w\\s]+) (?P<operation>\\w+) (?P<rhs>[\\w\\s]+) and (assign|store|save) it to (?P<variable>[\\w\\s]+)",
+    "(?P<lhs>[\\w\\s]+) (?P<operation>\\w+) (?P<rhs>[\\w\\s]+)",
+    "(?P<operation>\\w+) (?P<lhs>[\\w\\s]+)"
+  ]
+}
