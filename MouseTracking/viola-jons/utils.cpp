@@ -582,17 +582,6 @@ Learner *decision_stump(int **&X, int *&y, double *&weights, int feature_index, 
         }
     }
     update_learner(W_pos_below, W_neg_below, W_pos_above, W_neg_above, tot_wights, tau, curr_M, cur_stump);
-    // cout << "for threshold " << cur_stump->threshold << " error is " << cur_stump->error << endl;
-    // printf("error %f\n", cur_stump->error);
-    // printf("W_pos_below %f\n", W_pos_below);
-    // printf("W_neg_below %f\n", W_neg_below);
-    // printf("W_pos_above %f\n", W_pos_above);
-    // printf("W_neg_above %f\n", W_neg_above);
-    // printf("tau %f\n", tau);
-    // printf("curr_M %d\n", curr_M);
-    // printf("feature_index %d\n", feature_index);
-    // printf("tot_wights %f\n", tot_wights);
-
     return cur_stump;
 }
 

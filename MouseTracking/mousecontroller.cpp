@@ -181,11 +181,11 @@ void MouseController::control(vector<pair<int, int>> &landmarks)
         this->current_position = landmarks[NOSE_LANDMARK];
         return;
     }
-    if (!this->isSmile(landmarks))
-    {
-        this->current_position = landmarks[NOSE_LANDMARK];
-        return;
-    }
+    // if (!this->isSmile(landmarks))
+    // {
+    //     this->current_position = landmarks[NOSE_LANDMARK];
+    //     return;
+    // }
     pair<int, int> old_position = this->current_position;
     this->current_position = landmarks[NOSE_LANDMARK];
     double distance = this->get_distance(old_position, this->current_position);
@@ -197,4 +197,44 @@ void MouseController::control(vector<pair<int, int>> &landmarks)
     DIRECTION v_direction = this->get_vertical_direction(old_position, this->current_position);
     this->move_mouse_by(h_direction, abs(old_position.first - this->current_position.first));
     this->move_mouse_by(v_direction, abs(old_position.second - this->current_position.second));
+
+    // check if left click
+    if (landmarks.size() < 5)
+    {
+        return;
+    }
+    if (is_left_blink(landmarks))
+    {
+        this->left_click();
+    }
+    else if (is_right_blink(landmarks))
+    {
+        this->right_click();
+    }
+}
+bool MouseController::is_right_blink(vector<pair<int, int>> &landmarks)
+{
+    // return false;
+    // calc the horizontal distane
+    auto &p1 = landmarks[5];
+    auto &p2 = landmarks[6];
+    auto &p3 = landmarks[7];
+    auto &p4 = landmarks[8];
+    double horizontal_distance = sqrt((p1.first - p2.first) * (p1.first - p2.first) + (p1.second - p2.second) * (p1.second - p2.second));
+    double vertical_distance = sqrt((p3.first - p4.first) * (p3.first - p4.first) + (p3.second - p4.second) * (p3.second - p4.second));
+    cout << vertical_distance / horizontal_distance << endl;
+    return vertical_distance / horizontal_distance <= this->EYE_AR_THRESH;
+}
+bool MouseController::is_left_blink(vector<pair<int, int>> &landmarks)
+{
+    // return false;
+    // calc the horizontal distane
+    auto &p1 = landmarks[1];
+    auto &p2 = landmarks[2];
+    auto &p3 = landmarks[3];
+    auto &p4 = landmarks[4];
+    double horizontal_distance = sqrt((p1.first - p2.first) * (p1.first - p2.first) + (p1.second - p2.second) * (p1.second - p2.second));
+    double vertical_distance = sqrt((p3.first - p4.first) * (p3.first - p4.first) + (p3.second - p4.second) * (p3.second - p4.second));
+    cout << vertical_distance / horizontal_distance << endl;
+    return vertical_distance / horizontal_distance <= this->EYE_AR_THRESH;
 }

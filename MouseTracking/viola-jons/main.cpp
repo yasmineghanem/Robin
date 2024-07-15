@@ -315,7 +315,22 @@ void process_local_frame(const char *file)
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
     cout << "Processing time: " << duration.count() << " s\n";
-    drawGreenRectangles(color_img, M, N, faces);
+    vector<window *> windows;
+    int maxi = -1;
+    int index = -1;
+    for (int i = 0; i < faces.size(); i++)
+    {
+        if (faces[i]->w > maxi)
+        {
+            maxi = faces[i]->w;
+            index = i;
+        }
+    }
+    if (index != -1)
+    {
+        windows.push_back(faces[index]);
+    }
+    drawGreenRectangles(color_img, M, N, windows);
     saveImageAsPNG("output/output.png", color_img, img, M, N, true);
     for (int i = 0; i < M; i++)
     {
@@ -337,7 +352,7 @@ int main()
 {
     // freopen("log2.txt", "w", stdout);
     fill_features_info();
-    mode current_mode = TEST_FACE_DETECTION;
+    mode current_mode = PROCESS_LOCAL_FRAME;
     if (current_mode == TRAIN_ADABOOST)
     {
         // train_ADA_BOOST("model2.txt", 10, 1000);
@@ -352,14 +367,14 @@ int main()
     {
         // The targeted false positive and false negative rate for each layer
         // were set to 0.5 and 0.995
-        train_face_detector("face1", -1, 0.05, 0.3, 0.01, 1, 1);
-        test_face_detector_threads("face1", -1);
+        train_face_detector("test", 1000, 0.9, 0.9, 0.9, 0, 0);
+        test_face_detector_threads("test", -1);
         return 0;
     }
     else if (current_mode == TEST_FACE_DETECTION)
     {
         auto start = std::chrono::high_resolution_clock::now();
-        test_face_detector_threads("face1", -1);
+        test_face_detector_threads("face_lessFNR", 500);
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> duration = end - start;
         std::cout << "Testing time: " << duration.count() << " s\n";
@@ -367,9 +382,7 @@ int main()
     }
     else if (current_mode == PROCESS_LOCAL_FRAME)
     {
-        process_local_frame("imgs/img1.jpg");
-        // process_local_frame("test.png");
-
+        process_local_frame("img7.jpg");
         return 0;
     }
 

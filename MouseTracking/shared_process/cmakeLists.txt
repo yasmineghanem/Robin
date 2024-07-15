@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.10)
+project(SharedMemoryExample)
+
+set(CMAKE_CXX_STANDARD 14)
+
+# Find Boost
+find_package(Boost REQUIRED COMPONENTS interprocess)
+
+# Add executable
+add_executable(SharedMemoryExample main.cpp)
+
+# Link Boost libraries
+target_link_libraries(SharedMemoryExample Boost::interprocess)
