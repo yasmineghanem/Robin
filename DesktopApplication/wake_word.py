@@ -9,6 +9,7 @@ from robin_responses import responses
 last_detection_time = 0  # Time of the last detection
 DEBOUNCE_TIME = 2  # Debounce time in seconds
 
+
 def wake_word_detection(args, gui):
     FORMAT = pyaudio.paInt16
     CHANNELS = 1

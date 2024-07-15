@@ -11,6 +11,7 @@ import json
 import tensorflow as tf
 import torch
 import numpy as np
+import pyttsx3
 
 np.random.seed(42)
 tf.random.set_seed(42)
@@ -46,6 +47,8 @@ class SpeechRecognition:
         self.gui = gui
         self.command_intent = CommandIntent(intent_model_path, ner_model_path)
         self.api = APIController()
+        self.interactive = False
+        self.voice_engine = None
 
         # read config file
         with open('./config.json') as f:
@@ -83,6 +86,37 @@ class SpeechRecognition:
         except Exception as e:
             self.initialize_google_sr()
 
+    def process_command(self, command):
+        print(f"Command: {command}")
+        # process the command
+        try:
+            self.command_intent.process_command(command)
+        except Exception as e:
+            print(f"Error in processing command: {e}")
+
+    def activate_interactive(self,):
+        self.interactive = True
+        self.voice_engine = pyttsx3.init()
+
+        # getting details of current voice
+        voices = self.voice_engine.getProperty("voices")
+
+        self.voice_engine.setProperty(
+            "voice", voices[1].id
+        )  # changing index, changes voices. 1 for female
+
+        # random response
+        # engine.say(responses[np.random.randint(0, len(responses))])
+        # engine.runAndWait()
+
+    def interactive_response(self, response):
+        if 'message' in response:
+            self.voice_engine.say(response)
+            self.voice_engine.runAndWait()
+        else:
+            print(response)
+            
+
     def recognize(self):
         print("recogninzing")
         # based on the speech recognition method used
@@ -113,8 +147,9 @@ class SpeechRecognition:
                 if self.recognizer.AcceptWaveform(data):
                     print("RECOGNIZED")
                     result = self.recognizer.Result()
-                    # if 'text' in result:
-                    print(result)
-                    # return result['text']
-                    # else:
-                    #     return None
+                    if 'text' in result and result['text']:
+                        print(result)
+                        try:
+                            self.command_intent.process_command(result['text'])
+                        except Exception as e:
+                            print(f"Error in processing command: {e}")
