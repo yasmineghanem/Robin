@@ -26,7 +26,6 @@ export const WRITE_FILE = "robin.writeFile";
 export const DECLARE_CLASS = "robin.declareClass";
 export const TRY_EXCEPT = "robin.tryExcept";
 export const EXIT_SCOPE = 'robin.exitScope';
-export const GET_ERRORS = 'robin.getErrors';
 
 /**
  * Variable declaration messages

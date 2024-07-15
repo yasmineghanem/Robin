@@ -17,6 +17,8 @@ import {
   SELECT_RANGE,
   PASTE,
   CUT,
+  GET_ERROR_LIST,
+  
 } from "../constants/IDE";
 const router = require("express").Router();
 
@@ -270,5 +272,20 @@ router.get("/find", (req: any, res: any) => {
     }
   );
 });
+
+//get error list
+router.get("/get-error-list", (req: any, res: any) => {
+  vscode.commands.executeCommand(GET_ERROR_LIST).then(
+    (r: any) => {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: r.message }));
+    },
+    (err) => {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(err));
+    }
+  );
+}
+);
 
 export default router;

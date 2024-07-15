@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
-import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON, SELECT, SELECT_RANGE, FIND } from '../constants/IDE';
+import { FOCUS_TERMINAL, GO_TO_FILE, GO_TO_LINE, KILL_TERMINAL, NEW_TERMINAL, UNDO, REDO, PASTE, CUT, COPY, SELECT_KERNEL, RUN_NOTEBOOK_CELL, RUN_NOTEBOOK, RUN_PYTHON, SELECT, SELECT_RANGE, FIND, GET_ERROR_LIST } from '../constants/IDE';
 import fs from "fs";
 import { NO_ACTIVE_TEXT_EDITOR } from '../constants/code';
+import { get } from 'axios';
 
 
 // go to line
@@ -212,6 +213,43 @@ const redo = () => vscode.commands.registerCommand(REDO, () => {
     // }
 });
 
+// get error list
+const getErrorList = () => vscode.commands.registerCommand(GET_ERROR_LIST, () => {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const uri = editor.document.uri;
+        const errors = vscode.languages.getDiagnostics(uri);
+        if (errors.length === 0) {
+            return {
+                success: true,
+                message: "No errors found"
+            };
+        }
+        else{
+            const errorList = errors.map((errors) => {
+                        return {
+                          message: errors.message,
+                          line: errors.range.start.line + 1,
+                        };
+                      });
+            return {
+                success: true,
+                message: errorList
+
+        }
+
+        
+        };
+    } else {
+        return {
+            success: false,
+            message: "No active text editor"
+        };
+
+    }
+});
+
+
 //select kernel for notebook
 const selectKernel = () => vscode.commands.registerCommand(SELECT_KERNEL, (data) => {
     const path = `${vscode.workspace.rootPath}\\${data?.path}`;
@@ -322,7 +360,8 @@ const registerIDECommands = () => {
         runPython,
         select,
         selectRange,
-        find
+        find,
+        getErrorList
 
     ];
 
