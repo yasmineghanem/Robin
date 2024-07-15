@@ -155,7 +155,9 @@ class PostProcessor:
             case 'ide operation':
                 final_parameters = self.post_process_ide_operation(
                     parameters, fallback=fallback)
-                # response = self.api.ide_operation(final_parameters)
+                
+                
+                response = self.api.ide_operation(final_parameters)
 
             case 'array operation':
                 final_parameters = self.post_process_array_operation(
@@ -665,7 +667,9 @@ class PostProcessor:
         final_parameters = {
             'name': None
         }
-
+        if fallback:
+            final_parameters['name'] = parameters['name']
+            return final_parameters
         if parameters['CLASS'] is not None:
             final_parameters['name'] = parameters['CLASS'][0]
 
