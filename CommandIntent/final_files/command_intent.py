@@ -109,7 +109,7 @@ class CommandIntent:
 
         fallback = False
 
-        if intent in command_constants.FALLBACK_ENTITIES:
+        if intent in command_constants.FALLBACK_INTENTS:
             entities = self.fallback_ner.get_entities(command, intent)
             response = self.post_processor.post_process(
                 command, intent, entities, True)
