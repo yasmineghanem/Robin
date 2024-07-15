@@ -147,7 +147,7 @@ class SpeechRecognition:
 
     def check_mouse_click(self, command):
         # if 'mouse' in command or 'cursor':
-        if 'click' in command or 'press':
+        if 'click' in command or 'press' in command:
             if 'right' in command:
                 self.gui.right_click_mouse()
                 return True
