@@ -30,7 +30,7 @@ class APIController:
         return response.json()
     # File System Endpoints
 
-    def create_file(self,body):
+    def create_file(self, body):
         # data = {
         #     "fileName": fileName,
         #     "extension": extension,
@@ -94,6 +94,58 @@ class APIController:
     def focus_terminal(self):
         return self.__get(IDE_FOCUS_TERMINAL)
 
+    def ide_operation(self, parameters):
+        ide_op_type = parameters.get('type')
+        action = parameters.get('action')
+        if not ide_op_type:
+            if action == 'undo':
+                return self.undo()
+            elif action == 'redo':
+                return self.redo()
+            elif action == 'copy':
+                return self.copy()
+            elif action == 'cut':
+                return self.cut()
+            elif action == 'paste':
+                return self.paste()
+            elif action == 'find':
+                return self.find()
+            elif action == 'run':
+                return self.run_python_file(parameters)
+
+        elif ide_op_type == 'terminal':
+
+            if action == 'new':
+                return self.new_terminal()
+            elif action == 'kill':
+                return self.kill_terminal()
+            elif action == 'focus':
+                return self.focus_terminal()
+
+        elif ide_op_type == 'line':
+            if action == 'select':
+                return self.select()
+            elif action == 'goto':
+                return self.go_to_line(parameters)
+        elif ide_op_type == 'file':
+            if action == 'goto':
+                return self.go_to_file(parameters)
+
+    def git(self, parameters):
+        return self.__post("/git", parameters)
+        # git_action = parameters.get('action')
+        # if git_action == 'discard':
+        #     return self.discard()
+        # elif git_action == 'pull':
+        #     return self.pull()
+        # elif git_action == 'stage':
+        #     return self.stage()
+        # elif git_action == 'stash':
+        #     return self.stash()
+        
+        
+    
+    
     def undo(self):
         return self.__get(IDE_UNDO)
 
@@ -183,7 +235,7 @@ class APIController:
         #     "name": variable_name,
         #     # "value": variable_value,
         # }
-        
+
         # if variable_value:
         #     var_data["value"] = variable_value
         # if variable_type:
@@ -265,7 +317,7 @@ class APIController:
         self,
         data
         # variable,
-        # type        
+        # type
     ):
         # data = {
         #     "variable": variable,
@@ -357,7 +409,7 @@ class APIController:
         # }
         return self.__post(CODE_OPERATION, data)
 
-    def for_loop(self,body):
+    def for_loop(self, body):
         # data = {
         #     "type": loop_type,
         #     **rest

@@ -34,6 +34,7 @@ intent_model_path = os.path.abspath(
 ner_model_path = os.path.abspath(
     '../CommandIntent/models/final_constrained_ner_model.pth')
 
+# print(intent_model_path, ner_model_path)
 # Create an instance of CommandIntent with correct paths
 command_test = CommandIntent(intent_model_path, ner_model_path)
 
@@ -87,7 +88,7 @@ test_sentences_2 = [
     "add x and y and assign to result"
 ]
 
-#mathematical operations
+# mathematical operations
 fallback_commands = [
     "compute the addition of 5 and 10",
     "calculate the division of 20 and 2",

@@ -110,36 +110,37 @@ class CommandIntent:
         print(intent)
 
         fallback = False
-        # get the entities of the command if the intent is not in the no entities list
-        if intent not in command_constants.NO_ENTITIES:
-            print('ahlan')
-            fallback_entities = self.fallback_ner.get_entities(command, intent)
-            print("test:", fallback_entities)
-            if fallback_entities:
-                print(fallback_entities)
-                fallback = True
-                response = self.post_processor.post_process(command, intent, fallback_entities, fallback=fallback)
-
-                return response
-
-            print('ahlan tany')
-            if intent in ['mouse click', 'activate mouse', 'activate interactive']:
-                return None
-
-            entities = self.__get_entities(command, intent)
-            print(entities)
-
-            print(fallback)
-            # post process the entities
-            response = self.post_processor.post_process(
-                command, intent, entities)
-
-            return response
-
-        elif intent in command_constants.FALLBACK_ENTITIES:
+        if intent in command_constants.FALLBACK_ENTITIES:
             entities = self.fallback_ner.get_entities(command, intent)
             response = self.post_processor.post_process_fallback(
                 command, intent, entities)
-            return response
+            return intent, response
 
-        return intent
+        # get the entities of the command if the intent is not in the no entities list
+        # if intent not in command_constants.NO_ENTITIES:
+        print('ahlan')
+        fallback_entities = self.fallback_ner.get_entities(command, intent)
+        print("test:", fallback_entities)
+        if fallback_entities:
+            print(fallback_entities)
+            fallback = True
+            response = self.post_processor.post_process(
+                command, intent, fallback_entities, fallback=fallback)
+
+            return intent, response
+
+        print('ahlan tany')
+        if intent in ['mouse click', 'activate mouse', 'activate interactive']:
+            return None
+
+        entities = self.__get_entities(command, intent)
+        print(entities)
+
+        print(fallback)
+        # post process the entities
+        response = self.post_processor.post_process(
+            command, intent, entities)
+
+        return intent, response
+
+        # return intent

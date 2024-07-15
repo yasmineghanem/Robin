@@ -12,7 +12,6 @@ import json
 import tensorflow as tf
 import torch
 import numpy as np
-import pyttsx3
 from code_summarization import ASTProcessor
 
 np.random.seed(42)
@@ -39,9 +38,9 @@ CommandIntent = command_intent.CommandIntent
 
 # Correctly resolve paths relative to the script's location
 intent_model_path = os.path.abspath(
-    '../CommandIntent/models/intent_detection_model_2.h5')
+    '../CommandIntent/models/full_intent_detection_model.keras')
 ner_model_path = os.path.abspath(
-    '../CommandIntent/models/constrained_ner_model_2.pth')
+    '../CommandIntent/models/final_constrained_ner_model.pth')
 
 
 class SpeechRecognition:
@@ -49,8 +48,6 @@ class SpeechRecognition:
         self.gui = gui
         self.command_intent = CommandIntent(intent_model_path, ner_model_path)
         self.api = APIController()
-        self.interactive = False
-        self.voice_engine = None
         self.active = False
 
         self.interactive = False
@@ -99,40 +96,14 @@ class SpeechRecognition:
         print(f"Command: {command}")
         # process the command
         try:
-            self.command_intent.process_command(command)
-        except Exception as e:
-            print(f"Error in processing command: {e}")
-
-    def activate_interactive(self,):
-        self.interactive = True
-        self.voice_engine = pyttsx3.init()
-
-        # getting details of current voice
-        voices = self.voice_engine.getProperty("voices")
-
-        self.voice_engine.setProperty(
-            "voice", voices[1].id
-        )  # changing index, changes voices. 1 for female
-
-        # random response
-        # engine.say(responses[np.random.randint(0, len(responses))])
-        # engine.runAndWait()
-
-    def interactive_response(self, response):
-        if 'message' in response:
-            self.voice_engine.say(response)
-            self.voice_engine.runAndWait()
-        else:
-            print(response)
-            
             intent, response = self.command_intent.process_command(command)
             # print(self.command_intent.process_command(command))
             print(f"Intent: {intent}")
             print(f"Response: {response}")
             # print(f"Response: {type(response)}")
-            intent = 'summary'
+            # intent = 'summary'
             if intent == 'summary':
-                response['message'] = self.get_file_summary()
+                response['message'] = self.get_file_summary(response['data']['ast'])
 
             if self.interactive:
                 self.interactive_response(response)
@@ -140,12 +111,12 @@ class SpeechRecognition:
         except Exception as e:
             print(f"Error in processing command: {e}")
 
-    def get_file_summary(self):
-        self.summarizer = ASTProcessor({})
+    def get_file_summary(self, ast):
+        self.summarizer = ASTProcessor(ast)
 
-        s = self.summarizer.get_summary()
+        s = self.summarizer.get_summary(self.summarizer.process_ast())
         print(s)
-        return s
+        return 's'
 
     def activate_interactive(self,):
         print('activated interactive')
@@ -169,8 +140,8 @@ class SpeechRecognition:
         if self.voice_recognition_tool == 'google':
             while self.active:
                 with self.microphone as source:
-                    self.recognizer.adjust_for_ambient_noise(source,
-                                                             duration=1)
+                    # self.recognizer.adjust_for_ambient_noise(source,
+                    #                                          duration=1)
                     audio = self.recognizer.listen(source)
                     try:
                         r = self.recognizer.recognize_google(audio)

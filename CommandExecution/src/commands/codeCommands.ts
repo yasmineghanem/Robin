@@ -67,7 +67,6 @@ import {
   WRITE_FILE,
   WRITE_FILE_FAILURE,
   WRITE_FILE_SUCCESS,
-  GET_ERRORS,
 } from "../constants/code";
 import { EXTENSIONS } from "../constants/constants";
 
@@ -96,6 +95,9 @@ const handleSuccess = (message: string): any => {
 //     "name": "x",
 //     "value" : 0
 // }
+
+// error code list
+
 
 // declare variable
 const declareVariable = () => {
