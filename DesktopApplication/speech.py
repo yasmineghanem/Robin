@@ -68,6 +68,11 @@ class SpeechRecognition:
 
     def initialize_google_sr(self):
         self.recognizer = sr.Recognizer()
+        
+        self.recognizer.energy_threshold = 4000
+        self.recognizer.non_speaking_duration = 2
+        
+        
         self.microphone = sr.Microphone(
             device_index=1, sample_rate=48000, chunk_size=2048
         )
@@ -77,9 +82,12 @@ class SpeechRecognition:
 
     def initialize_vosk_sr(self):
         try:
+            # print(self.__config['light_weight'] )
+            # print(self.__config['light_weight'] is False)
             self.model = Model("./Assets/voice_recognition_models/" +
-                               ("v_2" if self.__config['light_weight'] == False else "v_1"))
+                               ("v_2" if self.__config['light_weight'] == 'false' else "v_1"))
             self.recognizer = KaldiRecognizer(self.model, 16000)
+            
             self.mic = pyaudio.PyAudio()
             self.stream = self.mic.open(
                 format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
@@ -94,6 +102,7 @@ class SpeechRecognition:
 
     def process_command(self, command):
         print(f"Command: {command}")
+        
         # process the command
         try:
             intent, response = self.command_intent.process_command(command)
@@ -103,7 +112,8 @@ class SpeechRecognition:
             # print(f"Response: {type(response)}")
             # intent = 'summary'
             if intent == 'summary':
-                response['message'] = self.get_file_summary(response['data']['ast'])
+                response['message'] = self.get_file_summary(
+                    response['data']['ast'])
 
             if self.interactive:
                 self.interactive_response(response)
@@ -140,8 +150,10 @@ class SpeechRecognition:
         if self.voice_recognition_tool == 'google':
             while self.active:
                 with self.microphone as source:
-                    # self.recognizer.adjust_for_ambient_noise(source,
-                    #                                          duration=1)
+                    self.recognizer.adjust_for_ambient_noise(source,
+                                                             duration=1
+
+                                                             )
                     audio = self.recognizer.listen(source)
                     try:
                         r = self.recognizer.recognize_google(audio)
@@ -165,7 +177,7 @@ class SpeechRecognition:
                 if len(data) == 0:
                     break
                 if self.recognizer.AcceptWaveform(data):
-                    print("RECOGNIZED")
+                    # print("RECOGNIZED")
                     result = self.recognizer.Result()
                     result = json.loads(result)
                     # print(result)
@@ -173,8 +185,7 @@ class SpeechRecognition:
                         # process the command
                         print(result['text'])
                         try:
-                            self.process_command(r)
+                            self.process_command(result['text'])
 
-                            # self.command_intent.process_command(result['text'])
                         except Exception as e:
                             print(f"Error in processing command: {e}")

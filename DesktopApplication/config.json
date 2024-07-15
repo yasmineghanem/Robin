@@ -1,6 +1,6 @@
 {
   "base_url": "http://localhost:2805",
   "voice_recognition": "google",
-  "light_weight": true,
+  "light_weight": "false",
   "mouse_execution_path": "./MouseControlling.exe"
 }
