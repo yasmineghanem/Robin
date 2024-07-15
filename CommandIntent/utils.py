@@ -258,6 +258,7 @@ def remove_punctuation(input_string):
     # Use re.sub to substitute all matches of the pattern with an empty string
     return re.sub(pattern, '', input_string)
 
+
 def find_subset_indices(subset, larger_list):
     indices = []
     for item in subset:
@@ -269,6 +270,7 @@ def find_subset_indices(subset, larger_list):
             # If an item is not found, return None indicating subset is not fully present
             return None
     return indices
+
 
 def convert_annotations_to_csv(file_path):
 
@@ -289,12 +291,12 @@ def convert_annotations_to_csv(file_path):
 
             sentence_index = 0
 
-            for intent in intents: 
+            for intent in intents:
                 print(intent)
                 examples = annotations[intent]
                 if len(examples) == 0:
                     continue
-                
+
                 for example in examples:
                     sentence = example[0]
                     entities = example[1]["entities"]
@@ -334,13 +336,15 @@ def convert_annotations_to_csv(file_path):
                                     tags[index] = f"B-{tag}"
                                 else:
                                     tags[index] = f"I-{tag}"
-                        
+
                         # print(tags)
-                    
+
                     for word, tag in zip(words, tags):
-                        csv_file.write(f"{sentence_index}, {word}, {tag}, variable_declaration\n")
+                        csv_file.write(
+                            f"{sentence_index}, {word}, {tag}, variable_declaration\n")
 
                     sentence_index += 1
+
 
 def read_dataset():
     data = pd.read_csv('./ner_dataset/ner_dataset.csv', encoding='latin1')
@@ -375,15 +379,17 @@ def argmax(vec, axis=0):
     '''
     returns the argmax as a python int
     '''
-    _, idx = torch.max(vec, axis) # axis=0: column-wise (2D tensor), axis=1: row-wise (2D tensor)
+    _, idx = torch.max(
+        vec, axis)  # axis=0: column-wise (2D tensor), axis=1: row-wise (2D tensor)
     return idx.item()
+
 
 def prepare_sequence(sequence, to_index):
     '''
     converts a sequence of words to a tensor of indices
     sequence: list of words
     to_index: dictionary mapping words to indices
-    
+
     example:
     sequence = ['The', 'dog', 'barked']
     word_to_index = {'The': 0, 'dog': 1, 'barked': 2}
