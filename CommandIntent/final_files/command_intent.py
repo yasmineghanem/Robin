@@ -12,14 +12,12 @@ from fallback_ner import FallbackNER
 
 class CommandIntent:
     def __init__(self, intent_model_path, ner_model_path):
-        # self.intent_data = IntentData('../intent_detection_dataset/final_intents_dataset.json')
         self.intent_model_path = os.path.abspath(intent_model_path)
         self.ner_model_path = os.path.abspath(ner_model_path)
         self.intent_to_tags_path = os.path.abspath(
             '../ner_dataset/intent_to_tags.json')
         self.intent_data = IntentData(self._resolve_path(
             '../intent_detection_dataset/final_intents_dataset.json'))
-        # self.ner_data = NERData('../ner_dataset/ner_dataset.csv', '../ner_dataset/intent_to_tags.json')
         self.ner_data = NERData(self._resolve_path(
             '../ner_dataset/ner_dataset.csv'), self._resolve_path('../ner_dataset/intent_to_tags.json'))
 
@@ -113,7 +111,8 @@ class CommandIntent:
 
         if intent in command_constants.FALLBACK_ENTITIES:
             entities = self.fallback_ner.get_entities(command, intent)
-            response = self.post_processor.post_process(command, intent, entities, True)
+            response = self.post_processor.post_process(
+                command, intent, entities, True)
             return intent, response
 
         # get the entities of the command if the intent is not in the no entities list

@@ -8,3 +8,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+CommandIntent/__pycache__/
+CommandIntent/__pycache__/
+CommandIntent/final_files/__pycache__/
