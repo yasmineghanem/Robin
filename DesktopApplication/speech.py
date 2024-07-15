@@ -68,11 +68,11 @@ class SpeechRecognition:
 
     def initialize_google_sr(self):
         self.recognizer = sr.Recognizer()
-        
-        self.recognizer.energy_threshold = 4000
-        self.recognizer.non_speaking_duration = 2
-        
-        
+
+        self.recognizer.dynamic_energy_threshold = True
+        # self.recognizer.non_speaking_duration = 2
+        # self.recognizer.pause_threshold = 2.5
+
         self.microphone = sr.Microphone(
             device_index=1, sample_rate=48000, chunk_size=2048
         )
@@ -87,7 +87,7 @@ class SpeechRecognition:
             self.model = Model("./Assets/voice_recognition_models/" +
                                ("v_2" if self.__config['light_weight'] == 'false' else "v_1"))
             self.recognizer = KaldiRecognizer(self.model, 16000)
-            
+
             self.mic = pyaudio.PyAudio()
             self.stream = self.mic.open(
                 format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
@@ -102,7 +102,7 @@ class SpeechRecognition:
 
     def process_command(self, command):
         print(f"Command: {command}")
-        
+
         # process the command
         try:
             intent, response = self.command_intent.process_command(command)
@@ -145,14 +145,24 @@ class SpeechRecognition:
         else:
             print(response)
 
+    def check_mouse_click(self, command):
+        # if 'mouse' in command or 'cursor':
+        if 'click' in command or 'press':
+            if 'right' in command:
+                self.gui.right_click_mouse()
+                return True
+            # elif 'left' in command:
+            self.gui.left_click_mouse()
+            return True
+        return False
+
     def recognize(self):
         # based on the speech recognition method used
         if self.voice_recognition_tool == 'google':
             while self.active:
                 with self.microphone as source:
                     self.recognizer.adjust_for_ambient_noise(source,
-                                                             duration=1
-
+                                                             duration=1.5
                                                              )
                     audio = self.recognizer.listen(source)
                     try:
@@ -162,8 +172,9 @@ class SpeechRecognition:
                         if (r != 'hey robin'):
                             # process the command
                             try:
-                                # self.command_intent.process_command(r)
-                                self.process_command(r)
+                                if not self.check_mouse_click(r):
+                                    self.process_command(r)
+
                             except Exception as e:
                                 print(f"Error in processing command: {e}")
                     except sr.UnknownValueError:

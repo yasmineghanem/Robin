@@ -8,3 +8,4 @@ tk
 requests
 vosk
 pyttsx3
+pydirectinput

@@ -8,6 +8,7 @@ from speech import *
 from subprocess_thread import *
 import json
 from PIL import Image
+import pydirectinput
 
 
 class RobinOrchestrator:
@@ -137,6 +138,12 @@ class RobinOrchestrator:
 
         else:
             self.mouse_thread.stop()
+
+    def right_click_mouse(self):
+        pydirectinput.rightClick()
+
+    def left_click_mouse(self):
+        pydirectinput.leftClick()
 
     def deactivate_robin(self):
         if self.active_switch_state.get() == 1:

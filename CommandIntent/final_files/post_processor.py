@@ -58,7 +58,7 @@ class PostProcessor:
                 final_parameters = self.post_process_declaration(
                     parameters, fallback=fallback)
 
-                response = self.api.declare_variable(final_parameters)
+                response = self.api.declare_constant(final_parameters)
 
             case 'function declaration':
                 final_parameters = self.post_process_function_declaration(
