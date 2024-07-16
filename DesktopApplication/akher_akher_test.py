@@ -90,9 +90,17 @@ test_sentences_2 = [
 
 # mathematical operations
 fallback_commands = [
-    "compute the addition of 5 and 10",
-    "calculate the division of 20 and 2",
-    "add y to x",
+    "declare a new variable n with value 10",
+    "define variable x and assign it to 0",
+    "declare y with value 1",
+    "create new variable called next number and set it to y",
+    "declare count as int and set it to 1",
+    "create a while loop that runs while count is less than or equal n",
+    "output the variable next number to the user",
+    "add count plus 1",
+    "assign x to y",
+    "assign y to next number",
+    "sum x and y and assign it to next number"
 ]
 
 testset_path = os.path.abspath('../CommandIntent/testset/bitwise.json')

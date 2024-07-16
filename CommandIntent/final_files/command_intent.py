@@ -1,7 +1,6 @@
 import sys
 import os
 from intent_detection_model import load_model, predict_intent
-# from ner_model import NERModel, predict_entities
 from constrained_ner_model import NERModel, predict_entities
 from data_preparation import IntentData, NERData
 from post_processor import PostProcessor
@@ -25,8 +24,7 @@ class CommandIntent:
         self.intent_model = load_model(self.intent_model_path)
 
         # load the ner model
-        self.ner_model = NERModel(vocab_size=1034, word_embedding_dim=50, intent_embedding_dim=50, hidden_dim=64, output_dim=len(
-            self.ner_data.tag_to_index), number_of_intents=len(self.ner_data.intent_to_index), index_to_tag=self.ner_data.index_to_tag)
+        self.ner_model = NERModel(vocab_size=len(self.ner_data.index_to_word), word_embedding_dim=50, intent_embedding_dim=50, hidden_dim=64, output_dim=len(self.ner_data.tag_to_index), number_of_intents=len(self.ner_data.intent_to_index), index_to_tag=self.ner_data.index_to_tag)
         state_dict = torch.load(self.ner_model_path)
         self.ner_model.load_state_dict(state_dict, strict=False)
 
@@ -81,8 +79,7 @@ class CommandIntent:
 
         print("error hena")
         # predict the entities in the user input
-        ner_prediction = predict_entities(
-            self.ner_model, ner_model_input, ner_intent_input, intent_mask)
+        ner_prediction = predict_entities(self.ner_model, ner_model_input, ner_intent_input, intent_mask)
 
         print("tab error hena")
         # get the entities
@@ -116,7 +113,6 @@ class CommandIntent:
             return intent, response
 
         # get the entities of the command if the intent is not in the no entities list
-        # if intent not in command_constants.NO_ENTITIES:
         print('ahlan')
         fallback_entities = self.fallback_ner.get_entities(command, intent)
         print("test:", fallback_entities)
@@ -128,18 +124,13 @@ class CommandIntent:
 
             return intent, response
 
-        print('ahlan tany')
-        if intent in ['mouse click', 'activate mouse', 'activate interactive']:
-            return None
-
         entities = self.__get_entities(command, intent)
         print(entities)
 
         print(fallback)
+
         # post process the entities
         response = self.post_processor.post_process(
             command, intent, entities)
 
         return intent, response
-
-        # return intent
