@@ -164,7 +164,8 @@ class PostProcessor:
                 # response = self.api.operation(final_parameters)
 
             case 'activate interactive':
-                final_parameters = self.post_process_fallback(parameters, intent)
+                final_parameters = self.post_process_fallback(
+                    parameters, intent)
                 # response = self.api.interactive_commands(final_parameters)
 
             case 'activate mouse':
@@ -254,24 +255,6 @@ class PostProcessor:
         print(value)
         # try:
         if var_type is not None:
-            # if var_type in command_constants.TYPES['int']:
-            #     final_value = int(value)
-            # elif var_type in command_constants.TYPES['float']:
-            #     final_value = float(value)
-            # elif var_type in command_constants.TYPES['double']:
-            #     final_value = float(value)
-            # elif var_type in command_constants.TYPES['str']:
-            #     final_value = value
-            # elif var_type in command_constants.TYPES['bool']:
-            #     final_value = bool(value)
-            # elif var_type in command_constants.TYPES['list']:
-            #     final_value = []
-            # elif var_type in command_constants.TYPES['dictionary']:
-            #     final_value = {}
-            # elif var_type in command_constants.TYPES['tuple']:
-            #     final_value = tuple()
-            # elif var_type in command_constants.TYPES['set']:
-            #     final_value = set()
 
             for key, values in command_constants.TYPES.items():
                 if var_type in values:
@@ -640,8 +623,11 @@ class PostProcessor:
         final_parameters = {
             'name': None,
             'parameters': [],
-            'return_type': None
         }
+
+        if fallback:
+
+            pass
 
         if parameters['FUNC'] is not None:
             final_parameters['name'] = parameters['FUNC'][0]
@@ -1069,7 +1055,8 @@ class PostProcessor:
         if fallback:
             if 'variable' in parameters.keys():
                 final_parameters['variable'] = parameters['variable']
-                pass
+            else:
+                final_parameters['variable'] = parameters['lhs']
             final_parameters['left'] = self.__map_values(parameters['lhs'])
             final_parameters['right'] = self.__map_values(parameters['rhs'])
             final_parameters['operator'] = self.__map_operator(

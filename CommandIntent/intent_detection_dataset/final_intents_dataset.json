@@ -1928,7 +1928,14 @@
     "add DataStructures to imports",
     "add SciCalc to imports",
     "require DateUtils to imports",
-    "import TemplateEngine to imports"
+    "import TemplateEngine to imports",
+    "include the math module",
+    "import the module numpy",
+    "add the pytorch module",
+    "use the pandas module",
+    "impor pandas module",
+    "import the module matplotlib",
+    "import tensorflow module"
   ],
   "File System": [
     "change name",
