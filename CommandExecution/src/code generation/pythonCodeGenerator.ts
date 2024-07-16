@@ -77,18 +77,18 @@ export class PythonCodeGenerator extends CodeGenerator {
     }
     let code = "";
     // replace spaces with underscores
-    let v_name = name.replace(/\s+/g,"_");
+    let v_name = name.replace(/\s+/g, "_");
     if (type) {
       let mappedType: string =
         this.typeMappings[type as keyof typeof this.typeMappings];
 
       if (initialValue) {
-        code = `${v_name }: ${mappedType} = ${initialValue}`;
+        code = `${v_name}: ${mappedType} = ${initialValue}`;
       }
 
-      code = `${v_name }: ${mappedType}`;
+      code = `${v_name}: ${mappedType}`;
     } else if (initialValue !== undefined) {
-      code = `${v_name } = ${initialValue}`;
+      code = `${v_name} = ${initialValue}`;
     } else {
       code = `${v_name}`;
     }
@@ -502,8 +502,18 @@ export class PythonCodeGenerator extends CodeGenerator {
     return `''' ${content.join("\n")} '''\n`;
   }
 
-  generateOperation(left: string, operator: string, right: string): string {
-    let code = `${left} ${this.operatorMappings[operator] ?? "=="} ${right}`;
+  generateOperation(
+    left: string,
+    operator: string,
+    right: string,
+    variable?: string
+  ): string {
+    let code = "";
+    if (variable) {
+      code += `${variable} = `;
+    }
+
+    code += `${left} ${this.operatorMappings[operator] ?? "=="} ${right}`;
     this.handleScope(code);
     return code;
   }

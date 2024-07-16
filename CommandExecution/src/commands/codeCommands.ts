@@ -464,7 +464,8 @@ const operation = () => {
         let s = codeGenerator.generateOperation(
           args.left,
           args.operator,
-          args.right
+          args.right,
+          args?.variable
         );
 
         if (!s) {
