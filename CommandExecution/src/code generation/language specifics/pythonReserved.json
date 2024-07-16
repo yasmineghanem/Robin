@@ -53,6 +53,7 @@
     "Modulus": "%",
     "Exponentiation": "**",
     "Assignment": "=",
+    "Equals" : "=",
     "Equal": "==",
     "NotEqual": "!=",
     "GreaterThan": ">",

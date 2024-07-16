@@ -76,19 +76,21 @@ export class PythonCodeGenerator extends CodeGenerator {
       throw new Error(`Invalid variable name: ${name}`);
     }
     let code = "";
+    // replace spaces with underscores
+    let v_name = name.replace(/\s+/g,"_");
     if (type) {
       let mappedType: string =
         this.typeMappings[type as keyof typeof this.typeMappings];
 
       if (initialValue) {
-        code = `${name}: ${mappedType} = ${initialValue}`;
+        code = `${v_name }: ${mappedType} = ${initialValue}`;
       }
 
-      code = `${name}: ${mappedType}`;
+      code = `${v_name }: ${mappedType}`;
     } else if (initialValue !== undefined) {
-      code = `${name} = ${initialValue}`;
+      code = `${v_name } = ${initialValue}`;
     } else {
-      code = `${name}`;
+      code = `${v_name}`;
     }
 
     this.handleScope(code);

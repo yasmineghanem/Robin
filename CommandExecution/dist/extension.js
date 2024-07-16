@@ -27531,18 +27531,20 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             throw new Error(`Invalid variable name: ${name}`);
         }
         let code = "";
+        // replace spaces with underscores
+        let v_name = name.replace(/\s+/g, "_");
         if (type) {
             let mappedType = this.typeMappings[type];
             if (initialValue) {
-                code = `${name}: ${mappedType} = ${initialValue}`;
+                code = `${v_name}: ${mappedType} = ${initialValue}`;
             }
-            code = `${name}: ${mappedType}`;
+            code = `${v_name}: ${mappedType}`;
         }
         else if (initialValue !== undefined) {
-            code = `${name} = ${initialValue}`;
+            code = `${v_name} = ${initialValue}`;
         }
         else {
-            code = `${name}`;
+            code = `${v_name}`;
         }
         this.handleScope(code);
         return code;
@@ -28022,7 +28024,7 @@ exports.CodeGenerator = CodeGenerator;
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"],"typeMappings":{"string":"str","integer":"int","float":"float","boolean":"bool","list":"list","tuple":"tuple","dictionary":"dict"},"operatorMappings":{"Addition":"+","Subtraction":"-","Multiplication":"*","Division":"/","Modulus":"%","Exponentiation":"**","Assignment":"=","Equal":"==","NotEqual":"!=","GreaterThan":">","GreaterThanOrEqual":">=","LessThan":"<","LessThanOrEqual":"<=","And":"and","Or":"or","Not":"not","Increment":"+=","Decrement":"-=","Multiply":"*=","Divide":"/=","ModulusAssign":"%=","ExponentAssign":"**="}}');
+module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"],"typeMappings":{"string":"str","integer":"int","float":"float","boolean":"bool","list":"list","tuple":"tuple","dictionary":"dict"},"operatorMappings":{"Addition":"+","Subtraction":"-","Multiplication":"*","Division":"/","Modulus":"%","Exponentiation":"**","Assignment":"=","Equals":"=","Equal":"==","NotEqual":"!=","GreaterThan":">","GreaterThanOrEqual":">=","LessThan":"<","LessThanOrEqual":"<=","And":"and","Or":"or","Not":"not","Increment":"+=","Decrement":"-=","Multiply":"*=","Divide":"/=","ModulusAssign":"%=","ExponentAssign":"**="}}');
 
 /***/ }),
 /* 179 */
