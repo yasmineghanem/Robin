@@ -3,7 +3,7 @@ from head import *
 import threading
 
 HTTP = 'https://'
-IP_ADDRESS = '192.168.1.95'
+IP_ADDRESS = '192.168.1.2'
 URL =  HTTP + IP_ADDRESS + ':4343/video'
 # URL = 0
 # eye_controller_object = eye_controller(URL)    

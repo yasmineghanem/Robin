@@ -9,9 +9,10 @@
 #include <filesystem>
 #include <fstream>
 #include <algorithm>
-#include <thread>
 #include <mutex>
 #include <cmath>
+#include <thread>
+#include <future>
 
 using namespace std;
 FaceDetector::FaceDetector(int **&X_train, int *&y_train, int ***&X_val, int *&y_val, pair<int, int> train_dim, tuple<int, int, int> val_dim, string folder)
@@ -105,7 +106,6 @@ void FaceDetector::remove_negative_val_data()
 
 void FaceDetector::train(double Yo, double Yl, double Bl, bool restric)
 {
-    // double cur_Y = 1;
     int l = cascade.size();
     int *predictions = new int[max(this->train_dim.first, get<0>(this->val_dim))];
     int last = 0;
@@ -268,10 +268,12 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
     // Create an M × N matrix E filled with zeros
     int **E = new int *[M];
     // int **freq = new int *[M];
+    // int **sum = new int *[M];
     for (int i = 0; i < M; ++i)
     {
         E[i] = new int[N]{0};
         // freq[i] = new int[N]{0};
+        // sum[i] = new int[N]{0};
     }
     // Fill E with the sizes of the windows
     for (const auto &w : windows)
@@ -279,6 +281,7 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
         E[w->x][w->y] = max(w->w, E[w->x][w->y]);
         // E[w->x][w->y] = w->w;
         // freq[w->x][w->y]++;
+        // sum[w->x][w->y] += w->w;
     }
     // for (int i = 0; i < M; ++i)
     // {
@@ -332,8 +335,15 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
         }
     }
 
+    typedef struct node
+    {
+        window w;
+        double confidence;
+        // long long sum_com;
+        // long long freq_com;
+    } node;
     // Process each component
-    vector<pair<window, double>> P;
+    vector<node> P;
     for (const auto &component : components)
     {
         int eC = E[component[0].first][component[0].second];
@@ -344,6 +354,8 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
         {
             int max_x = component[0].first, max_y = component[0].second;
             int avg_x = 0, avg_y = 0;
+            // int sumcom = 0;
+            // int freqcom = 0;
             for (const auto &p : component)
             {
                 int x = p.first;
@@ -352,34 +364,37 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
                 max_y = max(max_y, y);
                 avg_x += x;
                 avg_y += y;
+                // sumcom += sum[x][y];
+                // freqcom += freq[x][y];
             }
             avg_x /= size;
             avg_y /= size;
+            // avg_x, avg_y, eC, eC, confidence;
             P.push_back({{avg_x, avg_y, eC, eC}, confidence});
         }
     }
 
     //  Sort the elements in P in ascending order of window size
-    sort(P.begin(), P.end(), [](const pair<window, double> &a, const pair<window, double> &b)
-         { return (a.first.w * a.first.h) < (b.first.w * b.first.h); });
+    sort(P.begin(), P.end(), [](const node &a, const node &b)
+         { return (a.w.w * a.w.h) < (b.w.w * b.w.h); });
 
     // Remove redundant windows
     for (size_t i = 0; i < P.size(); ++i)
     {
-        auto center = getCenter(P[i].first);
+        auto center = getCenter(P[i].w);
         for (size_t j = i + 1; j < P.size(); ++j)
         {
 
-            if (isInside(P[j].first, center.first, center.second))
+            if (isInside(P[j].w, center.first, center.second))
             {
                 // window i has a higher detection confidence than window j ,detlet window j
-                if (P[i].second > P[j].second)
+                if (P[i].confidence > P[j].confidence)
                 {
-                    P[j].first = {0, 0, 0, 0}; // Remove P[j]
+                    P[j].w = {0, 0, 0, 0}; // Remove P[j]
                 }
                 else
                 {
-                    P[i].first = {0, 0, 0, 0}; // Remove P[i]
+                    P[i].w = {0, 0, 0, 0}; // Remove P[i]
                     break;
                 }
             }
@@ -391,15 +406,15 @@ void FaceDetector::window_test2(vector<window *> &windows, int **&img, int M, in
         delete w;
     }
     windows.clear();
-    for (auto &w : P)
+    for (auto &ch : P)
     {
-        if (w.first.w == 0 || w.first.h == 0)
+        if (ch.w.w == 0 || ch.w.h == 0)
             continue;
         window *x = new window;
-        x->x = w.first.x;
-        x->y = w.first.y;
-        x->w = w.first.w;
-        x->h = w.first.h;
+        x->x = ch.w.x;
+        x->y = ch.w.y;
+        x->w = ch.w.w;
+        x->h = ch.w.h;
         windows.push_back(x);
     }
 
@@ -563,7 +578,6 @@ void FaceDetector::window_test3(vector<window *> &windows, int **&img, int M, in
 
 vector<window *> FaceDetector::process(int **&img, int ***&color_img, int M, int N, double c)
 {
-    const bool return_biggest = 1;
     int L = this->cascade.size();
     int **II = new int *[M];
     long long **IIsq = new long long *[M];
@@ -583,7 +597,6 @@ vector<window *> FaceDetector::process(int **&img, int ***&color_img, int M, int
     integral_image(img, II, M, N);
     integral_image(IIsq, IIsq, M, N);
     vector<window *> P;
-
     vector<int> sizes;
     int last = 24;
     while (last <= min(M, N))
@@ -654,6 +667,121 @@ vector<window *> FaceDetector::process(int **&img, int ***&color_img, int M, int
     delete[] IIsq;
     delete[] skin_denisty;
     return P;
+}
+
+vector<window *> FaceDetector::process_part(int **II, long long **IIsq, int **skin_denisty, int **&img, int ***&color_img, int M, int N, double c, int starti, int startj, int endi, int endj, int max_size, int num_threads)
+{
+    int L = this->cascade.size();
+    for (int i = 0; i < M; ++i)
+    {
+        for (int j = 0; j < N; ++j)
+        {
+            IIsq[i][j] = img[i][j] * img[i][j];
+            skin_denisty[i][j] = skin_pixel(color_img[i][j][0], color_img[i][j][1], color_img[i][j][2]);
+        }
+    }
+    integral_image(skin_denisty, skin_denisty, M, N);
+    integral_image(img, II, M, N);
+    integral_image(IIsq, IIsq, M, N);
+    vector<window *> P;
+    vector<int> sizes;
+    int last = 24;
+    while (last <= min(min(M, N), max_size))
+    {
+        if (last * last >= this->smallest_box * M * N)
+            sizes.push_back(last);
+        last = static_cast<int>(last * c);
+    }
+    std::mutex mtx;
+
+    auto worker = [&](int start, int end)
+    {
+        vector<window *> my_P;
+        window my_temp;
+        for (int j = start; j < end; ++j)
+        {
+            for (int i = max(0, starti); i + sizes[j] < M; i += this->stride)
+            {
+                if (i > endi)
+                    break;
+                for (int k = max(0, startj); k + sizes[j] < N; k += this->stride)
+                {
+                    if (k > endj)
+                        break;
+                    if (!skin_test(skin_denisty, sizes[j], i, k))
+                        continue;
+                    my_temp.x = i;
+                    my_temp.y = k;
+                    my_temp.w = sizes[j];
+                    my_temp.h = sizes[j];
+                    if (this->window_test1(&my_temp, II, IIsq))
+                    {
+                        window *w = new window;
+                        w->x = i;
+                        w->y = k;
+                        w->w = sizes[j];
+                        w->h = sizes[j];
+                        std::lock_guard<std::mutex> lock(mtx);
+                        P.push_back(w);
+                    }
+                }
+            }
+        }
+    };
+
+    std::vector<std::thread> threads;
+    int sizes_per_thread = (sizes.size()) / num_threads;
+    int remaining = sizes.size() % num_threads;
+    for (size_t i = 0; i < num_threads; ++i)
+    {
+        int start = i * sizes_per_thread;
+        int end = start + sizes_per_thread + (i < remaining ? 1 : 0);
+        threads.emplace_back(worker, start, end);
+    }
+    for (auto &t : threads)
+    {
+        t.join();
+    }
+
+    // std::cout << "P size after filtter1 : " << P.size() << endl;
+    window_test2(P, img, M, N);
+    // std::cout << "P size after filtter2 : " << P.size() << endl;
+    // drawGreenRectangles(color_img, M, N, P, 1);
+
+    // for (int i = 0; i < M; ++i)
+    // {
+    //     delete[] II[i];
+    //     delete[] IIsq[i];
+    //     delete[] skin_denisty[i];
+    // }
+    // delete[] II;
+    // delete[] IIsq;
+    // delete[] skin_denisty;
+    return P;
+}
+
+void FaceDetector::infinite_prcess()
+{
+    this->start_flag = false;
+    this->end_flag = false;
+    while (true)
+    {
+        while (!this->start_flag)
+        {
+            // cout << "stupide wake me !!!\n";
+            std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Sleep to reduce CPU usage
+        }
+        // cout << this->in.num_threads << endl;
+        // this->res = {process_part(II, IIsq, skin_denisty, img, color_img, M, N, c, starti, startj, endi, endj, max_size, num_threads)};
+        // auto start = std::chrono::high_resolution_clock::now();
+        this->res.windows = process_part(this->in.II, this->in.IIsq, this->in.skin_denisty, this->in.img, this->in.color_img, this->in.M, this->in.N, this->in.c, this->in.starti, this->in.startj, this->in.endi, this->in.endj, this->in.max_size, this->in.num_threads);
+        // auto end = std::chrono::high_resolution_clock::now();
+        // cout << "done in " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << endl;
+        // cout << this->res.windows.size() << endl;
+        this->end_flag = true;
+        this->start_flag = false;
+        // break;
+    }
 }
 
 void FaceDetector::rebuild()

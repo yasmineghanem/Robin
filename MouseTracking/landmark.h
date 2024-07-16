@@ -6,6 +6,8 @@
 #include <dlib/opencv.h>
 #include <vector>
 #include <utility>
+#include <windows.h>
+#include <iostream>
 
 #define NOSE_LANDMARK 0
 #define LEFT_POINT_MOUSE 1
@@ -14,12 +16,21 @@
 #define RIGHT_POINT_MOUSE 4
 class Landmark
 {
-public:
-    bool load(const std::string &model_path);
-    std::vector<std::pair<int, int>> extract_land_mark(cv::Mat &face_image);
-
 private:
     dlib::shape_predictor sp;
+    const std::size_t size = 10 * 1000;
+    unsigned char *pBuf = nullptr;
+    HANDLE hMapFile = NULL, hEvent = NULL, hPythonEvent = NULL;
+
+public:
+    Landmark();
+    // load model from file
+    bool load(const std::string &model_path);
+    // extract landmark from face image using ML model
+    std::vector<std::pair<int, int>> extract_land_mark(cv::Mat &face_image);
+    // extract landmark from face image using DL model
+    std::vector<std::pair<int, int>> extract_land_mark_deep(cv::Mat &face_image);
+    ~Landmark();
 };
 
 #endif // LANDMARK_H

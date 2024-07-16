@@ -22,6 +22,7 @@ private:
     // current position off the nose ont te mouse
     pair<int, int> current_position = {-1, -1};
     const double MOVE_THRESHOLD = 10;
+    const double EYE_AR_THRESH = 0.25;
     POINT get_current_position();
     void move_relative(int dx, int dy);
     DIRECTION get_horezontal_direction(pair<int, int> p1, pair<int, int> p2);
@@ -39,5 +40,7 @@ public:
     void scroll(int delta);
     void control(vector<pair<int, int>> &landmarks);
     bool isSmile(vector<pair<int, int>> &landmarks);
+    bool is_right_blink(vector<pair<int, int>> &landmarks);
+    bool is_left_blink(vector<pair<int, int>> &landmarks);
 };
 #endif
