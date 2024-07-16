@@ -16280,7 +16280,7 @@
         }
       ],
       [
-        "get  the multiplication of system properties and 1.5678\r",
+        "get the multiplication of system properties and 1.5678\r",
         {
           "entities": [
             [9, 23, "OPERATOR"],
@@ -16300,7 +16300,7 @@
         }
       ],
       [
-        "get  the multiplication of city name and 789\r",
+        "get the multiplication of city name and 789\r",
         {
           "entities": [
             [9, 23, "OPERATOR"],
@@ -16380,7 +16380,7 @@
         }
       ],
       [
-        "get  the exponent of value and position\r",
+        "get the exponent of value and position\r",
         {
           "entities": [
             [9, 17, "OPERATOR"],
@@ -16450,7 +16450,7 @@
         }
       ],
       [
-        "get  end date power mentor id\r",
+        "get end date power mentor id\r",
         {
           "entities": [
             [5, 13, "OPERAND"],
@@ -16710,7 +16710,7 @@
         }
       ],
       [
-        "get  12345.6789 divided by 12345.6789\r",
+        "get 12345.6789 divided by 12345.6789\r",
         {
           "entities": [
             [5, 15, "OPERAND"],
@@ -18151,7 +18151,7 @@
         }
       ],
       [
-        "get  the exponent of user type and -262626 and store it city name\r",
+        "get the exponent of user type and -262626 and store it city name\r",
         {
           "entities": [
             [9, 17, "OPERATOR"],
@@ -18184,7 +18184,7 @@
         }
       ],
       [
-        "get  the subtraction of user type and 232323 and assign it in current date\r",
+        "get the subtraction of user type and 232323 and assign it in current date\r",
         {
           "entities": [
             [9, 20, "OPERATOR"],
@@ -18271,7 +18271,7 @@
         }
       ],
       [
-        "get  the subtraction of debit amount and product id and assign element\r",
+        "get the subtraction of debit amount and product id and assign element\r",
         {
           "entities": [
             [9, 20, "OPERATOR"],
@@ -18304,7 +18304,7 @@
         }
       ],
       [
-        "get  the division of zip code and completed and save to result\r",
+        "get the division of zip code and completed and save to result\r",
         {
           "entities": [
             [9, 17, "OPERATOR"],
@@ -18381,7 +18381,7 @@
         }
       ],
       [
-        "get  position add time stamp and assign it in count\r",
+        "get position add time stamp and assign it in count\r",
         {
           "entities": [
             [5, 13, "OPERAND"],
@@ -18425,7 +18425,7 @@
         }
       ],
       [
-        "get  expense report added to has errors and save to expiry date\r",
+        "get expense report added to has errors and save to expiry date\r",
         {
           "entities": [
             [5, 19, "OPERAND"],
@@ -18436,7 +18436,7 @@
         }
       ],
       [
-        "get  j sum step and save is visible\r",
+        "get j sum step and save is visible\r",
         {
           "entities": [
             [5, 6, "OPERAND"],
@@ -18480,7 +18480,7 @@
         }
       ],
       [
-        "get  counter power 0.999999 and set it to the variable geo coordinates\r",
+        "get counter power 0.999999 and set it to the variable geo coordinates\r",
         {
           "entities": [
             [5, 12, "OPERAND"],
@@ -18535,7 +18535,7 @@
         }
       ],
       [
-        "get  expense report added to -14142 and set it to the variable user gender\r",
+        "get expense report added to -14142 and set it to the variable user gender\r",
         {
           "entities": [
             [5, 19, "OPERAND"],

@@ -333,8 +333,10 @@ def save_ner_model(model, path):
 
 
 def predict_entities(model, input_sentence, intent, intent_mask):
+    print("Predicting Entities")
     model.eval()
     with torch.no_grad():
         entities = model(input_sentence, intent, intent_mask)[0]
+    print("Entities Predicted")
 
     return entities

@@ -29,9 +29,11 @@ class FallbackNER():
         print('inside fallback ner')
         # print(intent.capitalize())
         print(intent)
+        if intent == 'exit block':
+            return {}
+
         for pattern in self.intent_templates[intent]:
-            # Case-insensitive matching
-            # print(pattern)
+            # case-insensitive matching
             match = re.match(pattern, command, re.IGNORECASE)
             if match:
                 print('matched')

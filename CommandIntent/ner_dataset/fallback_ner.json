@@ -2,6 +2,7 @@
   "variable declaration": [
     "(declare|create|define|make) (a[n]? )?(new )?(variable )?(named|called|with name) (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
     "(declare|create|define|make) (a[n]? )?(new )?(variable )?(named|called|with name) (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
+    "(declare|create|define|make) (a[n]? )?(new )?(variable )?(?P<name>[\\w\\s]+?) (and|with) value (?P<value>.+)",
     "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) (variable )?(named|called|with name) (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
     "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) (variable )? (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
     "(declare|create|define|make) (a[n]? )?(new )?(?P<type>\\w+) variable (?P<name>[\\w\\s]+?) and (assign|set|value) (it to )?(?P<value>.+)",
@@ -9,6 +10,7 @@
     "(declare|create|define|make) (a[n]? )?(new )?variable (?P<name>[\\w\\s]+) and (assign|set|value) (it to )?(?P<value>.+) (and|with) (type|datatype) (?P<type>\\w+)",
     "(declare|create|define|make) (a[n]? )?(new )?variable (?P<name>[\\w\\s]+) and (assign|set|value) (it to )?(?P<value>.+)",
     "(declare|create|define|make) (a[n]? )?(new )?variable (?P<name>[\\w\\s]+) (with type|as) (?P<type>\\w+)",
+    "(declare|create|define|make) (?P<name>[\\w\\s]+) (with type|as) (?P<type>\\w+) and (assign|set|value) (it to )?(?P<value>.+)",
     "(declare|create|define|make) (?P<name>[\\w\\s]+) (with type|as) (?P<type>\\w+)"
   ],
   "constant declaration": [
@@ -65,8 +67,9 @@
     "(check |make sure )?(if|whether) (?P<lhs>[\\w\\s]+) is (?P<operation>not in|in) (?P<rhs>[\\w\\s]+)"
   ],
   "libraries": [
-    "(import|include|add) the (?P<library>[\\w\\s]+) (library|module)",
-    "(import|include|add) the (library|module) (?P<library>[\\w\\s]+)",
+    "(import|include|add) (the )?(library|module) (?P<library>[\\w\\s]+)",
+    "(import|include|add) (the )?(?P<library>[\\w\\s]+) (library|module)",
+    "(import|include|add) (the )?(?P<library>[\\w\\s]+) (library|module)",
     "(import|include|add) (?P<library>[\\w\\s]+)"
   ],
   "casting": [
@@ -173,7 +176,7 @@
     "(calculate|compute|work out|solve|get the) (?P<lhs>[\\w\\s]+) (?P<operation>\\w+) (?P<rhs>[\\w\\s]+)",
     "(?P<operation>\\w+) (?P<lhs>[\\w\\s]+) (and|times|plus|minus|divide|power) (?P<rhs>[\\w\\s]+) and (assign|store|save) it to (?P<variable>[\\w\\s]+)",
     "(?P<operation>\\w+) (?P<lhs>[\\w\\s]+) (and|times|plus|minus|divide|power) (?P<rhs>[\\w\\s]+)",
-    "(?P<operation>\\w+) (?P<lhs>[\\w\\s]+) (to|from) (?P<rhs>[\\w\\s]+)",
+    "(?P<operation>\\w+) (?P<rhs>[\\w\\s]+) (to|from) (?P<lhs>[\\w\\s]+)",
     "(?P<lsh>[\\w\\s]+) (?P<operation>\\w+) (?P<rhs>[\\w\\s]+) and (assign|store|save) it to (?P<variable>[\\w\\s]+)",
     "(?P<lhs>[\\w\\s]+) (?P<operation>\\w+) (?P<rhs>[\\w\\s]+)",
     "(?P<operation>\\w+) (?P<lhs>[\\w\\s]+)"
