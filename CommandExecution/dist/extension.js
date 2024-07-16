@@ -24524,27 +24524,28 @@ router.post("/try-except", (req, res) => {
 router.get("/exit-scope", (req, res) => {
     (0, utilities_1.executeCommand)(code_1.EXIT_SCOPE, {}, utilities_1.successHandler, utilities_1.errorHandler, res);
 });
-// get errors
-router.get("/errors", (req, res) => {
-    const editor = vscode.window.activeTextEditor;
-    if (editor) {
-        const uri = editor.document.uri;
-        const errors = vscode.languages.getDiagnostics(uri);
-        /**
-         *  [{"severity":"Error","message":"Parsing failed: 'invalid syntax (<unknown>, line 35)'","range":[{"line":34,"character":17},{"line":34,"character":17}],"source":"Pylint","code":{"value":"E0001:syntax-error","target":{"$mid":1,"path":"/en/latest/user_guide/messages/error/syntax-error.html","scheme":"https","authority":"pylint.readthedocs.io"}}},{"severity":"Error","message":"SyntaxError: invalid syntax (file:///c%3A/Users/77/OneDrive/Desktop/New%20folder/robin.py, line 35)","range":[{"line":34,"character":16},{"line":34,"character":17}],"source":"compile"},{"severity":"Information","message":"\"alsarsora\": Unknown word.","range":[{"line":34,"character":7},{"line":34,"character":16}],"source":"cSpell"},{"severity":"Information","message":"\"sarsora\": Unknown word.","range":[{"line":35,"character":0},{"line":35,"character":7}],"source":"cSpell"}]
-         */
-        // return error type and line number
-        const errorList = errors.map((error) => {
-            return {
-                severity: error.severity,
-                message: error.message,
-                range: error.range.start.line,
-                source: error.source,
-            };
-        });
-        res.send(errorList);
-    }
-});
+// // get errors
+// router.get("/errors", (req: Request, res: Response) => {
+//   const editor = vscode.window.activeTextEditor
+//   if(editor)
+//     {
+//       const uri = editor.document.uri;
+//       const errors = vscode.languages.getDiagnostics(uri);
+//       /**
+//        *  [{"severity":"Error","message":"Parsing failed: 'invalid syntax (<unknown>, line 35)'","range":[{"line":34,"character":17},{"line":34,"character":17}],"source":"Pylint","code":{"value":"E0001:syntax-error","target":{"$mid":1,"path":"/en/latest/user_guide/messages/error/syntax-error.html","scheme":"https","authority":"pylint.readthedocs.io"}}},{"severity":"Error","message":"SyntaxError: invalid syntax (file:///c%3A/Users/77/OneDrive/Desktop/New%20folder/robin.py, line 35)","range":[{"line":34,"character":16},{"line":34,"character":17}],"source":"compile"},{"severity":"Information","message":"\"alsarsora\": Unknown word.","range":[{"line":34,"character":7},{"line":34,"character":16}],"source":"cSpell"},{"severity":"Information","message":"\"sarsora\": Unknown word.","range":[{"line":35,"character":0},{"line":35,"character":7}],"source":"cSpell"}]
+//        */
+//       // return error type and line number
+//       const errorList = errors.map((error) => {
+//         return {
+//           severity: error.severity,
+//           message: error.message,
+//           range: error.range.start.line,
+//           source: error.source,
+//         };
+//       });
+//       res.send(errorList);
+//     }
+// });
 exports["default"] = router;
 
 
@@ -24555,8 +24556,8 @@ exports["default"] = router;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.GET_ERRORS = exports.EXIT_SCOPE = exports.TRY_EXCEPT = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
-exports.CLASS_FAILURE = exports.CLASS_SUCCESS = exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = exports.READ_FILE_FAILURE = void 0;
+exports.READ_FILE_FAILURE = exports.READ_FILE_SUCCESS = exports.BLOCK_COMMENT_FAILURE = exports.BLOCK_COMMENT_SUCCESS = exports.LINE_COMMENT_FAILURE = exports.LINE_COMMENT_SUCCESS = exports.PRINT_FAILURE = exports.PRINT_SUCCESS = exports.USER_INPUT_FAILURE = exports.USER_INPUT_SUCCESS = exports.CASTING_FAILURE = exports.CASTING_SUCCESS = exports.ASSERTION_FAILURE = exports.ASSERTION_SUCCESS = exports.IMPORT_FAILURE = exports.IMPORT_SUCCESS = exports.ASSIGNMENT_FAILURE = exports.ASSIGNMENT_SUCCESS = exports.FUNCTION_CALL_FAILURE = exports.FUNCTION_CALL_SUCCESS = exports.FUNCTION_FAILURE = exports.FUNCTION_SUCCESS = exports.FILE_EXT_FAILURE = exports.VARIABLE_FAILURE = exports.VARIABLE_SUCCESS = exports.EXIT_SCOPE = exports.TRY_EXCEPT = exports.DECLARE_CLASS = exports.WRITE_FILE = exports.READ_FILE = exports.BLOCK_COMMENT = exports.LINE_COMMENT = exports.PRINT = exports.USER_INPUT = exports.TYPE_CASTING = exports.ASSERTION = exports.ARRAY_OPERATION = exports.CONDITIONAL = exports.OPERATION = exports.WHILE_LOOP = exports.FOR_LOOP = exports.IMPORT_MODULE = exports.IMPORT_LIBRARY = exports.ASSIGN_VARIABLE = exports.ADD_WHITESPACE = exports.DECLARE_CONSTANT = exports.FUNCTION_CALL = exports.GET_AST = exports.DECLARE_FUNCTION = exports.DECLARE_VARIABLE = void 0;
+exports.CLASS_FAILURE = exports.CLASS_SUCCESS = exports.EXIT_SCOPE_FAILURE = exports.EXIT_SCOPE_SUCCESS = exports.OPERATION_FAILURE = exports.OPERATION_SUCCESS = exports.LOOP_FAILURE = exports.LOOP_SUCCESS = exports.WHITE_SPACE_FAILURE = exports.WHITE_SPACE_SUCCESS = exports.NO_ACTIVE_TEXT_EDITOR = exports.TRY_EXCEPT_FAILURE = exports.TRY_EXCEPT_SUCCESS = exports.WRITE_FILE_FAILURE = exports.WRITE_FILE_SUCCESS = void 0;
 /**
  * Commands
  */
@@ -24585,7 +24586,6 @@ exports.WRITE_FILE = "robin.writeFile";
 exports.DECLARE_CLASS = "robin.declareClass";
 exports.TRY_EXCEPT = "robin.tryExcept";
 exports.EXIT_SCOPE = 'robin.exitScope';
-exports.GET_ERRORS = 'robin.getErrors';
 /**
  * Variable declaration messages
  */
@@ -25452,6 +25452,16 @@ router.get("/find", (req, res) => {
         res.end(JSON.stringify(err));
     });
 });
+//get error list
+router.get("/get-error-list", (req, res) => {
+    vscode.commands.executeCommand(IDE_1.GET_ERROR_LIST).then((r) => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: r.message }));
+    }, (err) => {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(err));
+    });
+});
 exports["default"] = router;
 
 
@@ -25463,7 +25473,7 @@ exports["default"] = router;
 
 // commands
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FIND = exports.SELECT_RANGE = exports.SELECT = exports.RUN_PYTHON = exports.RUN_NOTEBOOK = exports.RUN_NOTEBOOK_CELL = exports.SELECT_KERNEL = exports.REDO = exports.UNDO = exports.CUT = exports.COPY = exports.PASTE = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
+exports.GET_ERROR_LIST = exports.FIND = exports.SELECT_RANGE = exports.SELECT = exports.RUN_PYTHON = exports.RUN_NOTEBOOK = exports.RUN_NOTEBOOK_CELL = exports.SELECT_KERNEL = exports.REDO = exports.UNDO = exports.CUT = exports.COPY = exports.PASTE = exports.KILL_TERMINAL = exports.NEW_TERMINAL = exports.FOCUS_TERMINAL = exports.GO_TO_FILE = exports.GO_TO_LINE = void 0;
 exports.GO_TO_LINE = "robin.goToLine";
 // go to file
 exports.GO_TO_FILE = "robin.goToFile";
@@ -25497,6 +25507,8 @@ exports.SELECT = "robin.select";
 exports.SELECT_RANGE = "robin.selectRange";
 //find
 exports.FIND = "robin.find";
+// get error list
+exports.GET_ERROR_LIST = "robin.getErrorList";
 /**
  * MESSAGES
  */
@@ -26088,6 +26100,39 @@ const redo = () => vscode.commands.registerCommand(IDE_1.REDO, () => {
     vscode.commands.executeCommand('redo');
     // }
 });
+// get error list
+const getErrorList = () => vscode.commands.registerCommand(IDE_1.GET_ERROR_LIST, () => {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const uri = editor.document.uri;
+        const errors = vscode.languages.getDiagnostics(uri);
+        if (errors.length === 0) {
+            return {
+                success: true,
+                message: "No errors found"
+            };
+        }
+        else {
+            const errorList = errors.map((errors) => {
+                return {
+                    message: errors.message,
+                    line: errors.range.start.line + 1,
+                };
+            });
+            return {
+                success: true,
+                message: errorList
+            };
+        }
+        ;
+    }
+    else {
+        return {
+            success: false,
+            message: "No active text editor"
+        };
+    }
+});
 //select kernel for notebook
 const selectKernel = () => vscode.commands.registerCommand(IDE_1.SELECT_KERNEL, (data) => {
     const path = `${vscode.workspace.rootPath}\\${data?.path}`;
@@ -26181,7 +26226,8 @@ const registerIDECommands = () => {
         runPython,
         select,
         selectRange,
-        find
+        find,
+        getErrorList
     ];
     commands.
         forEach(command => command());
@@ -26538,6 +26584,7 @@ const handleSuccess = (message) => {
 //     "name": "x",
 //     "value" : 0
 // }
+// error code list
 // declare variable
 const declareVariable = () => {
     vscode.commands.registerCommand(code_1.DECLARE_VARIABLE, async (args) => {
@@ -27491,7 +27538,7 @@ class PythonCodeGenerator extends codeGenerator_1.CodeGenerator {
             }
             code = `${name}: ${mappedType}`;
         }
-        else if (initialValue) {
+        else if (initialValue !== undefined) {
             code = `${name} = ${initialValue}`;
         }
         else {
@@ -27975,7 +28022,7 @@ exports.CodeGenerator = CodeGenerator;
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"],"typeMappings":{"string":"str","integer":"int","float":"float","boolean":"bool","list":"list","tuple":"tuple","dictionary":"dict"},"operatorMappings":{"addition":"+","subtraction":"-","multiplication":"*","division":"/","modulus":"%","exponentiation":"**","assignment":"=","equal":"==","notEqual":"!=","greaterThan":">","greaterThanOrEqual":">=","lessThan":"<","lessThanOrEqual":"<=","and":"and","or":"or","not":"not","increment":"+=","decrement":"-=","multiply":"*=","divide":"/=","modulusAssign":"%=","exponentAssign":"**="}}');
+module.exports = /*#__PURE__*/JSON.parse('{"reservedKeywords":["False","None","True","and","as","assert","async","await","break","class","continue","def","del","elif","else","except","finally","for","from","global","if","import","in","is","lambda","nonlocal","not","or","pass","raise","return","try","while","with","yield"],"typeMappings":{"string":"str","integer":"int","float":"float","boolean":"bool","list":"list","tuple":"tuple","dictionary":"dict"},"operatorMappings":{"Addition":"+","Subtraction":"-","Multiplication":"*","Division":"/","Modulus":"%","Exponentiation":"**","Assignment":"=","Equal":"==","NotEqual":"!=","GreaterThan":">","GreaterThanOrEqual":">=","LessThan":"<","LessThanOrEqual":"<=","And":"and","Or":"or","Not":"not","Increment":"+=","Decrement":"-=","Multiply":"*=","Divide":"/=","ModulusAssign":"%=","ExponentAssign":"**="}}');
 
 /***/ }),
 /* 179 */

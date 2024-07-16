@@ -85,7 +85,7 @@ export class PythonCodeGenerator extends CodeGenerator {
       }
 
       code = `${name}: ${mappedType}`;
-    } else if (initialValue) {
+    } else if (initialValue !== undefined) {
       code = `${name} = ${initialValue}`;
     } else {
       code = `${name}`;
@@ -367,7 +367,7 @@ export class PythonCodeGenerator extends CodeGenerator {
             c.logicalOperator
               ? `${this.operatorMappings[c.logicalOperator] ?? "=="} `
               : ""
-          } ${c.left} ${this.operatorMappings[c.operator]?? "=="} ${c.right}`
+          } ${c.left} ${this.operatorMappings[c.operator] ?? "=="} ${c.right}`
       )
       .join(" ");
 
